@@ -30,11 +30,6 @@ resume-url: assets/CV_Nima_May19.pdf
 
 
 
-
-
-plugins:
-  - jekyll-inline-svg
-
 # Google-analytics
 google-analytics:
   id: UA-141136428-1
