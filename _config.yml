@@ -1,22 +1,42 @@
 # Site settings
 title: Nima Sarang
-description: Site about Ashok
+description: Nima's personal website
+
 # baseurl: "/particle" # the subpath of your site, e.g. /blog
-url: "localhost:4000" # the base hostname & protocol for your site e.g. http://tanka.la
+url: localhost:4000 # the base hostname & protocol for your site e.g. http://tanka.la
+
 
 # User settings
 username: Nima Sarang
-user_description: Around ​<b>11 years</b> of experience in analysis, design, development, testing, and deployment of web-based applications using multiple technologies. Known for hiring and mentoring great, accomplishment-oriented teams that scale. <b>Managed GirnarSoft Pvt LTD Hyderabad branch</b> over 6 years.
-user_title: Deputy Director at CarDekho(GirnarSoft)
-
+user_description: Hi! I'm Nima. I'm a senior year student of B.Sc. Computer Science at the Amirkabir University of Tech, Tehran.<br> I am passionate about learning machine learning algorithms and deep learning models and I tend to code most of the things I learn. I have research experience in bioinformatics, particularly, protein design and evaluation. In my spare time, I tend to listen to music and play guitar, mostly classics :). I also take pleasure in mountain climbing.
+user_title: Machine Learning Researcher
 email: nimasarang@gmail.com
 
-gems:
-  - jekyll-inline-svg
 
+
+# if it's an external image, update below for true
+# better with square images
+external-image: false
+picture: ./assets/img/profile.jpg
+
+
+# If you want to include your resume, set to true
+# and specify source (external or local).
+resume: true
+resume-url: assets/CV_Nima_May19.pdf
+
+
+
+
+
+
+
+
+plugins:
+  - jekyll-inline-svg
 
 # Google-analytics
 google-analytics:
-  id: "UA-141136428-1"
+  id: UA-141136428-1
 
 exclude: ['package.json', 'src' , 'node_modules']

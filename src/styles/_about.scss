@@ -9,6 +9,7 @@
 
 .tech {
   margin: 10px;
+  max-width: 280px;
 }
 
 .user {
@@ -30,4 +31,18 @@
 .user-details {
   text-align: center;
   margin: 5px auto;
+}
+
+.selfie {
+  width: 175px;
+  margin-bottom: 25px;
+  border-radius: 100%;
+  transition: all .2s;
+  box-shadow: 0;
+  opacity: 1;
+}
+
+.selfie:hover {
+  filter: alpha(opacity=70);
+  opacity: .8;
 }

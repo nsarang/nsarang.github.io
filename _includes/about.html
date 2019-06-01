@@ -1,27 +1,29 @@
  <div class="user-details">
   <h1> About Me </h1>
+  <img class="selfie" alt="{{ site.name }}" src="{{ site.picture }}"/>
   <p> {{site.user_description}} </p>
 </div>
   <div class="user">
     <div class="tech">
-      <h3>ML Libraries</h3>
-      {% svg assets/svg/keras.svg width="50pt" height="50pt" %}
-      {% svg assets/svg/pytorch.svg width="55pt" height="55pt" %}
-      {% svg assets/svg/fastai.svg width="70pt" height="50pt" %}
-      <p>Very good knowledge of Spring Boot, Express js</p>
+      <h3>Machine Learning Libraries</h3>
+      {% svg assets/svg/keras.svg width="0.9em" %}
+      {% svg assets/svg/pytorch.svg width="1em" %}
+      {% svg assets/svg/fastai.svg width="65pt" height="50pt" %}
+      <p>Good experience of implementing in Keras and fastai. Familiar with Pytorch</p>
     </div>
     <div class="tech">
       <h3>Programming Languages</h3>
       <i class="devicon-python-plain-wordmark colored"></i>
       <i class="devicon-cplusplus-plain colored"></i>
-      <i class="devicon-javascript-plain"></i>
-      <p>Very Good knowledge of Java, Node.js. Familiar with Python</p>
+      <i class="devicon-java-plain colored"></i>
+      <p>Proficient in Python and C++. Familiar with Java</p>
     </div>
     <div class="tech">
-      <h3>Tools</h3>
+      <h3>Development<br>Tools</h3>
       <i class="devicon-git-plain"></i>
-      <i class="devicon-visualstudio-plain colored"></i>
-      <i class="devicon-intellij-plain"></i>
-      <p>Good knowledge of Visual Studio and Eclipse</p>
+<!--       <i class="devicon-visualstudio-plain colored"></i>
+ -->  
+      {% svg assets/svg/xcode.svg width="1em" %}
+      <p>Good knowledge of Xcode and Git version control</p>
     </div>
 </div>
