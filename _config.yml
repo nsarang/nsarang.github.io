@@ -8,7 +8,7 @@ url: localhost:4000 # the base hostname & protocol for your site e.g. http://tan
 
 # User settings
 username: Nima Sarang
-user_description: Hi! I'm Nima, a senior year student of B.Sc. Computer Science at the Amirkabir University of Tech, Tehran. I am passionate about learning machine learning algorithms and deep learning models and I tend to code most of the things I learn. I have research experience in bioinformatics, particularly, protein design and evaluation. In my spare time, I tend to listen to music and play guitar, mostly classics :). I also take pleasure in mountain climbing.
+user_description: Hi! I'm Nima, a senior year student of B.Sc. Computer Science at the Amirkabir University of Tech, Tehran. I am passionate about learning machine learning algorithms and deep learning models and I tend to code most of the things I learn. I have research experience in bioinformatics, particularly, protein design and evaluation. In my spare time, I tend to listen to music and play guitar, mostly classics :) I also take pleasure in mountain climbing.
 user_title: Machine Learning Researcher
 email: nimasarang@gmail.com
 
