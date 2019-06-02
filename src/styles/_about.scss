@@ -9,10 +9,17 @@
 
 .tech {
   // margin: 5px;
-  margin: auto;
+  margin-left: auto; 
+  margin-right: auto;
   max-width: 280px;
   // display: flex;
   // justify-content: center;
+  img {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: none;
+  }
 }
 
 .user {
