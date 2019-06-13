@@ -34,15 +34,15 @@
     }
   }
   .site-description {
-    font-size: 30px;
+    font-size: 20px;
     display: block;
     line-height: 1;
     color: #FFF;
     margin-top: 15px;
     padding-bottom: 25px;
-    // @media only screen and (min-width:$cut){
-    //   font-size: 30px;
-    // }
+    @media only screen and (min-width:$cut){
+      font-size: 30px;
+    }
   }
 }
 
