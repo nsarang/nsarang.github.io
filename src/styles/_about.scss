@@ -45,15 +45,16 @@
 
   #description {
     text-align: justify;
-    text-justify: auto;
+    text-justify: distribute;
+    text-align-last: left;
+
     padding-bottom:15px;
     
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    -webkit-hyphens: auto;
-    -ms-hyphens: auto;
-    hyphens: auto;
-    hyphenate-limit-chars: 8 4 4;
+    // word-break: break-all;
+    // -webkit-hyphens: auto;
+    // -ms-hyphens: auto;
+    // hyphens: auto;
+    // hyphenate-limit-chars: 8 4 4;
   }
 }
 
