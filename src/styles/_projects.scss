@@ -24,6 +24,10 @@
 
 .user-projects {
   margin: 20px auto;
+  width: 90%;
+  @media only screen and (min-width: $cut) {
+    width: 80%;
+  }
   img {
     max-width: 100%;
     height: auto;
@@ -56,12 +60,14 @@
 }
 .images-right {
   @media only screen and (min-width: $cut) {
+    display: block;
     float: right;
     width: 48%;
   }
   img {
     @media only screen and (min-width: $cut) {
       float: right;
+      display: block;
     }
   }
 }
