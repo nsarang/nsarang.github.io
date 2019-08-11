@@ -3,7 +3,7 @@ title: Nima Sarang
 description: Nima's personal website
 
 # baseurl: "/particle" # the subpath of your site, e.g. /blog
-url: localhost:4000 # the base hostname & protocol for your site e.g. http://tanka.la
+url: https://nimasarang.com # the base hostname & protocol for your site e.g. http://tanka.la
 
 
 # User settings
@@ -26,7 +26,8 @@ resume: true
 resume-url: assets/pdf/cv.pdf
 
 
-
+# plugins:
+#   - jekyll-sitemap
 
 
 
