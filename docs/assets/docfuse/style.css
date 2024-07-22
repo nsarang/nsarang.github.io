@@ -1,0 +1,652 @@
+/* html {
+  font-size: 62.5%;
+} */
+.docfuse {
+  position: relative;
+  font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  margin: 0;
+  padding: 0;
+  font-size: 0.9em;
+  line-height: 1.6;
+  font-weight: 400;
+  /* display: flex; */
+  /* overflow-x: scroll; */
+  /* overflow-block: scroll; */
+  /* white-space: pre; */
+  /* white-space: nowrap; */
+  /* overflow-x: scroll; */
+  /*# sourceMappingURL=pylit.css.map */ }
+  .docfuse mjx-math {
+    white-space: normal; }
+  .docfuse hr {
+    border-style: solid;
+    border-bottom: none; }
+  .docfuse pre > code {
+    display: block;
+    padding: 1rem 1.5rem;
+    white-space: pre; }
+  .docfuse p {
+    margin: 0 0 10px 0; }
+  .docfuse h1,
+  .docfuse h2,
+  .docfuse h3,
+  .docfuse h4,
+  .docfuse h5,
+  .docfuse h6 {
+    margin: 40px 0 15px 0; }
+  .docfuse h2,
+  .docfuse h3,
+  .docfuse h4,
+  .docfuse h5,
+  .docfuse h6 {
+    margin-top: 0; }
+  .docfuse #background {
+    position: absolute;
+    top: 0;
+    left: 45%;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    display: none; }
+  @media (min-width: 768px) {
+    .docfuse #background {
+      display: block; } }
+  .docfuse a.parent {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+    margin-right: 10px;
+    text-decoration: none; }
+  .docfuse a.parent:after {
+    content: ">";
+    font-size: 14px;
+    margin-left: 4px; }
+  .docfuse div.footer {
+    margin-top: 25px;
+    position: relative;
+    padding: 10px 0;
+    text-align: center; }
+  .docfuse div.footer a {
+    display: inline-block;
+    margin: 8px;
+    font-size: 1.3rem; }
+  .docfuse div.section {
+    position: relative; }
+  .docfuse div.section:after {
+    clear: both;
+    content: "";
+    display: block; }
+  .docfuse div.section:hover div.docs .section-link a {
+    opacity: 1; }
+  .docfuse div.section div.docs {
+    box-sizing: border-box;
+    padding: 10px 8px 1px 8px;
+    vertical-align: top;
+    text-align: left; }
+  @media (min-width: 768px) {
+    .docfuse div.section div.docs {
+      float: left;
+      width: 45%;
+      min-height: 5px; } }
+  @media (min-width: 1024px) {
+    .docfuse div.section div.docs {
+      padding: 10px 25px 1px 50px; } }
+  .docfuse div.section div.docs .section-link {
+    position: relative; }
+  .docfuse div.section div.docs .section-link a {
+    font: 12px Arial;
+    text-decoration: none;
+    position: absolute;
+    top: 3px;
+    left: -20px;
+    padding: 1px 2px;
+    opacity: 0;
+    -webkit-transition: opacity 0.2s linear;
+    transition: opacity 0.2s linear; }
+  .docfuse div.section div.docs pre code {
+    overflow-x: auto; }
+  .docfuse div.section div.docs img {
+    max-width: 100%; }
+  .docfuse div.section div.docs pre {
+    margin: 15px 0 15px; }
+  .docfuse div.section div.code {
+    padding: 14px 8px 16px 15px;
+    vertical-align: top;
+    /* width: 100%; */
+    /* height: 100%; */
+    /* white-space: nowrap; */
+    /* overflow-x: auto; */ }
+  @media (min-width: 768px) {
+    .docfuse div.section div.code {
+      margin-left: 45%; } }
+  .docfuse div.section div.code pre {
+    font-size: 12px;
+    word-break: break-all;
+    white-space: pre-wrap; }
+  .docfuse .highlight .n,
+  .docfuse .highlight .nn,
+  .docfuse .highlight .nc,
+  .docfuse .highlight .nf {
+    cursor: pointer; }
+  .docfuse code {
+    padding: 0.2rem 0.5rem;
+    margin: 0 0.2rem;
+    font-size: 80%;
+    white-space: nowrap;
+    border-radius: 4px; }
+  .docfuse pre,
+  .docfuse tt,
+  .docfuse code {
+    line-height: 18px;
+    font-family: Monaco, Consolas, "Lucida Console", monospace;
+    margin: 0;
+    padding: 0; }
+  .docfuse span.lineno {
+    width: 20px;
+    display: inline-block;
+    text-align: right;
+    padding-right: 10px;
+    opacity: 0.3;
+    font-size: 10px;
+    white-space: nowrap; }
+  .docfuse p > img {
+    max-height: 240px;
+    max-width: 240px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s; }
+  .docfuse p > img:hover {
+    opacity: 0.7; }
+  .docfuse #modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: scroll; }
+  .docfuse #modal > div {
+    padding: 100px 10px 10px 10px; }
+  .docfuse #modal > div > img {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px; }
+  .docfuse #modal > div > p {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    text-align: center;
+    padding: 10px 0;
+    height: 150px; }
+  .docfuse #modal > div > img,
+  .docfuse #modal > div > p {
+    animation-name: zoom;
+    animation-duration: 0.6s; }
+
+@keyframes zoom {
+  from {
+    transform: scale(0); }
+  to {
+    transform: scale(1); } }
+  .docfuse #modal > span.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s; }
+  .docfuse #modal > span.close:hover,
+  .docfuse #modal > span.close:focus {
+    text-decoration: none;
+    cursor: pointer; }
+  @media only screen and (max-width: 700px) {
+    .docfuse #modal > img {
+      width: 100%; } }
+  .docfuse.dark-theme {
+    background-color: #1d2127; }
+    .docfuse.dark-theme hr {
+      border-color: #555; }
+    .docfuse.dark-theme a {
+      color: #bbb; }
+    .docfuse.dark-theme a:visited {
+      color: #aaa; }
+    .docfuse.dark-theme div.section {
+      border-top: 1px solid #353745; }
+    .docfuse.dark-theme #background {
+      background: #282a36;
+      border-left: 1px solid #282a36; }
+    .docfuse.dark-theme div.footer {
+      background: #30353d; }
+    .docfuse.dark-theme div.footer a {
+      display: inline-block;
+      margin: 5px; }
+    .docfuse.dark-theme a.parent {
+      color: #ffffff; }
+    .docfuse.dark-theme a.parent:after {
+      color: #aaa; }
+    .docfuse.dark-theme div.section:hover {
+      background: #080a16; }
+    .docfuse.dark-theme div.section:hover div.code {
+      background: #080a16; }
+    .docfuse.dark-theme div.section div.docs {
+      color: #ccc; }
+    .docfuse.dark-theme div.section div.docs .section-link a {
+      color: #454545; }
+    .docfuse.dark-theme div.section div.docs p tt,
+    .docfuse.dark-theme div.section div.docs li code,
+    .docfuse.dark-theme div.section div.docs ol code,
+    .docfuse.dark-theme div.section div.docs p code {
+      background: #282a36;
+      color: #ccc; }
+    .docfuse.dark-theme div.section div.code {
+      background: #282a36; }
+    .docfuse.dark-theme .mjx-chtml {
+      color: #ccc; }
+    .docfuse.dark-theme code {
+      background: #282a36;
+      border: 1px solid #484a56; }
+    .docfuse.dark-theme #modal {
+      background-color: rgba(0, 0, 0, 0.9); }
+    .docfuse.dark-theme #modal > div > p {
+      color: #ccc; }
+    .docfuse.dark-theme #modal > span.close {
+      color: #f1f1f1; }
+    .docfuse.dark-theme #modal:hover,
+    .docfuse.dark-theme #modal:focus {
+      color: #bbb; }
+    .docfuse.dark-theme span.lineno {
+      color: #f8f8f2; }
+    .docfuse.dark-theme .highlight {
+      color: #f8f8f2; }
+    .docfuse.dark-theme .highlight .hll {
+      background-color: #f1fa8c; }
+    .docfuse.dark-theme .highlight .c {
+      color: #6272a4; }
+    .docfuse.dark-theme .highlight .err {
+      color: #f8f8f2; }
+    .docfuse.dark-theme .highlight .g {
+      color: #f8f8f2; }
+    .docfuse.dark-theme .highlight .k {
+      color: #ff79c6; }
+    .docfuse.dark-theme .highlight .l {
+      color: #f8f8f2; }
+    .docfuse.dark-theme .highlight .n {
+      color: #f8f8f2; }
+    .docfuse.dark-theme .highlight .o {
+      color: #ff4996; }
+    .docfuse.dark-theme .highlight .x {
+      color: #f8f8f2; }
+    .docfuse.dark-theme .highlight .p {
+      color: #a8a8a2; }
+    .docfuse.dark-theme .highlight .ch {
+      color: #6272a4; }
+    .docfuse.dark-theme .highlight .cm {
+      color: #6272a4; }
+    .docfuse.dark-theme .highlight .cp {
+      color: #ff79c6; }
+    .docfuse.dark-theme .highlight .cpf {
+      color: #6272a4; }
+    .docfuse.dark-theme .highlight .c1 {
+      color: #6272a4; }
+    .docfuse.dark-theme .highlight .cs {
+      color: #6272a4; }
+    .docfuse.dark-theme .highlight .gd {
+      color: #8b080b; }
+    .docfuse.dark-theme .highlight .ge {
+      color: #f8f8f2;
+      text-decoration: underline; }
+    .docfuse.dark-theme .highlight .gr {
+      color: #f8f8f2; }
+    .docfuse.dark-theme .highlight .gh {
+      color: #f8f8f2;
+      font-weight: bold; }
+    .docfuse.dark-theme .highlight .gi {
+      color: #f8f8f2;
+      font-weight: bold; }
+    .docfuse.dark-theme .highlight .go {
+      color: #44475a; }
+    .docfuse.dark-theme .highlight .gp {
+      color: #f8f8f2; }
+    .docfuse.dark-theme .highlight .gs {
+      color: #f8f8f2; }
+    .docfuse.dark-theme .highlight .gu {
+      color: #f8f8f2;
+      font-weight: bold; }
+    .docfuse.dark-theme .highlight .gt {
+      color: #f8f8f2; }
+    .docfuse.dark-theme .highlight .kc {
+      color: #ff79c6; }
+    .docfuse.dark-theme .highlight .kd {
+      color: #8be9fd;
+      font-style: italic; }
+    .docfuse.dark-theme .highlight .kn {
+      color: #ff79c6; }
+    .docfuse.dark-theme .highlight .kp {
+      color: #ff79c6; }
+    .docfuse.dark-theme .highlight .kr {
+      color: #ff79c6; }
+    .docfuse.dark-theme .highlight .kt {
+      color: #8be9fd; }
+    .docfuse.dark-theme .highlight .ld {
+      color: #f8f8f2; }
+    .docfuse.dark-theme .highlight .m {
+      color: #bd93f9; }
+    .docfuse.dark-theme .highlight .s {
+      color: #f1fa8c; }
+    .docfuse.dark-theme .highlight .na {
+      color: #50fa7b; }
+    .docfuse.dark-theme .highlight .nb {
+      color: #8be9fd;
+      font-style: italic; }
+    .docfuse.dark-theme .highlight .nc {
+      color: #ffb86c;
+      font-weight: bold; }
+    .docfuse.dark-theme .highlight .no {
+      color: #f8f8f2; }
+    .docfuse.dark-theme .highlight .nd {
+      color: #9d93ff; }
+    .docfuse.dark-theme .highlight .ni {
+      color: #f8f8f2; }
+    .docfuse.dark-theme .highlight .ne {
+      color: #d8d8d2;
+      font-style: italic; }
+    .docfuse.dark-theme .highlight .nf {
+      color: #ffb86c; }
+    .docfuse.dark-theme .highlight .nl {
+      color: #8be9fd;
+      font-style: italic; }
+    .docfuse.dark-theme .highlight .nn {
+      color: #f8f8f2; }
+    .docfuse.dark-theme .highlight .nx {
+      color: #f8f8f2; }
+    .docfuse.dark-theme .highlight .py {
+      color: #f8f8f2; }
+    .docfuse.dark-theme .highlight .nt {
+      color: #ff79c6; }
+    .docfuse.dark-theme .highlight .nv {
+      color: #8be9fd;
+      font-style: italic; }
+    .docfuse.dark-theme .highlight .ow {
+      color: #ff79c6; }
+    .docfuse.dark-theme .highlight .w {
+      color: #f8f8f2; }
+    .docfuse.dark-theme .highlight .mb {
+      color: #bd93f9; }
+    .docfuse.dark-theme .highlight .mf {
+      color: #bd93f9; }
+    .docfuse.dark-theme .highlight .mh {
+      color: #bd93f9; }
+    .docfuse.dark-theme .highlight .mi {
+      color: #bd93f9; }
+    .docfuse.dark-theme .highlight .mo {
+      color: #bd93f9; }
+    .docfuse.dark-theme .highlight .sa {
+      color: #f1fa8c; }
+    .docfuse.dark-theme .highlight .sb {
+      color: #f1fa8c; }
+    .docfuse.dark-theme .highlight .sc {
+      color: #f1fa8c; }
+    .docfuse.dark-theme .highlight .dl {
+      color: #f1fa8c; }
+    .docfuse.dark-theme .highlight .sd {
+      color: #f1fa8c; }
+    .docfuse.dark-theme .highlight .s2 {
+      color: #f1fa8c; }
+    .docfuse.dark-theme .highlight .se {
+      color: #f1fa8c; }
+    .docfuse.dark-theme .highlight .sh {
+      color: #f1fa8c; }
+    .docfuse.dark-theme .highlight .si {
+      color: #f1fa8c; }
+    .docfuse.dark-theme .highlight .sx {
+      color: #f1fa8c; }
+    .docfuse.dark-theme .highlight .sr {
+      color: #f1fa8c; }
+    .docfuse.dark-theme .highlight .s1 {
+      color: #f1fa8c; }
+    .docfuse.dark-theme .highlight .ss {
+      color: #f1fa8c; }
+    .docfuse.dark-theme .highlight .bp {
+      color: #50fa7b; }
+    .docfuse.dark-theme .highlight .fm {
+      color: #ffb86c;
+      font-style: italic; }
+    .docfuse.dark-theme .highlight .vc {
+      color: #8be9fd;
+      font-style: italic; }
+    .docfuse.dark-theme .highlight .vg {
+      color: #8be9fd;
+      font-style: italic; }
+    .docfuse.dark-theme .highlight .vi {
+      color: #8be9fd;
+      font-style: italic; }
+    .docfuse.dark-theme .highlight .vm {
+      color: #8be9fd;
+      font-style: italic; }
+    .docfuse.dark-theme .highlight .il {
+      color: #bd93f9; }
+  .docfuse.light-theme {
+    background-color: #ecf0f3; }
+    .docfuse.light-theme hr {
+      border-color: #555; }
+    .docfuse.light-theme a {
+      color: #666; }
+    .docfuse.light-theme a:visited {
+      color: #777; }
+    .docfuse.light-theme div.section {
+      border-top: 1px solid #e2e2eb; }
+    .docfuse.light-theme #background {
+      background: #ebedef;
+      border-left: 1px solid #ebedef; }
+    .docfuse.light-theme div.footer {
+      background: #d5dbe0; }
+    .docfuse.light-theme div.footer a {
+      display: inline-block;
+      margin: 5px; }
+    .docfuse.light-theme a.parent {
+      color: #000000; }
+    .docfuse.light-theme a.parent:after {
+      color: #666666; }
+    .docfuse.light-theme div.section:hover {
+      background: #f8fafb; }
+    .docfuse.light-theme div.section:hover div.code {
+      background: #f8fafb; }
+    .docfuse.light-theme div.section div.docs {
+      color: #555; }
+    .docfuse.light-theme div.section div.docs .section-link a {
+      color: #454545; }
+    .docfuse.light-theme div.section div.docs p tt,
+    .docfuse.light-theme div.section div.docs li code,
+    .docfuse.light-theme div.section div.docs ol code,
+    .docfuse.light-theme div.section div.docs p code {
+      background: #ebedef;
+      color: #666; }
+    .docfuse.light-theme div.section div.code {
+      background: #ebedef; }
+    .docfuse.light-theme .mjx-chtml {
+      color: #555; }
+    .docfuse.light-theme code {
+      background: #ebedef;
+      border: 1px solid #cacddc; }
+    .docfuse.light-theme #modal {
+      background-color: rgba(0, 0, 0, 0.9); }
+    .docfuse.light-theme #modal > div > p {
+      color: #ccc; }
+    .docfuse.light-theme #modal > span.close {
+      color: #f1f1f1; }
+    .docfuse.light-theme #modal:hover,
+    .docfuse.light-theme #modal:focus {
+      color: #bbb; }
+    .docfuse.light-theme span.lineno {
+      color: #060606; }
+    .docfuse.light-theme .highlight {
+      color: #060606; }
+    .docfuse.light-theme .highlight .hll {
+      background-color: #18c043; }
+    .docfuse.light-theme .highlight .c {
+      color: #213c93; }
+    .docfuse.light-theme .highlight .err {
+      color: #060606; }
+    .docfuse.light-theme .highlight .g {
+      color: #060606; }
+    .docfuse.light-theme .highlight .k {
+      color: #eb339d; }
+    .docfuse.light-theme .highlight .l {
+      color: #060606; }
+    .docfuse.light-theme .highlight .n {
+      color: #060606; }
+    .docfuse.light-theme .highlight .o {
+      color: #ff4996; }
+    .docfuse.light-theme .highlight .x {
+      color: #060606; }
+    .docfuse.light-theme .highlight .p {
+      color: #c9c900; }
+    .docfuse.light-theme .highlight .ch {
+      color: #213c93; }
+    .docfuse.light-theme .highlight .cm {
+      color: #213c93; }
+    .docfuse.light-theme .highlight .cp {
+      color: #eb339d; }
+    .docfuse.light-theme .highlight .cpf {
+      color: #213c93; }
+    .docfuse.light-theme .highlight .c1 {
+      color: #213c93; }
+    .docfuse.light-theme .highlight .cs {
+      color: #213c93; }
+    .docfuse.light-theme .highlight .gd {
+      color: #8b080b; }
+    .docfuse.light-theme .highlight .ge {
+      color: #060606;
+      text-decoration: underline; }
+    .docfuse.light-theme .highlight .gr {
+      color: #060606; }
+    .docfuse.light-theme .highlight .gh {
+      color: #060606;
+      font-weight: bold; }
+    .docfuse.light-theme .highlight .gi {
+      color: #060606;
+      font-weight: bold; }
+    .docfuse.light-theme .highlight .go {
+      color: #44475a; }
+    .docfuse.light-theme .highlight .gp {
+      color: #060606; }
+    .docfuse.light-theme .highlight .gs {
+      color: #060606; }
+    .docfuse.light-theme .highlight .gu {
+      color: #060606;
+      font-weight: bold; }
+    .docfuse.light-theme .highlight .gt {
+      color: #060606; }
+    .docfuse.light-theme .highlight .kc {
+      color: #eb339d; }
+    .docfuse.light-theme .highlight .kd {
+      color: #00cbf6;
+      font-style: italic; }
+    .docfuse.light-theme .highlight .kn {
+      color: #eb339d; }
+    .docfuse.light-theme .highlight .kp {
+      color: #eb339d; }
+    .docfuse.light-theme .highlight .kr {
+      color: #eb339d; }
+    .docfuse.light-theme .highlight .kt {
+      color: #00cbf6; }
+    .docfuse.light-theme .highlight .ld {
+      color: #060606; }
+    .docfuse.light-theme .highlight .m {
+      color: #733fbe; }
+    .docfuse.light-theme .highlight .s {
+      color: #18c043; }
+    .docfuse.light-theme .highlight .na {
+      color: #25da53; }
+    .docfuse.light-theme .highlight .nb {
+      color: #00cbf6;
+      font-style: italic; }
+    .docfuse.light-theme .highlight .nc {
+      color: #ff8707;
+      font-weight: bold; }
+    .docfuse.light-theme .highlight .no {
+      color: #060606; }
+    .docfuse.light-theme .highlight .nd {
+      color: #332b80; }
+    .docfuse.light-theme .highlight .ni {
+      color: #060606; }
+    .docfuse.light-theme .highlight .ne {
+      color: #b7b702;
+      font-style: italic; }
+    .docfuse.light-theme .highlight .nf {
+      color: #ff8707; }
+    .docfuse.light-theme .highlight .nl {
+      color: #00cbf6;
+      font-style: italic; }
+    .docfuse.light-theme .highlight .nn {
+      color: #060606; }
+    .docfuse.light-theme .highlight .nx {
+      color: #060606; }
+    .docfuse.light-theme .highlight .py {
+      color: #060606; }
+    .docfuse.light-theme .highlight .nt {
+      color: #eb339d; }
+    .docfuse.light-theme .highlight .nv {
+      color: #00cbf6;
+      font-style: italic; }
+    .docfuse.light-theme .highlight .ow {
+      color: #eb339d; }
+    .docfuse.light-theme .highlight .w {
+      color: #060606; }
+    .docfuse.light-theme .highlight .mb {
+      color: #733fbe; }
+    .docfuse.light-theme .highlight .mf {
+      color: #733fbe; }
+    .docfuse.light-theme .highlight .mh {
+      color: #733fbe; }
+    .docfuse.light-theme .highlight .mi {
+      color: #733fbe; }
+    .docfuse.light-theme .highlight .mo {
+      color: #733fbe; }
+    .docfuse.light-theme .highlight .sa {
+      color: #18c043; }
+    .docfuse.light-theme .highlight .sb {
+      color: #18c043; }
+    .docfuse.light-theme .highlight .sc {
+      color: #18c043; }
+    .docfuse.light-theme .highlight .dl {
+      color: #18c043; }
+    .docfuse.light-theme .highlight .sd {
+      color: #18c043; }
+    .docfuse.light-theme .highlight .s2 {
+      color: #18c043; }
+    .docfuse.light-theme .highlight .se {
+      color: #18c043; }
+    .docfuse.light-theme .highlight .sh {
+      color: #18c043; }
+    .docfuse.light-theme .highlight .si {
+      color: #18c043; }
+    .docfuse.light-theme .highlight .sx {
+      color: #18c043; }
+    .docfuse.light-theme .highlight .sr {
+      color: #18c043; }
+    .docfuse.light-theme .highlight .s1 {
+      color: #18c043; }
+    .docfuse.light-theme .highlight .ss {
+      color: #18c043; }
+    .docfuse.light-theme .highlight .bp {
+      color: #25da53; }
+    .docfuse.light-theme .highlight .fm {
+      color: #ff8707;
+      font-style: italic; }
+    .docfuse.light-theme .highlight .vc {
+      color: #00cbf6;
+      font-style: italic; }
+    .docfuse.light-theme .highlight .vg {
+      color: #00cbf6;
+      font-style: italic; }
+    .docfuse.light-theme .highlight .vi {
+      color: #00cbf6;
+      font-style: italic; }
+    .docfuse.light-theme .highlight .vm {
+      color: #00cbf6;
+      font-style: italic; }
+    .docfuse.light-theme .highlight .il {
+      color: #733fbe; }

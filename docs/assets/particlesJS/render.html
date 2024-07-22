@@ -1,0 +1,92 @@
+<style>
+    .particles-js-canvas-el {
+        z-index: -1;
+        display: inline-block;
+        width: 100%;
+        max-height: 80%;
+
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: 0 auto;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+    }
+</style>
+<script>
+    // ---- variables ----
+    const configPath = 'assets/particlesJS/config.json';
+    const parentID = 'quarto-content';
+
+    // light theme
+    const PARTICLE_COLOR_LIGHT = "#000000";
+    const LINE_LINKED_COLOR_LIGHT = "#000000";
+    // dark theme
+    const PARTICLE_COLOR_DARK = "#ffffff";
+    const LINE_LINKED_COLOR_DARK = "#ffffff";
+
+
+    particlesJS.load(parentID, configPath, function () {
+        console.log('callback - particles.js config loaded');
+
+        // Add thme toggle observer to the body element
+        const bodyElement = document.body;
+        const observer = new MutationObserver(mutationsList => {
+            // Check if any class mutations occurred
+            const hasClassMutation = mutationsList.some(mutation =>
+                mutation.attributeName === 'class'
+            );
+            if (hasClassMutation) {
+                const pJS = pJSDom[0].pJS;
+                // Dark theme
+                if (bodyElement.classList.contains('quarto-dark')) {
+                    pJS.particles.color.value = PARTICLE_COLOR_DARK;
+                    pJS.particles.line_linked.color = LINE_LINKED_COLOR_DARK;
+                    console.log('dark theme');
+                } else { // light theme (default)
+                    console.log('light theme');
+                    pJS.particles.color.value = PARTICLE_COLOR_LIGHT;
+                    pJS.particles.line_linked.color = LINE_LINKED_COLOR_LIGHT;
+                }
+                pJS.fn.particlesRefresh();
+            }
+        });
+        observer.observe(bodyElement, { attributes: true });
+
+        // Pass events from the parent element to the canvas since it's in the background
+        const canvas = document.getElementsByClassName('particles-js-canvas-el')[0];
+        const parent = canvas.parentElement;
+
+        // Function to handle and pass the event to the canvas
+        function passEventToCanvas(event) {
+            const canvasEvent = new MouseEvent(event.type, {
+                clientX: event.clientX,
+                clientY: event.clientY,
+                bubbles: false,
+                cancelable: true,
+                view: window
+            });
+            canvas.dispatchEvent(canvasEvent);
+        }
+
+        // Add event listeners to the parent element
+        ['mousemove', 'mouseent  er', 'mouseleave', 'mousedown', 'mouseup', 'click'].forEach(eventType => {
+            parent.addEventListener(eventType, passEventToCanvas);
+        });
+
+        // Add event listeners to the canvas (for demonstration purposes)
+        // canvas.addEventListener('mousemove', (event) => {
+        //     console.log(`Mouse move on canvas at (${event.clientX}, ${event.clientY})`);
+        // });
+        // canvas.addEventListener('mouseenter', () => {
+        //     console.log('Mouse entered canvas');
+        // });
+        // canvas.addEventListener('mouseleave', () => {
+        //     console.log('Mouse left canvas');
+        // });
+    });
+</script>
