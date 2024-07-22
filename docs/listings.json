@@ -1,13 +1,13 @@
 [
   {
+    "listing": "/blog/index.html",
+    "items": []
+  },
+  {
     "listing": "/publication/index.html",
     "items": [
       "/publication/2023-07-01-tractable-reinforcement-learning/index.html",
       "/publication/2018-01-03-protein-design/index.html"
     ]
-  },
-  {
-    "listing": "/blog/index.html",
-    "items": []
   }
 ]
