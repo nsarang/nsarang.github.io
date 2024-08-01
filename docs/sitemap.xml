@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.nimasarang.com/index.html</loc>
-    <lastmod>2024-07-22T02:56:42.448Z</lastmod>
+    <lastmod>2024-08-01T09:32:28.502Z</lastmod>
   </url>
   <url>
     <loc>https://www.nimasarang.com/publication/2023-07-01-tractable-reinforcement-learning/index.html</loc>
@@ -10,7 +10,15 @@
   </url>
   <url>
     <loc>https://www.nimasarang.com/blog/index.html</loc>
-    <lastmod>2024-07-22T02:52:03.143Z</lastmod>
+    <lastmod>2024-08-01T09:14:59.129Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/test/index.html</loc>
+    <lastmod>2024-07-31T06:15:37.769Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/blog/2024-06-15-lstm-from-scratch/index.html</loc>
+    <lastmod>2024-08-01T09:39:29.032Z</lastmod>
   </url>
   <url>
     <loc>https://www.nimasarang.com/about/index.html</loc>

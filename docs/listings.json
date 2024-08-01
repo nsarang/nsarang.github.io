@@ -1,7 +1,9 @@
 [
   {
     "listing": "/blog/index.html",
-    "items": []
+    "items": [
+      "/blog/2024-06-15-lstm-from-scratch/index.html"
+    ]
   },
   {
     "listing": "/publication/index.html",
