@@ -49,7 +49,8 @@
 
         simplexNoise = new SimplexNoise();
         canvas.addEventListener('click', onCanvasClick);
-        setupGUI();
+        // disable GUI for now
+        // setupGUI();
         update();
     }
 
