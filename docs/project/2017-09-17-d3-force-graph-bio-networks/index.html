@@ -6,9 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="I write about the things that spark my curiosity and the passions that drive me.  Hopefully, you’ll find something here to inspire you too.">
+<meta name="author" content="Nima Sarang">
+<meta name="dcterms.date" content="2017-09-17">
+<meta name="description" content="An interactive graph visualization of protein-protein interaction networks.">
 
-<title>Musings from My Corner of the World – Nima Sarang</title>
+<title>D3 Force Layout - Biological Networks – Nima Sarang</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,27 +26,25 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href="../_assets/favicon.svg" rel="icon" type="image/svg+xml">
-<script src="../site_libs/quarto-listing/list.min.js"></script>
-<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="../site_libs/quarto-html/quarto.js"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../_assets/favicon.svg" rel="icon" type="image/svg+xml">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -71,35 +71,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-reading-time','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-HWSGHN8N8N"></script>
 
 <script type="text/javascript">
@@ -115,68 +86,34 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <link href="https://fonts.googleapis.com/css2?family=Petrona:wght@400;500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:ital,wght@0,400;0,500;1,400;1,500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=B612:ital,wght@0,400;0,700;1,400;1,700&amp;family=B612+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js"></script>
-<link rel="stylesheet" href="../_assets/listing-default.css">
-<script src="../_assets/simplex-banner/simplex-noise.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css-js/styles.css">
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="../_assets/docfuse/style.css">
-<link rel="stylesheet" href="../_assets/hugo/listing-default.css">
-<meta property="og:title" content="Musings from My Corner of the World">
-<meta property="og:description" content="I write about the things that spark my curiosity and the passions that drive me. Hopefully, you’ll find something here to inspire you too.">
-<meta property="og:image" content="https://www.nimasarang.com/blog/2024-06-15-lstm-from-scratch/featured.png">
+<meta property="og:title" content="D3 Force Layout - Biological Networks">
+<meta property="og:description" content="An interactive graph visualization of protein-protein interaction networks.">
+<meta property="og:image" content="https://www.nimasarang.com/project/2017-09-17-d3-force-graph-bio-networks/featured.png">
 <meta property="og:site_name" content="Nima Sarang">
-<meta property="og:image:height" content="503">
-<meta property="og:image:width" content="890">
-<meta name="twitter:title" content="Musings from My Corner of the World">
-<meta name="twitter:description" content="I write about the things that spark my curiosity and the passions that drive me. Hopefully, you’ll find something here to inspire you too.">
-<meta name="twitter:image" content="https://www.nimasarang.com/blog/2024-06-15-lstm-from-scratch/featured.png">
-<meta name="twitter:image-height" content="503">
-<meta name="twitter:image-width" content="890">
+<meta property="og:image:height" content="1254">
+<meta property="og:image:width" content="2678">
+<meta name="twitter:title" content="D3 Force Layout - Biological Networks">
+<meta name="twitter:description" content="An interactive graph visualization of protein-protein interaction networks.">
+<meta name="twitter:image" content="https://www.nimasarang.com/project/2017-09-17-d3-force-graph-bio-networks/featured.png">
+<meta name="twitter:image-height" content="1254">
+<meta name="twitter:image-width" content="2678">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="floating nav-fixed">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../_assets/favicon.svg" alt="" class="navbar-logo">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../_assets/favicon.svg" alt="" class="navbar-logo">
     </a>
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Nima Sarang</span>
     </a>
   </div>
@@ -187,19 +124,19 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../about/index.html"> 
+    <a class="nav-link" href="../../about/index.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../blog/index.html" aria-current="page"> 
+    <a class="nav-link" href="../../blog/index.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../project/index.html"> 
+    <a class="nav-link" href="../../project/index.html"> 
 <span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../publication/index.html"> 
+    <a class="nav-link" href="../../publication/index.html"> 
 <span class="menu-text">Publications</span></a>
   </li>  
 </ul>
@@ -220,19 +157,31 @@ window.Quarto = {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns">
 <div id="title-block-header-title" class="quarto-title page-columns page-full page-layout-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg);">
-<h1 class="title">Musings from My Corner of the World</h1>
+<h1 class="title">D3 Force Layout - Biological Networks</h1>
 </div>
 
 <div>
   <div id="title-block-title-desc" class="description pt-4">
-    <p>I write about the things that spark my curiosity and the passions that drive me.<br> Hopefully, you’ll find something here to inspire you too.</p>
+    <p>An interactive graph visualization of protein-protein interaction networks.</p>
   </div>
 </div>
 
 
-<div class="quarto-title-meta column-page">
+<div class="quarto-title-meta column-body">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nima Sarang </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 17, 2017</p>
+    </div>
+  </div>
   
     
   </div>
@@ -242,12 +191,10 @@ window.Quarto = {
 
 </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
-  
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
+<main class="content quarto-banner-title-block page-columns page-full column-body" id="quarto-document-content">
 
 <!-- source: https://github.com/gadenbuie/garrickadenbuie-com/blob/main/_partials/title-block-link-buttons/title-block.html -->
 <!-- 
@@ -259,78 +206,97 @@ window.Quarto = {
 
 
 
+<p>While working as a research assistant at the <a href="https://bioinformatics.aut.ac.ir/">Computational Biology Research Center</a> at the Amirkabir University of Technology, I was tasked with implmenting algorithm for <a href="https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-016-1271-7">Identification of large disjoint motifs in biological networks</a>. We soon saw the need for a visualization tool to help us understand the networks we were working with, and the motifs that were identified. This was when I stumbled on the <a href="https://d3js.org/">D3.js</a> library, and decided to use its force layout for interactive visualization. The tool below is based on the countless examples and tutrials I found, and should give a glimpse of the true power of D3.js.</p>
+<p>The example below is a visualization of protein-protein interaction networks. Its main features include:</p>
+<ul>
+<li><strong>Force Layout</strong>: You can drag the nodes around, and the links will adjust accordingly. You can also toggle between static and force layout.<br>
+</li>
+<li><strong>FishEye Distortion</strong>: It allows you to zoom in on a particular node, and see its neighbors more clearly.<br>
+</li>
+<li><strong>Zoom</strong>: You can zoom in and out of the network.<br>
+</li>
+<li><strong>Pin on Drop</strong>: You can pin a node in place by first activating the pin mode, and then dragging the node to the desired location.<br>
+</li>
+<li><strong>Highlighting</strong>: You can highlight a node and its neighbors by double-clicking on the node.</li>
+<li><strong>Settings</strong>: You can adjust the charge, link strength, node radius, link width, velocity decay, and center gravity of the network.</li>
+</ul>
+<p>The source code can be found <a href="https://github.com/nsarang/motif_bionet">here</a>. The visualization code is in the <code>output</code> folder.</p>
+<p><br></p>
 <style>
-#simplex-noise-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: -1;
-  pointer-events: none;
-}
-#title-block-header > #title-block-header-title {
-  display: inline;
-  position: relative;
-  /* background-size: auto; */
-  /* overflow: hidden; */
-}
+  .bionet {
+    .aligner {
+        padding: 0 0 0 20px;
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+    }
+    .side-block {
+        margin: 0.15em 0;  
+    }
+    .side-block h2 {
+        font-size: 1.05em;
+        font-weight: bold;
+        display: inline-block;
+    }
+    .label-width {
+        width: 120px;
+        font-size: 0.75em;
+    }
+  }
 </style>
+<div class="grid column-screen-inset bionet" style="--bs-columns: 12">
+<div class="g-col-8" style="min-width: 1px; flex: 1;">
+<div class="aligner">
+  <svg width="800" height="600" preserveaspectratio="xMidYMid meet"></svg>
+</div>
+</div>
+<div class="g-col-4 flex-container block">
+<section id="network-details" class="level2 side-block">
+<h2 class="side-block anchored" data-anchor-id="network-details">Network Details</h2>
+<p><span class="label-width">Order:</span> <span id="graphOrder"></span><br>
+<span class="label-width">Size:</span> <span id="graphSize"></span><br>
+<span class="label-width">Components:</span> <span id="graphComps"></span></p>
+</section>
+<section id="pattern-details" class="level2 side-block">
+<h2 class="side-block anchored" data-anchor-id="pattern-details">Pattern Details</h2>
+<p><span class="label-width">Order:</span> <span id="patternOrder"></span><br>
+<span class="label-width">Size:</span> <span id="patternSize"></span><br>
+<span class="label-width">Frequency:</span> <span id="patternFreq"></span></p>
+</section>
+<section id="settings" class="level2 side-block">
+<h2 class="side-block anchored" data-anchor-id="settings">Settings</h2>
+<div id="chargeBlock" class="slider-block">
+<p><span class="label-width">Node Charge</span> <input id="chargeINPUT" class="range-slider__range" type="range" min="-200" max="20" step="1"> <span id="chargeVALUE" class="range-slider__value"></span></p>
+</div>
+<div id="linkStrBlock" class="slider-block">
+<p><label class="label-width">Link Strength</label> <input id="linkStrINPUT" class="range-slider__range" type="range" min="0.05" max="2" step="0.05"> <span id="linkStrVALUE" class="range-slider__value"></span></p>
+</div>
+<div class="slider-block">
+<p><label class="label-width">Node Radius</label> <input id="nodeRadINPUT" class="range-slider__range" type="range" min="2" max="10" step="0.2"> <span id="nodeRadVALUE" class="range-slider__value"></span></p>
+</div>
+<div class="slider-block">
+<p><label class="label-width">Link Width</label> <input id="linkWidthINPUT" class="range-slider__range" type="range" min="0.1" max="5" step="0.1"> <span id="linkWidthVALUE" class="range-slider__value"></span></p>
+</div>
+<div id="veloDecayBlock" class="slider-block">
+<p><label class="label-width">Velocity Decay</label> <input id="veloDecayINPUT" class="range-slider__range" type="range" min="0" max="1" step="0.05"> <span id="veloDecayVALUE" class="range-slider__value"></span></p>
+</div>
+<div id="centerGravityBlock" class="slider-block">
+<p><label class="label-width">Center Gravity</label> <input id="centerGravityINPUT" class="range-slider__range" type="range" min="0" max="0.75" step="0.02"> <span id="centerGravityVALUE" class="range-slider__value"></span></p>
+</div>
+<p><label id="forceLabel" class="toggle-switch"> <input type="checkbox" id="toggleForce"> <span class="slider"> <span class="slider-text off">Force</span> <span class="slider-text on">Static</span> </span> </label> <button class="button btn-black" id="fisheyeButton">FishEye Distortion</button> <button class="button btn-blue" id="zoomButton">Zoom Function</button> <button class="button btn-violet" id="pinButton">Pin on Drop</button></p>
+</section>
+<section id="infoTitle" class="level2 side-block">
+<h2 class="anchored" data-anchor-id="infoTitle">About</h2>
+<p><span id="infoDef"></span></p>
+</section>
+<!-- .g-col-8 -->
+</div>
+<!-- .grid -->
+</div>
 
-<canvas id="simplex-noise-canvas" data-target-parent="title-block-header-title"></canvas>
 
 
-
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="ml,analysis" data-listing-date-sort="1718434800000" data-listing-file-modified-sort="1722526681307" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="975">
-<div class="thumbnail">
-<p><a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external"></a></p><a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external">
-<p><img loading="lazy" src="../blog/2024-06-15-lstm-from-scratch/featured.png" class="thumbnail-image"></p>
-</a><p><a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external">Multi-Layer LSTM from Scratch using NumPy</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('ml'); return false;">
-ml
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('analysis'); return false;">
-analysis
-</div>
-</div>
-<div class="listing-description">
-<a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external">In this post, we will implement a multi-layer LSTM model from scratch in pure NumPy, and train it on the Shakespeare dataset. We’ll also implement the AdamW optimizer and the necessary data modules.</a>
-</div>
-</div>
-<div class="metadata">
-<a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external">
-<div class="listing-date">
-Jun 15, 2024
-</div>
-<div class="listing-author">
-Nima Sarang
-</div>
-<div class="listing-reading-time">
-5 min
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></div></div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -909,100 +875,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>
-    const bodyElement = document.body;
-    const observer = new MutationObserver(mutationsList => {
-        // Check if any class mutations occurred
-        const hasClassMutation = mutationsList.some(mutation =>
-            mutation.attributeName === 'class'
-        );
-
-        if (hasClassMutation) {
-            // Get all elements with the "docfuse" class
-            const docfuseElements = document.querySelectorAll('.docfuse');
-
-            // Iterate through the "docfuse" elements and toggle the classes
-            docfuseElements.forEach(element => {
-                // If the element has the "fixed-theme" class, skip it
-                if (element.classList.contains('fixed-theme')) {
-                    return
-                }
-
-                if (bodyElement.classList.contains('quarto-dark')) {
-                    console.log('dark theme');
-                    element.classList.add('dark-theme');
-                    element.classList.remove('light-theme');
-                } else { // light theme (default)
-                    console.log('light theme');
-                    element.classList.add('light-theme');
-                    element.classList.remove('dark-theme');
-                }
-            });
-        } // End if (hasClassMutation)
-    });
-
-    observer.observe(bodyElement, { attributes: true });
-
-
-    (function () {
-        'use strict';
-
-        const SelectionManager = {
-            selectionStart: null,
-            activeColumnType: null,
-
-            init: function () {
-                document.addEventListener('mousedown', this.handleMouseDown.bind(this));
-                document.addEventListener('selectionchange', this.handleSelectionChange.bind(this));
-            },
-
-            handleMouseDown: function (event) {
-                const target = event.target.closest('.docs, .code');
-                console.log('target:', target);
-                if (target) {
-                    this.selectionStart = target;
-                    this.activeColumnType = target.classList.contains('docs') ? '.docs' : '.code';
-                    this.updateSelectability(this.activeColumnType);
-                } else {
-                    this.resetSelection();
-                }
-            },
-
-            handleSelectionChange: function () {
-                if (!this.selectionStart) return;
-
-                const selection = window.getSelection();
-                if (selection.isCollapsed) return;
-
-                this.updateSelectability(this.activeColumnType);
-            },
-
-            updateSelectability: function (columnToSelect) {
-                const columnToDisable = columnToSelect === '.docs' ? '.code' : '.docs';
-                this.setUserSelect(columnToSelect, 'text');
-                this.setUserSelect(columnToDisable, 'none');
-            },
-
-            setUserSelect: function (selector, value) {
-                document.querySelectorAll(selector).forEach(el => el.style.userSelect = value);
-            },
-
-            resetSelection: function () {
-                this.selectionStart = null;
-                this.activeColumnType = null;
-                this.setUserSelect('.docs, .code', 'text');
-            }
-        };
-
-        // Initialize the SelectionManager when the DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', SelectionManager.init.bind(SelectionManager));
-        } else {
-            SelectionManager.init();
-        }
-    })();
-</script>
-<script type="module" src="../_assets/simplex-banner/render-canvas.js"></script>
+<script src="css-js/d3.v4.min.js"></script>
+<script src="css-js/fisheye.js"></script>
+<script src="css-js/force.js"></script>
 
 
 

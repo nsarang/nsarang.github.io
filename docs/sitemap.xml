@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.nimasarang.com/index.html</loc>
-    <lastmod>2024-08-01T18:59:55.410Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/publication/2023-07-01-tractable-reinforcement-learning/index.html</loc>
-    <lastmod>2024-07-14T18:04:22.680Z</lastmod>
+    <loc>https://www.nimasarang.com/project/2017-09-17-d3-force-graph-bio-networks/index.html</loc>
+    <lastmod>2024-08-05T16:53:52.686Z</lastmod>
   </url>
   <url>
     <loc>https://www.nimasarang.com/blog/index.html</loc>
-    <lastmod>2024-08-01T09:14:59.129Z</lastmod>
+    <lastmod>2024-08-05T18:05:39.282Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/publication/index.html</loc>
+    <lastmod>2024-07-22T02:51:34.825Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/publication/2018-01-03-protein-design/index.html</loc>
+    <lastmod>2024-07-14T18:16:19.923Z</lastmod>
   </url>
   <url>
     <loc>https://www.nimasarang.com/test/index.html</loc>
@@ -25,11 +29,15 @@
     <lastmod>2024-08-01T19:12:29.683Z</lastmod>
   </url>
   <url>
-    <loc>https://www.nimasarang.com/publication/2018-01-03-protein-design/index.html</loc>
-    <lastmod>2024-07-14T18:16:19.923Z</lastmod>
+    <loc>https://www.nimasarang.com/publication/2023-07-01-tractable-reinforcement-learning/index.html</loc>
+    <lastmod>2024-07-14T18:04:22.680Z</lastmod>
   </url>
   <url>
-    <loc>https://www.nimasarang.com/publication/index.html</loc>
-    <lastmod>2024-07-22T02:51:34.825Z</lastmod>
+    <loc>https://www.nimasarang.com/index.html</loc>
+    <lastmod>2024-08-01T18:59:55.410Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/project/index.html</loc>
+    <lastmod>2024-08-05T18:08:28.786Z</lastmod>
   </url>
 </urlset>

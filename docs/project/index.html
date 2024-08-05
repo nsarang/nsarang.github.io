@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="I write about the things that spark my curiosity and the passions that drive me.  Hopefully, you’ll find something here to inspire you too.">
+<meta name="description" content="Some of the projects I’ve worked on over the years.">
 
-<title>Musings from My Corner of the World – Nima Sarang</title>
+<title>Projects – Nima Sarang</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -81,9 +81,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-reading-time','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-description','listing-image',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
+      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -115,7 +115,6 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <link href="https://fonts.googleapis.com/css2?family=Petrona:wght@400;500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:ital,wght@0,400;0,500;1,400;1,500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=B612:ital,wght@0,400;0,700;1,400;1,700&amp;family=B612+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js"></script>
 <link rel="stylesheet" href="../_assets/listing-default.css">
 <script src="../_assets/simplex-banner/simplex-noise.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
@@ -150,26 +149,24 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="../_assets/docfuse/style.css">
-<link rel="stylesheet" href="../_assets/hugo/listing-default.css">
-<meta property="og:title" content="Musings from My Corner of the World">
-<meta property="og:description" content="I write about the things that spark my curiosity and the passions that drive me. Hopefully, you’ll find something here to inspire you too.">
-<meta property="og:image" content="https://www.nimasarang.com/blog/2024-06-15-lstm-from-scratch/featured.png">
+<meta property="og:title" content="Projects">
+<meta property="og:description" content="Some of the projects I’ve worked on over the years.">
+<meta property="og:image" content="https://www.nimasarang.com/project/2017-09-17-d3-force-graph-bio-networks/featured.png">
 <meta property="og:site_name" content="Nima Sarang">
-<meta property="og:image:height" content="503">
-<meta property="og:image:width" content="890">
-<meta name="twitter:title" content="Musings from My Corner of the World">
-<meta name="twitter:description" content="I write about the things that spark my curiosity and the passions that drive me. Hopefully, you’ll find something here to inspire you too.">
-<meta name="twitter:image" content="https://www.nimasarang.com/blog/2024-06-15-lstm-from-scratch/featured.png">
-<meta name="twitter:image-height" content="503">
-<meta name="twitter:image-width" content="890">
+<meta property="og:image:height" content="1254">
+<meta property="og:image:width" content="2678">
+<meta name="twitter:title" content="Projects">
+<meta name="twitter:description" content="Some of the projects I’ve worked on over the years.">
+<meta name="twitter:image" content="https://www.nimasarang.com/project/2017-09-17-d3-force-graph-bio-networks/featured.png">
+<meta name="twitter:image-height" content="1254">
+<meta name="twitter:image-width" content="2678">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="floating nav-fixed">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -191,11 +188,11 @@ window.Quarto = {
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../blog/index.html" aria-current="page"> 
+    <a class="nav-link" href="../blog/index.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../project/index.html"> 
+    <a class="nav-link active" href="../project/index.html" aria-current="page"> 
 <span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
@@ -218,14 +215,28 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content column-page" id="quarto-document-content">
+
+<!-- source: https://github.com/gadenbuie/garrickadenbuie-com/blob/main/_partials/title-block-link-buttons/title-block.html -->
+<!-- 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title"> 
+-->
+<!-- <header id="title-block-header" class="quarto-title-block default page-columns"> -->
+<!-- <div class="quarto-title page-columns page-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg);"> -->
 <header id="title-block-header" class="quarto-title-block default page-columns">
 <div id="title-block-header-title" class="quarto-title page-columns page-full page-layout-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg);">
-<h1 class="title">Musings from My Corner of the World</h1>
+<h1 class="title">Projects</h1>
 </div>
 
 <div>
   <div id="title-block-title-desc" class="description pt-4">
-    <p>I write about the things that spark my curiosity and the passions that drive me.<br> Hopefully, you’ll find something here to inspire you too.</p>
+    <p>Some of the projects I’ve worked on over the years.</p>
   </div>
 </div>
 
@@ -240,23 +251,7 @@ window.Quarto = {
 
 
 
-</header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
-<!-- sidebar -->
-  
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
-<!-- margin-sidebar -->
-    
-<!-- main -->
-<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
-
-<!-- source: https://github.com/gadenbuie/garrickadenbuie-com/blob/main/_partials/title-block-link-buttons/title-block.html -->
-<!-- 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title"> 
--->
-<!-- <header id="title-block-header" class="quarto-title-block default page-columns"> -->
-<!-- <div class="quarto-title page-columns page-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg);"> -->
-
+</header>
 
 
 <style>
@@ -285,52 +280,57 @@ window.Quarto = {
 
 
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="ml,analysis" data-listing-date-sort="1718434800000" data-listing-file-modified-sort="1722526681307" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="975">
-<div class="thumbnail">
-<p><a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external"></a></p><a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external">
-<p><img loading="lazy" src="../blog/2024-06-15-lstm-from-scratch/featured.png" class="thumbnail-image"></p>
-</a><p><a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external"></a></p>
+<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
+<div class="listing-actions-group">
+   <div class="input-group input-group-sm quarto-listing-sort">
+     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
+     <select id="listing-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
+       <option value="" disabled="" selected="" hidden="">Order By</option>
+       <option value="index" data-direction="asc">Default</option>
+         <option value="listing-title" data-direction="asc">
+          Title
+        </option>
+         <option value="listing-date-sort" data-direction="asc">
+          Date - Oldest
+        </option>
+         <option value="listing-date-sort" data-direction="desc">
+          Date - Newest
+        </option>
+     </select>
+  </div>
+    <div class="input-group input-group-sm quarto-listing-filter">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input type="text" class="search form-control" placeholder="Filter">
+    </div>
 </div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external">Multi-Layer LSTM from Scratch using NumPy</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external"></a>
+<div class="list grid quarto-listing-cols-2">
+<div class="g-col-1" data-index="0" data-listing-date-sort="1505631600000" data-listing-file-modified-sort="1722876832686" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="550">
+<a href="../project/2017-09-17-d3-force-graph-bio-networks/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="../project/2017-09-17-d3-force-graph-bio-networks/featured.png" class="thumbnail-image card-img" style="height: 33vmin;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+D3 Force Layout - Biological Networks
+</h5>
+<div class="card-text listing-description">
+<p>An interactive graph visualization of protein-protein interaction networks.</p>
 </div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('ml'); return false;">
-ml
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('analysis'); return false;">
-analysis
-</div>
-</div>
-<div class="listing-description">
-<a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external">In this post, we will implement a multi-layer LSTM model from scratch in pure NumPy, and train it on the Shakespeare dataset. We’ll also implement the AdamW optimizer and the necessary data modules.</a>
-</div>
-</div>
-<div class="metadata">
-<a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external">
+<div class="card-attribution card-text-small end">
 <div class="listing-date">
-Jun 15, 2024
+Sep 17, 2017
 </div>
-<div class="listing-author">
-Nima Sarang
 </div>
-<div class="listing-reading-time">
-5 min
+</div>
 </div>
 </a>
-</div>
 </div>
 </div>
 <div class="listing-no-matching d-none">
 No matching items
 </div>
-</div><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></div></div></section></div></main> <!-- /main -->
+</div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -909,99 +909,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>
-    const bodyElement = document.body;
-    const observer = new MutationObserver(mutationsList => {
-        // Check if any class mutations occurred
-        const hasClassMutation = mutationsList.some(mutation =>
-            mutation.attributeName === 'class'
-        );
-
-        if (hasClassMutation) {
-            // Get all elements with the "docfuse" class
-            const docfuseElements = document.querySelectorAll('.docfuse');
-
-            // Iterate through the "docfuse" elements and toggle the classes
-            docfuseElements.forEach(element => {
-                // If the element has the "fixed-theme" class, skip it
-                if (element.classList.contains('fixed-theme')) {
-                    return
-                }
-
-                if (bodyElement.classList.contains('quarto-dark')) {
-                    console.log('dark theme');
-                    element.classList.add('dark-theme');
-                    element.classList.remove('light-theme');
-                } else { // light theme (default)
-                    console.log('light theme');
-                    element.classList.add('light-theme');
-                    element.classList.remove('dark-theme');
-                }
-            });
-        } // End if (hasClassMutation)
-    });
-
-    observer.observe(bodyElement, { attributes: true });
-
-
-    (function () {
-        'use strict';
-
-        const SelectionManager = {
-            selectionStart: null,
-            activeColumnType: null,
-
-            init: function () {
-                document.addEventListener('mousedown', this.handleMouseDown.bind(this));
-                document.addEventListener('selectionchange', this.handleSelectionChange.bind(this));
-            },
-
-            handleMouseDown: function (event) {
-                const target = event.target.closest('.docs, .code');
-                console.log('target:', target);
-                if (target) {
-                    this.selectionStart = target;
-                    this.activeColumnType = target.classList.contains('docs') ? '.docs' : '.code';
-                    this.updateSelectability(this.activeColumnType);
-                } else {
-                    this.resetSelection();
-                }
-            },
-
-            handleSelectionChange: function () {
-                if (!this.selectionStart) return;
-
-                const selection = window.getSelection();
-                if (selection.isCollapsed) return;
-
-                this.updateSelectability(this.activeColumnType);
-            },
-
-            updateSelectability: function (columnToSelect) {
-                const columnToDisable = columnToSelect === '.docs' ? '.code' : '.docs';
-                this.setUserSelect(columnToSelect, 'text');
-                this.setUserSelect(columnToDisable, 'none');
-            },
-
-            setUserSelect: function (selector, value) {
-                document.querySelectorAll(selector).forEach(el => el.style.userSelect = value);
-            },
-
-            resetSelection: function () {
-                this.selectionStart = null;
-                this.activeColumnType = null;
-                this.setUserSelect('.docs, .code', 'text');
-            }
-        };
-
-        // Initialize the SelectionManager when the DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', SelectionManager.init.bind(SelectionManager));
-        } else {
-            SelectionManager.init();
-        }
-    })();
-</script>
 <script type="module" src="../_assets/simplex-banner/render-canvas.js"></script>
 
 

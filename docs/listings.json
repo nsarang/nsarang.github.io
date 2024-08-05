@@ -11,5 +11,11 @@
       "/publication/2023-07-01-tractable-reinforcement-learning/index.html",
       "/publication/2018-01-03-protein-design/index.html"
     ]
+  },
+  {
+    "listing": "/project/index.html",
+    "items": [
+      "/project/2017-09-17-d3-force-graph-bio-networks/index.html"
+    ]
   }
 ]

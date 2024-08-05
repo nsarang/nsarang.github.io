@@ -1,24 +1,38 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Nima Sarang",
+    "objectID": "project/2017-09-17-d3-force-graph-bio-networks/index.html",
+    "href": "project/2017-09-17-d3-force-graph-bio-networks/index.html",
+    "title": "D3 Force Layout - Biological Networks",
     "section": "",
-    "text": "Welcome to my personal website! I share my work, thoughts, and experiences here.\nMy drive is to use data science and machine learning to solve real-world problems, so most of the content you’ll find here is in that vein.\nI’m always looking for new opportunities to learn and grow, so feel free to reach out if you’d like to collaborate or chat!\nLearn more about me →"
+    "text": "While working as a research assistant at the Computational Biology Research Center at the Amirkabir University of Technology, I was tasked with implmenting algorithm for Identification of large disjoint motifs in biological networks. We soon saw the need for a visualization tool to help us understand the networks we were working with, and the motifs that were identified. This was when I stumbled on the D3.js library, and decided to use its force layout for interactive visualization. The tool below is based on the countless examples and tutrials I found, and should give a glimpse of the true power of D3.js.\nThe example below is a visualization of protein-protein interaction networks. Its main features include:\nThe source code can be found here. The visualization code is in the output folder."
   },
   {
-    "objectID": "publication/2023-07-01-tractable-reinforcement-learning/index.html",
-    "href": "publication/2023-07-01-tractable-reinforcement-learning/index.html",
-    "title": "Tractable large-scale deep reinforcement learning",
-    "section": "",
-    "text": "Reinforcement learning (RL) has emerged as one of the most promising and powerful techniques in deep learning. The training of intelligent agents requires a myriad of training examples which imposes a substantial computational cost. Consequently, RL is seldom applied to real-world problems and historically has been limited to computer vision tasks, similar to supervised learning. This work proposes an RL framework for complex, partially observable, large-scale environments. We introduce novel techniques for tractable training on commodity GPUs, and significantly reduce computational costs. Furthermore, we present a self-supervised loss that improves the learning stability in applications with a long-time horizon, shortening the training time. We demonstrate the effectiveness of the proposed solution on the application of road extraction from high-resolution satellite images. We present experiments on satellite images of fifteen cities that demonstrate comparable performance to state-of-the-art methods. To the best of our knowledge, this is the first time RL has been applied for extracting road networks. The code is publicly available at https://github.com/nsarang/road-extraction-rl."
+    "objectID": "project/2017-09-17-d3-force-graph-bio-networks/index.html#network-details",
+    "href": "project/2017-09-17-d3-force-graph-bio-networks/index.html#network-details",
+    "title": "D3 Force Layout - Biological Networks",
+    "section": "Network Details",
+    "text": "Network Details\nOrder: \nSize: \nComponents:"
   },
   {
-    "objectID": "publication/2023-07-01-tractable-reinforcement-learning/index.html#abstract",
-    "href": "publication/2023-07-01-tractable-reinforcement-learning/index.html#abstract",
-    "title": "Tractable large-scale deep reinforcement learning",
-    "section": "",
-    "text": "Reinforcement learning (RL) has emerged as one of the most promising and powerful techniques in deep learning. The training of intelligent agents requires a myriad of training examples which imposes a substantial computational cost. Consequently, RL is seldom applied to real-world problems and historically has been limited to computer vision tasks, similar to supervised learning. This work proposes an RL framework for complex, partially observable, large-scale environments. We introduce novel techniques for tractable training on commodity GPUs, and significantly reduce computational costs. Furthermore, we present a self-supervised loss that improves the learning stability in applications with a long-time horizon, shortening the training time. We demonstrate the effectiveness of the proposed solution on the application of road extraction from high-resolution satellite images. We present experiments on satellite images of fifteen cities that demonstrate comparable performance to state-of-the-art methods. To the best of our knowledge, this is the first time RL has been applied for extracting road networks. The code is publicly available at https://github.com/nsarang/road-extraction-rl."
+    "objectID": "project/2017-09-17-d3-force-graph-bio-networks/index.html#pattern-details",
+    "href": "project/2017-09-17-d3-force-graph-bio-networks/index.html#pattern-details",
+    "title": "D3 Force Layout - Biological Networks",
+    "section": "Pattern Details",
+    "text": "Pattern Details\nOrder: \nSize: \nFrequency:"
+  },
+  {
+    "objectID": "project/2017-09-17-d3-force-graph-bio-networks/index.html#settings",
+    "href": "project/2017-09-17-d3-force-graph-bio-networks/index.html#settings",
+    "title": "D3 Force Layout - Biological Networks",
+    "section": "Settings",
+    "text": "Settings\n\nNode Charge  \n\n\nLink Strength  \n\n\nNode Radius  \n\n\nLink Width  \n\n\nVelocity Decay  \n\n\nCenter Gravity  \n\n   Force Static   FishEye Distortion Zoom Function Pin on Drop"
+  },
+  {
+    "objectID": "project/2017-09-17-d3-force-graph-bio-networks/index.html#infoTitle",
+    "href": "project/2017-09-17-d3-force-graph-bio-networks/index.html#infoTitle",
+    "title": "D3 Force Layout - Biological Networks",
+    "section": "About",
+    "text": "About"
   },
   {
     "objectID": "blog/index.html",
@@ -26,6 +40,27 @@
     "title": "Musings from My Corner of the World",
     "section": "",
     "text": "Multi-Layer LSTM from Scratch using NumPy\n\n\n\n\n\n\nml\n\n\nanalysis\n\n\n\nIn this post, we will implement a multi-layer LSTM model from scratch in pure NumPy, and train it on the Shakespeare dataset. We’ll also implement the AdamW optimizer and the necessary data modules.\n\n\n\n\n\nJun 15, 2024\n\n\nNima Sarang\n\n\n5 min\n\n\n\n\n\n\nNo matching items\n\nReuseCC BY-SA 4.0"
+  },
+  {
+    "objectID": "publication/index.html",
+    "href": "publication/index.html",
+    "title": "Publications",
+    "section": "",
+    "text": "Tractable large-scale deep reinforcement learning\n\n\nThis work presents a reinforcement learning framework for road extraction from satellite images, offering reduced computational costs and improved stability through novel techniques and self-supervised loss\n\n\n\nReinforcement Learning\n\n\nComputer Vision\n\n\nSattelite Imagery\n\n\n\n\n\n\nJul 1, 2023\n\n\nNima Sarang, Charalambos Poullis\n\n\n\n\n\n\n\nProtein design using native secondary sub-structures and solvent accessibility\n\n\nAdvancing protein design through an improved genetic algorithm. This work builds on GAPSSIF, adding solvent accessibility to enhance sequence space exploration\n\n\n\nResearch\n\n\nProtein Design\n\n\nGenetic Algorithm\n\n\nSolvent Accessibility\n\n\n\n\n\n\nJan 3, 2018\n\n\nFatemeh Zare-Mirakabad, Marziyeh Movahedi, Nima Sarang, S. Shahriar Arab\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "publication/2018-01-03-protein-design/index.html",
+    "href": "publication/2018-01-03-protein-design/index.html",
+    "title": "Protein design using native secondary sub-structures and solvent accessibility",
+    "section": "",
+    "text": "According to structure-dependent function of proteins, two main challenging problems called Protein Structure Prediction (PSP) and Inverse Protein Folding (IPF) are investigated. In spite of IPF essential applications, it has not been studied as much as PSP problem. In fact, the ultimate goal of IPF problem or protein design is to create proteins with enhanced properties or even novel functions. One of the major computational challenges in protein design is large protein sequence space, namely searching through all plausible sequences is impossible. In our previous research, we introduced a genetic algorithm called GAPSSIF for designing protein secondary structure. This algorithm benefits from evolutionary information obtained by solved protein structures in PDB. Therefore, we constructed a repository of protein secondary sub-structures to accelerate convergence of the algorithm. The secondary structures of designed sequences by GAPSSIF are comparable with those obtained by Evolver and EvoDesign. In this paper, we modify GAPSSIF so it considers solvent accessibility. Therefore, the simple fitness function of GAPSSIF is improved by a multi-featured one to search through the sequence space more precisely."
+  },
+  {
+    "objectID": "publication/2018-01-03-protein-design/index.html#abstract",
+    "href": "publication/2018-01-03-protein-design/index.html#abstract",
+    "title": "Protein design using native secondary sub-structures and solvent accessibility",
+    "section": "",
+    "text": "According to structure-dependent function of proteins, two main challenging problems called Protein Structure Prediction (PSP) and Inverse Protein Folding (IPF) are investigated. In spite of IPF essential applications, it has not been studied as much as PSP problem. In fact, the ultimate goal of IPF problem or protein design is to create proteins with enhanced properties or even novel functions. One of the major computational challenges in protein design is large protein sequence space, namely searching through all plausible sequences is impossible. In our previous research, we introduced a genetic algorithm called GAPSSIF for designing protein secondary structure. This algorithm benefits from evolutionary information obtained by solved protein structures in PDB. Therefore, we constructed a repository of protein secondary sub-structures to accelerate convergence of the algorithm. The secondary structures of designed sequences by GAPSSIF are comparable with those obtained by Evolver and EvoDesign. In this paper, we modify GAPSSIF so it considers solvent accessibility. Therefore, the simple fitness function of GAPSSIF is improved by a multi-featured one to search through the sequence space more precisely."
   },
   {
     "objectID": "test/index.html",
@@ -98,24 +133,31 @@
     "text": "About Me\nPrior to working at Expedia Group, I was a Machine Learning Engineer at Divar, where I worked on pricing and computer vision models for the largest e-commerce platform in Iran. I had the joy and fortune of working with a lot of talented people, and learned how to build and deploy machine learning models at scale.\nI completed my master’s degree in Computer Science at Concordia University, where I was a member of the Immersive & Creative Technologies Lab. I worked on applying deep reinforement learning to satellite imagery data for extracting road networks using controllable agents.\nI’m a passionate about solving problems. In my free time, I often participate in Kaggle-like competitions to learn about applying ML techniques to different problems. I try to keep up with the latest research in the field, and am always looking for ways to improve my skills. One of the reason I started this website is to write about things I discover and share cool stuff.\n\nLet’s do something awesome together!\nIf you’re interested in working with me, please drop me a line at contact@nimasarang.com!"
   },
   {
-    "objectID": "publication/2018-01-03-protein-design/index.html",
-    "href": "publication/2018-01-03-protein-design/index.html",
-    "title": "Protein design using native secondary sub-structures and solvent accessibility",
+    "objectID": "publication/2023-07-01-tractable-reinforcement-learning/index.html",
+    "href": "publication/2023-07-01-tractable-reinforcement-learning/index.html",
+    "title": "Tractable large-scale deep reinforcement learning",
     "section": "",
-    "text": "According to structure-dependent function of proteins, two main challenging problems called Protein Structure Prediction (PSP) and Inverse Protein Folding (IPF) are investigated. In spite of IPF essential applications, it has not been studied as much as PSP problem. In fact, the ultimate goal of IPF problem or protein design is to create proteins with enhanced properties or even novel functions. One of the major computational challenges in protein design is large protein sequence space, namely searching through all plausible sequences is impossible. In our previous research, we introduced a genetic algorithm called GAPSSIF for designing protein secondary structure. This algorithm benefits from evolutionary information obtained by solved protein structures in PDB. Therefore, we constructed a repository of protein secondary sub-structures to accelerate convergence of the algorithm. The secondary structures of designed sequences by GAPSSIF are comparable with those obtained by Evolver and EvoDesign. In this paper, we modify GAPSSIF so it considers solvent accessibility. Therefore, the simple fitness function of GAPSSIF is improved by a multi-featured one to search through the sequence space more precisely."
+    "text": "Reinforcement learning (RL) has emerged as one of the most promising and powerful techniques in deep learning. The training of intelligent agents requires a myriad of training examples which imposes a substantial computational cost. Consequently, RL is seldom applied to real-world problems and historically has been limited to computer vision tasks, similar to supervised learning. This work proposes an RL framework for complex, partially observable, large-scale environments. We introduce novel techniques for tractable training on commodity GPUs, and significantly reduce computational costs. Furthermore, we present a self-supervised loss that improves the learning stability in applications with a long-time horizon, shortening the training time. We demonstrate the effectiveness of the proposed solution on the application of road extraction from high-resolution satellite images. We present experiments on satellite images of fifteen cities that demonstrate comparable performance to state-of-the-art methods. To the best of our knowledge, this is the first time RL has been applied for extracting road networks. The code is publicly available at https://github.com/nsarang/road-extraction-rl."
   },
   {
-    "objectID": "publication/2018-01-03-protein-design/index.html#abstract",
-    "href": "publication/2018-01-03-protein-design/index.html#abstract",
-    "title": "Protein design using native secondary sub-structures and solvent accessibility",
+    "objectID": "publication/2023-07-01-tractable-reinforcement-learning/index.html#abstract",
+    "href": "publication/2023-07-01-tractable-reinforcement-learning/index.html#abstract",
+    "title": "Tractable large-scale deep reinforcement learning",
     "section": "",
-    "text": "According to structure-dependent function of proteins, two main challenging problems called Protein Structure Prediction (PSP) and Inverse Protein Folding (IPF) are investigated. In spite of IPF essential applications, it has not been studied as much as PSP problem. In fact, the ultimate goal of IPF problem or protein design is to create proteins with enhanced properties or even novel functions. One of the major computational challenges in protein design is large protein sequence space, namely searching through all plausible sequences is impossible. In our previous research, we introduced a genetic algorithm called GAPSSIF for designing protein secondary structure. This algorithm benefits from evolutionary information obtained by solved protein structures in PDB. Therefore, we constructed a repository of protein secondary sub-structures to accelerate convergence of the algorithm. The secondary structures of designed sequences by GAPSSIF are comparable with those obtained by Evolver and EvoDesign. In this paper, we modify GAPSSIF so it considers solvent accessibility. Therefore, the simple fitness function of GAPSSIF is improved by a multi-featured one to search through the sequence space more precisely."
+    "text": "Reinforcement learning (RL) has emerged as one of the most promising and powerful techniques in deep learning. The training of intelligent agents requires a myriad of training examples which imposes a substantial computational cost. Consequently, RL is seldom applied to real-world problems and historically has been limited to computer vision tasks, similar to supervised learning. This work proposes an RL framework for complex, partially observable, large-scale environments. We introduce novel techniques for tractable training on commodity GPUs, and significantly reduce computational costs. Furthermore, we present a self-supervised loss that improves the learning stability in applications with a long-time horizon, shortening the training time. We demonstrate the effectiveness of the proposed solution on the application of road extraction from high-resolution satellite images. We present experiments on satellite images of fifteen cities that demonstrate comparable performance to state-of-the-art methods. To the best of our knowledge, this is the first time RL has been applied for extracting road networks. The code is publicly available at https://github.com/nsarang/road-extraction-rl."
   },
   {
-    "objectID": "publication/index.html",
-    "href": "publication/index.html",
-    "title": "Publications",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Nima Sarang",
     "section": "",
-    "text": "Tractable large-scale deep reinforcement learning\n\n\nThis work presents a reinforcement learning framework for road extraction from satellite images, offering reduced computational costs and improved stability through novel techniques and self-supervised loss\n\n\n\nReinforcement Learning\n\n\nComputer Vision\n\n\nSattelite Imagery\n\n\n\n\n\n\nJul 1, 2023\n\n\nNima Sarang, Charalambos Poullis\n\n\n\n\n\n\n\nProtein design using native secondary sub-structures and solvent accessibility\n\n\nAdvancing protein design through an improved genetic algorithm. This work builds on GAPSSIF, adding solvent accessibility to enhance sequence space exploration\n\n\n\nResearch\n\n\nProtein Design\n\n\nGenetic Algorithm\n\n\nSolvent Accessibility\n\n\n\n\n\n\nJan 3, 2018\n\n\nFatemeh Zare-Mirakabad, Marziyeh Movahedi, Nima Sarang, S. Shahriar Arab\n\n\n\n\n\n\nNo matching items"
+    "text": "Welcome to my personal website! I share my work, thoughts, and experiences here.\nMy drive is to use data science and machine learning to solve real-world problems, so most of the content you’ll find here is in that vein.\nI’m always looking for new opportunities to learn and grow, so feel free to reach out if you’d like to collaborate or chat!\nLearn more about me →"
+  },
+  {
+    "objectID": "project/index.html",
+    "href": "project/index.html",
+    "title": "Projects",
+    "section": "",
+    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nD3 Force Layout - Biological Networks\n\n\nAn interactive graph visualization of protein-protein interaction networks.\n\n\n\nSep 17, 2017\n\n\n\n\n\n\n\n\nNo matching items"
   }
 ]
