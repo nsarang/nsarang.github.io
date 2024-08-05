@@ -151,7 +151,6 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../_assets/docfuse/style.css">
-<link rel="stylesheet" href="../_assets/hugo/listing-default.css">
 <meta property="og:title" content="Musings from My Corner of the World">
 <meta property="og:description" content="I write about the things that spark my curiosity and the passions that drive me. Hopefully, you’ll find something here to inspire you too.">
 <meta property="og:image" content="https://www.nimasarang.com/blog/2024-06-15-lstm-from-scratch/featured.png">
@@ -272,11 +271,16 @@ window.Quarto = {
   z-index: -1;
   pointer-events: none;
 }
-#title-block-header > #title-block-header-title {
-  display: inline;
-  position: relative;
-  /* background-size: auto; */
-  /* overflow: hidden; */
+#title-block-header {
+  display: block;
+  margin-top: 1.5em;
+
+  #title-block-header-title {
+    display: inline;
+    position: relative;
+    /* background-size: auto; */
+    /* overflow: hidden; */
+  }
 }
 </style>
 

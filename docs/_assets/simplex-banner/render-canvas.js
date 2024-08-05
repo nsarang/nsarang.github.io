@@ -63,6 +63,7 @@
     }
 
     function onWindowResize() {
+        // set canvas size to parent size
         const parent = canvas.parentElement;
         screenWidth = canvas.width = parent.offsetWidth;
         screenHeight = canvas.height = parent.offsetHeight;
