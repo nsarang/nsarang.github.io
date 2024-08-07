@@ -1,38 +1,10 @@
 [
   {
-    "objectID": "project/2017-09-17-d3-force-graph-bio-networks/index.html",
-    "href": "project/2017-09-17-d3-force-graph-bio-networks/index.html",
-    "title": "D3 Force Layout - Biological Networks",
+    "objectID": "project/index.html",
+    "href": "project/index.html",
+    "title": "Projects",
     "section": "",
-    "text": "While working as a research assistant at the Computational Biology Research Center at the Amirkabir University of Technology, I was tasked with implmenting algorithm for Identification of large disjoint motifs in biological networks. We soon saw the need for a visualization tool to help us understand the networks we were working with, and the motifs that were identified. This was when I stumbled on the D3.js library, and decided to use its force layout for interactive visualization. The tool below is based on the countless examples and tutrials I found, and should give a glimpse of the true power of D3.js.\nThe example below is a visualization of protein-protein interaction networks. Its main features include:\nThe source code can be found here. The visualization code is in the output folder."
-  },
-  {
-    "objectID": "project/2017-09-17-d3-force-graph-bio-networks/index.html#network-details",
-    "href": "project/2017-09-17-d3-force-graph-bio-networks/index.html#network-details",
-    "title": "D3 Force Layout - Biological Networks",
-    "section": "Network Details",
-    "text": "Network Details\nOrder: \nSize: \nComponents:"
-  },
-  {
-    "objectID": "project/2017-09-17-d3-force-graph-bio-networks/index.html#pattern-details",
-    "href": "project/2017-09-17-d3-force-graph-bio-networks/index.html#pattern-details",
-    "title": "D3 Force Layout - Biological Networks",
-    "section": "Pattern Details",
-    "text": "Pattern Details\nOrder: \nSize: \nFrequency:"
-  },
-  {
-    "objectID": "project/2017-09-17-d3-force-graph-bio-networks/index.html#settings",
-    "href": "project/2017-09-17-d3-force-graph-bio-networks/index.html#settings",
-    "title": "D3 Force Layout - Biological Networks",
-    "section": "Settings",
-    "text": "Settings\n\nNode Charge  \n\n\nLink Strength  \n\n\nNode Radius  \n\n\nLink Width  \n\n\nVelocity Decay  \n\n\nCenter Gravity  \n\n   Force Static   FishEye Distortion Zoom Function Pin on Drop"
-  },
-  {
-    "objectID": "project/2017-09-17-d3-force-graph-bio-networks/index.html#infoTitle",
-    "href": "project/2017-09-17-d3-force-graph-bio-networks/index.html#infoTitle",
-    "title": "D3 Force Layout - Biological Networks",
-    "section": "About",
-    "text": "About"
+    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nD3 Force Layout - Biological Networks\n\n\nAn interactive graph visualization of protein-protein interaction networks.\n\n\n\nSep 17, 2017\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "blog/index.html",
@@ -154,10 +126,38 @@
     "text": "Welcome to my personal website! I share my work, thoughts, and experiences here.\nMy drive is to use data science and machine learning to solve real-world problems, so most of the content you’ll find here is in that vein.\nI’m always looking for new opportunities to learn and grow, so feel free to reach out if you’d like to collaborate or chat!\nLearn more about me →"
   },
   {
-    "objectID": "project/index.html",
-    "href": "project/index.html",
-    "title": "Projects",
+    "objectID": "project/2017-09-17-d3-force-graph-bio-networks/index.html",
+    "href": "project/2017-09-17-d3-force-graph-bio-networks/index.html",
+    "title": "D3 Force Layout - Biological Networks",
     "section": "",
-    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nD3 Force Layout - Biological Networks\n\n\nAn interactive graph visualization of protein-protein interaction networks.\n\n\n\nSep 17, 2017\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "While working as a research assistant at the Computational Biology Research Center at the Amirkabir University of Technology, I was tasked with implmenting an algorithm for Identification of large disjoint motifs in biological networks. We soon realized we needed a visualization tool to help us better understand the networks we were working with, and the motifs that were identified. This was when I stumbled on the D3.js library, and decided to use its force layout for interactive visualization. The tool below is based on the countless examples and tutrials I found, which I’ve lost track of, and should give a glimpse of the power of D3.js.\nThis example is a visualization of protein-protein interaction network. Its main features are:\nThe source code can be found here. The visualization code is in the output folder."
+  },
+  {
+    "objectID": "project/2017-09-17-d3-force-graph-bio-networks/index.html#network-details",
+    "href": "project/2017-09-17-d3-force-graph-bio-networks/index.html#network-details",
+    "title": "D3 Force Layout - Biological Networks",
+    "section": "Network Details",
+    "text": "Network Details\nOrder: \nSize: \nComponents:"
+  },
+  {
+    "objectID": "project/2017-09-17-d3-force-graph-bio-networks/index.html#pattern-details",
+    "href": "project/2017-09-17-d3-force-graph-bio-networks/index.html#pattern-details",
+    "title": "D3 Force Layout - Biological Networks",
+    "section": "Pattern Details",
+    "text": "Pattern Details\nOrder: \nSize: \nFrequency:"
+  },
+  {
+    "objectID": "project/2017-09-17-d3-force-graph-bio-networks/index.html#settings",
+    "href": "project/2017-09-17-d3-force-graph-bio-networks/index.html#settings",
+    "title": "D3 Force Layout - Biological Networks",
+    "section": "Settings",
+    "text": "Settings\n\nNode Charge  \n\n\nLink Strength  \n\n\nNode Radius  \n\n\nLink Width  \n\n\nVelocity Decay  \n\n\nCenter Gravity  \n\n   Force Static   FishEye Distortion Zoom Function Pin on Drop"
+  },
+  {
+    "objectID": "project/2017-09-17-d3-force-graph-bio-networks/index.html#infoTitle",
+    "href": "project/2017-09-17-d3-force-graph-bio-networks/index.html#infoTitle",
+    "title": "D3 Force Layout - Biological Networks",
+    "section": "About",
+    "text": "About"
   }
 ]

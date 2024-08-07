@@ -207,11 +207,6 @@ window.Quarto = {
     <a href="https://www.github.com/nsarang" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
     <a href="https://www.linkedin.com/in/nima-sarang" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-linkedin"></i></a>
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
-  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
-  <div class="quarto-reader-toggle-btn">
-  <i class="bi"></i>
-  </div>
-</a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -257,33 +252,41 @@ window.Quarto = {
 
 
 <style>
-#simplex-noise-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: -1;
-  pointer-events: none;
-}
-#title-block-header {
-  display: block;
-  margin-top: 1.0em;
-  /* width: 100%; */
-  /* height: auto; */
-}
-#title-block-header-title {
-  display: inline-block;
-  position: relative;
-  width: 100%;
-  height: 3.5em;
-}
+    #simplex-noise-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    #title-block-header {
+        display: block;
+        margin-top: 1.0em;
+        /* width: 100%; */
+        /* height: auto; */
+    }
+
+    #title-block-header-title {
+        display: inline-block;
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    #title-block-header.quarto-title-block.default .quarto-title .title {
+        margin: 0;
+        line-height: 1.4;
+    }
 </style>
 
 <canvas id="simplex-noise-canvas" data-target-parent="title-block-header-title"></canvas>
+
 
 
 
