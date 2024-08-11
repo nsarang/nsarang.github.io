@@ -161,7 +161,7 @@ showInfo("about");
 // READ DATA & INIT
 var graph, link, node, simulation;
 
-d3.json("motif.json", function (error, read) {
+d3.json("data/motif.json", function (error, read) {
   if (error) throw error;
   graph = read;
 

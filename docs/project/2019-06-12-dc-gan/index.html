@@ -6,9 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Some of the projects I’ve worked on over the years.">
+<meta name="author" content="Nima Sarang">
+<meta name="dcterms.date" content="2019-06-12">
+<meta name="description" content="A keras implementation of DC-GAN trained on MNIST dataset.">
 
-<title>Projects – Nima Sarang</title>
+<title>DCGAN on MNIST – Nima Sarang</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,27 +26,27 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href="../_assets/favicon.svg" rel="icon" type="image/svg+xml">
-<script src="../site_libs/quarto-listing/list.min.js"></script>
-<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="../site_libs/quarto-html/quarto.js"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../_assets/favicon.svg" rel="icon" type="image/svg+xml">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="../../site_libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -71,35 +73,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-description','listing-image',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-HWSGHN8N8N"></script>
 
 <script type="text/javascript">
@@ -115,9 +88,6 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <link href="https://fonts.googleapis.com/css2?family=Petrona:wght@400;500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:ital,wght@0,400;0,500;1,400;1,500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=B612:ital,wght@0,400;0,700;1,400;1,700&amp;family=B612+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../_assets/hugo/listing-default.css">
-<script src="../_assets/simplex-banner/simplex-noise.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -149,31 +119,31 @@ window.Quarto = {
 };
 </script>
 
-<meta property="og:title" content="Projects">
-<meta property="og:description" content="Some of the projects I’ve worked on over the years.">
+<meta property="og:title" content="DCGAN on MNIST">
+<meta property="og:description" content="A keras implementation of DC-GAN trained on MNIST dataset.">
 <meta property="og:image" content="https://www.nimasarang.com/project/2019-06-12-dc-gan/featured.png">
 <meta property="og:site_name" content="Nima Sarang">
 <meta property="og:image:height" content="339">
 <meta property="og:image:width" content="550">
-<meta name="twitter:title" content="Projects">
-<meta name="twitter:description" content="Some of the projects I’ve worked on over the years.">
+<meta name="twitter:title" content="DCGAN on MNIST">
+<meta name="twitter:description" content="A keras implementation of DC-GAN trained on MNIST dataset.">
 <meta name="twitter:image" content="https://www.nimasarang.com/project/2019-06-12-dc-gan/featured.png">
 <meta name="twitter:image-height" content="339">
 <meta name="twitter:image-width" content="550">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../_assets/favicon.svg" alt="" class="navbar-logo">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../_assets/favicon.svg" alt="" class="navbar-logo">
     </a>
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Nima Sarang</span>
     </a>
   </div>
@@ -184,19 +154,19 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../about/index.html"> 
+    <a class="nav-link" href="../../about/index.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../blog/index.html"> 
+    <a class="nav-link" href="../../blog/index.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../project/index.html" aria-current="page"> 
+    <a class="nav-link" href="../../project/index.html"> 
 <span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../publication/index.html"> 
+    <a class="nav-link" href="../../publication/index.html"> 
 <span class="menu-text">Publications</span></a>
   </li>  
 </ul>
@@ -210,12 +180,46 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns">
+<div id="title-block-header-title" class="quarto-title page-columns page-full page-layout-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg);">
+<h1 class="title">DCGAN on MNIST</h1>
+</div>
+
+<div>
+  <div id="title-block-title-desc" class="description pt-4">
+    A keras implementation of DC-GAN trained on MNIST dataset.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nima Sarang </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 12, 2019</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+
+</header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content column-page" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 <!-- source: https://github.com/gadenbuie/garrickadenbuie-com/blob/main/_partials/title-block-link-buttons/title-block.html -->
 <!-- 
@@ -224,144 +228,68 @@ window.Quarto = {
 -->
 <!-- <header id="title-block-header" class="quarto-title-block default page-columns"> -->
 <!-- <div class="quarto-title page-columns page-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg);"> -->
-<header id="title-block-header" class="quarto-title-block default page-columns">
-<div id="title-block-header-title" class="quarto-title page-columns page-full page-layout-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg);">
-<h1 class="title">Projects</h1>
-</div>
 
-<div>
-  <div id="title-block-title-desc" class="description pt-4">
-    <p>Some of the projects I’ve worked on over the years.</p>
-  </div>
-</div>
-
-
-<div class="quarto-title-meta column-page">
-
-    
-  
-    
-  </div>
-  
-
-
-
-</header>
 
 
 <style>
-    #simplex-noise-canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: -1;
-        pointer-events: none;
-    }
+.vjs-theme-sea .vjs-big-play-button {
+  width: 103px;
+  height: 79px;
+  object-fit: contain;
+  background-color: rgba(255, 255, 255, 0.25);
+  border: none;
+  margin: 0 auto;
+  line-height: 79px;
+  top: 50%;
+  left: 50%;
+  border-radius: 30px;
+  margin-top: -51.5px;
+  margin-left: -39.5px;
+}
 
-    #title-block-header {
-        display: block;
-        margin-top: 1.0em;
-        /* width: 100%; */
-        /* height: auto; */
-    }
-
-    #title-block-header-title {
-        display: inline-block;
-        position: relative;
-        width: 100%;
-        height: auto;
-    }
-
-    #title-block-header.quarto-title-block.default .quarto-title .title {
-        margin: 0;
-        line-height: 1.4;
-    }
+.vjs-theme-sea .vjs-button:hover {
+  color: #4176bc;
+  background: linear-gradient(to top, #d0ddee, #fff);
+}
 </style>
+<p>A keras implementation of a custom Deep Convolutional Generative Adversarial Networks (DCGAN) on MNIST dataset. The code is based on the Francois Chollet’s <a href="https://www.manning.com/books/deep-learning-with-python">Deep Learning with Python</a>, page 308.</p>
+<p>DCGAN is an extension of the GAN architecture, where the generator and discriminator are deep convolutional networks. The discriminator that takes an image as input and outputs a single scalar value representing the probability that the input image is real (as opposed to fake). The generator takes a random vector as input and decodes it into a synthetic image, and is trained to generate images that the discriminator identifies as real.</p>
+<p>The code is available on my <a href="https://github.com/nsarang/gan_implementations/tree/master/DCGAN">GitHub</a>.</p>
+<section id="what-worked" class="level3">
+<h3 class="anchored" data-anchor-id="what-worked">What worked</h3>
+<ul>
+<li>Using dropout in the discriminator<br>
+</li>
+<li>Adding noise to the labels<br>
+</li>
+<li>Using strided convolutions<br>
+</li>
+<li>Normalizing the data to <span class="math inline">\([-1, 1]\)</span></li>
+<li>RMSprop optimizer</li>
+</ul>
+</section>
+<section id="what-didnt-work" class="level3">
+<h3 class="anchored" data-anchor-id="what-didnt-work">What didn’t work</h3>
+<ul>
+<li>Using high learning rates (&gt;1e-3)</li>
+<li>I initially normalized the data between 0 and 1, but since I was using “tanh” as the last layer of the generator’s output, it made the convergence a lot harder</li>
+<li>Constructing separate batches for real and fake images</li>
+<li>Training the discriminator with more steps than the generator</li>
+<li>Using SGD optimizer</li>
+</ul>
+</section>
+<section id="results" class="level3">
+<h3 class="anchored" data-anchor-id="results">Results</h3>
+<p>This is the first 5000 iterations of the training history. The random vectors are fixed at the beginning of the training. As the training progresses, the generator learns to generate more realistic images.<br>
+<br></p>
+<div class="vjs-theme-sea" style="display: flex; justify-content: center;">
+<div class="quarto-video"><video id="video_shortcode_videojs_video1" width="400" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title="The generator learns to generate more realistic images as the training progresses"><source src="images/viz.mp4"></video></div>
+</div>
 
-<canvas id="simplex-noise-canvas" data-target-parent="title-block-header-title"></canvas>
 
+</section>
 
-
-
-
-<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
-<div class="listing-actions-group">
-   <div class="input-group input-group-sm quarto-listing-sort">
-     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
-     <select id="listing-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
-       <option value="" disabled="" selected="" hidden="">Order By</option>
-       <option value="index" data-direction="asc">Default</option>
-         <option value="listing-title" data-direction="asc">
-          Title
-        </option>
-         <option value="listing-date-sort" data-direction="asc">
-          Date - Oldest
-        </option>
-         <option value="listing-date-sort" data-direction="desc">
-          Date - Newest
-        </option>
-     </select>
-  </div>
-    <div class="input-group input-group-sm quarto-listing-filter">
-      <span class="input-group-text"><i class="bi bi-search"></i></span>
-      <input type="text" class="search form-control" placeholder="Filter">
-    </div>
-</div>
-<div class="list grid quarto-listing-cols-2">
-<div class="g-col-1" data-index="0" data-listing-date-sort="1560322800000" data-listing-file-modified-sort="1723327495925" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="308">
-<a href="../project/2019-06-12-dc-gan/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="../project/2019-06-12-dc-gan/featured.png" class="thumbnail-image card-img" style="height: 33vmin;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-DCGAN on MNIST
-</h5>
-<div class="card-text listing-description">
-A keras implementation of DC-GAN trained on MNIST dataset.
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Jun 12, 2019
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="1" data-listing-date-sort="1505631600000" data-listing-file-modified-sort="1723325942969" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="554">
-<a href="../project/2017-09-17-d3-force-graph-bio-networks/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="../project/2017-09-17-d3-force-graph-bio-networks/featured.png" class="thumbnail-image card-img" style="height: 33vmin;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-D3 Force Layout - Biological Networks
-</h5>
-<div class="card-text listing-description">
-<p>An interactive graph visualization of protein-protein interaction networks.</p>
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Sep 17, 2017
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -940,7 +868,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script type="module" src="../_assets/simplex-banner/render-canvas.js"></script>
+<script>videojs(video_shortcode_videojs_video1);</script>
 
 
 
