@@ -81,7 +81,7 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-description','listing-image',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-description','listing-categories','listing-image',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
       searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
     };
@@ -312,45 +312,70 @@ window.Quarto = {
       <input type="text" class="search form-control" placeholder="Filter">
     </div>
 </div>
-<div class="list grid quarto-listing-cols-2">
-<div class="g-col-1" data-index="0" data-listing-date-sort="1560322800000" data-listing-file-modified-sort="1723327495925" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="308">
+<div class="list grid quarto-listing-cols-3">
+<div class="g-col-1" data-index="0" data-categories="GAN,CNN,Keras" data-listing-date-sort="1560322800000" data-listing-file-modified-sort="1723340974382" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="308">
 <a href="../project/2019-06-12-dc-gan/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img loading="lazy" src="../project/2019-06-12-dc-gan/featured.png" class="thumbnail-image card-img" style="height: 33vmin;">
+<img loading="lazy" src="../project/2019-06-12-dc-gan/featured.png" class="thumbnail-image card-img" style="height: 25vmin;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
 DCGAN on MNIST
 </h5>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('GAN'); return false;">
+GAN
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('CNN'); return false;">
+CNN
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Keras'); return false;">
+Keras
+</div>
+</div>
 <div class="card-text listing-description">
-A keras implementation of DC-GAN trained on MNIST dataset.
+A Keras implementation of Deep Convolutional Generative Adversarial Networks (DCGAN) trained on MNIST dataset.
 </div>
 <div class="card-attribution card-text-small end">
 <div class="listing-date">
-Jun 12, 2019
+Jun, 2019
 </div>
 </div>
 </div>
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="1" data-listing-date-sort="1505631600000" data-listing-file-modified-sort="1723325942969" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="554">
+<div class="g-col-1" data-index="1" data-categories="d3,graph,protein-networks,visualization" data-listing-date-sort="1505631600000" data-listing-file-modified-sort="1723341026649" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="554">
 <a href="../project/2017-09-17-d3-force-graph-bio-networks/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img loading="lazy" src="../project/2017-09-17-d3-force-graph-bio-networks/featured.png" class="thumbnail-image card-img" style="height: 33vmin;">
+<img loading="lazy" src="../project/2017-09-17-d3-force-graph-bio-networks/featured.png" class="thumbnail-image card-img" style="height: 25vmin;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
 D3 Force Layout - Biological Networks
 </h5>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('d3'); return false;">
+d3
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('graph'); return false;">
+graph
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('protein-networks'); return false;">
+protein-networks
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('visualization'); return false;">
+visualization
+</div>
+</div>
 <div class="card-text listing-description">
 <p>An interactive graph visualization of protein-protein interaction networks.</p>
 </div>
 <div class="card-attribution card-text-small end">
 <div class="listing-date">
-Sep 17, 2017
+Sep, 2017
 </div>
 </div>
 </div>

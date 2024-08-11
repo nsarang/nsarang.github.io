@@ -8,7 +8,7 @@
 
 <meta name="author" content="Nima Sarang">
 <meta name="dcterms.date" content="2019-06-12">
-<meta name="description" content="A keras implementation of DC-GAN trained on MNIST dataset.">
+<meta name="description" content="A Keras implementation of Deep Convolutional Generative Adversarial Networks (DCGAN) trained on MNIST dataset.">
 
 <title>DCGAN on MNIST – Nima Sarang</title>
 <style>
@@ -120,13 +120,13 @@ window.Quarto = {
 </script>
 
 <meta property="og:title" content="DCGAN on MNIST">
-<meta property="og:description" content="A keras implementation of DC-GAN trained on MNIST dataset.">
+<meta property="og:description" content="A Keras implementation of Deep Convolutional Generative Adversarial Networks (DCGAN) trained on MNIST dataset.">
 <meta property="og:image" content="https://www.nimasarang.com/project/2019-06-12-dc-gan/featured.png">
 <meta property="og:site_name" content="Nima Sarang">
 <meta property="og:image:height" content="339">
 <meta property="og:image:width" content="550">
 <meta name="twitter:title" content="DCGAN on MNIST">
-<meta name="twitter:description" content="A keras implementation of DC-GAN trained on MNIST dataset.">
+<meta name="twitter:description" content="A Keras implementation of Deep Convolutional Generative Adversarial Networks (DCGAN) trained on MNIST dataset.">
 <meta name="twitter:image" content="https://www.nimasarang.com/project/2019-06-12-dc-gan/featured.png">
 <meta name="twitter:image-height" content="339">
 <meta name="twitter:image-width" content="550">
@@ -183,11 +183,16 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default page-columns">
 <div id="title-block-header-title" class="quarto-title page-columns page-full page-layout-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg);">
 <h1 class="title">DCGAN on MNIST</h1>
-</div>
+    <div class="quarto-categories">
+        <div class="quarto-category">GAN</div>
+        <div class="quarto-category">CNN</div>
+        <div class="quarto-category">Keras</div>
+      </div>
+  </div>
 
 <div>
   <div id="title-block-title-desc" class="description pt-4">
-    A keras implementation of DC-GAN trained on MNIST dataset.
+    A Keras implementation of Deep Convolutional Generative Adversarial Networks (DCGAN) trained on MNIST dataset.
   </div>
 </div>
 
@@ -252,7 +257,7 @@ window.Quarto = {
   background: linear-gradient(to top, #d0ddee, #fff);
 }
 </style>
-<p>A keras implementation of a custom Deep Convolutional Generative Adversarial Networks (DCGAN) on MNIST dataset. The code is based on the Francois Chollet’s <a href="https://www.manning.com/books/deep-learning-with-python">Deep Learning with Python</a>, page 308.</p>
+<p>A Keras implementation of a custom Deep Convolutional Generative Adversarial Networks (DCGAN) on MNIST dataset. The code is based on the Francois Chollet’s <a href="https://www.manning.com/books/deep-learning-with-python">Deep Learning with Python</a>, page 308.</p>
 <p>DCGAN is an extension of the GAN architecture, where the generator and discriminator are deep convolutional networks. The discriminator that takes an image as input and outputs a single scalar value representing the probability that the input image is real (as opposed to fake). The generator takes a random vector as input and decodes it into a synthetic image, and is trained to generate images that the discriminator identifies as real.</p>
 <p>The code is available on my <a href="https://github.com/nsarang/gan_implementations/tree/master/DCGAN">GitHub</a>.</p>
 <section id="what-worked" class="level3">

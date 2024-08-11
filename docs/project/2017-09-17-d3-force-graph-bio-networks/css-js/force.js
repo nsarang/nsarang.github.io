@@ -21,7 +21,7 @@ var rect = svg.append("rect")
 
 
 // ZOOM
-var zoomState = true,
+var zoomState = false,
   zoomExtent = 3,
   zoomScale,
   width_LT = -(zoomExtent - 1) / 2 * width + radius,
