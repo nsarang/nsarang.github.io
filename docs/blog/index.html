@@ -115,7 +115,6 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <link href="https://fonts.googleapis.com/css2?family=Petrona:wght@400;500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:ital,wght@0,400;0,500;1,400;1,500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=B612:ital,wght@0,400;0,700;1,400;1,700&amp;family=B612+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js"></script>
 <link rel="stylesheet" href="../_assets/hugo/listing-default.css">
 <script src="../_assets/simplex-banner/simplex-noise.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
@@ -227,7 +226,7 @@ window.Quarto = {
 <!-- <header id="title-block-header" class="quarto-title-block default page-columns"> -->
 <!-- <div class="quarto-title page-columns page-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg);"> -->
 <header id="title-block-header" class="quarto-title-block default page-columns">
-<div id="title-block-header-title" class="quarto-title page-columns page-full page-layout-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg);">
+<div id="title-block-header-title" class="quarto-title page-columns page-full page-layout-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg); background-repeat: no-repeat;">
 <h1 class="title">Musings from My Corner of the World</h1>
 </div>
 
@@ -293,7 +292,7 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="ML,LightGBM,CatBoost,GBT" data-listing-date-sort="1723359600000" data-listing-file-modified-sort="1723495659094" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1071">
+<div class="quarto-post image-right" data-index="0" data-categories="ML,LightGBM,CatBoost,GBT" data-listing-date-sort="1723359600000" data-listing-file-modified-sort="1723497616231" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1080">
 <div class="thumbnail">
 <p><a href="../blog/2024-08-11-gbt-custom-loss/index.html" class="no-external"></a></p><a href="../blog/2024-08-11-gbt-custom-loss/index.html" class="no-external">
 <p><img loading="lazy" src="../blog/2024-08-11-gbt-custom-loss/featured.png" class="thumbnail-image"></p>
@@ -335,7 +334,7 @@ Nima Sarang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="ml,analysis" data-listing-date-sort="1718434800000" data-listing-file-modified-sort="1723495860940" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="983">
+<div class="quarto-post image-right" data-index="1" data-categories="ml,analysis" data-listing-date-sort="1718434800000" data-listing-file-modified-sort="1723497653024" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="983">
 <div class="thumbnail">
 <p><a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external"></a></p><a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external">
 <p><img loading="lazy" src="../blog/2024-06-15-lstm-from-scratch/featured.png" class="thumbnail-image"></p>
@@ -976,11 +975,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
                 }
 
                 if (bodyElement.classList.contains('quarto-dark')) {
-                    console.log('dark theme');
                     element.classList.add('dark-theme');
                     element.classList.remove('light-theme');
                 } else { // light theme (default)
-                    console.log('light theme');
                     element.classList.add('light-theme');
                     element.classList.remove('dark-theme');
                 }
@@ -1005,7 +1002,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
             handleMouseDown: function (event) {
                 const target = event.target.closest('.docs, .code');
-                console.log('target:', target);
                 if (target) {
                     this.selectionStart = target;
                     this.activeColumnType = target.classList.contains('docs') ? '.docs' : '.code';

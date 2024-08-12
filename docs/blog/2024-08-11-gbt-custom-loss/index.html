@@ -123,7 +123,6 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <link href="https://fonts.googleapis.com/css2?family=Petrona:wght@400;500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:ital,wght@0,400;0,500;1,400;1,500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=B612:ital,wght@0,400;0,700;1,400;1,700&amp;family=B612+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -218,7 +217,7 @@ window.Quarto = {
 </header>
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns">
-<div id="title-block-header-title" class="quarto-title page-columns page-full page-layout-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg);">
+<div id="title-block-header-title" class="quarto-title page-columns page-full page-layout-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg); background-repeat: no-repeat;">
 <h1 class="title">Custom Loss Functions for LightGBM and CatBoost</h1>
     <div class="quarto-categories">
         <div class="quarto-category">ML</div>
@@ -268,15 +267,15 @@ window.Quarto = {
   <li><a href="#lightgbm" id="toc-lightgbm" class="nav-link" data-scroll-target="#lightgbm"><span class="header-section-number">2</span> LightGBM</a>
   <ul class="collapse">
   <li><a href="#interface" id="toc-interface" class="nav-link" data-scroll-target="#interface"><span class="header-section-number">2.1</span> Interface</a></li>
-  <li><a href="#mse" id="toc-mse" class="nav-link" data-scroll-target="#mse"><span class="header-section-number">2.2</span> MSE</a></li>
-  <li><a href="#msle" id="toc-msle" class="nav-link" data-scroll-target="#msle"><span class="header-section-number">2.3</span> MSLE</a></li>
+  <li><a href="#mean-squared-error" id="toc-mean-squared-error" class="nav-link" data-scroll-target="#mean-squared-error"><span class="header-section-number">2.2</span> Mean Squared Error</a></li>
+  <li><a href="#mean-squared-logarithmic-error" id="toc-mean-squared-logarithmic-error" class="nav-link" data-scroll-target="#mean-squared-logarithmic-error"><span class="header-section-number">2.3</span> Mean Squared Logarithmic Error</a></li>
   <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage"><span class="header-section-number">2.4</span> Usage</a></li>
   </ul></li>
   <li><a href="#catboost" id="toc-catboost" class="nav-link" data-scroll-target="#catboost"><span class="header-section-number">3</span> CatBoost</a>
   <ul class="collapse">
   <li><a href="#interface-1" id="toc-interface-1" class="nav-link" data-scroll-target="#interface-1"><span class="header-section-number">3.1</span> Interface</a></li>
-  <li><a href="#mse-1" id="toc-mse-1" class="nav-link" data-scroll-target="#mse-1"><span class="header-section-number">3.2</span> MSE</a></li>
-  <li><a href="#msle-1" id="toc-msle-1" class="nav-link" data-scroll-target="#msle-1"><span class="header-section-number">3.3</span> MSLE</a></li>
+  <li><a href="#mean-squared-error-1" id="toc-mean-squared-error-1" class="nav-link" data-scroll-target="#mean-squared-error-1"><span class="header-section-number">3.2</span> Mean Squared Error</a></li>
+  <li><a href="#mean-squared-logarithmic-error-1" id="toc-mean-squared-logarithmic-error-1" class="nav-link" data-scroll-target="#mean-squared-logarithmic-error-1"><span class="header-section-number">3.3</span> Mean Squared Logarithmic Error</a></li>
   <li><a href="#usage-1" id="toc-usage-1" class="nav-link" data-scroll-target="#usage-1"><span class="header-section-number">3.4</span> Usage</a></li>
   </ul></li>
   </ul>
@@ -302,7 +301,7 @@ window.Quarto = {
 <section id="introduction" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
 <p>As a data scientist, I’ve often found myself pushing the boundaries of popular gradient boosting frameworks. Recently I’ve been exploring the implementation of custom loss functions in LightGBM and CatBoost, two powerful tools in learning from tabular data. These frameworks offer a wide range of built-in loss functions, but sometimes you need to optimize for a specific metric or tackle a unique problem that requires a custom loss.</p>
-<p>In this blog post, I’ll walk through the process of creating custom loss functions, using Mean Squared Error (MSE) and Mean Squared Logarithmic Error (MSLE) as practical examples. We’ll start by deriving the gradients and Hessians for these functions, to provide the mathematical foundation for our implementations. Then we’ll move on to the code, showing how to integrate these custom losses into LightGBM and CatBoost. Each of these frameworks has its own API for custom losses, so we’ll cover the specifics for each one separately</p>
+<p>In this blog post, I’ll walk through the process of creating custom loss functions, using Mean Squared Error (MSE) and Mean Squared Logarithmic Error (MSLE) as practical examples. We’ll start by deriving the gradients and Hessians for these functions, to provide the mathematical foundation for our implementations. Then we’ll move on to the code, showing how to integrate these custom losses into LightGBM and CatBoost. Each of these frameworks has its own API for custom losses, so we’ll cover the specifics for each one separately.</p>
 </section>
 <section id="lightgbm" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="lightgbm"><span class="header-section-number">2</span> LightGBM</h2>
@@ -385,9 +384,9 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="mse" class="level3" data-number="2.2">
-<h3 data-number="2.2" class="anchored" data-anchor-id="mse"><span class="header-section-number">2.2</span> MSE</h3>
-<p>MSE or Mean Squared Error is commonly used loss function for regression and forecasting problems. It is defined as the average of the squared differences between the predicted and actual values: <span id="eq-mse"><span class="math display">\[
+<section id="mean-squared-error" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="mean-squared-error"><span class="header-section-number">2.2</span> Mean Squared Error</h3>
+<p><strong>Mean Squared Error (MSE)</strong> is a commonly used loss function for regression and forecasting problems. It is defined as the average of the squared differences between the predicted and actual values: <span id="eq-mse"><span class="math display">\[
 \text{MSE}(y, p) \;=\; {\frac{1}{|\mathcal{D}|} \sum_{i=1}^{|\mathcal{D}|} (y_i - p_i)^2}
 \tag{1}\]</span></span></p>
 <p>where <span class="math inline">\(y_i\)</span> and <span class="math inline">\(p_i\)</span> are the target and predicted values for the <span class="math inline">\(i\)</span>-th sample respectively, and <span class="math inline">\(|\mathcal{D}|\)</span> is the number of samples in the dataset.</p>
@@ -456,9 +455,9 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="msle" class="level3" data-number="2.3">
-<h3 data-number="2.3" class="anchored" data-anchor-id="msle"><span class="header-section-number">2.3</span> MSLE</h3>
-<p>MSLE or Mean Squared Logarithmic Error is defined as the average of the squared differences between the logarithm of the predicted and actual values. It’s an scale-invariant metric that is commonly used in regression problems where the target values have a wide range of values. I think it’s a good metric for modeling ratios or percentages.</p>
+<section id="mean-squared-logarithmic-error" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="mean-squared-logarithmic-error"><span class="header-section-number">2.3</span> Mean Squared Logarithmic Error</h3>
+<p><strong>Mean Squared Logarithmic Error (MSLE)</strong> is defined as the average of the squared differences between the logarithm of the predicted and actual values. It’s an scale-invariant metric that is commonly used in regression problems where the target values have a wide range of values. I think it’s a good metric for modeling ratios or percentages.</p>
 <p><span id="eq-msle"><span class="math display">\[
 \text{MSLE}(y, p) \;=\; \frac{1}{|\mathcal{D}|} \sum_{i=1}^{|\mathcal{D}|} (\log_e (1 + y_i) - \log_e (1 + p_i) )^2
 \tag{4}\]</span></span></p>
@@ -816,8 +815,8 @@ we'll just have to roll with it</p>
 </div>
 </div>
 </section>
-<section id="mse-1" class="level3" data-number="3.2">
-<h3 data-number="3.2" class="anchored" data-anchor-id="mse-1"><span class="header-section-number">3.2</span> MSE</h3>
+<section id="mean-squared-error-1" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="mean-squared-error-1"><span class="header-section-number">3.2</span> Mean Squared Error</h3>
 <p>We previously derived the gradient (<a href="#eq-mse-gradient" class="quarto-xref">Equation&nbsp;2</a>) and hessian (<a href="#eq-mse-hessian" class="quarto-xref">Equation&nbsp;3</a>) of the MSE loss function for LightGBM. We can use the same equations for CatBoost, but we need to implement them as a class.<br>
 <br></p>
 <div id="cell-22" class="cell" data-execution_count="8">
@@ -977,8 +976,8 @@ we'll just have to roll with it</p>
 </div>
 </div>
 </section>
-<section id="msle-1" class="level3" data-number="3.3">
-<h3 data-number="3.3" class="anchored" data-anchor-id="msle-1"><span class="header-section-number">3.3</span> MSLE</h3>
+<section id="mean-squared-logarithmic-error-1" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="mean-squared-logarithmic-error-1"><span class="header-section-number">3.3</span> Mean Squared Logarithmic Error</h3>
 <p>Based on the derivations from the LightGBM section (<a href="#eq-msle-gradient" class="quarto-xref">Equation&nbsp;5</a> and <a href="#eq-msle-hessian" class="quarto-xref">Equation&nbsp;6</a>), we can implement the MSLE objective function for CatBoost:<br>
 <br></p>
 <div id="cell-25" class="cell" data-execution_count="9">
@@ -1751,11 +1750,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
                 }
 
                 if (bodyElement.classList.contains('quarto-dark')) {
-                    console.log('dark theme');
                     element.classList.add('dark-theme');
                     element.classList.remove('light-theme');
                 } else { // light theme (default)
-                    console.log('light theme');
                     element.classList.add('light-theme');
                     element.classList.remove('dark-theme');
                 }
@@ -1780,7 +1777,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
             handleMouseDown: function (event) {
                 const target = event.target.closest('.docs, .code');
-                console.log('target:', target);
                 if (target) {
                     this.selectionStart = target;
                     this.activeColumnType = target.classList.contains('docs') ? '.docs' : '.code';
