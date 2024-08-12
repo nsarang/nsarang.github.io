@@ -2,11 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.nimasarang.com/project/index.html</loc>
-    <lastmod>2024-08-11T01:46:19.947Z</lastmod>
+    <lastmod>2024-08-11T05:20:44.949Z</lastmod>
   </url>
   <url>
     <loc>https://www.nimasarang.com/blog/index.html</loc>
-    <lastmod>2024-08-07T01:28:04.756Z</lastmod>
+    <lastmod>2024-08-12T20:48:54.912Z</lastmod>
   </url>
   <url>
     <loc>https://www.nimasarang.com/index.html</loc>
@@ -21,8 +21,12 @@
     <lastmod>2024-08-01T19:12:29.683Z</lastmod>
   </url>
   <url>
+    <loc>https://www.nimasarang.com/blog/2024-08-11-gbt-custom-loss/index.html</loc>
+    <lastmod>2024-08-12T20:47:39.094Z</lastmod>
+  </url>
+  <url>
     <loc>https://www.nimasarang.com/blog/2024-06-15-lstm-from-scratch/index.html</loc>
-    <lastmod>2024-08-06T00:29:50.556Z</lastmod>
+    <lastmod>2024-08-12T20:51:00.940Z</lastmod>
   </url>
   <url>
     <loc>https://www.nimasarang.com/test/index.html</loc>
@@ -38,7 +42,7 @@
   </url>
   <url>
     <loc>https://www.nimasarang.com/project/2019-06-12-dc-gan/index.html</loc>
-    <lastmod>2024-08-11T01:49:34.382Z</lastmod>
+    <lastmod>2024-08-12T18:48:23.939Z</lastmod>
   </url>
   <url>
     <loc>https://www.nimasarang.com/project/2017-09-17-d3-force-graph-bio-networks/index.html</loc>

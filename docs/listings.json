@@ -9,6 +9,7 @@
   {
     "listing": "/blog/index.html",
     "items": [
+      "/blog/2024-08-11-gbt-custom-loss/index.html",
       "/blog/2024-06-15-lstm-from-scratch/index.html"
     ]
   },

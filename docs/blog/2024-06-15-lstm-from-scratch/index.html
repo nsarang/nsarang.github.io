@@ -368,7 +368,7 @@ h_t &amp;= o_t \odot \tanh(C_t)
 <p>Now let’s get into the implementation, step by step.</p>
 <section id="lstm.py" class="level4">
 <h4 class="anchored">&gt; lstm.py</h4>
-<div id="cell-8" class="cell" data-execution_count="14">
+<div id="cell-8" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -1280,7 +1280,7 @@ It can be used to save and load the model.</p>
 <p>The loss function used is the cross-entropy loss, which is suitable for classification tasks. Next token prediction is indeed a classification task where the model predicts the probability distribution over the vocabulary for the next token in the sequence.</p>
 <section id="op.py" class="level4">
 <h4 class="anchored" data-anchor-id="op.py">&gt; op.py</h4>
-<div id="cell-11" class="cell" data-execution_count="15">
+<div id="cell-11" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -1437,7 +1437,7 @@ $$H(y, p) = -\sum_{i} y_i \log(p_i)$$</p>
 <p>AdamW is a variant of the Adam optimizer that decouples weight penalty from the optimization steps, where the weight penalty is applied directly to the gradients. Adam optimizer uses both the first and second moments of the gradients to adapt the learning rate tailored to each parameter. The benefit of Adam/AdamW is that it requires little tuning of hyperparameters compared to RMSprop and SGD. We’ll go over each step of the optimization in the implementation.</p>
 <section id="optim.py" class="level4">
 <h4 class="anchored">&gt; optim.py</h4>
-<div id="cell-15" class="cell" data-execution_count="16">
+<div id="cell-15" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -1823,7 +1823,7 @@ where \(p_{t-1}\) is the previous parameter value.</p>
 </ul>
 <section id="data.py" class="level4">
 <h4 class="anchored">&gt; data.py</h4>
-<div id="cell-19" class="cell" data-execution_count="17">
+<div id="cell-19" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -2052,16 +2052,16 @@ used in a <code>for</code> loop to iterate over the dataset. e.g.:</p>
 <p>An important distinction to make between the text generation at training time and inference time is that at training time, we feed the ground truth characters to the model to predict the next character; This is called <strong>teacher forcing</strong>. At inference time, we feed the model’s prediction at time step <span class="math inline">\(t\)</span> as the input at time step <span class="math inline">\(t+1\)</span> to predict the next character.</p>
 <section id="load" class="level3">
 <h3 class="anchored" data-anchor-id="load">Load</h3>
-<div id="cell-23" class="cell" data-execution_count="100">
+<div id="cell-23" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pylab <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Download the Shakespeare dataset which is a single text file from the following link: <a href="https://storage.googleapis.com/download.tensorflow.org/data/shakespeare.txt">Shakespeare dataset</a></p>
-<div id="cell-25" class="cell" data-execution_count="8">
+<div id="cell-25" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"shakespeare.txt"</span>) <span class="im">as</span> <span class="bu">file</span>:</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> <span class="bu">file</span>.read()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-26" class="cell" data-execution_count="9">
+<div id="cell-26" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(data[:<span class="dv">200</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>First Citizen:
@@ -2084,17 +2084,17 @@ First, you</code></pre>
 <section id="preprocess" class="level3">
 <h3 class="anchored" data-anchor-id="preprocess">Preprocess</h3>
 <p>We need to convert the text data into numerical data. Using scikit-learn’s <code>LabelEncoder</code> we can map each character to a unique integer. The same encoder will be used to inverse transform the predictions back to characters.</p>
-<div id="cell-28" class="cell" data-execution_count="10">
+<div id="cell-28" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> LabelEncoder</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>char_data <span class="op">=</span> np.array(<span class="bu">list</span>(data))</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>encoder <span class="op">=</span> LabelEncoder()</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>indices_data <span class="op">=</span> encoder.fit_transform(char_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-29" class="cell" data-execution_count="11">
+<div id="cell-29" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>vocabulary <span class="op">=</span> encoder.classes_</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>vocabulary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="11">
+<div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>array(['\n', ' ', '!', '$', '&amp;', "'", ',', '-', '.', '3', ':', ';', '?',
        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
        'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
@@ -2104,9 +2104,9 @@ First, you</code></pre>
 </div>
 </div>
 <p>An example of the mapped data:</p>
-<div id="cell-31" class="cell" data-execution_count="12">
+<div id="cell-31" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>indices_data[:<span class="dv">200</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="12">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>array([18, 47, 56, 57, 58,  1, 15, 47, 58, 47, 64, 43, 52, 10,  0, 14, 43,
        44, 53, 56, 43,  1, 61, 43,  1, 54, 56, 53, 41, 43, 43, 42,  1, 39,
        52, 63,  1, 44, 59, 56, 58, 46, 43, 56,  6,  1, 46, 43, 39, 56,  1,
@@ -2125,7 +2125,7 @@ First, you</code></pre>
 <section id="initialize" class="level3">
 <h3 class="anchored" data-anchor-id="initialize">Initialize</h3>
 <p>Now let’s define the dataloader, the model and the optimizer. I used the following hyperparameters below, but feel free to experiment with different values.</p>
-<div id="cell-34" class="cell" data-execution_count="13">
+<div id="cell-34" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>SEQUENCE_LENGTH <span class="op">=</span> <span class="dv">128</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>BATCH_SIZE <span class="op">=</span> <span class="dv">32</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>VOCAB_SIZE <span class="op">=</span> <span class="bu">len</span>(vocabulary)</span>
@@ -2139,7 +2139,7 @@ First, you</code></pre>
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>NUM_EPOCHS <span class="op">=</span> <span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Define the train and test data loaders</p>
-<div id="cell-36" class="cell" data-execution_count="14">
+<div id="cell-36" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> data <span class="im">import</span> NextCharDataset, DataLoader</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>trainset_size <span class="op">=</span> <span class="bu">int</span>(<span class="bu">len</span>(indices_data) <span class="op">*</span> TRAIN_SPLIT)</span>
@@ -2153,7 +2153,7 @@ First, you</code></pre>
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>testloader <span class="op">=</span> DataLoader(testset, batch_size<span class="op">=</span>BATCH_SIZE, shuffle<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Define the model and optimizer</p>
-<div id="cell-38" class="cell" data-execution_count="30">
+<div id="cell-38" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lstm <span class="im">import</span> LSTMClassifier</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> optim <span class="im">import</span> AdamW</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2549,6 +2549,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         if (link.dataset.originalHref !== undefined) {
           link.href = link.dataset.originalHref;
         }
+          // default icon
+          link.classList.add("external");
       }
     }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {

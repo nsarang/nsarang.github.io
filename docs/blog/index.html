@@ -81,7 +81,7 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-reading-time','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
       searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
     };
@@ -153,15 +153,15 @@ window.Quarto = {
 <link rel="stylesheet" href="../_assets/docfuse/style.css">
 <meta property="og:title" content="Musings from My Corner of the World">
 <meta property="og:description" content="I write about the things that spark my curiosity and the passions that drive me. Hopefully, you’ll find something here to inspire you too.">
-<meta property="og:image" content="https://www.nimasarang.com/blog/2024-06-15-lstm-from-scratch/featured.png">
+<meta property="og:image" content="https://www.nimasarang.com/blog/2024-08-11-gbt-custom-loss/featured.png">
 <meta property="og:site_name" content="Nima Sarang">
-<meta property="og:image:height" content="503">
-<meta property="og:image:width" content="890">
+<meta property="og:image:height" content="596">
+<meta property="og:image:width" content="800">
 <meta name="twitter:title" content="Musings from My Corner of the World">
 <meta name="twitter:description" content="I write about the things that spark my curiosity and the passions that drive me. Hopefully, you’ll find something here to inspire you too.">
-<meta name="twitter:image" content="https://www.nimasarang.com/blog/2024-06-15-lstm-from-scratch/featured.png">
-<meta name="twitter:image-height" content="503">
-<meta name="twitter:image-width" content="890">
+<meta name="twitter:image" content="https://www.nimasarang.com/blog/2024-08-11-gbt-custom-loss/featured.png">
+<meta name="twitter:image-height" content="596">
+<meta name="twitter:image-width" content="800">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -293,7 +293,49 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="ml,analysis" data-listing-date-sort="1718434800000" data-listing-file-modified-sort="1722904190556" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="983">
+<div class="quarto-post image-right" data-index="0" data-categories="ML,LightGBM,CatBoost,GBT" data-listing-date-sort="1723359600000" data-listing-file-modified-sort="1723495659094" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1071">
+<div class="thumbnail">
+<p><a href="../blog/2024-08-11-gbt-custom-loss/index.html" class="no-external"></a></p><a href="../blog/2024-08-11-gbt-custom-loss/index.html" class="no-external">
+<p><img loading="lazy" src="../blog/2024-08-11-gbt-custom-loss/featured.png" class="thumbnail-image"></p>
+</a><p><a href="../blog/2024-08-11-gbt-custom-loss/index.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="../blog/2024-08-11-gbt-custom-loss/index.html" class="no-external">Custom Loss Functions for LightGBM and CatBoost</a>
+</h3>
+<div class="listing-subtitle">
+<a href="../blog/2024-08-11-gbt-custom-loss/index.html" class="no-external"></a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('ML'); return false;">
+ML
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('LightGBM'); return false;">
+LightGBM
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('CatBoost'); return false;">
+CatBoost
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('GBT'); return false;">
+GBT
+</div>
+</div>
+<div class="listing-description">
+<a href="../blog/2024-08-11-gbt-custom-loss/index.html" class="no-external">Guide on how to implement custom loss functions and evaluation metrics for LightGBM and CatBoost</a>
+</div>
+</div>
+<div class="metadata">
+<a href="../blog/2024-08-11-gbt-custom-loss/index.html" class="no-external">
+<div class="listing-date">
+Aug 11, 2024
+</div>
+<div class="listing-author">
+Nima Sarang
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="ml,analysis" data-listing-date-sort="1718434800000" data-listing-file-modified-sort="1723495860940" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="983">
 <div class="thumbnail">
 <p><a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external"></a></p><a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external">
 <p><img loading="lazy" src="../blog/2024-06-15-lstm-from-scratch/featured.png" class="thumbnail-image"></p>
@@ -325,9 +367,6 @@ Jun 15, 2024
 </div>
 <div class="listing-author">
 Nima Sarang
-</div>
-<div class="listing-reading-time">
-5 min
 </div>
 </a>
 </div>
@@ -587,6 +626,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         if (link.dataset.originalHref !== undefined) {
           link.href = link.dataset.originalHref;
         }
+          // default icon
+          link.classList.add("external");
       }
     }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
