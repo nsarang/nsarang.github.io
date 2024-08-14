@@ -298,6 +298,12 @@ window.Quarto = {
 
 
 
+<style>
+.cell:has(.docfuse) {
+  margin-top: 1.5lh;
+  margin-bottom: 3.5lh;
+}
+</style>
 <section id="introduction" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
 <p>As a data scientist, I’ve often found myself pushing the boundaries of popular gradient boosting frameworks. Recently I’ve been exploring the implementation of custom loss functions in LightGBM and CatBoost, two powerful tools in learning from tabular data. These frameworks offer a wide range of built-in loss functions, but sometimes you need to optimize for a specific metric or tackle a unique problem that requires a custom loss.</p>
@@ -308,7 +314,7 @@ window.Quarto = {
 <section id="interface" class="level3" data-number="2.1">
 <h3 data-number="2.1" class="anchored" data-anchor-id="interface"><span class="header-section-number">2.1</span> Interface</h3>
 <p>The loss function and the evaluation metric must have the following structure:</p>
-<div id="cell-8" class="cell" data-execution_count="4">
+<div id="cell-9" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -398,7 +404,7 @@ window.Quarto = {
 <p>The hessian for sample <span class="math inline">\(i\)</span> is: <span id="eq-mse-hessian"><span class="math display">\[
 \frac{\partial^2}{\partial p_i^2} \text{MSE}(y, p) \;\propto\; \frac{\partial}{\partial p_i} p_i - y_i \;=\; 1
 \tag{3}\]</span></span></p>
-<div id="cell-11" class="cell" data-execution_count="5">
+<div id="cell-12" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -479,7 +485,7 @@ window.Quarto = {
      &amp; = \frac{1 - \log_e (1 + p_i) + \log_e (1 + y_i)}{(1 + p_i)^2}                                                                                                                    \\[3ex]
 \end{aligned}
 \tag{6}\]</span></span></p>
-<div id="cell-14" class="cell" data-execution_count="6">
+<div id="cell-15" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -625,7 +631,7 @@ window.Quarto = {
 </ol>
 <p><br></p>
 <p>The overall interface is as follows:</p>
-<div id="cell-19" class="cell" data-execution_count="7">
+<div id="cell-20" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -816,9 +822,8 @@ we'll just have to roll with it</p>
 </section>
 <section id="mean-squared-error-1" class="level3" data-number="3.2">
 <h3 data-number="3.2" class="anchored" data-anchor-id="mean-squared-error-1"><span class="header-section-number">3.2</span> Mean Squared Error</h3>
-<p>We previously derived the gradient (<a href="#eq-mse-gradient" class="quarto-xref">Equation&nbsp;2</a>) and hessian (<a href="#eq-mse-hessian" class="quarto-xref">Equation&nbsp;3</a>) of the MSE loss function for LightGBM. We can use the same equations for CatBoost, but we need to implement them as a class.<br>
-<br></p>
-<div id="cell-22" class="cell" data-execution_count="8">
+<p>We previously derived the gradient (<a href="#eq-mse-gradient" class="quarto-xref">Equation&nbsp;2</a>) and hessian (<a href="#eq-mse-hessian" class="quarto-xref">Equation&nbsp;3</a>) of the MSE loss function for LightGBM. We can use the same equations for CatBoost, but we need to implement them as a class.</p>
+<div id="cell-23" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -977,9 +982,8 @@ we'll just have to roll with it</p>
 </section>
 <section id="mean-squared-logarithmic-error-1" class="level3" data-number="3.3">
 <h3 data-number="3.3" class="anchored" data-anchor-id="mean-squared-logarithmic-error-1"><span class="header-section-number">3.3</span> Mean Squared Logarithmic Error</h3>
-<p>Based on the derivations from the LightGBM section (<a href="#eq-msle-gradient" class="quarto-xref">Equation&nbsp;5</a> and <a href="#eq-msle-hessian" class="quarto-xref">Equation&nbsp;6</a>), we can implement the MSLE objective function for CatBoost:<br>
-<br></p>
-<div id="cell-25" class="cell" data-execution_count="9">
+<p>Based on the derivations from the LightGBM section (<a href="#eq-msle-gradient" class="quarto-xref">Equation&nbsp;5</a> and <a href="#eq-msle-hessian" class="quarto-xref">Equation&nbsp;6</a>), we can implement the MSLE objective function for CatBoost:</p>
+<div id="cell-26" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">

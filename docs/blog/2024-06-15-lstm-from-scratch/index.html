@@ -320,6 +320,9 @@ figcaption {
   margin: auto;
   text-align: center;
 }
+.cell:has(.docfuse) {
+  margin-bottom: 4lh;
+}
 </style>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
@@ -2240,7 +2243,7 @@ First, you</code></pre>
 <h3 class="anchored" data-anchor-id="generating-text">Generating text</h3>
 <p>At inference time, we feed the model a prefix text and let it generate the next characters. We can control the number of characters to generate by setting the <code>generate_length</code> parameter in <code>forward</code>. I used <strong>greedy decoding</strong> to generate the text, but there are other methods like beam search and Top-K sampling.</p>
 <div id="cell-49" class="cell" data-execution_count="88">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate(model, prefix: <span class="bu">str</span>, length: <span class="bu">int</span>):</span>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">generate</span>(model, prefix: <span class="bu">str</span>, length: <span class="bu">int</span>):</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    inputs <span class="op">=</span> np.array(<span class="bu">list</span>(prefix))</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    inputs <span class="op">=</span> encoder.transform(inputs)</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    inputs <span class="op">=</span> inputs[np.newaxis]</span>
