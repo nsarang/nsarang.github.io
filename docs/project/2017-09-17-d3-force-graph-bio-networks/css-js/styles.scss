@@ -270,7 +270,7 @@ $circle-size: $toggle-height - 2 * ($toggle-padding + $border-size); // Size of 
 $transition-time: 0.3s; // Duration of transition animations
 $font-size: 12px; // Font size for the text labels
 $text-padding: 10px; // Padding for text labels from the edge
-$border-radius: $toggle-height / 2.5;
+$border-radius: calc($toggle-height / 2.5);
 
 // Color Variables
 $color-off: #BB0B0B; // Background color when toggle is off

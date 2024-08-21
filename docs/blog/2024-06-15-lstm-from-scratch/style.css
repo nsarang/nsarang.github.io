@@ -44,7 +44,7 @@
 .docfuse #background {
   position: absolute;
   top: 0;
-  left: 40%;
+  left: 37.5%;
   right: 0;
   bottom: 0;
   z-index: 0;
@@ -98,7 +98,7 @@
 @media (min-width: 768px) {
   .docfuse div.section div.docs {
     float: left;
-    width: 40%;
+    width: 37.5%;
     min-height: 5px;
   }
 }
@@ -136,7 +136,7 @@
 }
 @media (min-width: 768px) {
   .docfuse div.section div.code {
-    margin-left: 40%;
+    margin-left: 37.5%;
   }
 }
 .docfuse div.section div.code pre {
@@ -888,4 +888,13 @@
 }
 .docfuse.light-theme .highlight .il {
   color: #733fbe;
+}
+
+figcaption {
+  margin: auto;
+  text-align: center;
+}
+
+.cell:has(.docfuse) {
+  margin-bottom: 4lh;
 }

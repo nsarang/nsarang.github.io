@@ -292,7 +292,7 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="ML,LightGBM,CatBoost,GBT" data-listing-date-sort="1723359600000" data-listing-file-modified-sort="1723530940482" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1087">
+<div class="quarto-post image-right" data-index="0" data-categories="ML,LightGBM,CatBoost,GBT" data-listing-date-sort="1723359600000" data-listing-file-modified-sort="1724029306608" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1087">
 <div class="thumbnail">
 <p><a href="../blog/2024-08-11-gbt-custom-loss/index.html" class="no-external"></a></p><a href="../blog/2024-08-11-gbt-custom-loss/index.html" class="no-external">
 <p><img loading="lazy" src="../blog/2024-08-11-gbt-custom-loss/featured.png" class="thumbnail-image"></p>
@@ -334,7 +334,7 @@ Nima Sarang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="ml,analysis" data-listing-date-sort="1718434800000" data-listing-file-modified-sort="1723597516114" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="987">
+<div class="quarto-post image-right" data-index="1" data-categories="ml,analysis" data-listing-date-sort="1718434800000" data-listing-file-modified-sort="1723959225182" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="976">
 <div class="thumbnail">
 <p><a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external"></a></p><a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external">
 <p><img loading="lazy" src="../blog/2024-06-15-lstm-from-scratch/featured.png" class="thumbnail-image"></p>
@@ -960,96 +960,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>
-    const bodyElement = document.body;
-    const observer = new MutationObserver(mutationsList => {
-        // Check if any class mutations occurred
-        const hasClassMutation = mutationsList.some(mutation =>
-            mutation.attributeName === 'class'
-        );
-
-        if (hasClassMutation) {
-            // Get all elements with the "docfuse" class
-            const docfuseElements = document.querySelectorAll('.docfuse');
-
-            // Iterate through the "docfuse" elements and toggle the classes
-            docfuseElements.forEach(element => {
-                // If the element has the "fixed-theme" class, skip it
-                if (element.classList.contains('fixed-theme')) {
-                    return
-                }
-
-                if (bodyElement.classList.contains('quarto-dark')) {
-                    element.classList.add('dark-theme');
-                    element.classList.remove('light-theme');
-                } else { // light theme (default)
-                    element.classList.add('light-theme');
-                    element.classList.remove('dark-theme');
-                }
-            });
-        } // End if (hasClassMutation)
-    });
-
-    observer.observe(bodyElement, { attributes: true });
-
-
-    (function () {
-        'use strict';
-
-        const SelectionManager = {
-            selectionStart: null,
-            activeColumnType: null,
-
-            init: function () {
-                document.addEventListener('mousedown', this.handleMouseDown.bind(this));
-                document.addEventListener('selectionchange', this.handleSelectionChange.bind(this));
-            },
-
-            handleMouseDown: function (event) {
-                const target = event.target.closest('.docs, .code');
-                if (target) {
-                    this.selectionStart = target;
-                    this.activeColumnType = target.classList.contains('docs') ? '.docs' : '.code';
-                    this.updateSelectability(this.activeColumnType);
-                } else {
-                    this.resetSelection();
-                }
-            },
-
-            handleSelectionChange: function () {
-                if (!this.selectionStart) return;
-
-                const selection = window.getSelection();
-                if (selection.isCollapsed) return;
-
-                this.updateSelectability(this.activeColumnType);
-            },
-
-            updateSelectability: function (columnToSelect) {
-                const columnToDisable = columnToSelect === '.docs' ? '.code' : '.docs';
-                this.setUserSelect(columnToSelect, 'text');
-                this.setUserSelect(columnToDisable, 'none');
-            },
-
-            setUserSelect: function (selector, value) {
-                document.querySelectorAll(selector).forEach(el => el.style.userSelect = value);
-            },
-
-            resetSelection: function () {
-                this.selectionStart = null;
-                this.activeColumnType = null;
-                this.setUserSelect('.docs, .code', 'text');
-            }
-        };
-
-        // Initialize the SelectionManager when the DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', SelectionManager.init.bind(SelectionManager));
-        } else {
-            SelectionManager.init();
-        }
-    })();
-</script>
+<script src="../../_assets/docfuse/render.js"></script>
 <script type="module" src="../_assets/simplex-banner/render-canvas.js"></script>
 
 

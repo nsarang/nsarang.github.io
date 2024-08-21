@@ -6,107 +6,184 @@
   all: unset;
   /* HTML5 display-role reset for older browsers */
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 0.85em;
+  font-size: 1em;
   font-weight: 300;
   line-height: 1.5;
   letter-spacing: 0.05em;
-  margin: 0 auto;
   position: relative;
+}
+.timeline html, .timeline body, .timeline div, .timeline span, .timeline applet, .timeline object, .timeline iframe,
+.timeline h1, .timeline h2, .timeline h3, .timeline h4, .timeline h5, .timeline h6, .timeline p, .timeline blockquote, .timeline pre,
+.timeline a, .timeline abbr, .timeline acronym, .timeline address, .timeline big, .timeline cite, .timeline code,
+.timeline del, .timeline dfn, .timeline em, .timeline img, .timeline ins, .timeline kbd, .timeline q, .timeline s, .timeline samp,
+.timeline small, .timeline strike, .timeline strong, .timeline sub, .timeline sup, .timeline tt, .timeline var,
+.timeline b, .timeline u, .timeline i, .timeline center,
+.timeline dl, .timeline dt, .timeline dd, .timeline ol, .timeline ul, .timeline li,
+.timeline fieldset, .timeline form, .timeline label, .timeline legend,
+.timeline table, .timeline caption, .timeline tbody, .timeline tfoot, .timeline thead, .timeline tr, .timeline th, .timeline td,
+.timeline article, .timeline aside, .timeline canvas, .timeline details, .timeline embed,
+.timeline figure, .timeline figcaption, .timeline footer, .timeline header, .timeline hgroup,
+.timeline menu, .timeline nav, .timeline output, .timeline ruby, .timeline section, .timeline summary,
+.timeline time, .timeline mark, .timeline audio, .timeline video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+.timeline article, .timeline aside, .timeline details, .timeline figcaption, .timeline figure,
+.timeline footer, .timeline header, .timeline hgroup, .timeline menu, .timeline nav, .timeline section {
+  display: block;
+}
+.timeline body {
+  line-height: 1;
+}
+.timeline ol, .timeline ul {
+  list-style: none;
+}
+.timeline blockquote, .timeline q {
+  quotes: none;
+}
+.timeline blockquote:before, .timeline blockquote:after,
+.timeline q:before, .timeline q:after {
+  content: "";
+  content: none;
+}
+.timeline table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.timeline * {
+  box-sizing: border-box;
+}
+.timeline::before {
+  background-color: black;
+  content: "";
+  margin-left: -1px;
+  position: absolute;
+  top: 0;
   left: 50%;
-  max-width: 46em;
-  /* Layout */ }
-  .timeline html, .timeline body, .timeline div, .timeline span, .timeline applet, .timeline object, .timeline iframe,
-  .timeline h1, .timeline h2, .timeline h3, .timeline h4, .timeline h5, .timeline h6, .timeline p, .timeline blockquote, .timeline pre,
-  .timeline a, .timeline abbr, .timeline acronym, .timeline address, .timeline big, .timeline cite, .timeline code,
-  .timeline del, .timeline dfn, .timeline em, .timeline img, .timeline ins, .timeline kbd, .timeline q, .timeline s, .timeline samp,
-  .timeline small, .timeline strike, .timeline strong, .timeline sub, .timeline sup, .timeline tt, .timeline var,
-  .timeline b, .timeline u, .timeline i, .timeline center,
-  .timeline dl, .timeline dt, .timeline dd, .timeline ol, .timeline ul, .timeline li,
-  .timeline fieldset, .timeline form, .timeline label, .timeline legend,
-  .timeline table, .timeline caption, .timeline tbody, .timeline tfoot, .timeline thead, .timeline tr, .timeline th, .timeline td,
-  .timeline article, .timeline aside, .timeline canvas, .timeline details, .timeline embed,
-  .timeline figure, .timeline figcaption, .timeline footer, .timeline header, .timeline hgroup,
-  .timeline menu, .timeline nav, .timeline output, .timeline ruby, .timeline section, .timeline summary,
-  .timeline time, .timeline mark, .timeline audio, .timeline video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline; }
-  .timeline article, .timeline aside, .timeline details, .timeline figcaption, .timeline figure,
-  .timeline footer, .timeline header, .timeline hgroup, .timeline menu, .timeline nav, .timeline section {
-    display: block; }
-  .timeline body {
-    line-height: 1; }
-  .timeline ol, .timeline ul {
-    list-style: none; }
-  .timeline blockquote, .timeline q {
-    quotes: none; }
-  .timeline blockquote:before, .timeline blockquote:after,
-  .timeline q:before, .timeline q:after {
-    content: '';
-    content: none; }
-  .timeline table {
-    border-collapse: collapse;
-    border-spacing: 0; }
-  .timeline * {
-    box-sizing: border-box; }
-  .timeline::before {
-    background-color: black;
-    content: '';
-    margin-left: -1px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 2px;
-    height: 100%; }
-  .timeline li.timeline-event {
-    list-style: none; }
-  .timeline .timeline-event {
-    position: relative; }
-    .timeline .timeline-event:hover .timeline-event-icon {
-      transform: rotate(-45deg);
-      background-color: #a83279; }
-    .timeline .timeline-event:hover .timeline-event-thumbnail {
-      box-shadow: inset 40em 0 0 0 #a83279; }
-  .timeline .timeline-event-copy {
-    padding: 2em;
-    position: relative;
-    top: -1.875em;
-    width: 80%;
-    text-align: left; }
-    .timeline .timeline-event-copy.left {
-      left: -80%;
-      text-align: right; }
-    .timeline .timeline-event-copy h3 {
-      font-size: 1.4875em; }
-    .timeline .timeline-event-copy h4 {
-      font-size: 0.85em;
-      margin-bottom: 1.0em; }
-    .timeline .timeline-event-copy strong {
-      font-weight: 700; }
-    .timeline .timeline-event-copy p:not(.timeline-event-thumbnail) {
-      padding-bottom: 1.2em; }
-  .timeline .timeline-event-icon {
-    transition: transform 0.2s ease-in;
-    transform: rotate(45deg);
-    background-color: black;
-    outline: 10px solid white;
-    display: block;
-    margin: 0.5em 0.5em 0.5em -0.5em;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 1em;
-    height: 1em; }
-  .timeline .timeline-event-thumbnail {
-    transition: box-shadow 0.5s ease-in 0.1s;
-    color: white;
-    font-size: 0.935em;
-    background-color: black;
-    border-radius: 2px;
-    box-shadow: inset 0 0 0 0em #ef795a;
-    display: inline-block;
-    margin-bottom: 1.2em;
-    padding: 0.25em 1em 0.2em 1em; }
+  width: 2px;
+  height: 100%;
+}
+.timeline .timeline-event {
+  position: relative;
+  width: 49%;
+  text-align: left;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 1.25em;
+  padding-top: 2em;
+}
+.timeline .timeline-event .logo-container {
+  display: grid;
+  grid-auto-columns: 0;
+  grid-template-columns: auto 1fr;
+  grid-template-areas: "logo title" "logo subtitle";
+  gap: 0 1em;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+.timeline .timeline-event .logo-container .logo {
+  grid-column: 1;
+  grid-area: logo;
+  min-height: 2.5em;
+  max-height: 3em;
+  width: 100%;
+}
+.timeline .timeline-event .logo-container *:not(.logo) {
+  grid-column: 2;
+}
+.timeline .timeline-event .logo-container h3 {
+  margin-top: 0.5em;
+  font-size: 1.15em;
+}
+.timeline .timeline-event .logo-container h4 {
+  margin-bottom: 0.5em;
+}
+.timeline .timeline-event h3 {
+  font-size: 1.25em;
+}
+.timeline .timeline-event h4 {
+  font-size: 1em;
+  color: #333333;
+  margin-bottom: 0.5em;
+}
+.timeline .timeline-event strong {
+  font-weight: 700;
+}
+.timeline .timeline-event p:not(.timeline-event-thumbnail) {
+  font-size: 0.85em;
+  padding-bottom: 1.2em;
+}
+.timeline li.timeline-event {
+  list-style: none;
+}
+
+.timeline .timeline-event::before {
+  content: "";
+  display: block;
+  top: 0;
+  width: 1.25em;
+  height: 1.25em;
+  grid-column: 1;
+  align-self: center;
+  margin-inline-start: -0.625em;
+  margin-bottom: 1em;
+  background-color: black;
+  border-radius: 1px;
+  box-shadow: 0 0 0 10px var(--bs-body-bg);
+  transition: transform 0.2s ease-in;
+  transform: rotate(45deg);
+}
+.timeline .timeline-event > * {
+  grid-column: 2;
+}
+.timeline .timeline-event.timeline-left.timeline-left, .timeline .timeline-event:nth-child(odd) {
+  left: 1%;
+  text-align: right;
+  direction: rtl;
+}
+.timeline .timeline-event.timeline-left.timeline-left > *, .timeline .timeline-event:nth-child(odd) > * {
+  direction: ltr;
+}
+.timeline .timeline-event.timeline-left.timeline-left .logo-container, .timeline .timeline-event:nth-child(odd) .logo-container {
+  direction: rtl;
+}
+.timeline .timeline-event.timeline-right.timeline-right, .timeline .timeline-event:nth-child(even) {
+  left: 50%;
+  text-align: left;
+  direction: ltr;
+}
+.timeline .timeline-event.timeline-right.timeline-right .logo-container, .timeline .timeline-event:nth-child(even) .logo-container {
+  direction: ltr;
+}
+.timeline .timeline-event:first-child {
+  padding-top: 4em;
+}
+.timeline .timeline-event:last-child {
+  padding-bottom: 4em;
+}
+.timeline .timeline-event:hover::before {
+  transform: rotate(-45deg);
+  background-color: rgb(168, 50, 121);
+}
+.timeline .timeline-event:hover .timeline-event-thumbnail {
+  box-shadow: inset 40em 0 0 0 rgb(168, 50, 121);
+}
+.timeline .timeline-event-thumbnail {
+  transition: box-shadow 0.5s ease-in 0.1s;
+  color: var(--bs-body-bg);
+  font-size: 0.85em;
+  line-height: 1.5;
+  background-color: black;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 0em #ef795a;
+  display: inline-block;
+  width: fit-content;
+  padding: 0.25em 1em;
+  margin-bottom: 1em;
+  align-self: center;
+  direction: ltr;
+}
