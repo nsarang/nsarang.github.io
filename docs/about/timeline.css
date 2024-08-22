@@ -104,10 +104,11 @@
 }
 .timeline .timeline-event h3 {
   font-size: 1.25em;
+  color: rgb(0, 0, 0);
 }
 .timeline .timeline-event h4 {
   font-size: 1em;
-  color: #333333;
+  color: #1a1a1a;
   margin-bottom: 0.5em;
 }
 .timeline .timeline-event strong {
