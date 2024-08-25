@@ -1,23 +1,24 @@
 [
   {
-    "listing": "/project/index.html",
+    "listing": "/publication/index.html",
     "items": [
-      "/project/2019-06-12-dc-gan/index.html",
-      "/project/2017-09-17-d3-force-graph-bio-networks/index.html"
+      "/publication/2023-07-01-tractable-reinforcement-learning/index.html",
+      "/publication/2018-01-03-protein-design/index.html"
     ]
   },
   {
     "listing": "/blog/index.html",
     "items": [
+      "/blog/2024-08-24-information-theory/index.html",
       "/blog/2024-08-11-gbt-custom-loss/index.html",
       "/blog/2024-06-15-lstm-from-scratch/index.html"
     ]
   },
   {
-    "listing": "/publication/index.html",
+    "listing": "/project/index.html",
     "items": [
-      "/publication/2023-07-01-tractable-reinforcement-learning/index.html",
-      "/publication/2018-01-03-protein-design/index.html"
+      "/project/2019-06-12-dc-gan/index.html",
+      "/project/2017-09-17-d3-force-graph-bio-networks/index.html"
     ]
   }
 ]

@@ -1,47 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.nimasarang.com/project/index.html</loc>
-    <lastmod>2024-08-14T21:20:43.443Z</lastmod>
+    <loc>https://www.nimasarang.com/blog/2024-08-24-information-theory/index.html</loc>
+    <lastmod>2024-08-25T17:45:26.844Z</lastmod>
   </url>
   <url>
-    <loc>https://www.nimasarang.com/blog/index.html</loc>
-    <lastmod>2024-08-16T20:14:25.315Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/about/index.html</loc>
-    <lastmod>2024-08-22T04:50:35.737Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/publication/index.html</loc>
-    <lastmod>2024-08-05T19:34:14.445Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/publication/2018-01-03-protein-design/index.html</loc>
-    <lastmod>2024-07-14T18:16:19.923Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/blog/2024-06-15-lstm-from-scratch/index.html</loc>
-    <lastmod>2024-08-18T05:33:45.182Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/blog/2024-08-11-gbt-custom-loss/index.html</loc>
-    <lastmod>2024-08-22T04:14:41.786Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/publication/2023-07-01-tractable-reinforcement-learning/index.html</loc>
-    <lastmod>2024-07-14T18:04:22.680Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/index.html</loc>
-    <lastmod>2024-08-21T21:45:46.819Z</lastmod>
+    <loc>https://www.nimasarang.com/project/2017-09-17-d3-force-graph-bio-networks/index.html</loc>
+    <lastmod>2024-08-11T01:50:26.649Z</lastmod>
   </url>
   <url>
     <loc>https://www.nimasarang.com/project/2019-06-12-dc-gan/index.html</loc>
     <lastmod>2024-08-12T18:48:23.939Z</lastmod>
   </url>
   <url>
-    <loc>https://www.nimasarang.com/project/2017-09-17-d3-force-graph-bio-networks/index.html</loc>
-    <lastmod>2024-08-11T01:50:26.649Z</lastmod>
+    <loc>https://www.nimasarang.com/index.html</loc>
+    <lastmod>2024-08-21T21:45:46.819Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/publication/2023-07-01-tractable-reinforcement-learning/index.html</loc>
+    <lastmod>2024-07-14T18:04:22.680Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/blog/2024-08-11-gbt-custom-loss/index.html</loc>
+    <lastmod>2024-08-22T04:14:41.786Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/blog/2024-06-15-lstm-from-scratch/index.html</loc>
+    <lastmod>2024-08-18T05:33:45.182Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/publication/2018-01-03-protein-design/index.html</loc>
+    <lastmod>2024-07-14T18:16:19.923Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/publication/index.html</loc>
+    <lastmod>2024-08-05T19:34:14.445Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/about/index.html</loc>
+    <lastmod>2024-08-22T04:53:48.072Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/blog/index.html</loc>
+    <lastmod>2024-08-16T20:14:25.315Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/project/index.html</loc>
+    <lastmod>2024-08-14T21:20:43.443Z</lastmod>
   </url>
 </urlset>
