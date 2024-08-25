@@ -298,6 +298,38 @@ window.Quarto = {
 
 
 
+<div class="hidden">
+% Meta %
+<p>% Optional argument [#1]: Size modifier (e.g., , ) % #2: Opening delimiter % #3: Closing delimiter % #4: Content</p>
+<p>% Common sets % Real numbers % Integers % Natural numbers % Rational numbers % Complex numbers</p>
+<p>% Probability and statistics % Expectation % Variance % Covariance % Probability measure % Indicator function</p>
+% Linear algebra
+% Matrix
+<p>% Vector % Trace % Rank % Range (image) % Projection</p>
+% Calculus and analysis % For integrals, e.g., f(x) x
+% Partial derivative \newcommand{[2]}{ #1} % Partial derivative w/o fraction
+<p>% Second partial derivative % Gradient % Divergence % Curl</p>
+% Set theory
+% Set
+<p>% Set builder notation % Union % Intersection % Symmetric difference</p>
+<p>% Logic and proofs % Implies % If and only if % End of proof % Contradiction</p>
+% Norms and inner products
+% Norm
+<p>% Inner product</p>
+<p>% Common functions % Argument maximum % Argument minimum % Sign function % Span of a set</p>
+% Formatting
+% Absolute value
+% Parentheses
+% Brackets
+% Floor function
+<p>% Ceiling function</p>
+<p>% Asymptotic notations % Big O notation % Small o notation % Big Omega notation % Big Theta notation</p>
+<p>% Commonly used in algorithms and complexity % Polynomial time % Polylogarithmic time</p>
+<p>% Additional probability notations % Independent and identically distributed % Distributed as</p>
+<p>% Commonly used in optimization % Minimization problem % Maximization problem % Subject to constraints</p>
+<p>% Fourier transform % Fourier transform % Inverse Fourier transform</p>
+<p>% General math % Display style</p>
+</div>
 <style>
 .cell:has(.docfuse) {
   margin-top: 1.5lh;
@@ -314,7 +346,7 @@ window.Quarto = {
 <section id="interface" class="level3" data-number="2.1">
 <h3 data-number="2.1" class="anchored" data-anchor-id="interface"><span class="header-section-number">2.1</span> Interface</h3>
 <p>The loss function and the evaluation metric must have the following structure:</p>
-<div id="cell-9" class="cell" data-execution_count="4">
+<div id="cell-10" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -404,7 +436,23 @@ window.Quarto = {
 <p>The hessian for sample <span class="math inline">\(i\)</span> is: <span id="eq-mse-hessian"><span class="math display">\[
 \frac{\partial^2}{\partial p_i^2} \text{MSE}(y, p) \;\propto\; \frac{\partial}{\partial p_i} p_i - y_i \;=\; 1
 \tag{3}\]</span></span></p>
-<div id="cell-12" class="cell" data-execution_count="5">
+<div class="callout callout-style-default callout-tip callout-titled" title="Propotionality">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Propotionality
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The proportionality sign (<span class="math inline">\(\propto\)</span>) is used to indicate that the expression on the right-hand side is proportional to the expression on the left-hand side, up to a constant factor. Read more about it <a href="https://en.wikipedia.org/wiki/Proportionality_(mathematics)">here</a>.</p>
+</div>
+</div>
+</div>
+<div id="cell-13" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -480,12 +528,29 @@ window.Quarto = {
 <p><span id="eq-msle-hessian"><span class="math display">\[
 \begin{aligned}
     \frac{\partial^2}{\partial p_i^2} \text{MSLE}(y, p)
-     &amp; = \frac{\partial}{\partial p_i} \frac{\log_e (1 + p_i) - \log_e (1 + y_i)}{1 + p_i}                                                                                                              \\[3ex]
-     &amp; = \frac{(1 + p_i)\frac{\partial \Big(\log_e (1 + p_i) - \log_e (1 + y_i)\Big)}{\partial p_i} - \Big(\log_e (1 + p_i) - \log_e (1 + y_i)\Big) \frac{\partial (1 + p_i)}{\partial p_i}}{(1 + p_i)^2} \\[3ex]
-     &amp; = \frac{1 - \log_e (1 + p_i) + \log_e (1 + y_i)}{(1 + p_i)^2}                                                                                                                    \\[3ex]
+     &amp; = \frac{\partial}{\partial p_i} \frac{\log_e (1 + p_i) - \log_e (1 + y_i)}{1 + p_i}  \\[3ex]
+     &amp; = \frac{\splitfrac{(1 + p_i)\frac{\partial \Big(\log_e (1 + p_i) - \log_e (1 + y_i)\Big)}{\partial p_i} }{ - \Big(\log_e (1 + p_i) - \log_e (1 + y_i)\Big) \frac{\partial (1 + p_i)}{\partial p_i}}}{(1 + p_i)^2} \\[3ex]
+     &amp; = \frac{(1 + p_i)\times \frac{1}{1 + p_i}  - \Big(\log_e (1 + p_i) - \log_e (1 + y_i)\Big) \times 1}{(1 + p_i)^2}   \\[3ex]
+     &amp; = \frac{1 - \log_e (1 + p_i) + \log_e (1 + y_i)}{(1 + p_i)^2}   \\[3ex]
 \end{aligned}
 \tag{6}\]</span></span></p>
-<div id="cell-15" class="cell" data-execution_count="6">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Since there is <span class="math inline">\(\log_e{(1 + p_i)}\)</span> in the formulae, we need to ensure that <span class="math inline">\(1 + p_i &gt; 0\)</span> for all <span class="math inline">\(i\)</span>. This can be achieved by clipping the predicted values to a minimum value greater than <span class="math inline">\(-1\)</span>.</p>
+</div>
+</div>
+</div>
+<div id="cell-16" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -627,13 +692,28 @@ window.Quarto = {
 <ol type="1">
 <li>The objective function and the evaluation metric are implemented as as class rather than a function, and must implement a few specific methods.<br>
 </li>
-<li>CatBoost expects the <em>negative</em> gradient and hessian to be returned by the loss function.<br>
+<li>CatBoost expects the negative gradient and hessian to be returned by the loss function.<br>
 </li>
 <li>It’s not necessary to use NumPy arrays for doing vectorized operations. Using <code>for</code> loops will suffice, since under the hood CatBoost will convert our function into machine code using <a href="https://numba.pydata.org/">Numba</a>.</li>
 </ol>
-<p><br></p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Caution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>CatBoost requires the <em>negative</em> gradient and hessian to be returned by the loss function, so we need to apply a negation at the end of the calculations. Intuitively, this is because to minimize the loss function, we need to move in the opposite direction of the gradient, but I personally would’ve prefrred CatBoost hanlded this internally similar to LightGBM and XGBoost.</p>
+</div>
+</div>
+</div>
 <p>The overall interface is as follows:</p>
-<div id="cell-20" class="cell" data-execution_count="7">
+<div id="cell-21" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -833,7 +913,7 @@ we'll just have to roll with it</p>
 <section id="mean-squared-error-1" class="level3" data-number="3.2">
 <h3 data-number="3.2" class="anchored" data-anchor-id="mean-squared-error-1"><span class="header-section-number">3.2</span> Mean Squared Error</h3>
 <p>We previously derived the gradient (<a href="#eq-mse-gradient" class="quarto-xref">Equation&nbsp;2</a>) and hessian (<a href="#eq-mse-hessian" class="quarto-xref">Equation&nbsp;3</a>) of the MSE loss function for LightGBM. We can use the same equations for CatBoost, but we need to implement them as a class.</p>
-<div id="cell-23" class="cell" data-execution_count="8">
+<div id="cell-24" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -1001,7 +1081,7 @@ we'll just have to roll with it</p>
 <section id="mean-squared-logarithmic-error-1" class="level3" data-number="3.3">
 <h3 data-number="3.3" class="anchored" data-anchor-id="mean-squared-logarithmic-error-1"><span class="header-section-number">3.3</span> Mean Squared Logarithmic Error</h3>
 <p>Based on the derivations from the LightGBM section (<a href="#eq-msle-gradient" class="quarto-xref">Equation&nbsp;5</a> and <a href="#eq-msle-hessian" class="quarto-xref">Equation&nbsp;6</a>), we can implement the MSLE objective function for CatBoost:</p>
-<div id="cell-26" class="cell" data-execution_count="9">
+<div id="cell-27" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -1160,7 +1240,7 @@ we'll just have to roll with it</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> catboost <span class="im">as</span> cb</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>regressor <span class="op">=</span> cb.CatBoostRegressor(loss_function<span class="op">=</span>MSLEObjective(), eval_metric<span class="op">=</span>MSLEMetric())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Note that since the functions are implemented as classes, we need to instantiate them before passing them to the model.</p>
+<p>Note that since the functions are implemented as classes, we need to instantiate them before passing them to the model. I fell victim to this mistake a few times, so be careful!</p>
 
 
 </section>

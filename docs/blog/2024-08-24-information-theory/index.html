@@ -132,7 +132,7 @@ window.Quarto = {
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top quarto-banner">
@@ -215,8 +215,35 @@ window.Quarto = {
 
 </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#entropy" id="toc-entropy" class="nav-link" data-scroll-target="#entropy"><span class="header-section-number">2</span> Entropy</a>
+  <ul class="collapse">
+  <li><a href="#information-content" id="toc-information-content" class="nav-link" data-scroll-target="#information-content"><span class="header-section-number">2.1</span> Information Content</a></li>
+  <li><a href="#shannon-entropy" id="toc-shannon-entropy" class="nav-link" data-scroll-target="#shannon-entropy"><span class="header-section-number">2.2</span> Shannon Entropy</a></li>
+  <li><a href="#a-bit-of-history" id="toc-a-bit-of-history" class="nav-link" data-scroll-target="#a-bit-of-history"><span class="header-section-number">2.3</span> A bit of history</a></li>
+  </ul></li>
+  <li><a href="#cross-entropy" id="toc-cross-entropy" class="nav-link" data-scroll-target="#cross-entropy"><span class="header-section-number">3</span> Cross Entropy</a></li>
+  <li><a href="#kullbackleibler-divergence" id="toc-kullbackleibler-divergence" class="nav-link" data-scroll-target="#kullbackleibler-divergence"><span class="header-section-number">4</span> Kullback–Leibler Divergence</a>
+  <ul class="collapse">
+  <li><a href="#non-negativity" id="toc-non-negativity" class="nav-link" data-scroll-target="#non-negativity"><span class="header-section-number">4.1</span> Non-Negativity</a></li>
+  <li><a href="#relations-to-mutual-information" id="toc-relations-to-mutual-information" class="nav-link" data-scroll-target="#relations-to-mutual-information"><span class="header-section-number">4.2</span> Relations to Mutual Information</a></li>
+  </ul></li>
+  <li><a href="#jensen-shannon-divergence" id="toc-jensen-shannon-divergence" class="nav-link" data-scroll-target="#jensen-shannon-divergence"><span class="header-section-number">5</span> Jensen-Shannon Divergence</a>
+  <ul class="collapse">
+  <li><a href="#js-vs-kl-at-zero-probabilities" id="toc-js-vs-kl-at-zero-probabilities" class="nav-link" data-scroll-target="#js-vs-kl-at-zero-probabilities"><span class="header-section-number">5.1</span> JS vs KL at Zero Probabilities</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
@@ -262,16 +289,18 @@ window.Quarto = {
 <p>% Fourier transform % Fourier transform % Inverse Fourier transform</p>
 <p>% General math % Display style</p>
 </div>
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
 <p>Every now and then, I find myself revisiting the basics of Information Theory when reading on papers about VAEs, GANs, or other generative models. I decided to compile a brief overview of the concepts for my own reference. Take it with a grain of salt, as it’s not meant to be a comprehensive guide.</p>
 <p>I’ll update this post as I learn more about the topic.</p>
-<p><br></p>
-<section id="entropy" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="entropy"><span class="header-section-number">1</span> Entropy</h2>
+</section>
+<section id="entropy" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="entropy"><span class="header-section-number">2</span> Entropy</h2>
 <p>Entropy is a fundamental concept in information theory that quantifies the uncertainty or randomness in a system. Let’s consider a couple of examples:</p>
 <p>Imagine you’re trying to guess the next card drawn from a deck. With a well-shuffled deck, each draw is unpredictable – this scenario has high entropy. On the other hand, if the cards were arranged in a known order, each draw would be predictable – this has low entropy.</p>
 <p>Now, let’s think about weather prediction. In a climate where it rains 90% of the days, predicting rain is usually correct but not very informative. This scenario has lower entropy than a climate where rain and sun are equally likely (50% each), making predictions more challenging and uncertain.</p>
-<section id="information-content" class="level3" data-number="1.1">
-<h3 data-number="1.1" class="anchored" data-anchor-id="information-content"><span class="header-section-number">1.1</span> Information Content</h3>
+<section id="information-content" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="information-content"><span class="header-section-number">2.1</span> Information Content</h3>
 <p>We quantify the uncertainty or information content of an event <span class="math inline">\(x\)</span> with probability <span class="math inline">\(p(x)\)</span> as:</p>
 <p><span class="math display">\[I(x) = -\log_2{p(x)}\]</span></p>
 <p>It measures the surprise or “news value” of observing event <span class="math inline">\(x\)</span>. <span class="math inline">\(I(x)\)</span> is also reffered to as the number of bits needed to encode the event, but we’ll get to that later.</p>
@@ -296,8 +325,8 @@ window.Quarto = {
 <li>The negative sign ensures positive information values.</li>
 </ol>
 </section>
-<section id="shannon-entropy" class="level3" data-number="1.2">
-<h3 data-number="1.2" class="anchored" data-anchor-id="shannon-entropy"><span class="header-section-number">1.2</span> Shannon Entropy</h3>
+<section id="shannon-entropy" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="shannon-entropy"><span class="header-section-number">2.2</span> Shannon Entropy</h3>
 <p>Shannon entropy is the expected value (weighted average) of information content across all possible events in a probability distribution:</p>
 <p><span id="eq-entropy"><span class="math display">\[H(X) = \mathbb{E}[-\log p(X)] = -\sum_x p(x) \log{p(x)} \tag{1}\]</span></span></p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -319,14 +348,14 @@ Note
 <p>To put this into perspective, English text typically has an entropy of about 1-1.5 bits per character. In comparison, a random string of characters over the same alphabet has an entropy of <span class="math display">\[\mathbb{E}[-\log_2{p(X)}] = -\sum\limits_{i=1}^{26} \frac{1}{26} \log_2(\frac{1}{26}) = \log_2(26) \approx 4.7\]</span> bits per character.</p>
 <p>This concept has practical applications in various fields. For instance, in cybersecurity, a truly random string of characters (like a strong password) approaches the maximum entropy of <span class="math inline">\(\log_2(n)\)</span> bits per character, where <span class="math inline">\(n\)</span> is the number of possible characters. The password “password123” has low entropy and is easily guessable, while “Tr0ub4dor&amp;Co” has higher entropy and is more secure. This difference in entropy reflects the varying degrees of unpredictability and, consequently, the strength of these passwords.</p>
 </section>
-<section id="a-bit-of-history" class="level3" data-number="1.3">
-<h3 data-number="1.3" class="anchored" data-anchor-id="a-bit-of-history"><span class="header-section-number">1.3</span> A bit of history</h3>
+<section id="a-bit-of-history" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="a-bit-of-history"><span class="header-section-number">2.3</span> A bit of history</h3>
 <p>The terms “coding” and “encoded” in information theory stem from Claude Shannon’s work on efficient information transmission over noisy channels. Entropy <span class="math inline">\(H(X)\)</span> represents the theoretical lower bound on the average number of bits needed to encode symbols from a source, which is why we measure it in bits (using log base 2) - it directly relates to optimal coding length.</p>
 <p>Shannon’s Source Coding Theorem formalizes this: no lossless compression can exceed this efficiency on average. This explains why English text (~1.5 bits of entropy per character) compresses far more than random text (~4.7 bits per character), and why compression algorithms excel with natural language but struggle with random data. Understanding entropy as a limit on coding efficiency makes it a powerful tool across various domains like data compression, cryptography, and machine learning.</p>
 </section>
 </section>
-<section id="cross-entropy" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="cross-entropy"><span class="header-section-number">2</span> Cross Entropy</h2>
+<section id="cross-entropy" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="cross-entropy"><span class="header-section-number">3</span> Cross Entropy</h2>
 <p>Imagine you have a source that produces messages according to a true distribution <span class="math inline">\(P\)</span>, but you’re using a different distribution <span class="math inline">\(Q\)</span> to encode these messages. Cross-entropy measures the average number of bits you’ll need using this possibly inefficient encoding.</p>
 <p>For example, consider describing a language you’ve never seen before. You start by guessing how often each letter appears.</p>
 <ul>
@@ -368,8 +397,8 @@ Note
 <p><span class="math display">\[-\left[y\,log(q)\;+\;(1−y)\,log(1−q)\right]\]</span></p></li>
 </ul>
 </section>
-<section id="kullbackleibler-divergence" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="kullbackleibler-divergence"><span class="header-section-number">3</span> Kullback–Leibler Divergence</h2>
+<section id="kullbackleibler-divergence" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="kullbackleibler-divergence"><span class="header-section-number">4</span> Kullback–Leibler Divergence</h2>
 <p>To measure the expected number of extra bits required to code samples from <span class="math inline">\(P\)</span> using a code optimized for <span class="math inline">\(Q\)</span> rather than the code optimized for <span class="math inline">\(P\)</span>, we use the Kullback-Leibler divergence. It</p>
 <p><span id="eq-kl-divergence"><span class="math display">\[
 \begin{aligned}
@@ -396,8 +425,8 @@ Note
 </div>
 </div>
 </div>
-<section id="non-negativity" class="level3" data-number="3.1">
-<h3 data-number="3.1" class="anchored" data-anchor-id="non-negativity"><span class="header-section-number">3.1</span> Non-Negativity</h3>
+<section id="non-negativity" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="non-negativity"><span class="header-section-number">4.1</span> Non-Negativity</h3>
 <p>If <span class="math inline">\(Q = P\)</span>, then <span class="math inline">\(D_{KL}(P \;\Vert\; P) = H(P, P) - H(P) = 0\)</span>. But is zero the lower bound for <span class="math inline">\(D_{KL}\)</span>? Basically the question is whether: <span class="math display">\[H(P, Q) \stackrel{?}{\geq} H(P) \quad \forall P, Q\]</span></p>
 <p>This is known as Gibbs’ inequality, and it’s a fundamental property of the Kullback-Leibler divergence. It tells us that if you try to use a probability distribution <span class="math inline">\(Q\)</span> to encode data that actually follows a different distribution <span class="math inline">\(P\)</span>, you will always need more bits on average, compared to using <span class="math inline">\(P\)</span> itself.</p>
 <p>To prove <span class="math inline">\(D_{KL}(P \;\Vert\; Q) \stackrel{?}{\ge} 0\)</span>, we can use the fact that <span class="math inline">\(-\log\)</span> is a convex function (see <a href="#fig-log-ic" class="quarto-xref">Figure&nbsp;1</a>). By Jensen’s inequality, we have:</p>
@@ -428,8 +457,8 @@ Jensen’s Inequality
 </div>
 </div>
 </section>
-<section id="relations-to-mutual-information" class="level3" data-number="3.2">
-<h3 data-number="3.2" class="anchored" data-anchor-id="relations-to-mutual-information"><span class="header-section-number">3.2</span> Relations to Mutual Information</h3>
+<section id="relations-to-mutual-information" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="relations-to-mutual-information"><span class="header-section-number">4.2</span> Relations to Mutual Information</h3>
 <p>Let <span class="math inline">\((X,Y)\)</span> be a pair of random variables with values over the space <span class="math inline">\({\mathcal {X}}\times {\mathcal {Y}}\)</span>. If their joint distribution is <span class="math inline">\({P_{(X,Y)}}\)</span> and the marginal distributions are <span class="math inline">\({P_{Y}}\)</span> and <span class="math inline">\({P_{Y}}\)</span>, the mutual information is defined as:</p>
 <p><span id="eq-mutual-information"><span class="math display">\[{I(X;Y)=D_{\mathrm {KL} }(P_{(X,Y)}\|P_{X}P_{Y})} \tag{4}\]</span></span></p>
 <p>Notice, as per property of the KL divergence that <span class="math inline">\(I(X;Y)\)</span> is equal to zero precisely when the joint distribution coincides with the product of the marginals, i.e.&nbsp;when <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are independent (and hence observing <span class="math inline">\(Y\)</span> tells you nothing about <span class="math inline">\(X\)</span>). Intuitively, <span class="math inline">\(I(X;Y)\)</span> is a measure of the price for encoding <span class="math inline">\((X,Y)\)</span> as a pair of independent random variables when in reality they may not be.</p>
@@ -439,13 +468,13 @@ Jensen’s Inequality
 <p>Check out this video for a more detailed explanation: <a href="https://www.youtube.com/watch?v=RaTe3dhiqdE">A RIDICULOUSLY AWESOME SUMMATION: Mutual Information and Kullback-Leibler Divergence</a></p>
 </section>
 </section>
-<section id="jensen-shannon-divergence" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="jensen-shannon-divergence"><span class="header-section-number">4</span> Jensen-Shannon Divergence</h2>
+<section id="jensen-shannon-divergence" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="jensen-shannon-divergence"><span class="header-section-number">5</span> Jensen-Shannon Divergence</h2>
 <p>JS divergence is a symmetric measure, derived from KL divergence, and it does satisfy the properties of a metric. It is defined as the average of the KL divergence from each distribution to the average of both distributions:</p>
 <p><span id="eq-js-divergence"><span class="math display">\[{JS(P \;\Vert\; Q) = \frac{1}{2}KL(P \;\Vert\; M) + \frac{1}{2}KL(Q \;\Vert\; M)} \tag{5}\]</span></span></p>
 <p>where <span class="math inline">\(M=\dfrac{1}{2} (P+Q)\)</span> is a mixture of <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span>.</p>
-<section id="js-vs-kl-at-zero-probabilities" class="level3" data-number="4.1">
-<h3 data-number="4.1" class="anchored" data-anchor-id="js-vs-kl-at-zero-probabilities"><span class="header-section-number">4.1</span> JS vs KL at Zero Probabilities</h3>
+<section id="js-vs-kl-at-zero-probabilities" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="js-vs-kl-at-zero-probabilities"><span class="header-section-number">5.1</span> JS vs KL at Zero Probabilities</h3>
 <p><strong>KL Divergence</strong></p>
 <ol type="1">
 <li><p><span class="math inline">\(p(𝑋)=0 \text{ and } q(𝑋)\gt 0\)</span>:<br>
