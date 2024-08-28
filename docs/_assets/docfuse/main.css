@@ -1,8 +1,5 @@
 /*-- scss:rules --*/
 .docfuse {
-  /* html {
-    font-size: 62.5%;
-  } */
   position: relative;
   font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   margin: 0;
@@ -118,7 +115,6 @@
   left: -20px;
   padding: 1px 2px;
   opacity: 0;
-  -webkit-transition: opacity 0.2s linear;
   transition: opacity 0.2s linear;
 }
 .docfuse div.section div.docs pre code {
@@ -144,12 +140,6 @@
   overflow-x: auto;
   white-space: pre;
 }
-.docfuse .highlight .n,
-.docfuse .highlight .nn,
-.docfuse .highlight .nc,
-.docfuse .highlight .nf {
-  cursor: pointer;
-}
 .docfuse code {
   padding: 0.2rem 0.5rem;
   margin: 0 0.2rem;
@@ -165,7 +155,7 @@
   margin: 0;
   padding: 0;
 }
-.docfuse span.lineno {
+.docfuse span.linenos {
   width: 20px;
   display: inline-block;
   text-align: right;
@@ -197,33 +187,19 @@
 .docfuse #modal > div {
   padding: 100px 10px 10px 10px;
 }
-.docfuse #modal > div > img {
-  margin: auto;
-  display: block;
-  width: 80%;
-  max-width: 700px;
-}
-.docfuse #modal > div > p {
-  margin: auto;
-  display: block;
-  width: 80%;
-  max-width: 700px;
-  text-align: center;
-  padding: 10px 0;
-  height: 150px;
-}
 .docfuse #modal > div > img,
 .docfuse #modal > div > p {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
   animation-name: zoom;
   animation-duration: 0.6s;
 }
-@keyframes zoom {
-  from {
-    transform: scale(0);
-  }
-  to {
-    transform: scale(1);
-  }
+.docfuse #modal > div > p {
+  text-align: center;
+  padding: 10px 0;
+  height: 150px;
 }
 .docfuse #modal > span.close {
   position: absolute;
@@ -233,15 +209,28 @@
   font-weight: bold;
   transition: 0.3s;
 }
-.docfuse #modal > span.close:hover,
-.docfuse #modal > span.close:focus {
+.docfuse #modal > span.close:hover, .docfuse #modal > span.close:focus {
   text-decoration: none;
   cursor: pointer;
+}
+@keyframes zoom {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
 }
 @media only screen and (max-width: 700px) {
   .docfuse #modal > img {
     width: 100%;
   }
+}
+.docfuse .highlight .n,
+.docfuse .highlight .nn,
+.docfuse .highlight .nc,
+.docfuse .highlight .nf {
+  cursor: pointer;
 }
 .docfuse.dark-theme {
   background-color: #1d2127;
@@ -266,7 +255,6 @@
   background: #30353d;
 }
 .docfuse.dark-theme div.footer a {
-  display: inline-block;
   margin: 5px;
 }
 .docfuse.dark-theme a.parent {
@@ -313,15 +301,92 @@
 .docfuse.dark-theme #modal > span.close {
   color: #f1f1f1;
 }
-.docfuse.dark-theme #modal:hover,
-.docfuse.dark-theme #modal:focus {
+.docfuse.dark-theme #modal:hover, .docfuse.dark-theme #modal:focus {
   color: #bbb;
 }
-.docfuse.dark-theme span.lineno {
+.docfuse.dark-theme span.linenos {
   color: #f8f8f2;
 }
 .docfuse.dark-theme .highlight {
   color: #f8f8f2;
+  /* Highlight Color */
+  /* Comment */
+  /* Error */
+  /* Generic */
+  /* Keyword */
+  /* Literal */
+  /* Name */
+  /* Operator */
+  /* Other */
+  /* Punctuation */
+  /* Comment.Hashbang */
+  /* Comment.Multiline */
+  /* Comment.Preproc */
+  /* Comment.PreprocFile */
+  /* Comment.Single */
+  /* Comment.Special */
+  /* Generic.Deleted */
+  /* Generic.Emph */
+  /* Generic.EmphStrong */
+  /* Generic.Error */
+  /* Generic.Heading */
+  /* Generic.Inserted */
+  /* Generic.Output */
+  /* Generic.Prompt */
+  /* Generic.Strong */
+  /* Generic.Subheading */
+  /* Generic.Traceback */
+  /* Keyword.Constant */
+  /* Keyword.Declaration */
+  /* Keyword.Namespace */
+  /* Keyword.Pseudo */
+  /* Keyword.Reserved */
+  /* Keyword.Type */
+  /* Literal.Date */
+  /* Literal.Number */
+  /* Literal.String */
+  /* Name.Attribute */
+  /* Name.Builtin */
+  /* Name.Class */
+  /* Name.Constant */
+  /* Name.Decorator */
+  /* Name.Entity */
+  /* Name.Exception */
+  /* Name.Function */
+  /* Name.Label */
+  /* Name.Namespace */
+  /* Name.Other */
+  /* Name.Property */
+  /* Name.Tag */
+  /* Name.Variable */
+  /* Operator.Word */
+  /* Punctuation.Marker */
+  /* Text.Whitespace */
+  /* Literal.Number.Bin */
+  /* Literal.Number.Float */
+  /* Literal.Number.Hex */
+  /* Literal.Number.Integer */
+  /* Literal.Number.Oct */
+  /* Literal.String.Affix */
+  /* Literal.String.Backtick */
+  /* Literal.String.Char */
+  /* Literal.String.Delimiter */
+  /* Literal.String.Doc */
+  /* Literal.String.Double */
+  /* Literal.String.Escape */
+  /* Literal.String.Heredoc */
+  /* Literal.String.Interpol */
+  /* Literal.String.Other */
+  /* Literal.String.Regex */
+  /* Literal.String.Single */
+  /* Literal.String.Symbol */
+  /* Name.Builtin.Pseudo */
+  /* Name.Function.Magic */
+  /* Name.Variable.Class */
+  /* Name.Variable.Global */
+  /* Name.Variable.Instance */
+  /* Name.Variable.Magic */
+  /* Literal.Number.Integer.Long */
 }
 .docfuse.dark-theme .highlight .hll {
   background-color: #f1fa8c;
@@ -377,6 +442,9 @@
 .docfuse.dark-theme .highlight .ge {
   color: #f8f8f2;
   text-decoration: underline;
+}
+.docfuse.dark-theme .highlight .ges {
+  color: #f8f8f2;
 }
 .docfuse.dark-theme .highlight .gr {
   color: #f8f8f2;
@@ -483,6 +551,9 @@
 .docfuse.dark-theme .highlight .ow {
   color: #ff79c6;
 }
+.docfuse.dark-theme .highlight .pm {
+  color: #a8a8a2;
+}
 .docfuse.dark-theme .highlight .w {
   color: #f8f8f2;
 }
@@ -542,6 +613,7 @@
 }
 .docfuse.dark-theme .highlight .bp {
   color: #50fa7b;
+  font-style: italic;
 }
 .docfuse.dark-theme .highlight .fm {
   color: #ffb86c;
@@ -589,7 +661,6 @@
   background: #d5dbe0;
 }
 .docfuse.light-theme div.footer a {
-  display: inline-block;
   margin: 5px;
 }
 .docfuse.light-theme a.parent {
@@ -636,15 +707,92 @@
 .docfuse.light-theme #modal > span.close {
   color: #f1f1f1;
 }
-.docfuse.light-theme #modal:hover,
-.docfuse.light-theme #modal:focus {
+.docfuse.light-theme #modal:hover, .docfuse.light-theme #modal:focus {
   color: #bbb;
 }
-.docfuse.light-theme span.lineno {
+.docfuse.light-theme span.linenos {
   color: #060606;
 }
 .docfuse.light-theme .highlight {
   color: #060606;
+  /* Highlight Color */
+  /* Comment */
+  /* Error */
+  /* Generic */
+  /* Keyword */
+  /* Literal */
+  /* Name */
+  /* Operator */
+  /* Other */
+  /* Punctuation */
+  /* Comment.Hashbang */
+  /* Comment.Multiline */
+  /* Comment.Preproc */
+  /* Comment.PreprocFile */
+  /* Comment.Single */
+  /* Comment.Special */
+  /* Generic.Deleted */
+  /* Generic.Emph */
+  /* Generic.EmphStrong */
+  /* Generic.Error */
+  /* Generic.Heading */
+  /* Generic.Inserted */
+  /* Generic.Output */
+  /* Generic.Prompt */
+  /* Generic.Strong */
+  /* Generic.Subheading */
+  /* Generic.Traceback */
+  /* Keyword.Constant */
+  /* Keyword.Declaration */
+  /* Keyword.Namespace */
+  /* Keyword.Pseudo */
+  /* Keyword.Reserved */
+  /* Keyword.Type */
+  /* Literal.Date */
+  /* Literal.Number */
+  /* Literal.String */
+  /* Name.Attribute */
+  /* Name.Builtin */
+  /* Name.Class */
+  /* Name.Constant */
+  /* Name.Decorator */
+  /* Name.Entity */
+  /* Name.Exception */
+  /* Name.Function */
+  /* Name.Label */
+  /* Name.Namespace */
+  /* Name.Other */
+  /* Name.Property */
+  /* Name.Tag */
+  /* Name.Variable */
+  /* Operator.Word */
+  /* Punctuation.Marker */
+  /* Text.Whitespace */
+  /* Literal.Number.Bin */
+  /* Literal.Number.Float */
+  /* Literal.Number.Hex */
+  /* Literal.Number.Integer */
+  /* Literal.Number.Oct */
+  /* Literal.String.Affix */
+  /* Literal.String.Backtick */
+  /* Literal.String.Char */
+  /* Literal.String.Delimiter */
+  /* Literal.String.Doc */
+  /* Literal.String.Double */
+  /* Literal.String.Escape */
+  /* Literal.String.Heredoc */
+  /* Literal.String.Interpol */
+  /* Literal.String.Other */
+  /* Literal.String.Regex */
+  /* Literal.String.Single */
+  /* Literal.String.Symbol */
+  /* Name.Builtin.Pseudo */
+  /* Name.Function.Magic */
+  /* Name.Variable.Class */
+  /* Name.Variable.Global */
+  /* Name.Variable.Instance */
+  /* Name.Variable.Magic */
+  /* Literal.Number.Integer.Long */
 }
 .docfuse.light-theme .highlight .hll {
   background-color: #18c043;
@@ -700,6 +848,9 @@
 .docfuse.light-theme .highlight .ge {
   color: #060606;
   text-decoration: underline;
+}
+.docfuse.light-theme .highlight .ges {
+  color: #060606;
 }
 .docfuse.light-theme .highlight .gr {
   color: #060606;
@@ -806,6 +957,9 @@
 .docfuse.light-theme .highlight .ow {
   color: #eb339d;
 }
+.docfuse.light-theme .highlight .pm {
+  color: #c9c900;
+}
 .docfuse.light-theme .highlight .w {
   color: #060606;
 }
@@ -865,6 +1019,7 @@
 }
 .docfuse.light-theme .highlight .bp {
   color: #25da53;
+  font-style: italic;
 }
 .docfuse.light-theme .highlight .fm {
   color: #ff8707;

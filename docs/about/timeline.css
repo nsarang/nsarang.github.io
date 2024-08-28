@@ -97,7 +97,7 @@
 }
 .timeline .timeline-event .logo-container h3 {
   margin-top: 0.5em;
-  font-size: 1.15em;
+  font-size: 1.2em;
 }
 .timeline .timeline-event .logo-container h4 {
   margin-bottom: 0.5em;
@@ -107,8 +107,10 @@
   color: rgb(0, 0, 0);
 }
 .timeline .timeline-event h4 {
-  font-size: 1em;
-  color: #1a1a1a;
+  font-size: 0.9em;
+  font-weight: 400;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #cb1212;
   margin-bottom: 0.5em;
 }
 .timeline .timeline-event strong {
