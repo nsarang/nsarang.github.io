@@ -718,12 +718,9 @@
   /* Highlight Color */
   /* Comment */
   /* Error */
-  /* Generic */
   /* Keyword */
-  /* Literal */
   /* Name */
   /* Operator */
-  /* Other */
   /* Punctuation */
   /* Comment.Hashbang */
   /* Comment.Multiline */
@@ -733,7 +730,6 @@
   /* Comment.Special */
   /* Generic.Deleted */
   /* Generic.Emph */
-  /* Generic.EmphStrong */
   /* Generic.Error */
   /* Generic.Heading */
   /* Generic.Inserted */
@@ -748,7 +744,6 @@
   /* Keyword.Pseudo */
   /* Keyword.Reserved */
   /* Keyword.Type */
-  /* Literal.Date */
   /* Literal.Number */
   /* Literal.String */
   /* Name.Attribute */
@@ -795,252 +790,263 @@
   /* Literal.Number.Integer.Long */
 }
 .docfuse.light-theme .highlight .hll {
-  background-color: #18c043;
+  background-color: #ffffcc;
 }
 .docfuse.light-theme .highlight .c {
-  color: #213c93;
+  color: #999988;
+  font-style: italic;
 }
 .docfuse.light-theme .highlight .err {
-  color: #060606;
-}
-.docfuse.light-theme .highlight .g {
-  color: #060606;
+  color: #e3d2d2;
 }
 .docfuse.light-theme .highlight .k {
-  color: #eb339d;
-}
-.docfuse.light-theme .highlight .l {
-  color: #060606;
+  color: #8237a2;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .n {
-  color: #060606;
+  color: #000000;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .o {
-  color: #ff4996;
-}
-.docfuse.light-theme .highlight .x {
-  color: #060606;
+  color: #000000;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .p {
-  color: #c9c900;
+  color: #000000;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .ch {
-  color: #213c93;
+  color: #999988;
+  font-style: italic;
 }
 .docfuse.light-theme .highlight .cm {
-  color: #213c93;
+  color: #999988;
+  font-style: italic;
 }
 .docfuse.light-theme .highlight .cp {
-  color: #eb339d;
+  color: #999999;
+  font-weight: bold;
+  font-style: italic;
 }
 .docfuse.light-theme .highlight .cpf {
-  color: #213c93;
+  color: #999988;
+  font-style: italic;
 }
 .docfuse.light-theme .highlight .c1 {
-  color: #213c93;
+  color: #999988;
+  font-style: italic;
 }
 .docfuse.light-theme .highlight .cs {
-  color: #213c93;
+  color: #999999;
+  font-weight: bold;
+  font-style: italic;
 }
 .docfuse.light-theme .highlight .gd {
-  color: #8b080b;
+  color: #ffdddd;
 }
 .docfuse.light-theme .highlight .ge {
-  color: #060606;
-  text-decoration: underline;
-}
-.docfuse.light-theme .highlight .ges {
-  color: #060606;
+  color: #000000;
+  font-style: italic;
 }
 .docfuse.light-theme .highlight .gr {
-  color: #060606;
+  color: #aa0000;
 }
 .docfuse.light-theme .highlight .gh {
-  color: #060606;
-  font-weight: bold;
+  color: #999999;
 }
 .docfuse.light-theme .highlight .gi {
-  color: #060606;
-  font-weight: bold;
+  color: #ddffdd;
 }
 .docfuse.light-theme .highlight .go {
-  color: #44475a;
+  color: #888888;
 }
 .docfuse.light-theme .highlight .gp {
-  color: #060606;
+  color: #555555;
 }
 .docfuse.light-theme .highlight .gs {
-  color: #060606;
-}
-.docfuse.light-theme .highlight .gu {
-  color: #060606;
   font-weight: bold;
 }
+.docfuse.light-theme .highlight .gu {
+  color: #aaaaaa;
+}
 .docfuse.light-theme .highlight .gt {
-  color: #060606;
+  color: #aa0000;
 }
 .docfuse.light-theme .highlight .kc {
-  color: #eb339d;
+  color: #000000;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .kd {
-  color: #00cbf6;
-  font-style: italic;
+  color: #000000;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .kn {
-  color: #eb339d;
+  color: #8237a2;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .kp {
-  color: #eb339d;
+  color: #158564;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .kr {
-  color: #eb339d;
+  color: #000000;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .kt {
-  color: #00cbf6;
-}
-.docfuse.light-theme .highlight .ld {
-  color: #060606;
+  color: #445588;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .m {
-  color: #733fbe;
+  color: #009999;
 }
 .docfuse.light-theme .highlight .s {
-  color: #18c043;
+  color: #dd1144;
 }
 .docfuse.light-theme .highlight .na {
-  color: #25da53;
+  color: #008080;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .nb {
-  color: #00cbf6;
-  font-style: italic;
+  color: #0086B3;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .nc {
-  color: #ff8707;
+  color: #445588;
   font-weight: bold;
 }
 .docfuse.light-theme .highlight .no {
-  color: #060606;
+  color: #008080;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .nd {
-  color: #332b80;
+  color: #3c5d5d;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .ni {
-  color: #060606;
+  color: #800080;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .ne {
-  color: #b7b702;
-  font-style: italic;
+  color: #990000;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .nf {
-  color: #ff8707;
+  color: #990000;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .nl {
-  color: #00cbf6;
-  font-style: italic;
+  color: #990000;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .nn {
-  color: #060606;
+  color: #555555;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .nx {
-  color: #060606;
+  color: #000000;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .py {
-  color: #060606;
+  color: #000000;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .nt {
-  color: #eb339d;
+  color: #000080;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .nv {
-  color: #00cbf6;
-  font-style: italic;
+  color: #008080;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .ow {
-  color: #eb339d;
+  color: #000000;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .pm {
-  color: #c9c900;
+  color: #000000;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .w {
-  color: #060606;
+  color: #bbbbbb;
 }
 .docfuse.light-theme .highlight .mb {
-  color: #733fbe;
+  color: #009999;
 }
 .docfuse.light-theme .highlight .mf {
-  color: #733fbe;
+  color: #009999;
 }
 .docfuse.light-theme .highlight .mh {
-  color: #733fbe;
+  color: #009999;
 }
 .docfuse.light-theme .highlight .mi {
-  color: #733fbe;
+  color: #009999;
 }
 .docfuse.light-theme .highlight .mo {
-  color: #733fbe;
+  color: #009999;
 }
 .docfuse.light-theme .highlight .sa {
-  color: #18c043;
+  color: #dd1144;
 }
 .docfuse.light-theme .highlight .sb {
-  color: #18c043;
+  color: #dd1144;
 }
 .docfuse.light-theme .highlight .sc {
-  color: #18c043;
+  color: #dd1144;
 }
 .docfuse.light-theme .highlight .dl {
-  color: #18c043;
+  color: #dd1144;
 }
 .docfuse.light-theme .highlight .sd {
-  color: #18c043;
+  color: #dd1144;
 }
 .docfuse.light-theme .highlight .s2 {
-  color: #18c043;
+  color: #dd1144;
 }
 .docfuse.light-theme .highlight .se {
-  color: #18c043;
+  color: #dd1144;
 }
 .docfuse.light-theme .highlight .sh {
-  color: #18c043;
+  color: #dd1144;
 }
 .docfuse.light-theme .highlight .si {
-  color: #18c043;
+  color: #dd1144;
 }
 .docfuse.light-theme .highlight .sx {
-  color: #18c043;
+  color: #dd1144;
 }
 .docfuse.light-theme .highlight .sr {
-  color: #18c043;
+  color: #009926;
 }
 .docfuse.light-theme .highlight .s1 {
-  color: #18c043;
+  color: #dd1144;
 }
 .docfuse.light-theme .highlight .ss {
-  color: #18c043;
+  color: #990073;
 }
 .docfuse.light-theme .highlight .bp {
-  color: #25da53;
-  font-style: italic;
+  color: #525252;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .fm {
-  color: #ff8707;
-  font-style: italic;
+  color: #990000;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .vc {
-  color: #00cbf6;
-  font-style: italic;
+  color: #008080;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .vg {
-  color: #00cbf6;
-  font-style: italic;
+  color: #008080;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .vi {
-  color: #00cbf6;
-  font-style: italic;
+  color: #008080;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .vm {
-  color: #00cbf6;
-  font-style: italic;
+  color: #008080;
+  font-weight: bold;
 }
 .docfuse.light-theme .highlight .il {
-  color: #733fbe;
+  color: #009999;
 }

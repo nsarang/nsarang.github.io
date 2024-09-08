@@ -374,9 +374,9 @@ window.Quarto = {
             </div>
             <div class="code">
                 <div class="highlight"><pre><span class="linenos">1</span><span class="k">def</span> <span class="nf">lgbm_objective_function</span><span class="p">(</span>
-<span class="linenos">2</span>    <span class="n">target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-<span class="linenos">3</span>    <span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-<span class="linenos">4</span>    <span class="n">weight</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="linenos">2</span>    <span class="n">target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
+<span class="linenos">3</span>    <span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
+<span class="linenos">4</span>    <span class="n">weight</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="linenos">5</span><span class="p">):</span>
 <span class="linenos">6</span>    <span class="o">...</span>
 <span class="linenos">7</span>
@@ -406,9 +406,9 @@ window.Quarto = {
             </div>
             <div class="code">
                 <div class="highlight"><pre><span class="linenos"> 9</span><span class="k">def</span> <span class="nf">lgbm_evaluation_metric</span><span class="p">(</span>
-<span class="linenos">10</span>    <span class="n">target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-<span class="linenos">11</span>    <span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-<span class="linenos">12</span>    <span class="n">weight</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="linenos">10</span>    <span class="n">target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
+<span class="linenos">11</span>    <span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
+<span class="linenos">12</span>    <span class="n">weight</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="linenos">13</span><span class="p">):</span>
 <span class="linenos">14</span>    <span class="o">...</span>
 <span class="linenos">15</span>
@@ -471,12 +471,12 @@ Propotionality
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span>
 <span class="linenos"> 4</span><span class="k">def</span> <span class="nf">lgbm_mse_objective_function</span><span class="p">(</span>
-<span class="linenos"> 5</span>    <span class="n">target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-<span class="linenos"> 6</span>    <span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-<span class="linenos"> 7</span>    <span class="n">weight</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="linenos"> 5</span>    <span class="n">target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
+<span class="linenos"> 6</span>    <span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
+<span class="linenos"> 7</span>    <span class="n">weight</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="linenos"> 8</span><span class="p">):</span>
 <span class="linenos"> 9</span>    <span class="n">gradient</span> <span class="o">=</span> <span class="n">prediction</span> <span class="o">-</span> <span class="n">target</span>
-<span class="linenos">10</span>    <span class="n">hessian</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">gradient</span><span class="p">)</span>
+<span class="linenos">10</span>    <span class="n">hessian</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">ones_like</span><span class="p">(</span><span class="n">gradient</span><span class="p">)</span>
 <span class="linenos">11</span>    <span class="k">return</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">hessian</span></pre></div>
 
             </div>
@@ -493,12 +493,12 @@ Propotionality
             </div>
             <div class="code">
                 <div class="highlight"><pre><span class="linenos">12</span><span class="k">def</span> <span class="nf">lgbm_mse_metric</span><span class="p">(</span>
-<span class="linenos">13</span>    <span class="n">target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-<span class="linenos">14</span>    <span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-<span class="linenos">15</span>    <span class="n">weight</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="linenos">13</span>    <span class="n">target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
+<span class="linenos">14</span>    <span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
+<span class="linenos">15</span>    <span class="n">weight</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="linenos">16</span><span class="p">):</span>
 <span class="linenos">17</span>    <span class="n">squared_error</span> <span class="o">=</span> <span class="p">(</span><span class="n">prediction</span> <span class="o">-</span> <span class="n">target</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
-<span class="linenos">18</span>    <span class="n">mse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">squared_error</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weight</span><span class="p">)</span></pre></div>
+<span class="linenos">18</span>    <span class="n">mse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">average</span><span class="p">(</span><span class="n">squared_error</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weight</span><span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -583,9 +583,9 @@ Note
 <span class="linenos">2</span>
 <span class="linenos">3</span>
 <span class="linenos">4</span><span class="k">def</span> <span class="nf">lgbm_msle_objective</span><span class="p">(</span>
-<span class="linenos">5</span>    <span class="n">target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-<span class="linenos">6</span>    <span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-<span class="linenos">7</span>    <span class="n">weight</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="linenos">5</span>    <span class="n">target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
+<span class="linenos">6</span>    <span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
+<span class="linenos">7</span>    <span class="n">weight</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="linenos">8</span><span class="p">):</span></pre></div>
 
             </div>
@@ -601,7 +601,7 @@ Note
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">9</span>    <span class="n">prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">1e-6</span><span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">9</span>    <span class="n">prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">maximum</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">1e-6</span><span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -616,7 +616,7 @@ Note
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">10</span>    <span class="n">gradient</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">target</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span>
+                <div class="highlight"><pre><span class="linenos">10</span>    <span class="n">gradient</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="kp">log1p</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="kp">log1p</span><span class="p">(</span><span class="n">target</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span>
 <span class="linenos">11</span>        <span class="n">prediction</span> <span class="o">+</span> <span class="mi">1</span>
 <span class="linenos">12</span>    <span class="p">)</span></pre></div>
 
@@ -634,7 +634,7 @@ Note
             </div>
             <div class="code">
                 <div class="highlight"><pre><span class="linenos">13</span>    <span class="n">hessian</span> <span class="o">=</span> <span class="p">(</span>
-<span class="linenos">14</span>        <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="linenos">14</span>        <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="kp">log1p</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="kp">log1p</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
 <span class="linenos">15</span>    <span class="p">)</span> <span class="o">/</span> <span class="p">((</span><span class="n">prediction</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span></pre></div>
 
             </div>
@@ -670,15 +670,15 @@ Note
             </div>
             <div class="code">
                 <div class="highlight"><pre><span class="linenos">21</span><span class="k">def</span> <span class="nf">lgbm_msle_metric</span><span class="p">(</span>
-<span class="linenos">22</span>    <span class="n">target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-<span class="linenos">23</span>    <span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-<span class="linenos">24</span>    <span class="n">weight</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="linenos">22</span>    <span class="n">target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
+<span class="linenos">23</span>    <span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
+<span class="linenos">24</span>    <span class="n">weight</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="linenos">25</span><span class="p">):</span>
-<span class="linenos">26</span>    <span class="n">preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">1e-6</span><span class="p">)</span>
+<span class="linenos">26</span>    <span class="n">preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">maximum</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">1e-6</span><span class="p">)</span>
 <span class="linenos">27</span>    <span class="n">squared_log_error</span> <span class="o">=</span> <span class="p">(</span>
-<span class="linenos">28</span>        <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">preds</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+<span class="linenos">28</span>        <span class="n">np</span><span class="o">.</span><span class="kp">log1p</span><span class="p">(</span><span class="n">preds</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="kp">log1p</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
 <span class="linenos">29</span>    <span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
-<span class="linenos">30</span>    <span class="n">msle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">squared_log_error</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weight</span><span class="p">)</span>
+<span class="linenos">30</span>    <span class="n">msle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">average</span><span class="p">(</span><span class="n">squared_log_error</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weight</span><span class="p">)</span>
 <span class="linenos">31</span>    <span class="k">return</span> <span class="s2">"MSLE"</span><span class="p">,</span> <span class="n">msle</span><span class="p">,</span> <span class="kc">False</span></pre></div>
 
             </div>
@@ -1138,11 +1138,11 @@ we'll just have to roll with it</p>
 <span class="linenos">12</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">target</span><span class="p">)):</span>
 <span class="linenos">13</span>            <span class="n">approx_i</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">approx</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">1e-6</span><span class="p">)</span>
 <span class="linenos">14</span>            <span class="n">grad_i</span> <span class="o">=</span> <span class="p">(</span>
-<span class="linenos">15</span>                <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">approx_i</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">target</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="linenos">15</span>                <span class="n">np</span><span class="o">.</span><span class="kp">log1p</span><span class="p">(</span><span class="n">approx_i</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="kp">log1p</span><span class="p">(</span><span class="n">target</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 <span class="linenos">16</span>            <span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">approx_i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 <span class="linenos">17</span>            <span class="n">hess_i</span> <span class="o">=</span> <span class="p">(</span>
-<span class="linenos">18</span>                <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">approx_i</span><span class="p">)</span>
-<span class="linenos">19</span>                <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">target</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="linenos">18</span>                <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="kp">log1p</span><span class="p">(</span><span class="n">approx_i</span><span class="p">)</span>
+<span class="linenos">19</span>                <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="kp">log1p</span><span class="p">(</span><span class="n">target</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 <span class="linenos">20</span>                <span class="o">+</span> <span class="mi">1</span>
 <span class="linenos">21</span>            <span class="p">)</span> <span class="o">/</span> <span class="p">((</span><span class="n">approx_i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
 <span class="linenos">22</span>
@@ -1197,7 +1197,7 @@ we'll just have to roll with it</p>
 <span class="linenos">43</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">approx</span><span class="p">)):</span>
 <span class="linenos">44</span>            <span class="n">approx_i</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">approx</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">1e-6</span><span class="p">)</span>
 <span class="linenos">45</span>            <span class="n">error_i</span> <span class="o">=</span> <span class="p">(</span>
-<span class="linenos">46</span>                <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">approx_i</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">target</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="linenos">46</span>                <span class="n">np</span><span class="o">.</span><span class="kp">log1p</span><span class="p">(</span><span class="n">approx_i</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="kp">log1p</span><span class="p">(</span><span class="n">target</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 <span class="linenos">47</span>            <span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
 <span class="linenos">48</span>            <span class="n">weight_i</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">weight</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">weight</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 <span class="linenos">49</span>
@@ -1253,7 +1253,8 @@ we'll just have to roll with it</p>
 <p>To use the custom loss functions in CatBoost, we need to pass it as a parameter during model initialization.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> catboost <span class="im">as</span> cb</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>regressor <span class="op">=</span> cb.CatBoostRegressor(loss_function<span class="op">=</span>MSLEObjective(), eval_metric<span class="op">=</span>MSLEMetric())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>regressor <span class="op">=</span> cb.CatBoostRegressor(loss_function<span class="op">=</span>MSLEObjective(),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                                 eval_metric<span class="op">=</span>MSLEMetric())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Note that since the functions are implemented as classes, we need to instantiate them before passing them to the model. I fell victim to this mistake a few times, so be careful!</p>
 
 
