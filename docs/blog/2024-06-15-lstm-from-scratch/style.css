@@ -805,7 +805,6 @@
 }
 .docfuse.light-theme .highlight .n {
   color: #000000;
-  font-weight: bold;
 }
 .docfuse.light-theme .highlight .o {
   color: #000000;
@@ -904,11 +903,9 @@
 }
 .docfuse.light-theme .highlight .na {
   color: #008080;
-  font-weight: bold;
 }
 .docfuse.light-theme .highlight .nb {
   color: #0086B3;
-  font-weight: bold;
 }
 .docfuse.light-theme .highlight .nc {
   color: #445588;
@@ -916,7 +913,6 @@
 }
 .docfuse.light-theme .highlight .no {
   color: #008080;
-  font-weight: bold;
 }
 .docfuse.light-theme .highlight .nd {
   color: #3c5d5d;
@@ -924,7 +920,6 @@
 }
 .docfuse.light-theme .highlight .ni {
   color: #800080;
-  font-weight: bold;
 }
 .docfuse.light-theme .highlight .ne {
   color: #990000;
@@ -940,23 +935,18 @@
 }
 .docfuse.light-theme .highlight .nn {
   color: #555555;
-  font-weight: bold;
 }
 .docfuse.light-theme .highlight .nx {
   color: #000000;
-  font-weight: bold;
 }
 .docfuse.light-theme .highlight .py {
   color: #000000;
-  font-weight: bold;
 }
 .docfuse.light-theme .highlight .nt {
   color: #000080;
-  font-weight: bold;
 }
 .docfuse.light-theme .highlight .nv {
   color: #008080;
-  font-weight: bold;
 }
 .docfuse.light-theme .highlight .ow {
   color: #000000;
@@ -1025,7 +1015,6 @@
 }
 .docfuse.light-theme .highlight .bp {
   color: #525252;
-  font-weight: bold;
 }
 .docfuse.light-theme .highlight .fm {
   color: #990000;
@@ -1033,19 +1022,15 @@
 }
 .docfuse.light-theme .highlight .vc {
   color: #008080;
-  font-weight: bold;
 }
 .docfuse.light-theme .highlight .vg {
   color: #008080;
-  font-weight: bold;
 }
 .docfuse.light-theme .highlight .vi {
   color: #008080;
-  font-weight: bold;
 }
 .docfuse.light-theme .highlight .vm {
   color: #008080;
-  font-weight: bold;
 }
 .docfuse.light-theme .highlight .il {
   color: #009999;

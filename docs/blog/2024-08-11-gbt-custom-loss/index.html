@@ -1253,8 +1253,7 @@ we'll just have to roll with it</p>
 <p>To use the custom loss functions in CatBoost, we need to pass it as a parameter during model initialization.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> catboost <span class="im">as</span> cb</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>regressor <span class="op">=</span> cb.CatBoostRegressor(loss_function<span class="op">=</span>MSLEObjective(),</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                                 eval_metric<span class="op">=</span>MSLEMetric())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>regressor <span class="op">=</span> cb.CatBoostRegressor(loss_function<span class="op">=</span>MSLEObjective(), eval_metric<span class="op">=</span>MSLEMetric())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Note that since the functions are implemented as classes, we need to instantiate them before passing them to the model. I fell victim to this mistake a few times, so be careful!</p>
 
 
