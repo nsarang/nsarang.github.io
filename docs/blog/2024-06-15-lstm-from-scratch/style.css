@@ -1,12 +1,17 @@
 /*-- scss:rules --*/
 .docfuse {
-  position: relative;
   font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   margin: 0;
   padding: 0;
   font-size: 0.9em;
   line-height: 1.6;
   font-weight: 400;
+}
+@media (min-width: 768px) {
+  .docfuse {
+    display: grid;
+    grid-template-columns: 42.5% 1fr;
+  }
 }
 .docfuse mjx-math {
   white-space: normal;
@@ -23,34 +28,22 @@
 .docfuse p {
   margin: 0 0 10px 0;
 }
-.docfuse h1,
-.docfuse h2,
-.docfuse h3,
-.docfuse h4,
-.docfuse h5,
-.docfuse h6 {
+.docfuse h1, .docfuse h2, .docfuse h3, .docfuse h4, .docfuse h5, .docfuse h6 {
   margin: 40px 0 15px 0;
 }
-.docfuse h2,
-.docfuse h3,
-.docfuse h4,
-.docfuse h5,
-.docfuse h6 {
+.docfuse h2, .docfuse h3, .docfuse h4, .docfuse h5, .docfuse h6 {
   margin-top: 0;
 }
-.docfuse #background {
-  position: absolute;
-  top: 0;
-  left: 42.5%;
-  right: 0;
-  bottom: 0;
-  z-index: 0;
-  display: none;
+.docfuse a {
+  text-decoration: none;
 }
 @media (min-width: 768px) {
-  .docfuse #background {
+  .docfuse a {
     display: block;
   }
+}
+.docfuse a:hover {
+  text-decoration: underline;
 }
 .docfuse a.parent {
   text-transform: uppercase;
@@ -64,50 +57,42 @@
   font-size: 14px;
   margin-left: 4px;
 }
-.docfuse div.footer {
+.docfuse .footer {
+  grid-column: 1/-1;
   margin-top: 25px;
-  position: relative;
   padding: 10px 0;
   text-align: center;
 }
-.docfuse div.footer a {
+.docfuse .footer a {
   display: inline-block;
   margin: 8px;
   font-size: 1.3rem;
 }
-.docfuse div.section {
+@media (min-width: 768px) {
+  .docfuse .section {
+    display: contents;
+  }
+}
+.docfuse .section .docs {
   position: relative;
-}
-.docfuse div.section:after {
-  clear: both;
-  content: "";
-  display: block;
-}
-.docfuse div.section:hover div.docs .section-link a {
-  opacity: 1;
-}
-.docfuse div.section div.docs {
   box-sizing: border-box;
   padding: 10px 8px 1px 8px;
-  vertical-align: top;
-  text-align: left;
 }
 @media (min-width: 768px) {
-  .docfuse div.section div.docs {
-    float: left;
-    width: 42.5%;
-    min-height: 5px;
+  .docfuse .section .docs {
+    grid-column: 1;
+    padding-right: 15px;
   }
 }
 @media (min-width: 1024px) {
-  .docfuse div.section div.docs {
-    padding: 10px 15px 1px 25px;
+  .docfuse .section .docs {
+    padding: 10px 25px 1px 35px;
   }
 }
-.docfuse div.section div.docs .section-link {
+.docfuse .section .docs .section-link {
   position: relative;
 }
-.docfuse div.section div.docs .section-link a {
+.docfuse .section .docs .section-link a {
   font: 12px Arial;
   text-decoration: none;
   position: absolute;
@@ -117,25 +102,27 @@
   opacity: 0;
   transition: opacity 0.2s linear;
 }
-.docfuse div.section div.docs pre code {
+.docfuse .section .docs:hover .section-link a {
+  opacity: 1;
+}
+.docfuse .section .docs pre code {
   overflow-x: auto;
 }
-.docfuse div.section div.docs img {
+.docfuse .section .docs img {
   max-width: 100%;
 }
-.docfuse div.section div.docs pre {
+.docfuse .section .docs pre {
   margin: 15px 0 15px;
 }
-.docfuse div.section div.code {
+.docfuse .section .code {
   padding: 14px 8px 16px 15px;
-  vertical-align: top;
 }
 @media (min-width: 768px) {
-  .docfuse div.section div.code {
-    margin-left: 42.5%;
+  .docfuse .section .code {
+    grid-column: 2;
   }
 }
-.docfuse div.section div.code pre {
+.docfuse .section .code pre {
   font-size: 12px;
   overflow-x: auto;
   white-space: pre;
@@ -147,9 +134,7 @@
   white-space: nowrap;
   border-radius: 4px;
 }
-.docfuse pre,
-.docfuse tt,
-.docfuse code {
+.docfuse pre, .docfuse tt, .docfuse code {
   line-height: 18px;
   font-family: Monaco, Consolas, "Lucida Console", monospace;
   margin: 0;
@@ -182,24 +167,29 @@
   top: 0;
   right: 0;
   bottom: 0;
-  overflow: scroll;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .docfuse #modal > div {
+  position: relative;
   padding: 100px 10px 10px 10px;
+  max-width: 80%;
+  max-height: 80%;
 }
 .docfuse #modal > div > img,
 .docfuse #modal > div > p {
   margin: auto;
   display: block;
-  width: 80%;
-  max-width: 700px;
-  animation-name: zoom;
-  animation-duration: 0.6s;
+  width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  animation: zoom 0.6s;
 }
 .docfuse #modal > div > p {
   text-align: center;
   padding: 10px 0;
-  height: 150px;
 }
 .docfuse #modal > span.close {
   position: absolute;
@@ -221,19 +211,8 @@
     transform: scale(1);
   }
 }
-@media only screen and (max-width: 700px) {
-  .docfuse #modal > img {
-    width: 100%;
-  }
-}
-.docfuse .highlight .n,
-.docfuse .highlight .nn,
-.docfuse .highlight .nc,
-.docfuse .highlight .nf {
+.docfuse .highlight .n, .docfuse .highlight .nn, .docfuse .highlight .nc, .docfuse .highlight .nf {
   cursor: pointer;
-}
-.docfuse.dark-theme {
-  background-color: #1d2127;
 }
 .docfuse.dark-theme hr {
   border-color: #555;
@@ -244,17 +223,10 @@
 .docfuse.dark-theme a:visited {
   color: #aaa;
 }
-.docfuse.dark-theme div.section {
-  border-top: 1px solid #353745;
-}
-.docfuse.dark-theme #background {
-  background: #282a36;
-  border-left: 1px solid #282a36;
-}
-.docfuse.dark-theme div.footer {
+.docfuse.dark-theme .footer {
   background: #30353d;
 }
-.docfuse.dark-theme div.footer a {
+.docfuse.dark-theme .footer a {
   margin: 5px;
 }
 .docfuse.dark-theme a.parent {
@@ -263,27 +235,54 @@
 .docfuse.dark-theme a.parent:after {
   color: #aaa;
 }
-.docfuse.dark-theme div.section:hover {
+.docfuse.dark-theme .section:hover .docs, .docfuse.dark-theme .section:hover .code {
   background: #080a16;
 }
-.docfuse.dark-theme div.section:hover div.code {
-  background: #080a16;
-}
-.docfuse.dark-theme div.section div.docs {
+.docfuse.dark-theme .section .docs {
+  background-color: #1d2127;
   color: #ccc;
 }
-.docfuse.dark-theme div.section div.docs .section-link a {
+.docfuse.dark-theme .section .docs .section-link a {
   color: #454545;
 }
-.docfuse.dark-theme div.section div.docs p tt,
-.docfuse.dark-theme div.section div.docs li code,
-.docfuse.dark-theme div.section div.docs ol code,
-.docfuse.dark-theme div.section div.docs p code {
+.docfuse.dark-theme .section .docs p tt,
+.docfuse.dark-theme .section .docs li code,
+.docfuse.dark-theme .section .docs ol code,
+.docfuse.dark-theme .section .docs p code {
   background: #282a36;
   color: #ccc;
 }
-.docfuse.dark-theme div.section div.code {
+.docfuse.dark-theme .section .code {
   background: #282a36;
+  border-left: 1px solid #293340;
+}
+.docfuse.dark-theme .section:first-child .docs {
+  border-top: 1px solid #336b90;
+}
+.docfuse.dark-theme .section:last-child .code {
+  border-bottom: 1px solid #336b90;
+}
+.docfuse.dark-theme .section .docs, .docfuse.dark-theme .section .code {
+  border-left: 1px solid #336b90;
+  border-right: 1px solid #336b90;
+}
+@media (min-width: 768px) {
+  .docfuse.dark-theme .section:first-child .docs,
+  .docfuse.dark-theme .section:first-child .code {
+    border-top: 1px solid #336b90;
+  }
+  .docfuse.dark-theme .section:last-child .docs,
+  .docfuse.dark-theme .section:last-child .code {
+    border-bottom: 1px solid #336b90;
+  }
+  .docfuse.dark-theme .section .docs {
+    border-left: 1px solid #336b90;
+    border-right: none;
+  }
+  .docfuse.dark-theme .section .code {
+    border-right: 1px solid #336b90;
+    border-left-color: #293340;
+  }
 }
 .docfuse.dark-theme .mjx-chtml {
   color: #ccc;
@@ -638,9 +637,6 @@
 .docfuse.dark-theme .highlight .il {
   color: #bd93f9;
 }
-.docfuse.light-theme {
-  background-color: #ecf0f3;
-}
 .docfuse.light-theme hr {
   border-color: #555;
 }
@@ -650,17 +646,10 @@
 .docfuse.light-theme a:visited {
   color: #777;
 }
-.docfuse.light-theme div.section {
-  border-top: 1px solid #e2e2eb;
-}
-.docfuse.light-theme #background {
-  background: #ebedef;
-  border-left: 1px solid #ebedef;
-}
-.docfuse.light-theme div.footer {
+.docfuse.light-theme .footer {
   background: #d5dbe0;
 }
-.docfuse.light-theme div.footer a {
+.docfuse.light-theme .footer a {
   margin: 5px;
 }
 .docfuse.light-theme a.parent {
@@ -669,33 +658,60 @@
 .docfuse.light-theme a.parent:after {
   color: #666666;
 }
-.docfuse.light-theme div.section:hover {
+.docfuse.light-theme .section:hover .docs, .docfuse.light-theme .section:hover .code {
   background: #f8fafb;
 }
-.docfuse.light-theme div.section:hover div.code {
-  background: #f8fafb;
-}
-.docfuse.light-theme div.section div.docs {
+.docfuse.light-theme .section .docs {
+  background-color: #ecf0f3;
   color: #555;
 }
-.docfuse.light-theme div.section div.docs .section-link a {
+.docfuse.light-theme .section .docs .section-link a {
   color: #454545;
 }
-.docfuse.light-theme div.section div.docs p tt,
-.docfuse.light-theme div.section div.docs li code,
-.docfuse.light-theme div.section div.docs ol code,
-.docfuse.light-theme div.section div.docs p code {
+.docfuse.light-theme .section .docs p tt,
+.docfuse.light-theme .section .docs li code,
+.docfuse.light-theme .section .docs ol code,
+.docfuse.light-theme .section .docs p code {
   background: #ebedef;
   color: #666;
 }
-.docfuse.light-theme div.section div.code {
-  background: #ebedef;
+.docfuse.light-theme .section .code {
+  background-color: #ebedef;
+  border-left: 1px solid #e2e2eb;
+}
+.docfuse.light-theme .section:first-child .docs {
+  border-top: 1px solid #3498db;
+}
+.docfuse.light-theme .section:last-child .code {
+  border-bottom: 1px solid #3498db;
+}
+.docfuse.light-theme .section .docs, .docfuse.light-theme .section .code {
+  border-left: 1px solid #3498db;
+  border-right: 1px solid #3498db;
+}
+@media (min-width: 768px) {
+  .docfuse.light-theme .section:first-child .docs,
+  .docfuse.light-theme .section:first-child .code {
+    border-top: 1px solid #3498db;
+  }
+  .docfuse.light-theme .section:last-child .docs,
+  .docfuse.light-theme .section:last-child .code {
+    border-bottom: 1px solid #3498db;
+  }
+  .docfuse.light-theme .section .docs {
+    border-left: 1px solid #3498db;
+    border-right: none;
+  }
+  .docfuse.light-theme .section .code {
+    border-right: 1px solid #3498db;
+    border-left-color: #e2e2eb;
+  }
 }
 .docfuse.light-theme .mjx-chtml {
   color: #555;
 }
 .docfuse.light-theme code {
-  background: #ebedef;
+  background: #f0f0f0;
   border: 1px solid #cacddc;
 }
 .docfuse.light-theme #modal {
@@ -1034,6 +1050,10 @@
 }
 .docfuse.light-theme .highlight .il {
   color: #009999;
+}
+
+.cell-output:has(.docfuse) {
+  border-radius: 0;
 }
 
 figcaption {

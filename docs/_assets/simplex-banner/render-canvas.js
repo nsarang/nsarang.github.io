@@ -2,7 +2,7 @@
     // dependencies
     // - simple-noise.js
     // - https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js
-    
+
     'use strict';
 
     const SimplexNoise = window.SimplexNoise;
@@ -13,7 +13,8 @@
         particleNum: 1000,
         step: 5,
         base: 1000,
-        zInc: 0.001
+        zInc: 0.001,
+        maxFrames: 700
     };
 
     let canvas, context, screenWidth, screenHeight, centerX, centerY;
@@ -22,9 +23,11 @@
     let simplexNoise;
     let zoff = 0;
     let gui;
+    let frameCount = 0;
+    let animationId = null;
 
     function init() {
-        
+
         canvas = document.getElementById('simplex-noise-canvas');
         if (!canvas) {
             console.error('Canvas element not found');
@@ -110,6 +113,12 @@
     }
 
     function update() {
+        if (frameCount >= Configs.maxFrames) {
+            // console.log("Animation completed after " + frameCount + " frames");
+            cancelAnimationFrame(animationId);  // Cancel the animation
+            return;
+        }
+
         const { step, base } = Configs;
 
         particles.forEach(p => {
@@ -136,7 +145,8 @@
         hueBase += 0.1;
         zoff += Configs.zInc;
 
-        requestAnimationFrame(update);
+        frameCount++;
+        animationId = requestAnimationFrame(update);
     }
 
     class HSLA {

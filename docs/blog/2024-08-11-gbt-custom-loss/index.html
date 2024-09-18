@@ -350,7 +350,6 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
-            <div id="background"></div>
             
         <div class="section" id="section-0">
             <div class="docs">
@@ -456,7 +455,6 @@ Propotionality
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
-            <div id="background"></div>
             
         <div class="section" id="section-0">
             <div class="docs">
@@ -568,7 +566,6 @@ Note
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
-            <div id="background"></div>
             
         <div class="section" id="section-0">
             <div class="docs">
@@ -616,9 +613,9 @@ Note
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">10</span>    <span class="n">gradient</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="kp">log1p</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="kp">log1p</span><span class="p">(</span><span class="n">target</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span>
-<span class="linenos">11</span>        <span class="n">prediction</span> <span class="o">+</span> <span class="mi">1</span>
-<span class="linenos">12</span>    <span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">10</span>    <span class="n">gradient</span> <span class="o">=</span> <span class="p">(</span>
+<span class="linenos">11</span>        <span class="n">np</span><span class="o">.</span><span class="kp">log1p</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="kp">log1p</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+<span class="linenos">12</span>    <span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">prediction</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -731,7 +728,6 @@ Caution
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
-            <div id="background"></div>
             
         <div class="section" id="section-0">
             <div class="docs">
@@ -865,11 +861,13 @@ we'll just have to roll with it</p>
 <span class="linenos">27</span>
 <span class="linenos">28</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">approx</span><span class="p">)):</span>
 <span class="linenos">29</span>            <span class="n">error_i</span> <span class="o">=</span> <span class="o">...</span>
-<span class="linenos">30</span>            <span class="n">weight_i</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">weight</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">weight</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-<span class="linenos">31</span>            <span class="n">weight_sum</span> <span class="o">+=</span> <span class="n">weight_i</span>
-<span class="linenos">32</span>            <span class="n">error_sum</span> <span class="o">+=</span> <span class="n">weight_i</span> <span class="o">*</span> <span class="n">error_i</span>
-<span class="linenos">33</span>
-<span class="linenos">34</span>        <span class="k">return</span> <span class="n">error_sum</span><span class="p">,</span> <span class="n">weight_sum</span></pre></div>
+<span class="linenos">30</span>            <span class="n">weight_i</span> <span class="o">=</span> <span class="p">(</span>
+<span class="linenos">31</span>                <span class="mf">1.0</span> <span class="k">if</span> <span class="n">weight</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">weight</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="linenos">32</span>            <span class="p">)</span>
+<span class="linenos">33</span>            <span class="n">weight_sum</span> <span class="o">+=</span> <span class="n">weight_i</span>
+<span class="linenos">34</span>            <span class="n">error_sum</span> <span class="o">+=</span> <span class="n">weight_i</span> <span class="o">*</span> <span class="n">error_i</span>
+<span class="linenos">35</span>
+<span class="linenos">36</span>        <span class="k">return</span> <span class="n">error_sum</span><span class="p">,</span> <span class="n">weight_sum</span></pre></div>
 
             </div>
         </div>
@@ -893,9 +891,9 @@ we'll just have to roll with it</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">35</span>    <span class="k">def</span> <span class="nf">get_final_error</span><span class="p">(</span>
-<span class="linenos">36</span>        <span class="bp">self</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span>
-<span class="linenos">37</span>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">37</span>    <span class="k">def</span> <span class="nf">get_final_error</span><span class="p">(</span>
+<span class="linenos">38</span>        <span class="bp">self</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span>
+<span class="linenos">39</span>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span></pre></div>
 
             </div>
         </div>
@@ -914,7 +912,7 @@ we'll just have to roll with it</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">38</span>    <span class="k">def</span> <span class="nf">is_max_optimal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">40</span>    <span class="k">def</span> <span class="nf">is_max_optimal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span></pre></div>
 
             </div>
         </div>
@@ -931,7 +929,6 @@ we'll just have to roll with it</p>
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
-            <div id="background"></div>
             
         <div class="section" id="section-0">
             <div class="docs">
@@ -1044,11 +1041,13 @@ we'll just have to roll with it</p>
 <span class="linenos">31</span>
 <span class="linenos">32</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">approx</span><span class="p">)):</span>
 <span class="linenos">33</span>            <span class="n">error_i</span> <span class="o">=</span> <span class="p">(</span><span class="n">approx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">target</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
-<span class="linenos">34</span>            <span class="n">weight_i</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">weight</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">weight</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-<span class="linenos">35</span>            <span class="n">weight_sum</span> <span class="o">+=</span> <span class="n">weight_i</span>
-<span class="linenos">36</span>            <span class="n">error_sum</span> <span class="o">+=</span> <span class="n">weight_i</span> <span class="o">*</span> <span class="n">error_i</span>
-<span class="linenos">37</span>
-<span class="linenos">38</span>        <span class="k">return</span> <span class="n">error_sum</span><span class="p">,</span> <span class="n">weight_sum</span></pre></div>
+<span class="linenos">34</span>            <span class="n">weight_i</span> <span class="o">=</span> <span class="p">(</span>
+<span class="linenos">35</span>                <span class="mf">1.0</span> <span class="k">if</span> <span class="n">weight</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">weight</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="linenos">36</span>            <span class="p">)</span>
+<span class="linenos">37</span>            <span class="n">weight_sum</span> <span class="o">+=</span> <span class="n">weight_i</span>
+<span class="linenos">38</span>            <span class="n">error_sum</span> <span class="o">+=</span> <span class="n">weight_i</span> <span class="o">*</span> <span class="n">error_i</span>
+<span class="linenos">39</span>
+<span class="linenos">40</span>        <span class="k">return</span> <span class="n">error_sum</span><span class="p">,</span> <span class="n">weight_sum</span></pre></div>
 
             </div>
         </div>
@@ -1063,10 +1062,10 @@ we'll just have to roll with it</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">39</span>    <span class="k">def</span> <span class="nf">get_final_error</span><span class="p">(</span>
-<span class="linenos">40</span>        <span class="bp">self</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span>
-<span class="linenos">41</span>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="linenos">42</span>        <span class="k">return</span> <span class="n">error</span> <span class="o">/</span> <span class="n">weight</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">41</span>    <span class="k">def</span> <span class="nf">get_final_error</span><span class="p">(</span>
+<span class="linenos">42</span>        <span class="bp">self</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span>
+<span class="linenos">43</span>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="linenos">44</span>        <span class="k">return</span> <span class="n">error</span> <span class="o">/</span> <span class="n">weight</span></pre></div>
 
             </div>
         </div>
@@ -1081,8 +1080,8 @@ we'll just have to roll with it</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">43</span>    <span class="k">def</span> <span class="nf">is_max_optimal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="linenos">44</span>        <span class="k">return</span> <span class="kc">False</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">45</span>    <span class="k">def</span> <span class="nf">is_max_optimal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="linenos">46</span>        <span class="k">return</span> <span class="kc">False</span></pre></div>
 
             </div>
         </div>
@@ -1099,7 +1098,6 @@ we'll just have to roll with it</p>
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
-            <div id="background"></div>
             
         <div class="section" id="section-0">
             <div class="docs">
@@ -1199,12 +1197,14 @@ we'll just have to roll with it</p>
 <span class="linenos">45</span>            <span class="n">error_i</span> <span class="o">=</span> <span class="p">(</span>
 <span class="linenos">46</span>                <span class="n">np</span><span class="o">.</span><span class="kp">log1p</span><span class="p">(</span><span class="n">approx_i</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="kp">log1p</span><span class="p">(</span><span class="n">target</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 <span class="linenos">47</span>            <span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
-<span class="linenos">48</span>            <span class="n">weight_i</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">weight</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">weight</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-<span class="linenos">49</span>
-<span class="linenos">50</span>            <span class="n">weight_sum</span> <span class="o">+=</span> <span class="n">weight_i</span>
-<span class="linenos">51</span>            <span class="n">error_sum</span> <span class="o">+=</span> <span class="n">weight_i</span> <span class="o">*</span> <span class="n">error_i</span>
-<span class="linenos">52</span>
-<span class="linenos">53</span>        <span class="k">return</span> <span class="n">error_sum</span><span class="p">,</span> <span class="n">weight_sum</span></pre></div>
+<span class="linenos">48</span>            <span class="n">weight_i</span> <span class="o">=</span> <span class="p">(</span>
+<span class="linenos">49</span>                <span class="mf">1.0</span> <span class="k">if</span> <span class="n">weight</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">weight</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="linenos">50</span>            <span class="p">)</span>
+<span class="linenos">51</span>
+<span class="linenos">52</span>            <span class="n">weight_sum</span> <span class="o">+=</span> <span class="n">weight_i</span>
+<span class="linenos">53</span>            <span class="n">error_sum</span> <span class="o">+=</span> <span class="n">weight_i</span> <span class="o">*</span> <span class="n">error_i</span>
+<span class="linenos">54</span>
+<span class="linenos">55</span>        <span class="k">return</span> <span class="n">error_sum</span><span class="p">,</span> <span class="n">weight_sum</span></pre></div>
 
             </div>
         </div>
@@ -1219,10 +1219,10 @@ we'll just have to roll with it</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">54</span>    <span class="k">def</span> <span class="nf">get_final_error</span><span class="p">(</span>
-<span class="linenos">55</span>        <span class="bp">self</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span>
-<span class="linenos">56</span>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="linenos">57</span>        <span class="k">return</span> <span class="n">error</span> <span class="o">/</span> <span class="n">weight</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">56</span>    <span class="k">def</span> <span class="nf">get_final_error</span><span class="p">(</span>
+<span class="linenos">57</span>        <span class="bp">self</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span>
+<span class="linenos">58</span>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="linenos">59</span>        <span class="k">return</span> <span class="n">error</span> <span class="o">/</span> <span class="n">weight</span></pre></div>
 
             </div>
         </div>
@@ -1237,8 +1237,8 @@ we'll just have to roll with it</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">58</span>    <span class="k">def</span> <span class="nf">is_max_optimal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="linenos">59</span>        <span class="k">return</span> <span class="kc">False</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">60</span>    <span class="k">def</span> <span class="nf">is_max_optimal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="linenos">61</span>        <span class="k">return</span> <span class="kc">False</span></pre></div>
 
             </div>
         </div>
