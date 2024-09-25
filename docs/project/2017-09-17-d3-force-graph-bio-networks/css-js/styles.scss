@@ -45,9 +45,8 @@
         -webkit-flex-direction: row;
         flex-direction: row;
         flex-wrap: wrap; // items will wrap around to the next row if there is no space
-        justify-content: space-between; // align horizontally
-        align-items: left; // align vertically since flex-direction is row
-        gap: 0px; // space between the elements
+        align-items: flex-start;
+        gap: 2em 6vh; // space between the elements (row and column)
         padding: 0 30px; // avoid the edge
         // max-width: 95%;
     }

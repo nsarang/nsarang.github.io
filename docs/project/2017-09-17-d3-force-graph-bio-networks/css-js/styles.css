@@ -41,9 +41,8 @@
   -webkit-flex-direction: row;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: left;
-  gap: 0px;
+  align-items: flex-start;
+  gap: 2em 6vh;
   padding: 0 30px;
 }
 .bionet .button {
