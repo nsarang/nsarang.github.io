@@ -1,18 +1,58 @@
 // Force.js V0.9  17 Sep 2017
 
+function responsivefy(svg, keepAspect = true) {
+  // get container + svg aspect ratio
+  var container = d3.select(svg.node().parentNode),
+    width = parseInt(svg.style("width")),
+    height = parseInt(svg.style("height")),
+    aspect = width / height;
+
+  // add viewBox and preserveAspectRatio properties,
+  // and call resize so that svg resizes on inital page load
+  svg
+    .attr("width", "100%")
+    .attr("height", "100%")
+    .attr("viewBox", "0 0 " + width + " " + height)
+    .attr("perserveAspectRatio", "xMinYMid meet")
+    .call(resize);
+
+  // to register multiple listeners for same event type, 
+  // you need to add namespace, i.e., 'click.foo'
+  // necessary if you call invoke this function for multiple svgs
+  // api docs: https://github.com/mbostock/d3/wiki/Selections#on
+  d3.select(window).on("resize." + container.attr("id"), resize);
+
+  // get width of container and resize svg to fit it
+  function resize() {
+    var targetWidth = parseInt(container.style("width")), targetHeight;
+    if (keepAspect == true) {
+      targetHeight = Math.round(targetWidth / aspect);
+    }
+    else {
+      targetHeight = parseInt(container.style("height"));
+    }
+    svg.attr("width", targetWidth);
+    svg.attr("height", targetHeight);
+  }
+}
 
 // SVG
-var svg = d3.select("svg"),
-  width = +svg.attr("width"),
-  height = +svg.attr("height"),
+var width = 850,
+  height = 630,
   radius = 150; // boundaries
 
+var svg = d3.select("#visualization").append("svg")
+  .attr("width", width)
+  .attr("height", height)
+  .call(responsivefy);
 
 
 // RECT & GROUP
 var rect = svg.append("rect")
-  .attr("width", width)
-  .attr("height", height)
+  .attr("width", "100%")
+  .attr("height", "100%")
+  .attr("x", 0)
+  .attr("y", 0)
   .on("click", releaseHighlight)
   .on("mouseout", showInfo),
 
