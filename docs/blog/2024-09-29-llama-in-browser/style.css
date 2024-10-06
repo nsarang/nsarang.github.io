@@ -1,0 +1,486 @@
+.chat-layout {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 20px;
+}
+
+.sidebar {
+  width: 250px;
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chat-container {
+  flex-grow: 1;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chat-header {
+  background-color: #f0f0f0;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  color: #666;
+  transition: color 0.3s ease;
+}
+
+.icon-button:hover {
+  color: #333;
+}
+
+.chat-messages {
+  height: 400px;
+  overflow-y: auto;
+  padding: 20px;
+  background-color: #fff;
+}
+
+.message {
+  max-width: 80%;
+  margin-bottom: 15px;
+  padding: 10px 15px;
+  border-radius: 18px;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.user-message {
+  background-color: #007bff;
+  color: white;
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+.assistant-message {
+  background-color: #f1f0f0;
+  color: #333;
+  align-self: flex-start;
+}
+
+.chat-input-container {
+  display: flex;
+  padding: 10px;
+  background-color: #f8f8f8;
+}
+
+#user-input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  resize: none;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.send-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin-left: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.send-button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.send-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.setting {
+  margin-bottom: 15px;
+}
+
+.setting label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.setting input[type="range"],
+.setting input[type="number"],
+.setting select {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.initialize-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.initialize-button:hover {
+  background-color: #218838;
+}
+
+#download-status {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+}
+
+.hidden {
+  display: none;
+}
+
+#model-size {
+  display: block;
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 5px;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .chat-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+.chat-layout {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 20px;
+  height: 80vh; /* Adjust this value as needed */
+}
+
+.sidebar {
+  width: 250px;
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  flex-shrink: 0; /* Prevent sidebar from shrinking */
+}
+
+.chat-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chat-header {
+  background-color: #f0f0f0;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 20px;
+  background-color: #fff;
+}
+
+.chat-input-container {
+  display: flex;
+  padding: 10px;
+  background-color: #f8f8f8;
+}
+
+#user-input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  resize: none;
+  font-family: inherit;
+  font-size: 1rem;
+  max-height: 100px; /* Limit the height of the textarea */
+  overflow-y: auto; /* Add scrollbar when content exceeds max-height */
+}
+
+.send-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin-left: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  flex-shrink: 0; /* Prevent button from shrinking */
+}
+
+@media (max-width: 768px) {
+  .chat-layout {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .sidebar {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
+
+
+.info-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-color: #888;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 16px;
+  font-size: 12px;
+  cursor: help;
+  margin-left: 5px;
+  position: relative;
+}
+
+.info-icon::after {
+  content: attr(data-tooltip);
+  position: fixed; /* Changed from absolute to fixed */
+  background-color: #333;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 250px;
+  white-space: normal;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+  pointer-events: none;
+  z-index: 1000;
+  text-align: left;
+  line-height: 1.4;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.info-icon:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Position the tooltip */
+.info-icon:hover::after {
+  content: attr(data-tooltip);
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: auto;
+  top: 100%;
+  margin-top: 10px;
+}
+
+/* Ensure the tooltip doesn't go off-screen on the right side */
+.info-icon:hover::after {
+  left: auto;
+  right: 10px;
+  transform: none;
+}
+
+/* Adjust for left side of the screen */
+.sidebar .setting:first-child .info-icon:hover::after {
+  left: 10px;
+  right: auto;
+  transform: none;
+}
+
+@media (max-width: 768px) {
+  .info-icon::after {
+    width: 200px; /* Slightly narrower on mobile */
+  }
+}
+
+.info-icon.tooltip-active::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (hover: none) {
+  .info-icon:hover::after {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.info-icon::after {
+  /* ... (other styles remain the same) ... */
+  position: fixed;
+  top: var(--tooltip-top, auto);
+  left: var(--tooltip-left, auto);
+  transform: none;
+  right: auto;
+  bottom: auto;
+}
+
+.info-icon:hover::after {
+  /* Remove any existing positioning styles */
+  left: var(--tooltip-left, auto);
+  right: auto;
+  top: var(--tooltip-top, auto);
+  bottom: auto;
+  transform: none;
+}
+
+
+
+.tooltip {
+  position: absolute;
+  top: 0;
+  font-size: 14px;
+  background: #ffffff;
+  color: #ffffff;
+  padding: 5px 8px;
+  border-radius: 5px;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.tooltip::before {
+  position: absolute;
+  content: "";
+  height: 8px;
+  width: 8px;
+  background: #ffffff;
+  bottom: -3px;
+  left: 50%;
+  transform: translate(-50%) rotate(45deg);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.icon:hover .tooltip {
+  top: -45px;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+ .icon:hover, .icon:hover .tooltip {
+  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Add these styles to your existing CSS */
+
+.message pre {
+  background-color: #f4f4f4;
+  border-radius: 4px;
+  padding: 1em;
+  overflow-x: auto;
+}
+
+.message code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9em;
+}
+
+.message p {
+  margin-bottom: 0.5em;
+}
+
+.message ul, .message ol {
+  margin-left: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.message table {
+  border-collapse: collapse;
+  margin-bottom: 0.5em;
+}
+
+.message th, .message td {
+  border: 1px solid #ddd;
+  padding: 0.5em;
+}
+
+.message blockquote {
+  border-left: 4px solid #ddd;
+  padding-left: 1em;
+  margin-left: 0;
+  color: #666;
+}
