@@ -51,7 +51,7 @@ async function getWebGPUBackend() {
         } else if (info.vendor.toLowerCase().includes("microsoft") || info.vendor.toLowerCase().includes("windows")) {
             return "Direct3D 12 (Windows)";
         } else {
-            return `Unknown (Vendor: ${info.vendor})`;
+            return `Vendor: ${info.vendor}`;
         }
     } catch (error) {
         return `Error querying WebGPU backend: ${error.message}`;
@@ -61,11 +61,11 @@ async function getWebGPUBackend() {
 function deindent(str) {
     const lines = str.split('\n');
     const minIndent = lines.reduce((min, line) => {
-      const indent = line.match(/^\s*/)[0].length;
-      return line.trim().length ? Math.min(min, indent) : min;
+        const indent = line.match(/^\s*/)[0].length;
+        return line.trim().length ? Math.min(min, indent) : min;
     }, Infinity);
     return lines.map(line => line.slice(minIndent)).join('\n').trim();
-  }
+}
 
 // api.js
 export const getFileSizeFromURL = async (fileUrl) => {
@@ -252,9 +252,25 @@ import * as webllm from 'https://esm.run/@mlc-ai/web-llm';
 // import { modelConfig } from './modelConfig.js';
 // import { CONFIG, debounce, formatBytes } from './utils.js';
 
+let engine;
+let useWebWorker = false;
 let selectedModel = CONFIG.DEFAULT_MODEL;
 let isModelInitialized = false;
-const engine = new webllm.MLCEngine();
+
+// Worker code as a string
+const workerCode = `
+import { WebWorkerMLCEngineHandler } from "@mlc-ai/web-llm";
+
+const handler = new WebWorkerMLCEngineHandler();
+self.onmessage = (msg) => {
+  handler.onmessage(msg);
+};
+`;
+// Create a Blob containing the worker code
+const blob = new Blob([workerCode], { type: 'application/javascript' });
+const workerUrl = URL.createObjectURL(blob);
+
+
 const messages = [
     {
         content: `
@@ -299,7 +315,6 @@ const updateEngineInitProgressCallback = (report) => {
     updateUI.updateDownloadStatus(report.text, report.progress);
 };
 
-engine.setInitProgressCallback(updateEngineInitProgressCallback);
 
 const initializeWebLLMEngine = async () => {
     updateUI.updateDownloadStatus('Initializing model...');
@@ -307,7 +322,20 @@ const initializeWebLLMEngine = async () => {
     selectedModel = document.getElementById('model-selection').value;
 
     try {
-        await engine.reload(selectedModel, modelConfig.getConfig());
+        if (useWebWorker) {
+            engine = await webllm.CreateWebWorkerMLCEngine(
+                new Worker(workerUrl, { type: 'module' }),
+                selectedModel,
+                {
+                    initProgressCallback: updateEngineInitProgressCallback,
+                }
+            );
+            await engine.reload(modelConfig.getConfig());
+        } else {
+            engine = new webllm.MLCEngine();
+            engine.setInitProgressCallback(updateEngineInitProgressCallback);
+            await engine.reload(selectedModel, modelConfig.getConfig());
+        }
         isModelInitialized = true;
         updateUI.sendButton(false);
         updateUI.initializeButton('Model Initialized', false);
@@ -426,6 +454,9 @@ const syncUIWithConfig = () => {
 
 const setupEventListeners = () => {
     document.getElementById('initialize-model').addEventListener('click', initializeWebLLMEngine);
+    if (useWebWorker) {
+        window.addEventListener('unload', () => URL.revokeObjectURL(workerUrl));
+    }
     document.getElementById('send').addEventListener('click', onMessageSend);
     document.getElementById('clear-chat').addEventListener('click', () => {
         updateUI.clearChat();
@@ -435,7 +466,9 @@ const setupEventListeners = () => {
     document.getElementById('user-input').addEventListener('keypress', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            onMessageSend();
+            if (document.getElementById('send').disabled === false) {
+                onMessageSend();
+            }
         }
     });
 
@@ -469,22 +502,22 @@ const setupEventListeners = () => {
         tooltipContainer.innerHTML = tooltipHtml;
         tooltipContainer.style.visibility = 'visible';
         tooltipContainer.style.opacity = '1';
-    
+
         const iconRect = icon.getBoundingClientRect();
         const tooltipRect = tooltipContainer.getBoundingClientRect();
-    
+
         // Define the minimum margin from the edges of the screen
         const margin = 10;
-    
+
         // Calculate available space in different directions
         const spaceAbove = iconRect.top;
         const spaceBelow = window.innerHeight - iconRect.bottom;
         const spaceLeft = iconRect.left;
         const spaceRight = window.innerWidth - iconRect.right;
-    
+
         // Determine the best position
         let top, left;
-    
+
         // Prefer below, then above, then right, then left
         if (spaceBelow >= tooltipRect.height + margin) {
             // Position below
@@ -507,7 +540,7 @@ const setupEventListeners = () => {
             top = (window.innerHeight - tooltipRect.height) / 2;
             left = (window.innerWidth - tooltipRect.width) / 2;
         }
-    
+
         tooltipContainer.style.top = `${top}px`;
         tooltipContainer.style.left = `${left}px`;
     }
@@ -516,7 +549,7 @@ const setupEventListeners = () => {
         tooltipContainer.style.visibility = 'hidden';
         tooltipContainer.style.opacity = '0';
     }
-    
+
 
     infoIcons.forEach(icon => {
         icon.addEventListener('mouseenter', showTooltip);
