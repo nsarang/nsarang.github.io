@@ -1,22 +1,100 @@
+:root {
+  --max-width: 1200px;
+  --primary-color: #007bff;
+  --secondary-color: #f8f8f8;
+  --border-color: #e0e0e0;
+  --text-color: #333;
+  --light-text-color: #666;
+  --border-radius: 8px;
+  --transition: 0.3s ease;
+}
+
+/* Layout */
 .chat-layout {
   display: flex;
-  max-width: 1200px;
+  flex-direction: row-reverse; /* This moves the sidebar to the right */
+  max-width: var(--max-width);
   margin: 0 auto;
   gap: 20px;
+  height: 80vh;
 }
 
+.chat-layout h3 {
+  margin: 0;
+}
+
+/* Sidebar */
 .sidebar {
-  width: 250px;
+  width: 300px;
   padding: 20px;
-  background-color: #f8f8f8;
-  border-radius: 8px;
+  background-color: var(--secondary-color);
+  border-radius: var(--border-radius);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  flex-shrink: 0;
+  /* margin-left: 20px; */
 }
 
+.setting {
+  margin-top: 1.25em;
+}
+
+.setting label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.setting .input-group {
+  display: flex;
+  align-items: center; /* This vertically centers the items */
+  gap: 10px; /* This adds space between the slider and the label */
+}
+
+.setting .input-group input[type="range"] {
+  width: 80%;
+  margin: 0; /* Remove default margins */
+}
+
+.setting .input-group .value-label {
+  flex-shrink: 0; /* Prevents the label from shrinking */
+  min-width: 40px; /* Adjust this value as needed */
+  text-align: right;
+}
+
+.setting input[type="range"],
+.setting input[type="number"],
+.setting select {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+.initialize-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color var(--transition);
+  width: 100%;
+}
+
+.initialize-button:hover {
+  background-color: #218838;
+}
+
+/* Chat Container */
 .chat-container {
   flex-grow: 1;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -34,21 +112,8 @@
   font-size: 1.2rem;
 }
 
-.icon-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-  color: #666;
-  transition: color 0.3s ease;
-}
-
-.icon-button:hover {
-  color: #333;
-}
-
 .chat-messages {
-  height: 400px;
+  flex-grow: 1;
   overflow-y: auto;
   padding: 20px;
   background-color: #fff;
@@ -64,7 +129,7 @@
 }
 
 .user-message {
-  background-color: #007bff;
+  background-color: var(--primary-color);
   color: white;
   align-self: flex-end;
   margin-left: auto;
@@ -72,28 +137,30 @@
 
 .assistant-message {
   background-color: #f1f0f0;
-  color: #333;
+  color: var(--text-color);
   align-self: flex-start;
 }
 
 .chat-input-container {
   display: flex;
   padding: 10px;
-  background-color: #f8f8f8;
+  background-color: var(--secondary-color);
 }
 
 #user-input {
   flex-grow: 1;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 20px;
   resize: none;
   font-family: inherit;
   font-size: 1rem;
+  max-height: 100px;
+  overflow-y: auto;
 }
 
 .send-button {
-  background-color: #007bff;
+  background-color: var(--primary-color);
   color: white;
   border: none;
   border-radius: 50%;
@@ -104,7 +171,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.3s ease;
+  padding: 0; /* Remove any default padding */
+  transition: background-color var(--transition);
+  flex-shrink: 0;
+}
+
+.send-button svg {
+  width: 20px; /* Adjust as needed */
+  height: 20px; /* Adjust as needed */
+  transform: translate(-1px, 1px);
 }
 
 .send-button:hover:not(:disabled) {
@@ -116,56 +191,82 @@
   cursor: not-allowed;
 }
 
-.setting {
-  margin-bottom: 15px;
-}
-
-.setting label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.setting input[type="range"],
-.setting input[type="number"],
-.setting select {
-  width: 100%;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.initialize-button {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 100%;
-}
-
-.initialize-button:hover {
-  background-color: #218838;
-}
-
-#download-status {
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #e9ecef;
-  border-radius: 4px;
-}
-
+/* Utility Classes */
 .hidden {
   display: none;
 }
 
-#model-size {
-  display: block;
-  font-size: 0.8rem;
-  color: #666;
-  margin-top: 5px;
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  color: var(--light-text-color);
+  transition: color var(--transition);
+}
+
+.icon-button:hover {
+  color: var(--text-color);
+}
+
+/* Info Icon and Tooltip */
+.info-icon {
+  position: relative;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-color: #888;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 16px;
+  font-size: 12px;
+  cursor: pointer;
+  margin-left: 1px;
+}
+
+.tooltip {
+  position: fixed;
+  background-color: #333;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  width: max-content;
+  white-space: normal;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s, visibility 0.3s;
+  pointer-events: none;
+  z-index: 10000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  max-width: 30vw;
+  /* max-height: 80vh; */
+  overflow-y: auto;
+}
+
+.tooltip > p {
+  margin: 0;
+}
+.tooltip > * + p {
+  margin: 0.5em 0 0 0;
+}
+.tooltip ul {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .tooltip {
+    max-width: 200px;
+  }
+}
+
+/* Status and Error Messages */
+#download-status-container {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #e9ecef;
+  border-radius: 4px;
 }
 
 .error-message {
@@ -176,15 +277,26 @@
   margin-bottom: 10px;
 }
 
-@media (max-width: 768px) {
-  .chat-layout {
-    flex-direction: column;
-  }
+/* Info Updates */
+.status-update {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 0.5em;
+  gap: 5px; /* Adjust as needed */
+}
 
-  .sidebar {
-    width: 100%;
-    margin-bottom: 20px;
-  }
+.status-update .icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 0.25em; 
+}
+
+.loading-icon {
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
@@ -192,261 +304,21 @@
   100% { transform: rotate(360deg); }
 }
 
-.loading-icon {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 2px solid #f3f3f3;
-  border-top: 2px solid #3498db;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-right: 10px;
-}
-
-
-
-
-
-
-
-
-
-
-
-.chat-layout {
-  display: flex;
-  max-width: 1200px;
-  margin: 0 auto;
-  gap: 20px;
-  height: 80vh; /* Adjust this value as needed */
-}
-
-.sidebar {
-  width: 250px;
-  padding: 20px;
-  background-color: #f8f8f8;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
-  flex-shrink: 0; /* Prevent sidebar from shrinking */
-}
-
-.chat-container {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.chat-header {
-  background-color: #f0f0f0;
-  padding: 10px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.chat-messages {
-  flex-grow: 1;
-  overflow-y: auto;
-  padding: 20px;
-  background-color: #fff;
-}
-
-.chat-input-container {
-  display: flex;
-  padding: 10px;
-  background-color: #f8f8f8;
-}
-
-#user-input {
-  flex-grow: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 20px;
-  resize: none;
-  font-family: inherit;
-  font-size: 1rem;
-  max-height: 100px; /* Limit the height of the textarea */
-  overflow-y: auto; /* Add scrollbar when content exceeds max-height */
-}
-
-.send-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  margin-left: 10px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.3s ease;
-  flex-shrink: 0; /* Prevent button from shrinking */
-}
-
-@media (max-width: 768px) {
-  .chat-layout {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .sidebar {
-    width: 100%;
-    margin-bottom: 20px;
-  }
-}
-
-
-
-.info-icon {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  background-color: #888;
-  color: white;
-  border-radius: 50%;
-  text-align: center;
+.checkmark-icon {
+  color: #28a745;
+  font-size: 16px;
   line-height: 16px;
-  font-size: 12px;
-  cursor: help;
-  margin-left: 5px;
-  position: relative;
 }
 
-.info-icon::after {
-  content: attr(data-tooltip);
-  position: fixed; /* Changed from absolute to fixed */
-  background-color: #333;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 14px;
-  width: 250px;
-  white-space: normal;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s, visibility 0.3s;
-  pointer-events: none;
-  z-index: 1000;
-  text-align: left;
-  line-height: 1.4;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+.checkmark-icon::before {
+  content: '✓';
 }
 
-.info-icon:hover::after {
-  opacity: 1;
-  visibility: visible;
+.hidden {
+  display: none;
 }
 
-/* Position the tooltip */
-.info-icon:hover::after {
-  content: attr(data-tooltip);
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: auto;
-  top: 100%;
-  margin-top: 10px;
-}
-
-/* Ensure the tooltip doesn't go off-screen on the right side */
-.info-icon:hover::after {
-  left: auto;
-  right: 10px;
-  transform: none;
-}
-
-/* Adjust for left side of the screen */
-.sidebar .setting:first-child .info-icon:hover::after {
-  left: 10px;
-  right: auto;
-  transform: none;
-}
-
-@media (max-width: 768px) {
-  .info-icon::after {
-    width: 200px; /* Slightly narrower on mobile */
-  }
-}
-
-.info-icon.tooltip-active::after {
-  opacity: 1;
-  visibility: visible;
-}
-
-@media (hover: none) {
-  .info-icon:hover::after {
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-
-.info-icon::after {
-  /* ... (other styles remain the same) ... */
-  position: fixed;
-  top: var(--tooltip-top, auto);
-  left: var(--tooltip-left, auto);
-  transform: none;
-  right: auto;
-  bottom: auto;
-}
-
-.info-icon:hover::after {
-  /* Remove any existing positioning styles */
-  left: var(--tooltip-left, auto);
-  right: auto;
-  top: var(--tooltip-top, auto);
-  bottom: auto;
-  transform: none;
-}
-
-
-
-.tooltip {
-  position: absolute;
-  top: 0;
-  font-size: 14px;
-  background: #ffffff;
-  color: #ffffff;
-  padding: 5px 8px;
-  border-radius: 5px;
-  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.tooltip::before {
-  position: absolute;
-  content: "";
-  height: 8px;
-  width: 8px;
-  background: #ffffff;
-  bottom: -3px;
-  left: 50%;
-  transform: translate(-50%) rotate(45deg);
-  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.icon:hover .tooltip {
-  top: -45px;
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-
- .icon:hover, .icon:hover .tooltip {
-  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1);
-}
-
-
-/* Add these styles to your existing CSS */
-
+/* Markdown Styles */
 .message pre {
   background-color: #f4f4f4;
   border-radius: 4px;
@@ -482,5 +354,64 @@
   border-left: 4px solid #ddd;
   padding-left: 1em;
   margin-left: 0;
-  color: #666;
+  color: var(--light-text-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .chat-layout {
+    flex-direction: column-reverse; /* Stack elements vertically on mobile */
+    /* flex-direction: column; */
+    height: auto;
+  }
+
+  .sidebar {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .info-icon::after {
+    width: 200px;
+  }
+}
+
+@media (hover: none) {
+  .info-icon:hover::after {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+
+/* Typing Indicator */
+.typing-indicator {
+  display: none;
+  align-items: center;
+  padding: 10px;
+  border-radius: 18px;
+  margin-bottom: 15px;
+  font-style: italic;
+  color: gray;
+}
+
+.typing-indicator.visible {
+  display: flex;
+}
+
+.typing-indicator::before {
+  content: "Typing";
+  margin-right: 5px;
+}
+
+.typing-indicator::after {
+  content: "...";
+  width: 20px;
+  text-align: left;
+  animation: typing 1s steps(3, end) infinite;
+}
+
+@keyframes typing {
+  0%, 20% { content: "."; }
+  40%, 60% { content: ".."; }
+  80%, 100% { content: "..."; }
 }

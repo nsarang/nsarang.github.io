@@ -3,12 +3,12 @@ export const CONFIG = {
     API_BASE_URL: 'https://huggingface.co/api',
     MODEL_WEIGHT_EXTENSIONS: ['.bin', '.pt', '.safetensors'],
     DEFAULT_MODEL: 'Llama-3.2-1B-Instruct-q4f32_1-MLC',
-    DEFAULT_TEMPERATURE: 0.8,
+    DEFAULT_TEMPERATURE: 0.7,
     DEFAULT_MAX_TOKENS: 1000,
     DEFAULT_TOP_P: 0.9,
-    DEFAULT_FREQUENCY_PENALTY: 0,
-    DEFAULT_PRESENCE_PENALTY: 0,
-  };
+    DEFAULT_FREQUENCY_PENALTY: 0.1,
+    DEFAULT_PRESENCE_PENALTY: 0.1,
+};
 
 // utils.js
 export const debounce = (func, delay) => {
@@ -28,8 +28,46 @@ export const formatBytes = (bytes, decimals = 2) => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 };
 
-// api.js
+async function getWebGPUBackend() {
+    if (!navigator.gpu) {
+        return "WebGPU is not supported in this browser";
+    }
 
+    try {
+        const adapter = await navigator.gpu.requestAdapter();
+        if (!adapter) {
+            return "Failed to get GPU adapter";
+        }
+
+        const info = await adapter.requestAdapterInfo();
+
+        // If 'architecture' is not available, we can make an educated guess based on other properties
+        if (info.vendor.toLowerCase().includes("apple")) {
+            return "Metal (Apple)";
+        } else if (info.vendor.toLowerCase().includes("google") || info.vendor.toLowerCase().includes("android")) {
+            return "Vulkan (Android) or Dawn (Chrome)";
+        } else if (info.vendor.toLowerCase().includes("mozilla") || info.vendor.toLowerCase().includes("firefox")) {
+            return "WebGPU (Firefox)";
+        } else if (info.vendor.toLowerCase().includes("microsoft") || info.vendor.toLowerCase().includes("windows")) {
+            return "Direct3D 12 (Windows)";
+        } else {
+            return `Unknown (Vendor: ${info.vendor})`;
+        }
+    } catch (error) {
+        return `Error querying WebGPU backend: ${error.message}`;
+    }
+}
+
+function deindent(str) {
+    const lines = str.split('\n');
+    const minIndent = lines.reduce((min, line) => {
+      const indent = line.match(/^\s*/)[0].length;
+      return line.trim().length ? Math.min(min, indent) : min;
+    }, Infinity);
+    return lines.map(line => line.slice(minIndent)).join('\n').trim();
+  }
+
+// api.js
 export const getFileSizeFromURL = async (fileUrl) => {
     try {
         const response = await fetch(fileUrl, { method: 'HEAD' });
@@ -83,24 +121,43 @@ hljs.highlightAll();
 
 // Configure marked to use highlight.js for code syntax highlighting
 marked.setOptions({
-  highlight: function(code, lang) {
-    const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-    return hljs.highlight(code, { language }).value;
-  },
-  langPrefix: 'hljs language-'
+    highlight: function (code, lang) {
+        const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+        return hljs.highlight(code, { language }).value;
+    },
+    langPrefix: 'hljs language-'
 });
 
 export const updateUI = {
     modelInfo: (size) => {
-        const infoElement = document.getElementById('model-info');
-        infoElement.innerHTML = size === 'loading'
-            ? '<span class="loading-icon"></span> Estimating model size...'
-            : `Estimated model size: ${size}`;
+        const infoIcon = document.querySelector('#model-info .icon');
+        const infoText = document.querySelector('#model-info .text');
+        if (size === 'loading') {
+            infoIcon.classList.add('loading-icon');
+            infoIcon.classList.remove('hidden');
+            infoText.textContent = 'Estimating download size...';
+        } else {
+            infoIcon.classList.remove('loading-icon');
+            infoIcon.classList.add('hidden');
+            infoText.textContent = `Download size: ${size}`;
+        }
     },
-    downloadStatus: (text) => {
-        const statusElement = document.getElementById('download-status');
-        statusElement.textContent = text;
-        statusElement.classList.remove('hidden');
+    updateDownloadStatus: (text, progress = null) => {
+        const statusIcon = document.querySelector('#download-status .icon');
+        const statusText = document.querySelector('#download-status .text');
+
+        if (progress == null || (progress >= 0 && progress < 1)) {
+            statusIcon.classList.remove('checkmark-icon');
+            statusIcon.classList.add('loading-icon');
+        } else if (progress === 1) {
+            statusIcon.classList.remove('loading-icon');
+            statusIcon.classList.add('checkmark-icon');
+        } else {
+            statusIcon.classList.remove('loading-icon');
+            statusIcon.classList.remove('checkmark-icon');
+        }
+        statusText.textContent = text;
+        statusIcon.classList.remove('hidden');
     },
     initializeButton: (text, disabled) => {
         const button = document.getElementById('initialize-model');
@@ -114,35 +171,35 @@ export const updateUI = {
         const chatBox = document.getElementById('chat-messages');
         const messageElement = document.createElement('div');
         messageElement.classList.add('message', `${message.role}-message`);
-        
+
         // Render markdown for assistant messages
         if (message.role === 'assistant') {
-          messageElement.innerHTML = marked.parse(message.content);
+            messageElement.innerHTML = marked.parse(message.content);
         } else {
-          messageElement.textContent = message.content;
+            messageElement.textContent = message.content;
         }
-        
+
         chatBox.appendChild(messageElement);
         chatBox.scrollTop = chatBox.scrollHeight;
-    
+
         // Apply syntax highlighting to code blocks
         messageElement.querySelectorAll('pre code').forEach((block) => {
-          hljs.highlightElement(block);
+            hljs.highlightElement(block);
         });
     },
     updateLastMessage: (content) => {
         const chatBox = document.getElementById('chat-messages');
         const lastMessage = chatBox.lastElementChild;
         if (lastMessage) {
-          // Render markdown for the updated content
-          lastMessage.innerHTML = marked.parse(content);
-    
-          // Apply syntax highlighting to code blocks
-          lastMessage.querySelectorAll('pre code').forEach((block) => {
-            hljs.highlightElement(block);
-          });
+            // Render markdown for the updated content
+            lastMessage.innerHTML = marked.parse(content);
+
+            // Apply syntax highlighting to code blocks
+            lastMessage.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
         }
-      },
+    },
     clearChat: () => {
         document.getElementById('chat-messages').innerHTML = '';
     },
@@ -169,20 +226,20 @@ export const updateUI = {
 // modelConfig.js
 const createModelConfig = () => {
     const config = {
-      temperature: CONFIG.DEFAULT_TEMPERATURE,
-      max_tokens: CONFIG.DEFAULT_MAX_TOKENS,
-      top_p: CONFIG.DEFAULT_TOP_P,
-      frequency_penalty: CONFIG.DEFAULT_FREQUENCY_PENALTY,
-      presence_penalty: CONFIG.DEFAULT_PRESENCE_PENALTY,
+        temperature: CONFIG.DEFAULT_TEMPERATURE,
+        max_tokens: CONFIG.DEFAULT_MAX_TOKENS,
+        top_p: CONFIG.DEFAULT_TOP_P,
+        frequency_penalty: CONFIG.DEFAULT_FREQUENCY_PENALTY,
+        presence_penalty: CONFIG.DEFAULT_PRESENCE_PENALTY,
     };
-  
+
     return {
-      getConfig: () => ({ ...config }),
-      updateConfig: (key, value) => {
-        if (key in config) {
-          config[key] = value;
-        }
-      },
+        getConfig: () => ({ ...config }),
+        updateConfig: (key, value) => {
+            if (key in config) {
+                config[key] = value;
+            }
+        },
     };
 };
 
@@ -199,7 +256,8 @@ let selectedModel = CONFIG.DEFAULT_MODEL;
 let isModelInitialized = false;
 const engine = new webllm.MLCEngine();
 const messages = [
-    { content: `
+    {
+        content: `
 You are an advanced AI assistant, designed to be helpful and knowledgeable across a wide range of topics.
 Your primary goal is to assist users with information, analysis, and creative tasks while maintaining a respectful and professional demeanor.
 
@@ -232,19 +290,19 @@ When responding:
 
 Remember to approach each query with curiosity and a desire to assist the user to the best of your abilities.
         `,
-      role: 'system' },
+        role: 'system'
+    },
 ];
 
 const updateEngineInitProgressCallback = (report) => {
     console.log("initialize", report.progress);
-    updateUI.downloadStatus(report.text);
-    // updateUI.updateProgress(report.progress);
+    updateUI.updateDownloadStatus(report.text, report.progress);
 };
 
 engine.setInitProgressCallback(updateEngineInitProgressCallback);
 
 const initializeWebLLMEngine = async () => {
-    updateUI.downloadStatus('Initializing model...');
+    updateUI.updateDownloadStatus('Initializing model...');
     updateUI.initializeButton('Initializing...', true);
     selectedModel = document.getElementById('model-selection').value;
 
@@ -256,7 +314,7 @@ const initializeWebLLMEngine = async () => {
         updateUI.enableParameterInputs(true);
     } catch (error) {
         console.error('Error initializing model:', error);
-        updateUI.downloadStatus('Error initializing model. Please try again.');
+        updateUI.updateDownloadStatus('Error initializing model. Please try again.', -1);
         updateUI.initializeButton('Initialize Model', false);
     }
 };
@@ -312,8 +370,12 @@ const onMessageSend = async () => {
         updateUI.updateLastMessage(finalMessage);
         updateUI.sendButton(false);
         console.log("Usage:", usage);
+        // Hide typing indicator
+        document.querySelector('.typing-indicator').classList.remove('visible');
     };
 
+    // Show typing indicator
+    document.querySelector('.typing-indicator').classList.add('visible');
     streamingGenerating(
         messages,
         updateUI.updateLastMessage,
@@ -325,6 +387,7 @@ const onMessageSend = async () => {
 const updateModelInfo = debounce(async () => {
     const selectedModel = document.getElementById('model-selection').value;
     updateUI.modelInfo('loading');
+    console.log(webllm.prebuiltAppConfig.model_list);
 
     try {
         const modelConfig = webllm.prebuiltAppConfig.model_list.find(m => m.model_id === selectedModel);
@@ -348,7 +411,7 @@ const handleError = (error) => {
 
 const syncUIWithConfig = () => {
     const config = modelConfig.getConfig();
-    
+
     document.getElementById('model-selection').value = selectedModel;
     document.getElementById('temperature').value = config.temperature;
     document.getElementById('temperature-value').textContent = config.temperature;
@@ -359,7 +422,7 @@ const syncUIWithConfig = () => {
     document.getElementById('frequency-penalty-value').textContent = config.frequency_penalty;
     document.getElementById('presence-penalty').value = config.presence_penalty;
     document.getElementById('presence-penalty-value').textContent = config.presence_penalty;
-  };
+};
 
 const setupEventListeners = () => {
     document.getElementById('initialize-model').addEventListener('click', initializeWebLLMEngine);
@@ -381,14 +444,103 @@ const setupEventListeners = () => {
     ['temperature', 'max-tokens', 'top-p', 'frequency-penalty', 'presence-penalty'].forEach(id => {
         const element = document.getElementById(id);
         element.addEventListener('input', (e) => {
-          const value = parseFloat(e.target.value);
-          document.getElementById(`${id}-value`).textContent = value;
-          modelConfig.updateConfig(id.replace('-', '_'), value);
+            const value = parseFloat(e.target.value);
+            if (e.target.type === 'range') {
+                const valueElement = document.getElementById(`${id}-value`);
+                if (valueElement) {
+                    valueElement.textContent = value;
+                }
+            }
+            modelConfig.updateConfig(id.replace('-', '_'), value);
         });
-      });
+    });
+
+
+    const tooltipContainer = document.createElement('div');
+    tooltipContainer.className = 'tooltip';
+    document.body.appendChild(tooltipContainer);
+
+    const infoIcons = document.querySelectorAll('.info-icon');
+
+    function showTooltip(event) {
+        const icon = event.currentTarget;
+        const tooltipText = icon.getAttribute('data-tooltip');
+        const tooltipHtml = marked.parse(deindent(tooltipText));
+        tooltipContainer.innerHTML = tooltipHtml;
+        tooltipContainer.style.visibility = 'visible';
+        tooltipContainer.style.opacity = '1';
+    
+        const iconRect = icon.getBoundingClientRect();
+        const tooltipRect = tooltipContainer.getBoundingClientRect();
+    
+        // Define the minimum margin from the edges of the screen
+        const margin = 10;
+    
+        // Calculate available space in different directions
+        const spaceAbove = iconRect.top;
+        const spaceBelow = window.innerHeight - iconRect.bottom;
+        const spaceLeft = iconRect.left;
+        const spaceRight = window.innerWidth - iconRect.right;
+    
+        // Determine the best position
+        let top, left;
+    
+        // Prefer below, then above, then right, then left
+        if (spaceBelow >= tooltipRect.height + margin) {
+            // Position below
+            top = iconRect.bottom + margin;
+            left = Math.max(margin, Math.min(iconRect.left + (iconRect.width / 2) - (tooltipRect.width / 2), window.innerWidth - tooltipRect.width - margin));
+        } else if (spaceAbove >= tooltipRect.height + margin) {
+            // Position above
+            top = iconRect.top - tooltipRect.height - margin;
+            left = Math.max(margin, Math.min(iconRect.left + (iconRect.width / 2) - (tooltipRect.width / 2), window.innerWidth - tooltipRect.width - margin));
+        } else if (spaceRight >= tooltipRect.width + margin) {
+            // Position to the right
+            top = Math.max(margin, Math.min(iconRect.top + (iconRect.height / 2) - (tooltipRect.height / 2), window.innerHeight - tooltipRect.height - margin));
+            left = iconRect.right + margin;
+        } else if (spaceLeft >= tooltipRect.width + margin) {
+            // Position to the left
+            top = Math.max(margin, Math.min(iconRect.top + (iconRect.height / 2) - (tooltipRect.height / 2), window.innerHeight - tooltipRect.height - margin));
+            left = iconRect.left - tooltipRect.width - margin;
+        } else {
+            // If no ideal position, center on screen
+            top = (window.innerHeight - tooltipRect.height) / 2;
+            left = (window.innerWidth - tooltipRect.width) / 2;
+        }
+    
+        tooltipContainer.style.top = `${top}px`;
+        tooltipContainer.style.left = `${left}px`;
+    }
+
+    function hideTooltip() {
+        tooltipContainer.style.visibility = 'hidden';
+        tooltipContainer.style.opacity = '0';
+    }
+    
+
+    infoIcons.forEach(icon => {
+        icon.addEventListener('mouseenter', showTooltip);
+        icon.addEventListener('mouseleave', hideTooltip);
+        icon.addEventListener('click', showTooltip);
+        icon.addEventListener('focus', showTooltip);
+        icon.addEventListener('blur', hideTooltip);
+    });
+
+    // Reposition tooltip on window resize
+    window.addEventListener('resize', () => {
+        if (tooltipContainer.style.visibility === 'visible') {
+            const visibleIcon = document.querySelector('.info-icon:hover');
+            if (visibleIcon) {
+                showTooltip({ currentTarget: visibleIcon });
+            }
+        }
+    });
 };
 
-const initializeApp = () => {
+const initializeApp = async () => {
+    const webgpuStatus = await getWebGPUBackend();
+    document.getElementById('webgpu-status').textContent = webgpuStatus;
+
     const modelSelect = document.getElementById('model-selection');
     webllm.prebuiltAppConfig.model_list.forEach((m) => {
         const option = document.createElement('option');
@@ -397,7 +549,7 @@ const initializeApp = () => {
         modelSelect.appendChild(option);
     });
     modelSelect.value = selectedModel;
-    
+
     syncUIWithConfig();
     updateModelInfo();
     setupEventListeners();
