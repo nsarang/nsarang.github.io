@@ -2,15 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.nimasarang.com/blog/2024-08-24-information-theory/index.html</loc>
-    <lastmod>2024-09-14T05:47:14.575Z</lastmod>
+    <lastmod>2024-10-15T01:54:28.569Z</lastmod>
   </url>
   <url>
-    <loc>https://www.nimasarang.com/project/2017-09-17-d3-force-graph-bio-networks/index.html</loc>
-    <lastmod>2024-09-25T19:12:01.775Z</lastmod>
+    <loc>https://www.nimasarang.com/project/index.html</loc>
+    <lastmod>2024-08-14T21:20:43.443Z</lastmod>
   </url>
   <url>
-    <loc>https://www.nimasarang.com/project/2019-06-12-dc-gan/index.html</loc>
-    <lastmod>2024-08-12T18:48:23.939Z</lastmod>
+    <loc>https://www.nimasarang.com/blog/index.html</loc>
+    <lastmod>2024-09-17T00:31:16.166Z</lastmod>
   </url>
   <url>
     <loc>https://www.nimasarang.com/about/index.html</loc>
@@ -41,15 +41,15 @@
     <lastmod>2024-08-26T14:19:47.290Z</lastmod>
   </url>
   <url>
+    <loc>https://www.nimasarang.com/project/2019-06-12-dc-gan/index.html</loc>
+    <lastmod>2024-08-12T18:48:23.939Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/project/2017-09-17-d3-force-graph-bio-networks/index.html</loc>
+    <lastmod>2024-09-25T19:12:01.775Z</lastmod>
+  </url>
+  <url>
     <loc>https://www.nimasarang.com/blog/2024-09-29-llama-in-browser/index.html</loc>
-    <lastmod>2024-10-07T02:30:41.063Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/blog/index.html</loc>
-    <lastmod>2024-09-17T00:31:16.166Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/project/index.html</loc>
-    <lastmod>2024-08-14T21:20:43.443Z</lastmod>
+    <lastmod>2024-10-14T02:34:12.517Z</lastmod>
   </url>
 </urlset>

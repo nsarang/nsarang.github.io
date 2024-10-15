@@ -23,7 +23,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -80,6 +134,8 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 </script>
+<script type="module" src="../../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;700&amp;display=swap" rel="stylesheet">
@@ -219,7 +275,7 @@ window.Quarto = {
 </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
@@ -234,12 +290,11 @@ window.Quarto = {
   <li><a href="#kullbackleibler-divergence" id="toc-kullbackleibler-divergence" class="nav-link" data-scroll-target="#kullbackleibler-divergence"><span class="header-section-number">4</span> Kullback–Leibler Divergence</a>
   <ul class="collapse">
   <li><a href="#non-negativity" id="toc-non-negativity" class="nav-link" data-scroll-target="#non-negativity"><span class="header-section-number">4.1</span> Non-Negativity</a></li>
-  <li><a href="#relations-to-mutual-information" id="toc-relations-to-mutual-information" class="nav-link" data-scroll-target="#relations-to-mutual-information"><span class="header-section-number">4.2</span> Relations to Mutual Information</a></li>
+  <li><a href="#sec-zero-prob" id="toc-sec-zero-prob" class="nav-link" data-scroll-target="#sec-zero-prob"><span class="header-section-number">4.2</span> At Zero Probabilities</a></li>
+  <li><a href="#reverse-kl-vs-forward-kl" id="toc-reverse-kl-vs-forward-kl" class="nav-link" data-scroll-target="#reverse-kl-vs-forward-kl"><span class="header-section-number">4.3</span> Reverse KL vs Forward KL</a></li>
+  <li><a href="#relations-to-mutual-information" id="toc-relations-to-mutual-information" class="nav-link" data-scroll-target="#relations-to-mutual-information"><span class="header-section-number">4.4</span> Relations to Mutual Information</a></li>
   </ul></li>
-  <li><a href="#jensen-shannon-divergence" id="toc-jensen-shannon-divergence" class="nav-link" data-scroll-target="#jensen-shannon-divergence"><span class="header-section-number">5</span> Jensen-Shannon Divergence</a>
-  <ul class="collapse">
-  <li><a href="#js-vs-kl-at-zero-probabilities" id="toc-js-vs-kl-at-zero-probabilities" class="nav-link" data-scroll-target="#js-vs-kl-at-zero-probabilities"><span class="header-section-number">5.1</span> JS vs KL at Zero Probabilities</a></li>
-  </ul></li>
+  <li><a href="#jensen-shannon-divergence" id="toc-jensen-shannon-divergence" class="nav-link" data-scroll-target="#jensen-shannon-divergence"><span class="header-section-number">5</span> Jensen-Shannon Divergence</a></li>
   </ul>
 </nav>
 </nav>
@@ -248,7 +303,7 @@ window.Quarto = {
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
 
 <!-- source: https://github.com/gadenbuie/garrickadenbuie-com/blob/main/_partials/title-block-link-buttons/title-block.html -->
 <!-- 
@@ -278,7 +333,8 @@ window.Quarto = {
 % Norms and inner products
 % Norm
 <p>% Inner product</p>
-<p>% Common functions % Argument maximum % Argument minimum % Sign function % Span of a set</p>
+<p>% Common functions % Minimization problem % Maximization problem % Argument minimum % Argument maximum</p>
+<p>% Subject to constraints % Sign function % Span of a set</p>
 % Formatting
 % Absolute value
 % Parentheses
@@ -288,14 +344,13 @@ window.Quarto = {
 <p>% Asymptotic notations % Big O notation % Small o notation % Big Omega notation % Big Theta notation</p>
 <p>% Commonly used in algorithms and complexity % Polynomial time % Polylogarithmic time</p>
 <p>% Additional probability notations % Independent and identically distributed % Distributed as</p>
-<p>% Commonly used in optimization % Minimization problem % Maximization problem % Subject to constraints</p>
 <p>% Fourier transform % Fourier transform % Inverse Fourier transform</p>
 <p>% General math % Display style</p>
 </div>
 <section id="introduction" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
 <p>Every now and then, I find myself revisiting the basics of Information Theory when reading on papers about VAEs, GANs, or other generative models. I decided to compile a brief overview of the concepts for my own reference. Take it with a grain of salt, as it’s not meant to be a comprehensive guide.</p>
-<p>I’ll update this post as I learn more about the topic.</p>
+<p>I’ll update this post as I learn more about the topic, so stay tuned!</p>
 </section>
 <section id="entropy" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="entropy"><span class="header-section-number">2</span> Entropy</h2>
@@ -310,7 +365,7 @@ window.Quarto = {
 <p>Why use <span class="math inline">\(-\log p\)</span>? Let’s visualize it:</p>
 <div id="cell-fig-log-ic" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display">
-<div id="fig-log-ic" class="quarto-float quarto-figure quarto-figure-center anchored" width="585" height="429">
+<div id="fig-log-ic" class="quarto-float quarto-figure quarto-figure-center anchored" height="429" width="585">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-log-ic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="index_files/figure-html/fig-log-ic-output-1.png" id="fig-log-ic" width="585" height="429" class="figure-img">
@@ -400,7 +455,7 @@ Note
 <p><span class="math display">\[-\left[y\,log(q)\;+\;(1−y)\,log(1−q)\right]\]</span></p></li>
 </ul>
 </section>
-<section id="kullbackleibler-divergence" class="level2" data-number="4">
+<section id="kullbackleibler-divergence" class="level2 page-columns page-full" data-number="4">
 <h2 data-number="4" class="anchored" data-anchor-id="kullbackleibler-divergence"><span class="header-section-number">4</span> Kullback–Leibler Divergence</h2>
 <p>To measure the expected number of extra bits required to code samples from <span class="math inline">\(P\)</span> using a code optimized for <span class="math inline">\(Q\)</span> rather than the code optimized for <span class="math inline">\(P\)</span>, we use the Kullback-Leibler divergence. It</p>
 <p><span id="eq-kl-divergence"><span class="math display">\[
@@ -460,15 +515,586 @@ Jensen’s Inequality
 </div>
 </div>
 </section>
-<section id="relations-to-mutual-information" class="level3" data-number="4.2">
-<h3 data-number="4.2" class="anchored" data-anchor-id="relations-to-mutual-information"><span class="header-section-number">4.2</span> Relations to Mutual Information</h3>
+<section id="sec-zero-prob" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="sec-zero-prob"><span class="header-section-number">4.2</span> At Zero Probabilities</h3>
+<p>Let’s consider the cases where <span class="math inline">\(p(x) = 0\)</span> or <span class="math inline">\(q(x) = 0\)</span>, because it’ll be useful later on:</p>
+<ol type="1">
+<li><p><span class="math inline">\(p(𝑋)=0 \text{ and } q(𝑋)\gt 0\)</span>:<br>
+As a result, <span class="math inline">\(\displaystyle\lim_{p \to 0} p\log{p} = 0\)</span>. This makes sense since we sample according to distribution <span class="math inline">\(p\)</span>, we’ll never sample event <span class="math inline">\(x\)</span>. Hence, it does not weight in <span class="math inline">\({D_{KL}(P \;\Vert\; Q)}\)</span>, meaning <span class="math inline">\(Q\)</span> can make mistakes about events that <span class="math inline">\(P\)</span> considers impossible without penalty.<br></p></li>
+<li><p><span class="math inline">\(p(𝑋)\gt 0 \text{ and } q(𝑋)= 0\)</span>:<br>
+Then&nbsp;<span class="math inline">\(\displaystyle\lim_{q \to 0^+} \log{\frac{1}{q}} = +\infty\)</span>. An infinite divergence effectively signals that the model <span class="math inline">\(Q\)</span> fails to account for an event <span class="math inline">\(x\)</span> that is observed under <span class="math inline">\(P\)</span>.<br></p></li>
+<li><p><span class="math inline">\(p(𝑋)=0 \text{ and } q(𝑋)= 0\)</span>: Then it’s really undefined :)</p></li>
+</ol>
+</section>
+<section id="reverse-kl-vs-forward-kl" class="level3 page-columns page-full" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="reverse-kl-vs-forward-kl"><span class="header-section-number">4.3</span> Reverse KL vs Forward KL</h3>
+<p>This is something that I had never thought about before, because I had only seen KL divergence in the context of variational inference. But it turns out that there are two ways to use KL divergence in an optimization problem. The practical difference between the two arises when the model cannot perfectly fit the true distribution, which is most often the case. This is where the two divergences diverge (pun intended).</p>
+<p>Let’s say we have a model <span class="math inline">\(Q\)</span> that we want to optimize to approximate the true distribution <span class="math inline">\(P\)</span>. It’d be fair assumption that <span class="math inline">\(P\)</span> would be a more complex distribution than <span class="math inline">\(Q\)</span>, with more modes and a more complex structure, since <span class="math inline">\(Q\)</span> is a simpler model. As example, <span class="math inline">\(P\)</span> could be a Gaussian mixture model with 10 components (multimodal), while <span class="math inline">\(Q\)</span> is a single Gaussian (unimodal).</p>
+<p>We had previously established that <span class="math inline">\(D_{KL}\)</span> is asymmetric. This means that minimizing <span class="math inline">\(D_{KL}(P \;\Vert\; Q)\)</span> is not the same as minimizing <span class="math inline">\(D_{KL}(Q \;\Vert\; P)\)</span>. The former is known as the <em>Forward KL</em> and the latter is known as the <em>Reverse KL</em>. Let’s look into each of them.</p>
+<section id="forward-kl" class="level4 page-columns page-full">
+<h4 class="anchored" data-anchor-id="forward-kl"><strong>Forward KL</strong></h4>
+<p><span class="math inline">\(D_{KL}(P \;\Vert\; Q)\)</span> measures the extra bits needed to encode samples from <span class="math inline">\(P\)</span> using a code optimized for <span class="math inline">\(Q\)</span>. By minimizing this, we’re trying to make <span class="math inline">\(Q\)</span> as close as possible to <span class="math inline">\(P\)</span>:</p>
+<p><span class="math display">\[ \begin{aligned}
+\mathop{\mathrm{arg\,min}}\limits_Q\; D_{KL}(P \;\Vert\; Q) &amp;= \mathop{\mathrm{arg\,min}}\limits_Q\; H(P, Q) - H(P) \\[1ex]
+&amp;= \mathop{\mathrm{arg\,min}}\limits_Q\; H(P, Q) &amp;&amp; \text{\small{(since $H(P)$ is constant w.r.t. $Q$)}} \\[1ex]
+&amp;= \mathop{\mathrm{arg\,min}}\limits_Q\; -\sum\limits_{x \in X} p(x)\log{q(x)}
+\end{aligned} \]</span></p>
+<p>So basically minimizing the forward KL is equivalent to maximizing the cross-entropy between <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span>, a common objective in supervised classification problems. As I previously mentioned in <a href="#sec-zero-prob" class="quarto-xref">Section&nbsp;4.2</a>, this loss ladnscape is interesting around zero probabilities:</p>
+<ul>
+<li>If <span class="math inline">\(p(x) = 0\)</span> then <span class="math inline">\(q(x)\)</span> can be anything, because the loss is zero. The con of this is that it can lead to overconfident predictions in regions with little data.<br>
+</li>
+<li>If <span class="math inline">\(P(x) \gt 0\)</span> and <span class="math inline">\(Q(x) \le \epsilon\)</span>, then the loss becomes significanly large. As a consequence, <span class="math inline">\(Q\)</span> would rather assign a low probability to events that are very unlikely under <span class="math inline">\(P\)</span> than missing them entirely.</li>
+</ul>
+<p>In the interactive plot below you can see how the forward KL divergence changes as you adjust the mean and variance of the Gaussian distribution <span class="math inline">\(Q\)</span>.</p>
+<div class="column-body-outset" style="margin: 2em 0;" data-collapse="false">
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb1" data-startfrom="218" data-source-offset="-29"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 217;"><span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a>d3 <span class="op">=</span> <span class="pp">require</span>(<span class="st">"d3"</span>)</span>
+<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a>Plot <span class="op">=</span> <span class="pp">require</span>(<span class="st">"@observablehq/plot"</span>)</span>
+<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {slider} <span class="im">from</span> <span class="st">'@jashkenas/inputs'</span></span>
+<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a><span class="co">// Cell 2: Input sliders</span></span>
+<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a>viewof mean <span class="op">=</span> <span class="fu">slider</span>({</span>
+<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a>  <span class="dt">min</span><span class="op">:</span> <span class="op">-</span><span class="dv">3</span><span class="op">,</span> </span>
+<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a>  <span class="dt">max</span><span class="op">:</span> <span class="dv">3</span><span class="op">,</span> </span>
+<span id="cb1-226"><a href="#cb1-226" aria-hidden="true" tabindex="-1"></a>  <span class="dt">step</span><span class="op">:</span> <span class="fl">0.1</span><span class="op">,</span> </span>
+<span id="cb1-227"><a href="#cb1-227" aria-hidden="true" tabindex="-1"></a>  <span class="dt">value</span><span class="op">:</span> <span class="op">-</span><span class="fl">1.4</span><span class="op">,</span> </span>
+<span id="cb1-228"><a href="#cb1-228" aria-hidden="true" tabindex="-1"></a>  <span class="dt">title</span><span class="op">:</span> <span class="st">"Mean"</span><span class="op">,</span> </span>
+<span id="cb1-229"><a href="#cb1-229" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-230"><a href="#cb1-230" aria-hidden="true" tabindex="-1"></a>viewof variance <span class="op">=</span> <span class="fu">slider</span>({</span>
+<span id="cb1-231"><a href="#cb1-231" aria-hidden="true" tabindex="-1"></a>  <span class="dt">min</span><span class="op">:</span> <span class="fl">0.5</span><span class="op">,</span> </span>
+<span id="cb1-232"><a href="#cb1-232" aria-hidden="true" tabindex="-1"></a>  <span class="dt">max</span><span class="op">:</span> <span class="dv">3</span><span class="op">,</span> </span>
+<span id="cb1-233"><a href="#cb1-233" aria-hidden="true" tabindex="-1"></a>  <span class="dt">step</span><span class="op">:</span> <span class="fl">0.1</span><span class="op">,</span> </span>
+<span id="cb1-234"><a href="#cb1-234" aria-hidden="true" tabindex="-1"></a>  <span class="dt">value</span><span class="op">:</span> <span class="fl">1.5</span><span class="op">,</span> </span>
+<span id="cb1-235"><a href="#cb1-235" aria-hidden="true" tabindex="-1"></a>  <span class="dt">title</span><span class="op">:</span> <span class="st">"Variance"</span><span class="op">,</span></span>
+<span id="cb1-236"><a href="#cb1-236" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-237"><a href="#cb1-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-238"><a href="#cb1-238" aria-hidden="true" tabindex="-1"></a><span class="co">// Static P distribution: Gaussian Mixture Model</span></span>
+<span id="cb1-239"><a href="#cb1-239" aria-hidden="true" tabindex="-1"></a>P <span class="op">=</span> <span class="fu">generateDataFromGMM</span>([</span>
+<span id="cb1-240"><a href="#cb1-240" aria-hidden="true" tabindex="-1"></a>  {<span class="dt">mean</span><span class="op">:</span> <span class="op">-</span><span class="fl">2.5</span><span class="op">,</span> <span class="dt">variance</span><span class="op">:</span> <span class="fl">0.3</span><span class="op">,</span> <span class="dt">weight</span><span class="op">:</span> <span class="fl">0.4</span>}<span class="op">,</span></span>
+<span id="cb1-241"><a href="#cb1-241" aria-hidden="true" tabindex="-1"></a>  {<span class="dt">mean</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dt">variance</span><span class="op">:</span> <span class="fl">0.5</span><span class="op">,</span> <span class="dt">weight</span><span class="op">:</span> <span class="fl">0.6</span>}</span>
+<span id="cb1-242"><a href="#cb1-242" aria-hidden="true" tabindex="-1"></a>])<span class="op">;</span></span>
+<span id="cb1-243"><a href="#cb1-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-244"><a href="#cb1-244" aria-hidden="true" tabindex="-1"></a><span class="co">// Cell 3: Gaussian mixture function, data generation, and KL divergence calculation</span></span>
+<span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">gaussian</span>(x<span class="op">,</span> mean<span class="op">,</span> variance) {</span>
+<span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> (<span class="dv">1</span> <span class="op">/</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">sqrt</span>(<span class="dv">2</span> <span class="op">*</span> <span class="bu">Math</span><span class="op">.</span><span class="cn">PI</span> <span class="op">*</span> variance)) <span class="op">*</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>(<span class="op">-</span><span class="bu">Math</span><span class="op">.</span><span class="fu">pow</span>(x <span class="op">-</span> mean<span class="op">,</span> <span class="dv">2</span>) <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> variance))<span class="op">;</span></span>
+<span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a><span class="co">// Define Gaussian Mixture Model for P</span></span>
+<span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">gaussianMixture</span>(x<span class="op">,</span> components) {</span>
+<span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a>  <span class="co">// components is an array of objects with {mean, variance, weight}</span></span>
+<span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> components<span class="op">.</span><span class="fu">reduce</span>((sum<span class="op">,</span> {mean<span class="op">,</span> variance<span class="op">,</span> weight}) <span class="kw">=&gt;</span> {</span>
+<span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sum <span class="op">+</span> weight <span class="op">*</span> <span class="fu">gaussian</span>(x<span class="op">,</span> mean<span class="op">,</span> variance)<span class="op">;</span></span>
+<span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-256"><a href="#cb1-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-257"><a href="#cb1-257" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">generateDataFromGMM</span>(components) {</span>
+<span id="cb1-258"><a href="#cb1-258" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> d3<span class="op">.</span><span class="fu">range</span>(<span class="op">-</span><span class="dv">5</span><span class="op">,</span> <span class="dv">5</span><span class="op">,</span> <span class="fl">0.1</span>)<span class="op">.</span><span class="fu">map</span>(x <span class="kw">=&gt;</span> ({</span>
+<span id="cb1-259"><a href="#cb1-259" aria-hidden="true" tabindex="-1"></a>    <span class="dt">x</span><span class="op">:</span> x<span class="op">,</span></span>
+<span id="cb1-260"><a href="#cb1-260" aria-hidden="true" tabindex="-1"></a>    <span class="dt">y</span><span class="op">:</span> <span class="fu">gaussianMixture</span>(x<span class="op">,</span> components)</span>
+<span id="cb1-261"><a href="#cb1-261" aria-hidden="true" tabindex="-1"></a>  }))<span class="op">;</span></span>
+<span id="cb1-262"><a href="#cb1-262" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-263"><a href="#cb1-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-264"><a href="#cb1-264" aria-hidden="true" tabindex="-1"></a><span class="co">// Generate data for Q (simple Gaussian)</span></span>
+<span id="cb1-265"><a href="#cb1-265" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">generateData</span>(mean<span class="op">,</span> variance) {</span>
+<span id="cb1-266"><a href="#cb1-266" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> d3<span class="op">.</span><span class="fu">range</span>(<span class="op">-</span><span class="dv">5</span><span class="op">,</span> <span class="dv">5</span><span class="op">,</span> <span class="fl">0.1</span>)<span class="op">.</span><span class="fu">map</span>(x <span class="kw">=&gt;</span> ({</span>
+<span id="cb1-267"><a href="#cb1-267" aria-hidden="true" tabindex="-1"></a>    <span class="dt">x</span><span class="op">:</span> x<span class="op">,</span></span>
+<span id="cb1-268"><a href="#cb1-268" aria-hidden="true" tabindex="-1"></a>    <span class="dt">y</span><span class="op">:</span> <span class="fu">gaussian</span>(x<span class="op">,</span> mean<span class="op">,</span> variance)</span>
+<span id="cb1-269"><a href="#cb1-269" aria-hidden="true" tabindex="-1"></a>  }))<span class="op">;</span></span>
+<span id="cb1-270"><a href="#cb1-270" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-271"><a href="#cb1-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-272"><a href="#cb1-272" aria-hidden="true" tabindex="-1"></a><span class="co">// Calculate KL divergence</span></span>
+<span id="cb1-273"><a href="#cb1-273" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">calculateKLDivergence</span>(P<span class="op">,</span> Q) {</span>
+<span id="cb1-274"><a href="#cb1-274" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> P<span class="op">.</span><span class="fu">reduce</span>((sum<span class="op">,</span> p<span class="op">,</span> i) <span class="kw">=&gt;</span> {</span>
+<span id="cb1-275"><a href="#cb1-275" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> q <span class="op">=</span> Q[i]<span class="op">;</span></span>
+<span id="cb1-276"><a href="#cb1-276" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (p<span class="op">.</span><span class="at">y</span> <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">&amp;&amp;</span> q<span class="op">.</span><span class="at">y</span> <span class="op">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb1-277"><a href="#cb1-277" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> sum <span class="op">+</span> p<span class="op">.</span><span class="at">y</span> <span class="op">*</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">log</span>(p<span class="op">.</span><span class="at">y</span> <span class="op">/</span> q<span class="op">.</span><span class="at">y</span>)<span class="op">;</span></span>
+<span id="cb1-278"><a href="#cb1-278" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-279"><a href="#cb1-279" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sum<span class="op">;</span></span>
+<span id="cb1-280"><a href="#cb1-280" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb1-281"><a href="#cb1-281" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-282"><a href="#cb1-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-283"><a href="#cb1-283" aria-hidden="true" tabindex="-1"></a><span class="co">// Cell 4: Calculate KL divergence for contour plot</span></span>
+<span id="cb1-284"><a href="#cb1-284" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">calculateKLDivergenceGrid</span>(dist1<span class="op">,</span> meanRange<span class="op">,</span> varianceRange<span class="op">,</span> forward<span class="op">=</span><span class="kw">true</span>) {</span>
+<span id="cb1-285"><a href="#cb1-285" aria-hidden="true" tabindex="-1"></a>   <span class="kw">const</span> grid <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb1-286"><a href="#cb1-286" aria-hidden="true" tabindex="-1"></a>   <span class="kw">let</span> kl<span class="op">;</span></span>
+<span id="cb1-287"><a href="#cb1-287" aria-hidden="true" tabindex="-1"></a>   <span class="cf">for</span> (<span class="kw">let</span> m <span class="kw">of</span> meanRange) {</span>
+<span id="cb1-288"><a href="#cb1-288" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (<span class="kw">let</span> v <span class="kw">of</span> varianceRange) {</span>
+<span id="cb1-289"><a href="#cb1-289" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> dist2 <span class="op">=</span> <span class="fu">generateData</span>(m<span class="op">,</span> v)<span class="op">;</span></span>
+<span id="cb1-290"><a href="#cb1-290" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (forward) {</span>
+<span id="cb1-291"><a href="#cb1-291" aria-hidden="true" tabindex="-1"></a>            kl <span class="op">=</span> <span class="fu">calculateKLDivergence</span>(dist1<span class="op">,</span> dist2)<span class="op">;</span></span>
+<span id="cb1-292"><a href="#cb1-292" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
+<span id="cb1-293"><a href="#cb1-293" aria-hidden="true" tabindex="-1"></a>            kl <span class="op">=</span> <span class="fu">calculateKLDivergence</span>(dist2<span class="op">,</span> dist1)<span class="op">;</span></span>
+<span id="cb1-294"><a href="#cb1-294" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb1-295"><a href="#cb1-295" aria-hidden="true" tabindex="-1"></a>        grid<span class="op">.</span><span class="fu">push</span>({<span class="dt">mean</span><span class="op">:</span> m<span class="op">,</span> <span class="dt">variance</span><span class="op">:</span> v<span class="op">,</span> <span class="dt">kl</span><span class="op">:</span> kl})<span class="op">;</span></span>
+<span id="cb1-296"><a href="#cb1-296" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb1-297"><a href="#cb1-297" aria-hidden="true" tabindex="-1"></a>   }</span>
+<span id="cb1-298"><a href="#cb1-298" aria-hidden="true" tabindex="-1"></a>   <span class="cf">return</span> grid<span class="op">;</span></span>
+<span id="cb1-299"><a href="#cb1-299" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-300"><a href="#cb1-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-301"><a href="#cb1-301" aria-hidden="true" tabindex="-1"></a><span class="co">// Cell 5: Create and update the Gaussian mixture model plot</span></span>
+<span id="cb1-302"><a href="#cb1-302" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">createGuassianPlot</span>(mean<span class="op">,</span> variance<span class="op">,</span> P) {</span>
+<span id="cb1-303"><a href="#cb1-303" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> width <span class="op">=</span> <span class="dv">600</span><span class="op">;</span></span>
+<span id="cb1-304"><a href="#cb1-304" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> height <span class="op">=</span> <span class="dv">400</span><span class="op">;</span></span>
+<span id="cb1-305"><a href="#cb1-305" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> margin <span class="op">=</span> {<span class="dt">top</span><span class="op">:</span> <span class="dv">20</span><span class="op">,</span> <span class="dt">right</span><span class="op">:</span> <span class="dv">20</span><span class="op">,</span> <span class="dt">bottom</span><span class="op">:</span> <span class="dv">40</span><span class="op">,</span> <span class="dt">left</span><span class="op">:</span> <span class="dv">60</span>}<span class="op">;</span></span>
+<span id="cb1-306"><a href="#cb1-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-307"><a href="#cb1-307" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> dataQ <span class="op">=</span> <span class="fu">generateData</span>(mean<span class="op">,</span> variance)<span class="op">;</span></span>
+<span id="cb1-308"><a href="#cb1-308" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-309"><a href="#cb1-309" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> x <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleLinear</span>()</span>
+<span id="cb1-310"><a href="#cb1-310" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">domain</span>([<span class="op">-</span><span class="dv">5</span><span class="op">,</span> <span class="dv">5</span>])</span>
+<span id="cb1-311"><a href="#cb1-311" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">range</span>([margin<span class="op">.</span><span class="at">left</span><span class="op">,</span> width <span class="op">-</span> margin<span class="op">.</span><span class="at">right</span>])<span class="op">;</span></span>
+<span id="cb1-312"><a href="#cb1-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-313"><a href="#cb1-313" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> y <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleLinear</span>()</span>
+<span id="cb1-314"><a href="#cb1-314" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">domain</span>([<span class="dv">0</span><span class="op">,</span> d3<span class="op">.</span><span class="fu">max</span>([<span class="op">...</span>P<span class="op">,</span> <span class="op">...</span>dataQ]<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">y</span>)])</span>
+<span id="cb1-315"><a href="#cb1-315" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">range</span>([height <span class="op">-</span> margin<span class="op">.</span><span class="at">bottom</span><span class="op">,</span> margin<span class="op">.</span><span class="at">top</span>])<span class="op">;</span></span>
+<span id="cb1-316"><a href="#cb1-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-317"><a href="#cb1-317" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> line <span class="op">=</span> d3<span class="op">.</span><span class="fu">line</span>()</span>
+<span id="cb1-318"><a href="#cb1-318" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">x</span>(d <span class="kw">=&gt;</span> <span class="fu">x</span>(d<span class="op">.</span><span class="at">x</span>))</span>
+<span id="cb1-319"><a href="#cb1-319" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">y</span>(d <span class="kw">=&gt;</span> <span class="fu">y</span>(d<span class="op">.</span><span class="at">y</span>))<span class="op">;</span></span>
+<span id="cb1-320"><a href="#cb1-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-321"><a href="#cb1-321" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> svg <span class="op">=</span> d3<span class="op">.</span><span class="fu">create</span>(<span class="st">"svg"</span>)</span>
+<span id="cb1-322"><a href="#cb1-322" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"viewBox"</span><span class="op">,</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> width<span class="op">,</span> height])<span class="op">;</span></span>
+<span id="cb1-323"><a href="#cb1-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-324"><a href="#cb1-324" aria-hidden="true" tabindex="-1"></a>  <span class="co">// X-axis</span></span>
+<span id="cb1-325"><a href="#cb1-325" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">append</span>(<span class="st">"g"</span>)</span>
+<span id="cb1-326"><a href="#cb1-326" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"transform"</span><span class="op">,</span> <span class="vs">`translate(0,</span><span class="sc">${</span>height <span class="op">-</span> margin<span class="op">.</span><span class="at">bottom</span><span class="sc">}</span><span class="vs">)`</span>)</span>
+<span id="cb1-327"><a href="#cb1-327" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">call</span>(d3<span class="op">.</span><span class="fu">axisBottom</span>(x))<span class="op">;</span></span>
+<span id="cb1-328"><a href="#cb1-328" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-329"><a href="#cb1-329" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Y-axis</span></span>
+<span id="cb1-330"><a href="#cb1-330" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> yAxis <span class="op">=</span> svg<span class="op">.</span><span class="fu">append</span>(<span class="st">"g"</span>)</span>
+<span id="cb1-331"><a href="#cb1-331" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"transform"</span><span class="op">,</span> <span class="vs">`translate(</span><span class="sc">${</span>margin<span class="op">.</span><span class="at">left</span><span class="sc">}</span><span class="vs">,0)`</span>)</span>
+<span id="cb1-332"><a href="#cb1-332" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">call</span>(d3<span class="op">.</span><span class="fu">axisLeft</span>(y))<span class="op">;</span></span>
+<span id="cb1-333"><a href="#cb1-333" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-334"><a href="#cb1-334" aria-hidden="true" tabindex="-1"></a>  <span class="co">// X-axis label</span></span>
+<span id="cb1-335"><a href="#cb1-335" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">append</span>(<span class="st">"text"</span>)</span>
+<span id="cb1-336"><a href="#cb1-336" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"x"</span><span class="op">,</span> width <span class="op">/</span> <span class="dv">2</span>)</span>
+<span id="cb1-337"><a href="#cb1-337" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"y"</span><span class="op">,</span> height <span class="op">-</span> <span class="dv">5</span>)</span>
+<span id="cb1-338"><a href="#cb1-338" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"text-anchor"</span><span class="op">,</span> <span class="st">"middle"</span>)</span>
+<span id="cb1-339"><a href="#cb1-339" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">text</span>(<span class="st">"X"</span>)<span class="op">;</span></span>
+<span id="cb1-340"><a href="#cb1-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-341"><a href="#cb1-341" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Y-axis label (centered and rotated)</span></span>
+<span id="cb1-342"><a href="#cb1-342" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">append</span>(<span class="st">"text"</span>)</span>
+<span id="cb1-343"><a href="#cb1-343" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"transform"</span><span class="op">,</span> <span class="st">"rotate(-90)"</span>)</span>
+<span id="cb1-344"><a href="#cb1-344" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"x"</span><span class="op">,</span> <span class="op">-</span>height <span class="op">/</span> <span class="dv">2</span>)</span>
+<span id="cb1-345"><a href="#cb1-345" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"y"</span><span class="op">,</span> <span class="dv">15</span>)</span>
+<span id="cb1-346"><a href="#cb1-346" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"text-anchor"</span><span class="op">,</span> <span class="st">"middle"</span>)</span>
+<span id="cb1-347"><a href="#cb1-347" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">text</span>(<span class="st">"Probability Density"</span>)<span class="op">;</span></span>
+<span id="cb1-348"><a href="#cb1-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-349"><a href="#cb1-349" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Line for Q (interactive)</span></span>
+<span id="cb1-350"><a href="#cb1-350" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> pathQ <span class="op">=</span> svg<span class="op">.</span><span class="fu">append</span>(<span class="st">"path"</span>)</span>
+<span id="cb1-351"><a href="#cb1-351" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"fill"</span><span class="op">,</span> <span class="st">"none"</span>)</span>
+<span id="cb1-352"><a href="#cb1-352" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"stroke"</span><span class="op">,</span> <span class="st">"steelblue"</span>)</span>
+<span id="cb1-353"><a href="#cb1-353" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"stroke-width"</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb1-354"><a href="#cb1-354" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-355"><a href="#cb1-355" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Line for P (static GMM)</span></span>
+<span id="cb1-356"><a href="#cb1-356" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">append</span>(<span class="st">"path"</span>)</span>
+<span id="cb1-357"><a href="#cb1-357" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">datum</span>(P)</span>
+<span id="cb1-358"><a href="#cb1-358" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"fill"</span><span class="op">,</span> <span class="st">"none"</span>)</span>
+<span id="cb1-359"><a href="#cb1-359" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"stroke"</span><span class="op">,</span> <span class="st">"orange"</span>)</span>
+<span id="cb1-360"><a href="#cb1-360" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"stroke-width"</span><span class="op">,</span> <span class="dv">2</span>)</span>
+<span id="cb1-361"><a href="#cb1-361" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"d"</span><span class="op">,</span> line)<span class="op">;</span></span>
+<span id="cb1-362"><a href="#cb1-362" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-363"><a href="#cb1-363" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Legend</span></span>
+<span id="cb1-364"><a href="#cb1-364" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> legend <span class="op">=</span> svg<span class="op">.</span><span class="fu">append</span>(<span class="st">"g"</span>)</span>
+<span id="cb1-365"><a href="#cb1-365" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"transform"</span><span class="op">,</span> <span class="vs">`translate(</span><span class="sc">${</span>width <span class="op">-</span> margin<span class="op">.</span><span class="at">right</span> <span class="op">-</span> <span class="dv">25</span><span class="sc">}</span><span class="vs">,</span><span class="sc">${</span>margin<span class="op">.</span><span class="at">top</span><span class="sc">}</span><span class="vs">)`</span>)<span class="op">;</span></span>
+<span id="cb1-366"><a href="#cb1-366" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-367"><a href="#cb1-367" aria-hidden="true" tabindex="-1"></a>  legend<span class="op">.</span><span class="fu">append</span>(<span class="st">"rect"</span>)</span>
+<span id="cb1-368"><a href="#cb1-368" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"width"</span><span class="op">,</span> <span class="dv">20</span>)</span>
+<span id="cb1-369"><a href="#cb1-369" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"height"</span><span class="op">,</span> <span class="dv">20</span>)</span>
+<span id="cb1-370"><a href="#cb1-370" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"fill"</span><span class="op">,</span> <span class="st">"steelblue"</span>)<span class="op">;</span></span>
+<span id="cb1-371"><a href="#cb1-371" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-372"><a href="#cb1-372" aria-hidden="true" tabindex="-1"></a>  legend<span class="op">.</span><span class="fu">append</span>(<span class="st">"text"</span>)</span>
+<span id="cb1-373"><a href="#cb1-373" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"x"</span><span class="op">,</span> <span class="dv">25</span>)</span>
+<span id="cb1-374"><a href="#cb1-374" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"y"</span><span class="op">,</span> <span class="dv">15</span>)</span>
+<span id="cb1-375"><a href="#cb1-375" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">text</span>(<span class="st">"Q"</span>)<span class="op">;</span></span>
+<span id="cb1-376"><a href="#cb1-376" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-377"><a href="#cb1-377" aria-hidden="true" tabindex="-1"></a>  legend<span class="op">.</span><span class="fu">append</span>(<span class="st">"rect"</span>)</span>
+<span id="cb1-378"><a href="#cb1-378" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"y"</span><span class="op">,</span> <span class="dv">25</span>)</span>
+<span id="cb1-379"><a href="#cb1-379" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"width"</span><span class="op">,</span> <span class="dv">20</span>)</span>
+<span id="cb1-380"><a href="#cb1-380" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"height"</span><span class="op">,</span> <span class="dv">20</span>)</span>
+<span id="cb1-381"><a href="#cb1-381" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"fill"</span><span class="op">,</span> <span class="st">"orange"</span>)<span class="op">;</span></span>
+<span id="cb1-382"><a href="#cb1-382" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-383"><a href="#cb1-383" aria-hidden="true" tabindex="-1"></a>  legend<span class="op">.</span><span class="fu">append</span>(<span class="st">"text"</span>)</span>
+<span id="cb1-384"><a href="#cb1-384" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"x"</span><span class="op">,</span> <span class="dv">25</span>)</span>
+<span id="cb1-385"><a href="#cb1-385" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"y"</span><span class="op">,</span> <span class="dv">40</span>)</span>
+<span id="cb1-386"><a href="#cb1-386" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">text</span>(<span class="st">"P"</span>)<span class="op">;</span></span>
+<span id="cb1-387"><a href="#cb1-387" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-388"><a href="#cb1-388" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Update Q distribution</span></span>
+<span id="cb1-389"><a href="#cb1-389" aria-hidden="true" tabindex="-1"></a>  y<span class="op">.</span><span class="fu">domain</span>([<span class="dv">0</span><span class="op">,</span> d3<span class="op">.</span><span class="fu">max</span>([<span class="op">...</span>P<span class="op">,</span> <span class="op">...</span>dataQ]<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">y</span>)])<span class="op">;</span></span>
+<span id="cb1-390"><a href="#cb1-390" aria-hidden="true" tabindex="-1"></a>  yAxis<span class="op">.</span><span class="fu">call</span>(d3<span class="op">.</span><span class="fu">axisLeft</span>(y))<span class="op">;</span></span>
+<span id="cb1-391"><a href="#cb1-391" aria-hidden="true" tabindex="-1"></a>  pathQ<span class="op">.</span><span class="fu">datum</span>(dataQ)<span class="op">.</span><span class="fu">attr</span>(<span class="st">"d"</span><span class="op">,</span> line)<span class="op">;</span></span>
+<span id="cb1-392"><a href="#cb1-392" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-393"><a href="#cb1-393" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> svg<span class="op">.</span><span class="fu">node</span>()<span class="op">;</span></span>
+<span id="cb1-394"><a href="#cb1-394" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-395"><a href="#cb1-395" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-396"><a href="#cb1-396" aria-hidden="true" tabindex="-1"></a><span class="co">// Cell 6: Refactored KL divergence contour plot</span></span>
+<span id="cb1-397"><a href="#cb1-397" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">createklContourPlot</span>(mean<span class="op">,</span> variance<span class="op">,</span> klGrid<span class="op">,</span> cntTitle) {</span>
+<span id="cb1-398"><a href="#cb1-398" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> width <span class="op">=</span> <span class="dv">600</span><span class="op">;</span></span>
+<span id="cb1-399"><a href="#cb1-399" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> height <span class="op">=</span> <span class="dv">400</span><span class="op">;</span></span>
+<span id="cb1-400"><a href="#cb1-400" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> margin <span class="op">=</span> {<span class="dt">top</span><span class="op">:</span> <span class="dv">35</span><span class="op">,</span> <span class="dt">right</span><span class="op">:</span> <span class="dv">30</span><span class="op">,</span> <span class="dt">bottom</span><span class="op">:</span> <span class="dv">40</span><span class="op">,</span> <span class="dt">left</span><span class="op">:</span> <span class="dv">50</span>}<span class="op">;</span></span>
+<span id="cb1-401"><a href="#cb1-401" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> plotWidth <span class="op">=</span> width <span class="op">-</span> margin<span class="op">.</span><span class="at">left</span> <span class="op">-</span> margin<span class="op">.</span><span class="at">right</span><span class="op">;</span></span>
+<span id="cb1-402"><a href="#cb1-402" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> plotHeight <span class="op">=</span> height <span class="op">-</span> margin<span class="op">.</span><span class="at">top</span> <span class="op">-</span> margin<span class="op">.</span><span class="at">bottom</span><span class="op">;</span></span>
+<span id="cb1-403"><a href="#cb1-403" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-404"><a href="#cb1-404" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> uniqueMeans <span class="op">=</span> <span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>(<span class="kw">new</span> <span class="bu">Set</span>(klGrid<span class="op">.</span><span class="fu">map</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">mean</span>)))<span class="op">;</span></span>
+<span id="cb1-405"><a href="#cb1-405" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> uniqueVariances <span class="op">=</span> <span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>(<span class="kw">new</span> <span class="bu">Set</span>(klGrid<span class="op">.</span><span class="fu">map</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">variance</span>)))<span class="op">;</span></span>
+<span id="cb1-406"><a href="#cb1-406" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-407"><a href="#cb1-407" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Create 2D array of KL values</span></span>
+<span id="cb1-408"><a href="#cb1-408" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> klValues <span class="op">=</span> uniqueVariances<span class="op">.</span><span class="fu">map</span>(v <span class="kw">=&gt;</span> </span>
+<span id="cb1-409"><a href="#cb1-409" aria-hidden="true" tabindex="-1"></a>    uniqueMeans<span class="op">.</span><span class="fu">map</span>(m <span class="kw">=&gt;</span> {</span>
+<span id="cb1-410"><a href="#cb1-410" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> point <span class="op">=</span> klGrid<span class="op">.</span><span class="fu">find</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">mean</span> <span class="op">===</span> m <span class="op">&amp;&amp;</span> d<span class="op">.</span><span class="at">variance</span> <span class="op">===</span> v)<span class="op">;</span></span>
+<span id="cb1-411"><a href="#cb1-411" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> point <span class="op">?</span> point<span class="op">.</span><span class="at">kl</span> <span class="op">:</span> <span class="kw">null</span><span class="op">;</span></span>
+<span id="cb1-412"><a href="#cb1-412" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb1-413"><a href="#cb1-413" aria-hidden="true" tabindex="-1"></a>  )<span class="op">;</span></span>
+<span id="cb1-414"><a href="#cb1-414" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-415"><a href="#cb1-415" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Scales</span></span>
+<span id="cb1-416"><a href="#cb1-416" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> xScale <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleLinear</span>()</span>
+<span id="cb1-417"><a href="#cb1-417" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">domain</span>(d3<span class="op">.</span><span class="fu">extent</span>(uniqueMeans))</span>
+<span id="cb1-418"><a href="#cb1-418" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> plotWidth])<span class="op">;</span></span>
+<span id="cb1-419"><a href="#cb1-419" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-420"><a href="#cb1-420" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> yScale <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleLinear</span>()</span>
+<span id="cb1-421"><a href="#cb1-421" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">domain</span>(d3<span class="op">.</span><span class="fu">extent</span>(uniqueVariances))</span>
+<span id="cb1-422"><a href="#cb1-422" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">range</span>([plotHeight<span class="op">,</span> <span class="dv">0</span>])<span class="op">;</span></span>
+<span id="cb1-423"><a href="#cb1-423" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-424"><a href="#cb1-424" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> colorScale <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleSequential</span>(d3<span class="op">.</span><span class="at">interpolateViridis</span>)</span>
+<span id="cb1-425"><a href="#cb1-425" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">domain</span>(d3<span class="op">.</span><span class="fu">extent</span>(klGrid<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">kl</span>))<span class="op">;</span></span>
+<span id="cb1-426"><a href="#cb1-426" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-427"><a href="#cb1-427" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Generate contours</span></span>
+<span id="cb1-428"><a href="#cb1-428" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> contours <span class="op">=</span> d3<span class="op">.</span><span class="fu">contours</span>()</span>
+<span id="cb1-429"><a href="#cb1-429" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">size</span>([uniqueMeans<span class="op">.</span><span class="at">length</span><span class="op">,</span> uniqueVariances<span class="op">.</span><span class="at">length</span>])</span>
+<span id="cb1-430"><a href="#cb1-430" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">thresholds</span>(<span class="dv">50</span>)</span>
+<span id="cb1-431"><a href="#cb1-431" aria-hidden="true" tabindex="-1"></a>    (klValues<span class="op">.</span><span class="fu">flat</span>())<span class="op">;</span></span>
+<span id="cb1-432"><a href="#cb1-432" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-433"><a href="#cb1-433" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Create SVG element</span></span>
+<span id="cb1-434"><a href="#cb1-434" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> svg <span class="op">=</span> d3<span class="op">.</span><span class="fu">create</span>(<span class="st">"svg"</span>)</span>
+<span id="cb1-435"><a href="#cb1-435" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"viewBox"</span><span class="op">,</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> width<span class="op">,</span> height])</span>
+<span id="cb1-436"><a href="#cb1-436" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"style"</span><span class="op">,</span> <span class="st">"max-width: 100%; height: auto;"</span>)<span class="op">;</span></span>
+<span id="cb1-437"><a href="#cb1-437" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-438"><a href="#cb1-438" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> g <span class="op">=</span> svg<span class="op">.</span><span class="fu">append</span>(<span class="st">"g"</span>)</span>
+<span id="cb1-439"><a href="#cb1-439" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"transform"</span><span class="op">,</span> <span class="vs">`translate(</span><span class="sc">${</span>margin<span class="op">.</span><span class="at">left</span><span class="sc">}</span><span class="vs">,</span><span class="sc">${</span>margin<span class="op">.</span><span class="at">top</span><span class="sc">}</span><span class="vs">)`</span>)<span class="op">;</span></span>
+<span id="cb1-440"><a href="#cb1-440" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-441"><a href="#cb1-441" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Draw contour paths</span></span>
+<span id="cb1-442"><a href="#cb1-442" aria-hidden="true" tabindex="-1"></a>  g<span class="op">.</span><span class="fu">append</span>(<span class="st">"g"</span>)</span>
+<span id="cb1-443"><a href="#cb1-443" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">"path"</span>)</span>
+<span id="cb1-444"><a href="#cb1-444" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">data</span>(contours)</span>
+<span id="cb1-445"><a href="#cb1-445" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">join</span>(<span class="st">"path"</span>)</span>
+<span id="cb1-446"><a href="#cb1-446" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"fill"</span><span class="op">,</span> d <span class="kw">=&gt;</span> <span class="fu">colorScale</span>(d<span class="op">.</span><span class="at">value</span>))</span>
+<span id="cb1-447"><a href="#cb1-447" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"d"</span><span class="op">,</span> d3<span class="op">.</span><span class="fu">geoPath</span>()</span>
+<span id="cb1-448"><a href="#cb1-448" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">projection</span>(d3<span class="op">.</span><span class="fu">geoTransform</span>({</span>
+<span id="cb1-449"><a href="#cb1-449" aria-hidden="true" tabindex="-1"></a>        <span class="dt">point</span><span class="op">:</span> <span class="kw">function</span>(x<span class="op">,</span> y) {</span>
+<span id="cb1-450"><a href="#cb1-450" aria-hidden="true" tabindex="-1"></a>          <span class="co">// Projection mapping based on exact data grid size</span></span>
+<span id="cb1-451"><a href="#cb1-451" aria-hidden="true" tabindex="-1"></a>          <span class="kw">const</span> scaleX <span class="op">=</span> plotWidth <span class="op">/</span> (uniqueMeans<span class="op">.</span><span class="at">length</span> <span class="op">-</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb1-452"><a href="#cb1-452" aria-hidden="true" tabindex="-1"></a>          <span class="kw">const</span> scaleY <span class="op">=</span> plotHeight <span class="op">/</span> (uniqueVariances<span class="op">.</span><span class="at">length</span> <span class="op">-</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb1-453"><a href="#cb1-453" aria-hidden="true" tabindex="-1"></a>          <span class="kw">this</span><span class="op">.</span><span class="at">stream</span><span class="op">.</span><span class="fu">point</span>(x <span class="op">*</span> scaleX<span class="op">,</span> plotHeight <span class="op">-</span> y <span class="op">*</span> scaleY)<span class="op">;</span>  <span class="co">// Corrected projection</span></span>
+<span id="cb1-454"><a href="#cb1-454" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb1-455"><a href="#cb1-455" aria-hidden="true" tabindex="-1"></a>      }))</span>
+<span id="cb1-456"><a href="#cb1-456" aria-hidden="true" tabindex="-1"></a>    )<span class="op">;</span></span>
+<span id="cb1-457"><a href="#cb1-457" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-458"><a href="#cb1-458" aria-hidden="true" tabindex="-1"></a>  <span class="co">// X-axis</span></span>
+<span id="cb1-459"><a href="#cb1-459" aria-hidden="true" tabindex="-1"></a>  g<span class="op">.</span><span class="fu">append</span>(<span class="st">"g"</span>)</span>
+<span id="cb1-460"><a href="#cb1-460" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"transform"</span><span class="op">,</span> <span class="vs">`translate(0,</span><span class="sc">${</span>plotHeight<span class="sc">}</span><span class="vs">)`</span>)</span>
+<span id="cb1-461"><a href="#cb1-461" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">call</span>(d3<span class="op">.</span><span class="fu">axisBottom</span>(xScale)<span class="op">.</span><span class="fu">ticks</span>(<span class="dv">10</span>))</span>
+<span id="cb1-462"><a href="#cb1-462" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">append</span>(<span class="st">"text"</span>)</span>
+<span id="cb1-463"><a href="#cb1-463" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"x"</span><span class="op">,</span> plotWidth <span class="op">/</span> <span class="dv">2</span>)</span>
+<span id="cb1-464"><a href="#cb1-464" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"y"</span><span class="op">,</span> <span class="dv">30</span>)</span>
+<span id="cb1-465"><a href="#cb1-465" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"fill"</span><span class="op">,</span> <span class="st">"currentColor"</span>)</span>
+<span id="cb1-466"><a href="#cb1-466" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"text-anchor"</span><span class="op">,</span> <span class="st">"middle"</span>)</span>
+<span id="cb1-467"><a href="#cb1-467" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">text</span>(<span class="st">"Mean"</span>)<span class="op">;</span></span>
+<span id="cb1-468"><a href="#cb1-468" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-469"><a href="#cb1-469" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Y-axis (centered label and rotated)</span></span>
+<span id="cb1-470"><a href="#cb1-470" aria-hidden="true" tabindex="-1"></a>  g<span class="op">.</span><span class="fu">append</span>(<span class="st">"g"</span>)</span>
+<span id="cb1-471"><a href="#cb1-471" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">call</span>(d3<span class="op">.</span><span class="fu">axisLeft</span>(yScale)<span class="op">.</span><span class="fu">ticks</span>(<span class="dv">10</span>))</span>
+<span id="cb1-472"><a href="#cb1-472" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">append</span>(<span class="st">"text"</span>)</span>
+<span id="cb1-473"><a href="#cb1-473" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"transform"</span><span class="op">,</span> <span class="st">"rotate(-90)"</span>)</span>
+<span id="cb1-474"><a href="#cb1-474" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"x"</span><span class="op">,</span> <span class="op">-</span>plotHeight <span class="op">/</span> <span class="dv">2</span>)</span>
+<span id="cb1-475"><a href="#cb1-475" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"y"</span><span class="op">,</span> <span class="op">-</span><span class="dv">35</span>)</span>
+<span id="cb1-476"><a href="#cb1-476" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"text-anchor"</span><span class="op">,</span> <span class="st">"middle"</span>)</span>
+<span id="cb1-477"><a href="#cb1-477" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"fill"</span><span class="op">,</span> <span class="st">"currentColor"</span>)</span>
+<span id="cb1-478"><a href="#cb1-478" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">text</span>(<span class="st">"Variance"</span>)<span class="op">;</span></span>
+<span id="cb1-479"><a href="#cb1-479" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-480"><a href="#cb1-480" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">append</span>(<span class="st">"text"</span>)</span>
+<span id="cb1-481"><a href="#cb1-481" aria-hidden="true" tabindex="-1"></a>   <span class="op">.</span><span class="fu">attr</span>(<span class="st">"x"</span><span class="op">,</span> width <span class="op">/</span> <span class="dv">2</span>)</span>
+<span id="cb1-482"><a href="#cb1-482" aria-hidden="true" tabindex="-1"></a>   <span class="op">.</span><span class="fu">attr</span>(<span class="st">"y"</span><span class="op">,</span> margin<span class="op">.</span><span class="at">top</span> <span class="op">-</span> <span class="dv">20</span>)</span>
+<span id="cb1-483"><a href="#cb1-483" aria-hidden="true" tabindex="-1"></a>   <span class="op">.</span><span class="fu">attr</span>(<span class="st">"text-anchor"</span><span class="op">,</span> <span class="st">"middle"</span>)</span>
+<span id="cb1-484"><a href="#cb1-484" aria-hidden="true" tabindex="-1"></a>   <span class="op">.</span><span class="fu">style</span>(<span class="st">"font-size"</span><span class="op">,</span> <span class="st">"16px"</span>)</span>
+<span id="cb1-485"><a href="#cb1-485" aria-hidden="true" tabindex="-1"></a>   <span class="op">.</span><span class="fu">text</span>(cntTitle)<span class="op">;</span></span>
+<span id="cb1-486"><a href="#cb1-486" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-487"><a href="#cb1-487" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Function to update point dynamically</span></span>
+<span id="cb1-488"><a href="#cb1-488" aria-hidden="true" tabindex="-1"></a>  <span class="kw">function</span> <span class="fu">updatePoint</span>(mean<span class="op">,</span> variance) {</span>
+<span id="cb1-489"><a href="#cb1-489" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> nearestPoint <span class="op">=</span> klGrid<span class="op">.</span><span class="fu">reduce</span>((a<span class="op">,</span> b) <span class="kw">=&gt;</span> </span>
+<span id="cb1-490"><a href="#cb1-490" aria-hidden="true" tabindex="-1"></a>      (<span class="bu">Math</span><span class="op">.</span><span class="fu">abs</span>(b<span class="op">.</span><span class="at">mean</span> <span class="op">-</span> mean) <span class="op">+</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">abs</span>(b<span class="op">.</span><span class="at">variance</span> <span class="op">-</span> variance) <span class="op">&lt;</span> </span>
+<span id="cb1-491"><a href="#cb1-491" aria-hidden="true" tabindex="-1"></a>       <span class="bu">Math</span><span class="op">.</span><span class="fu">abs</span>(a<span class="op">.</span><span class="at">mean</span> <span class="op">-</span> mean) <span class="op">+</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">abs</span>(a<span class="op">.</span><span class="at">variance</span> <span class="op">-</span> variance)) <span class="op">?</span> b <span class="op">:</span> a</span>
+<span id="cb1-492"><a href="#cb1-492" aria-hidden="true" tabindex="-1"></a>    )<span class="op">;</span></span>
+<span id="cb1-493"><a href="#cb1-493" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-494"><a href="#cb1-494" aria-hidden="true" tabindex="-1"></a>    g<span class="op">.</span><span class="fu">selectAll</span>(<span class="st">".current-point, .kl-value"</span>)<span class="op">.</span><span class="fu">remove</span>()<span class="op">;</span></span>
+<span id="cb1-495"><a href="#cb1-495" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-496"><a href="#cb1-496" aria-hidden="true" tabindex="-1"></a>    g<span class="op">.</span><span class="fu">append</span>(<span class="st">"circle"</span>)</span>
+<span id="cb1-497"><a href="#cb1-497" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"class"</span><span class="op">,</span> <span class="st">"current-point"</span>)</span>
+<span id="cb1-498"><a href="#cb1-498" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"cx"</span><span class="op">,</span> <span class="fu">xScale</span>(mean))</span>
+<span id="cb1-499"><a href="#cb1-499" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"cy"</span><span class="op">,</span> <span class="fu">yScale</span>(variance))</span>
+<span id="cb1-500"><a href="#cb1-500" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"r"</span><span class="op">,</span> <span class="dv">5</span>)</span>
+<span id="cb1-501"><a href="#cb1-501" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"fill"</span><span class="op">,</span> <span class="st">"red"</span>)</span>
+<span id="cb1-502"><a href="#cb1-502" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"stroke"</span><span class="op">,</span> <span class="st">"white"</span>)<span class="op">;</span></span>
+<span id="cb1-503"><a href="#cb1-503" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-504"><a href="#cb1-504" aria-hidden="true" tabindex="-1"></a>    g<span class="op">.</span><span class="fu">append</span>(<span class="st">"text"</span>)</span>
+<span id="cb1-505"><a href="#cb1-505" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"class"</span><span class="op">,</span> <span class="st">"kl-value"</span>)</span>
+<span id="cb1-506"><a href="#cb1-506" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"x"</span><span class="op">,</span> <span class="fu">xScale</span>(mean))</span>
+<span id="cb1-507"><a href="#cb1-507" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"y"</span><span class="op">,</span> <span class="fu">yScale</span>(variance) <span class="op">-</span> <span class="dv">10</span>)</span>
+<span id="cb1-508"><a href="#cb1-508" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"text-anchor"</span><span class="op">,</span> <span class="st">"middle"</span>)</span>
+<span id="cb1-509"><a href="#cb1-509" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"fill"</span><span class="op">,</span> <span class="st">"white"</span>)</span>
+<span id="cb1-510"><a href="#cb1-510" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"stroke"</span><span class="op">,</span> <span class="st">"black"</span>)</span>
+<span id="cb1-511"><a href="#cb1-511" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"stroke-width"</span><span class="op">,</span> <span class="dv">2</span>)</span>
+<span id="cb1-512"><a href="#cb1-512" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"paint-order"</span><span class="op">,</span> <span class="st">"stroke"</span>)</span>
+<span id="cb1-513"><a href="#cb1-513" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"font-weight"</span><span class="op">,</span> <span class="st">"bold"</span>)</span>
+<span id="cb1-514"><a href="#cb1-514" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">text</span>(nearestPoint<span class="op">.</span><span class="at">kl</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>))<span class="op">;</span></span>
+<span id="cb1-515"><a href="#cb1-515" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-516"><a href="#cb1-516" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-517"><a href="#cb1-517" aria-hidden="true" tabindex="-1"></a>  <span class="fu">updatePoint</span>(mean<span class="op">,</span> variance)<span class="op">;</span></span>
+<span id="cb1-518"><a href="#cb1-518" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-519"><a href="#cb1-519" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">assign</span>(svg<span class="op">.</span><span class="fu">node</span>()<span class="op">,</span> {updatePoint})<span class="op">;</span></span>
+<span id="cb1-520"><a href="#cb1-520" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-521"><a href="#cb1-521" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-522"><a href="#cb1-522" aria-hidden="true" tabindex="-1"></a>klGrid <span class="op">=</span> <span class="fu">calculateKLDivergenceGrid</span>(</span>
+<span id="cb1-523"><a href="#cb1-523" aria-hidden="true" tabindex="-1"></a>    P<span class="op">,</span></span>
+<span id="cb1-524"><a href="#cb1-524" aria-hidden="true" tabindex="-1"></a>    d3<span class="op">.</span><span class="fu">range</span>(<span class="op">-</span><span class="dv">3</span><span class="op">,</span> <span class="fl">3.1</span><span class="op">,</span> <span class="fl">0.1</span>)<span class="op">,</span></span>
+<span id="cb1-525"><a href="#cb1-525" aria-hidden="true" tabindex="-1"></a>    d3<span class="op">.</span><span class="fu">range</span>(<span class="fl">0.5</span><span class="op">,</span> <span class="fl">3.1</span><span class="op">,</span> <span class="fl">0.1</span>)<span class="op">,</span></span>
+<span id="cb1-526"><a href="#cb1-526" aria-hidden="true" tabindex="-1"></a>    <span class="kw">true</span></span>
+<span id="cb1-527"><a href="#cb1-527" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span>
+<span id="cb1-528"><a href="#cb1-528" aria-hidden="true" tabindex="-1"></a>gaussianPlot <span class="op">=</span> <span class="fu">createGuassianPlot</span>(mean<span class="op">,</span> variance<span class="op">,</span> P)<span class="op">;</span></span>
+<span id="cb1-529"><a href="#cb1-529" aria-hidden="true" tabindex="-1"></a>klContourPlot <span class="op">=</span> <span class="fu">createklContourPlot</span>(</span>
+<span id="cb1-530"><a href="#cb1-530" aria-hidden="true" tabindex="-1"></a>    mean<span class="op">,</span> variance<span class="op">,</span> klGrid<span class="op">,</span></span>
+<span id="cb1-531"><a href="#cb1-531" aria-hidden="true" tabindex="-1"></a>    <span class="st">"KL Divergence (P, Q) Contour Plot"</span></span>
+<span id="cb1-532"><a href="#cb1-532" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span>
+<span id="cb1-533"><a href="#cb1-533" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-534"><a href="#cb1-534" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`&lt;div style="display: flex; align-items: center; column-gap: 1em;"&gt;</span></span>
+<span id="cb1-535"><a href="#cb1-535" aria-hidden="true" tabindex="-1"></a><span class="vs"> &lt;div style="flex-basis:50%"&gt;</span><span class="sc">${</span>gaussianPlot<span class="sc">}</span><span class="vs">&lt;/div&gt;</span></span>
+<span id="cb1-536"><a href="#cb1-536" aria-hidden="true" tabindex="-1"></a><span class="vs"> &lt;div style="flex-basis:50%"&gt;</span><span class="sc">${</span>klContourPlot<span class="sc">}</span><span class="vs"> &lt;/div&gt;</span></span>
+<span id="cb1-537"><a href="#cb1-537" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;/div&gt;`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-4" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-5" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-6" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-7" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-8" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-9" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-10" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-11" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-12" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-13" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-14" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-15" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-16" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-17" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-18" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>As you can see, the minimum as achieved when <span class="math inline">\(Q\)</span> is spread out enough to cover the modes of <span class="math inline">\(P\)</span>. This is the <strong>mean-seeking</strong> behavior of the forward KL divergence.</p>
+</section>
+<section id="reverse-kl" class="level4 page-columns page-full">
+<h4 class="anchored" data-anchor-id="reverse-kl"><strong>Reverse KL</strong></h4>
+<p><span class="math inline">\(D_{KL}(Q \;\Vert\; P)\)</span> measures the extra bits needed to encode samples from <span class="math inline">\(Q\)</span> using a code optimized for <span class="math inline">\(P\)</span>. Similar to the <a href="#sec-zero-prob" class="quarto-xref">Section&nbsp;4.2</a> analysis:</p>
+<ul>
+<li>It penalizes distributions <span class="math inline">\(Q\)</span> that assign non-zero probability to regions where p is zero. Conversely, it doesn’t penalize <span class="math inline">\(Q\)</span> for missing regions where <span class="math inline">\(P\)</span> has non-zero probability. This is called <strong>zero-forcing</strong>.</li>
+<li>It tends to capturing the dominant mode of <span class="math inline">\(P\)</span> and ignoring the rest.</li>
+</ul>
+<p>The plot below is same as the previous one, but this time it the contour plot shows the reverse KL divergence.</p>
+<div class="column-body-outset" style="margin: 2em 0;" data-collapse="false">
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb2" data-startfrom="556" data-source-offset="-1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 555;"><span id="cb2-556"><a href="#cb2-556" aria-hidden="true" tabindex="-1"></a>viewof mean2 <span class="op">=</span> <span class="fu">slider</span>({</span>
+<span id="cb2-557"><a href="#cb2-557" aria-hidden="true" tabindex="-1"></a>  <span class="dt">min</span><span class="op">:</span> <span class="op">-</span><span class="dv">3</span><span class="op">,</span> </span>
+<span id="cb2-558"><a href="#cb2-558" aria-hidden="true" tabindex="-1"></a>  <span class="dt">max</span><span class="op">:</span> <span class="dv">3</span><span class="op">,</span> </span>
+<span id="cb2-559"><a href="#cb2-559" aria-hidden="true" tabindex="-1"></a>  <span class="dt">step</span><span class="op">:</span> <span class="fl">0.1</span><span class="op">,</span> </span>
+<span id="cb2-560"><a href="#cb2-560" aria-hidden="true" tabindex="-1"></a>  <span class="dt">value</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span> </span>
+<span id="cb2-561"><a href="#cb2-561" aria-hidden="true" tabindex="-1"></a>  <span class="dt">title</span><span class="op">:</span> <span class="st">"Mean"</span><span class="op">,</span> </span>
+<span id="cb2-562"><a href="#cb2-562" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-563"><a href="#cb2-563" aria-hidden="true" tabindex="-1"></a>viewof variance2 <span class="op">=</span> <span class="fu">slider</span>({</span>
+<span id="cb2-564"><a href="#cb2-564" aria-hidden="true" tabindex="-1"></a>  <span class="dt">min</span><span class="op">:</span> <span class="fl">0.5</span><span class="op">,</span> </span>
+<span id="cb2-565"><a href="#cb2-565" aria-hidden="true" tabindex="-1"></a>  <span class="dt">max</span><span class="op">:</span> <span class="dv">3</span><span class="op">,</span> </span>
+<span id="cb2-566"><a href="#cb2-566" aria-hidden="true" tabindex="-1"></a>  <span class="dt">step</span><span class="op">:</span> <span class="fl">0.1</span><span class="op">,</span> </span>
+<span id="cb2-567"><a href="#cb2-567" aria-hidden="true" tabindex="-1"></a>  <span class="dt">value</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> </span>
+<span id="cb2-568"><a href="#cb2-568" aria-hidden="true" tabindex="-1"></a>  <span class="dt">title</span><span class="op">:</span> <span class="st">"Variance"</span><span class="op">,</span></span>
+<span id="cb2-569"><a href="#cb2-569" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-570"><a href="#cb2-570" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-571"><a href="#cb2-571" aria-hidden="true" tabindex="-1"></a>klGrid2 <span class="op">=</span> <span class="fu">calculateKLDivergenceGrid</span>(</span>
+<span id="cb2-572"><a href="#cb2-572" aria-hidden="true" tabindex="-1"></a>    P<span class="op">,</span></span>
+<span id="cb2-573"><a href="#cb2-573" aria-hidden="true" tabindex="-1"></a>    d3<span class="op">.</span><span class="fu">range</span>(<span class="op">-</span><span class="dv">3</span><span class="op">,</span> <span class="fl">3.1</span><span class="op">,</span> <span class="fl">0.1</span>)<span class="op">,</span></span>
+<span id="cb2-574"><a href="#cb2-574" aria-hidden="true" tabindex="-1"></a>    d3<span class="op">.</span><span class="fu">range</span>(<span class="fl">0.5</span><span class="op">,</span> <span class="fl">3.1</span><span class="op">,</span> <span class="fl">0.1</span>)<span class="op">,</span></span>
+<span id="cb2-575"><a href="#cb2-575" aria-hidden="true" tabindex="-1"></a>    <span class="kw">false</span><span class="op">,</span></span>
+<span id="cb2-576"><a href="#cb2-576" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span>
+<span id="cb2-577"><a href="#cb2-577" aria-hidden="true" tabindex="-1"></a>gaussianPlot2 <span class="op">=</span> <span class="fu">createGuassianPlot</span>(mean2<span class="op">,</span> variance2<span class="op">,</span> P)<span class="op">;</span></span>
+<span id="cb2-578"><a href="#cb2-578" aria-hidden="true" tabindex="-1"></a>klContourPlot2 <span class="op">=</span> <span class="fu">createklContourPlot</span>(</span>
+<span id="cb2-579"><a href="#cb2-579" aria-hidden="true" tabindex="-1"></a>    mean2<span class="op">,</span> variance2<span class="op">,</span> klGrid2<span class="op">,</span></span>
+<span id="cb2-580"><a href="#cb2-580" aria-hidden="true" tabindex="-1"></a>    <span class="st">"KL Divergence (Q, P) Contour Plot"</span></span>
+<span id="cb2-581"><a href="#cb2-581" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span>
+<span id="cb2-582"><a href="#cb2-582" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-583"><a href="#cb2-583" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`&lt;div style="display: flex; align-items: center;"&gt;</span></span>
+<span id="cb2-584"><a href="#cb2-584" aria-hidden="true" tabindex="-1"></a><span class="vs"> &lt;div style="flex-basis:55%"&gt;</span><span class="sc">${</span>gaussianPlot2<span class="sc">}</span><span class="vs">&lt;/div&gt;</span></span>
+<span id="cb2-585"><a href="#cb2-585" aria-hidden="true" tabindex="-1"></a><span class="vs"> &lt;div style="flex-basis:45%"&gt;</span><span class="sc">${</span>klContourPlot2<span class="sc">}</span><span class="vs"> &lt;/div&gt;</span></span>
+<span id="cb2-586"><a href="#cb2-586" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;/div&gt;`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-4" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-5" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-6" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>You can see how the minimum is achieved when <span class="math inline">\(Q\)</span> is concentrated around the dominant mode of <span class="math inline">\(P\)</span>. This is the <strong>mode-seeking/zero-forcing</strong> behavior of the reverse KL divergence. This property makes it desirable in the context of density estimation and variational inference.</p>
+</section>
+</section>
+<section id="relations-to-mutual-information" class="level3" data-number="4.4">
+<h3 data-number="4.4" class="anchored" data-anchor-id="relations-to-mutual-information"><span class="header-section-number">4.4</span> Relations to Mutual Information</h3>
 <p>Let <span class="math inline">\((X,Y)\)</span> be a pair of random variables with values over the space <span class="math inline">\({\mathcal {X}}\times {\mathcal {Y}}\)</span>. If their joint distribution is <span class="math inline">\({P_{(X,Y)}}\)</span> and the marginal distributions are <span class="math inline">\({P_{Y}}\)</span> and <span class="math inline">\({P_{Y}}\)</span>, the mutual information is defined as:</p>
 <p><span id="eq-mutual-information"><span class="math display">\[{I(X;Y)=D_{\mathrm {KL} }(P_{(X,Y)}\|P_{X}P_{Y})} \tag{4}\]</span></span></p>
 <p>Notice, as per property of the KL divergence that <span class="math inline">\(I(X;Y)\)</span> is equal to zero precisely when the joint distribution coincides with the product of the marginals, i.e.&nbsp;when <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are independent (and hence observing <span class="math inline">\(Y\)</span> tells you nothing about <span class="math inline">\(X\)</span>). Intuitively, <span class="math inline">\(I(X;Y)\)</span> is a measure of the price for encoding <span class="math inline">\((X,Y)\)</span> as a pair of independent random variables when in reality they may not be.</p>
 <p>Mutual information can also be expressed using conditional entropy:</p>
 <p><span class="math display">\[{I(X;Y) \equiv H(X) - H(X \vert Y)}\]</span></p>
 <p><br></p>
-<p>Check out this video for a more detailed explanation: <a href="https://www.youtube.com/watch?v=RaTe3dhiqdE">A RIDICULOUSLY AWESOME SUMMATION: Mutual Information and Kullback-Leibler Divergence</a></p>
+<p>Check out this video for a more detailed explanation: <span class="citation" data-cites="james2021_mi_kl"><a href="#ref-james2021_mi_kl" role="doc-biblioref">[1]</a></span></p>
 </section>
 </section>
 <section id="jensen-shannon-divergence" class="level2" data-number="5">
@@ -476,26 +1102,30 @@ Jensen’s Inequality
 <p>JS divergence is a symmetric measure, derived from KL divergence, and it does satisfy the properties of a metric. It is defined as the average of the KL divergence from each distribution to the average of both distributions:</p>
 <p><span id="eq-js-divergence"><span class="math display">\[{JS(P \;\Vert\; Q) = \frac{1}{2}KL(P \;\Vert\; M) + \frac{1}{2}KL(Q \;\Vert\; M)} \tag{5}\]</span></span></p>
 <p>where <span class="math inline">\(M=\dfrac{1}{2} (P+Q)\)</span> is a mixture of <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span>.</p>
-<section id="js-vs-kl-at-zero-probabilities" class="level3" data-number="5.1">
-<h3 data-number="5.1" class="anchored" data-anchor-id="js-vs-kl-at-zero-probabilities"><span class="header-section-number">5.1</span> JS vs KL at Zero Probabilities</h3>
-<p><strong>KL Divergence</strong></p>
-<ol type="1">
-<li><p><span class="math inline">\(p(𝑋)=0 \text{ and } q(𝑋)\gt 0\)</span>:<br>
-Then <span class="math inline">\(\displaystyle\lim_{p \to 0} p\log{p} = 0\)</span>. Since we sample according to <span class="math inline">\(p\)</span>, we will never sample event <span class="math inline">\(x\)</span>. Hence, it does not weight in <span class="math inline">\({D_{KL}(P \;\Vert\; Q)}\)</span>. This means <span class="math inline">\(Q\)</span> can make mistakes about events that <span class="math inline">\(P\)</span> considers impossible without penalty.<br></p></li>
-<li><p><span class="math inline">\(p(𝑋)\gt 0 \text{ and } q(𝑋)= 0\)</span>:<br>
-Then&nbsp;<span class="math inline">\(\displaystyle\lim_{q \to 0^+} \log{\frac{1}{q}} = +\infty\)</span>. An infinite divergence effectively signals that the model <span class="math inline">\(Q\)</span> fails to account for an event <span class="math inline">\(x\)</span> that is observed under <span class="math inline">\(P\)</span>.<br></p></li>
-<li><p><span class="math inline">\(p(𝑋)=0 \text{ and } q(𝑋)= 0\)</span>: Then it’s really undefined :)</p></li>
-</ol>
-<p><br></p>
-<p><strong>JS Divergence</strong></p>
 <p>The averaging process and the introduction of <span class="math inline">\(M\)</span> ensure that the divergence remains finite, even if one distribution assigns zero probability to an event that the other distribution assigns a positive probability.</p>
 <p>This can be a desirable property in scenarios where you want a more stable and bounded measure of divergence. However, it also means that JS divergence is less sensitive to cases where one distribution completely ignores an event that the other considers possible.</p>
 
 
-</section>
+
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{sarang2024,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="ref-james2021_mi_kl" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">J. Explains, <span>“A RIDICULOUSLY AWESOME SUMMATION: Mutual information and kullback-leibler divergence.”</span> <a href="https://www.youtube.com/watch?v=RaTe3dhiqdE" class="uri">https://www.youtube.com/watch?v=RaTe3dhiqdE</a>, 2021.</div>
+</div>
+<div id="ref-evjang2016_variational_bayes" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">E. Jang, <span>“A beginner’s guide to variational methods: Mean-field approximation.”</span> <a href="https://blog.evjang.com/2016/08/variational-bayes.html" class="uri">https://blog.evjang.com/2016/08/variational-bayes.html</a>, 2016.</div>
+</div>
+<div id="ref-jones2019_klqp" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">A. Jones, <span>“KL(q||p) is mode-seeking.”</span> <a href="https://andrewcharlesjones.github.io/journal/klqp.html" class="uri">https://andrewcharlesjones.github.io/journal/klqp.html</a>.</div>
+</div>
+<div id="ref-le2017_reverse_forward_kl" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[4] </div><div class="csl-right-inline">T. A. Le, <span>“Reverse vs forward KL.”</span> <a href="https://www.tuananhle.co.uk/notes/reverse-forward-kl.html" class="uri">https://www.tuananhle.co.uk/notes/reverse-forward-kl.html</a>, 2017.</div>
+</div>
+<div id="ref-reddit2016_cross_entropy_vs_kl" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[5] </div><div class="csl-right-inline">Reddit, <span>“Why train with cross-entropy instead of KL divergence in classification?”</span> <a href="https://www.reddit.com/r/MachineLearning/comments/4mebvf/why_train_with_crossentropy_instead_of_kl/" class="uri">https://www.reddit.com/r/MachineLearning/comments/4mebvf/why_train_with_crossentropy_instead_of_kl/</a>, 2016.</div>
+</div>
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{sarang2024,
   author = {Sarang, Nima},
   title = {My {Notes} on {Information} {Theory}},
   date = {2024-08-24},
@@ -507,6 +1137,17 @@ Then&nbsp;<span class="math inline">\(\displaystyle\lim_{q \to 0^+} \log{\frac{1
 Sarang, <span>“My Notes on Information Theory.”</span> [Online].
 Available: <a href="https://www.nimasarang.com/blog/2024-08-24-information-theory/">https://www.nimasarang.com/blog/2024-08-24-information-theory/</a></div>
 </div></div></section></div></main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IlxuLy8gQ2VsbCAxOiBJbXBvcnQgbGlicmFyaWVzXG5kMyA9IHJlcXVpcmUoXCJkM1wiKVxuUGxvdCA9IHJlcXVpcmUoXCJAb2JzZXJ2YWJsZWhxL3Bsb3RcIilcbmltcG9ydCB7c2xpZGVyfSBmcm9tICdAamFzaGtlbmFzL2lucHV0cydcblxuLy8gQ2VsbCAyOiBJbnB1dCBzbGlkZXJzXG52aWV3b2YgbWVhbiA9IHNsaWRlcih7XG4gIG1pbjogLTMsIFxuICBtYXg6IDMsIFxuICBzdGVwOiAwLjEsIFxuICB2YWx1ZTogLTEuNCwgXG4gIHRpdGxlOiBcIk1lYW5cIiwgXG59KVxudmlld29mIHZhcmlhbmNlID0gc2xpZGVyKHtcbiAgbWluOiAwLjUsIFxuICBtYXg6IDMsIFxuICBzdGVwOiAwLjEsIFxuICB2YWx1ZTogMS41LCBcbiAgdGl0bGU6IFwiVmFyaWFuY2VcIixcbn0pXG5cbi8vIFN0YXRpYyBQIGRpc3RyaWJ1dGlvbjogR2F1c3NpYW4gTWl4dHVyZSBNb2RlbFxuUCA9IGdlbmVyYXRlRGF0YUZyb21HTU0oW1xuICB7bWVhbjogLTIuNSwgdmFyaWFuY2U6IDAuMywgd2VpZ2h0OiAwLjR9LFxuICB7bWVhbjogMiwgdmFyaWFuY2U6IDAuNSwgd2VpZ2h0OiAwLjZ9XG5dKTtcblxuLy8gQ2VsbCAzOiBHYXVzc2lhbiBtaXh0dXJlIGZ1bmN0aW9uLCBkYXRhIGdlbmVyYXRpb24sIGFuZCBLTCBkaXZlcmdlbmNlIGNhbGN1bGF0aW9uXG5mdW5jdGlvbiBnYXVzc2lhbih4LCBtZWFuLCB2YXJpYW5jZSkge1xuICByZXR1cm4gKDEgLyBNYXRoLnNxcnQoMiAqIE1hdGguUEkgKiB2YXJpYW5jZSkpICogTWF0aC5leHAoLU1hdGgucG93KHggLSBtZWFuLCAyKSAvICgyICogdmFyaWFuY2UpKTtcbn1cblxuLy8gRGVmaW5lIEdhdXNzaWFuIE1peHR1cmUgTW9kZWwgZm9yIFBcbmZ1bmN0aW9uIGdhdXNzaWFuTWl4dHVyZSh4LCBjb21wb25lbnRzKSB7XG4gIC8vIGNvbXBvbmVudHMgaXMgYW4gYXJyYXkgb2Ygb2JqZWN0cyB3aXRoIHttZWFuLCB2YXJpYW5jZSwgd2VpZ2h0fVxuICByZXR1cm4gY29tcG9uZW50cy5yZWR1Y2UoKHN1bSwge21lYW4sIHZhcmlhbmNlLCB3ZWlnaHR9KSA9PiB7XG4gICAgcmV0dXJuIHN1bSArIHdlaWdodCAqIGdhdXNzaWFuKHgsIG1lYW4sIHZhcmlhbmNlKTtcbiAgfSwgMCk7XG59XG5cbmZ1bmN0aW9uIGdlbmVyYXRlRGF0YUZyb21HTU0oY29tcG9uZW50cykge1xuICByZXR1cm4gZDMucmFuZ2UoLTUsIDUsIDAuMSkubWFwKHggPT4gKHtcbiAgICB4OiB4LFxuICAgIHk6IGdhdXNzaWFuTWl4dHVyZSh4LCBjb21wb25lbnRzKVxuICB9KSk7XG59XG5cbi8vIEdlbmVyYXRlIGRhdGEgZm9yIFEgKHNpbXBsZSBHYXVzc2lhbilcbmZ1bmN0aW9uIGdlbmVyYXRlRGF0YShtZWFuLCB2YXJpYW5jZSkge1xuICByZXR1cm4gZDMucmFuZ2UoLTUsIDUsIDAuMSkubWFwKHggPT4gKHtcbiAgICB4OiB4LFxuICAgIHk6IGdhdXNzaWFuKHgsIG1lYW4sIHZhcmlhbmNlKVxuICB9KSk7XG59XG5cbi8vIENhbGN1bGF0ZSBLTCBkaXZlcmdlbmNlXG5mdW5jdGlvbiBjYWxjdWxhdGVLTERpdmVyZ2VuY2UoUCwgUSkge1xuICByZXR1cm4gUC5yZWR1Y2UoKHN1bSwgcCwgaSkgPT4ge1xuICAgIGNvbnN0IHEgPSBRW2ldO1xuICAgIGlmIChwLnkgPiAwICYmIHEueSA+IDApIHtcbiAgICAgIHJldHVybiBzdW0gKyBwLnkgKiBNYXRoLmxvZyhwLnkgLyBxLnkpO1xuICAgIH1cbiAgICByZXR1cm4gc3VtO1xuICB9LCAwKTtcbn1cblxuLy8gQ2VsbCA0OiBDYWxjdWxhdGUgS0wgZGl2ZXJnZW5jZSBmb3IgY29udG91ciBwbG90XG5mdW5jdGlvbiBjYWxjdWxhdGVLTERpdmVyZ2VuY2VHcmlkKGRpc3QxLCBtZWFuUmFuZ2UsIHZhcmlhbmNlUmFuZ2UsIGZvcndhcmQ9dHJ1ZSkge1xuICAgY29uc3QgZ3JpZCA9IFtdO1xuICAgbGV0IGtsO1xuICAgZm9yIChsZXQgbSBvZiBtZWFuUmFuZ2UpIHtcbiAgICAgIGZvciAobGV0IHYgb2YgdmFyaWFuY2VSYW5nZSkge1xuICAgICAgICBjb25zdCBkaXN0MiA9IGdlbmVyYXRlRGF0YShtLCB2KTtcbiAgICAgICAgaWYgKGZvcndhcmQpIHtcbiAgICAgICAgICAgIGtsID0gY2FsY3VsYXRlS0xEaXZlcmdlbmNlKGRpc3QxLCBkaXN0Mik7XG4gICAgICAgIH0gZWxzZSB7XG4gICAgICAgICAgICBrbCA9IGNhbGN1bGF0ZUtMRGl2ZXJnZW5jZShkaXN0MiwgZGlzdDEpO1xuICAgICAgICB9XG4gICAgICAgIGdyaWQucHVzaCh7bWVhbjogbSwgdmFyaWFuY2U6IHYsIGtsOiBrbH0pO1xuICAgICAgfVxuICAgfVxuICAgcmV0dXJuIGdyaWQ7XG59XG5cbi8vIENlbGwgNTogQ3JlYXRlIGFuZCB1cGRhdGUgdGhlIEdhdXNzaWFuIG1peHR1cmUgbW9kZWwgcGxvdFxuZnVuY3Rpb24gY3JlYXRlR3Vhc3NpYW5QbG90KG1lYW4sIHZhcmlhbmNlLCBQKSB7XG4gIGNvbnN0IHdpZHRoID0gNjAwO1xuICBjb25zdCBoZWlnaHQgPSA0MDA7XG4gIGNvbnN0IG1hcmdpbiA9IHt0b3A6IDIwLCByaWdodDogMjAsIGJvdHRvbTogNDAsIGxlZnQ6IDYwfTtcblxuICBjb25zdCBkYXRhUSA9IGdlbmVyYXRlRGF0YShtZWFuLCB2YXJpYW5jZSk7XG4gIFxuICBjb25zdCB4ID0gZDMuc2NhbGVMaW5lYXIoKVxuICAgIC5kb21haW4oWy01LCA1XSlcbiAgICAucmFuZ2UoW21hcmdpbi5sZWZ0LCB3aWR0aCAtIG1hcmdpbi5yaWdodF0pO1xuXG4gIGNvbnN0IHkgPSBkMy5zY2FsZUxpbmVhcigpXG4gICAgLmRvbWFpbihbMCwgZDMubWF4KFsuLi5QLCAuLi5kYXRhUV0sIGQgPT4gZC55KV0pXG4gICAgLnJhbmdlKFtoZWlnaHQgLSBtYXJnaW4uYm90dG9tLCBtYXJnaW4udG9wXSk7XG5cbiAgY29uc3QgbGluZSA9IGQzLmxpbmUoKVxuICAgIC54KGQgPT4geChkLngpKVxuICAgIC55KGQgPT4geShkLnkpKTtcblxuICBjb25zdCBzdmcgPSBkMy5jcmVhdGUoXCJzdmdcIilcbiAgICAuYXR0cihcInZpZXdCb3hcIiwgWzAsIDAsIHdpZHRoLCBoZWlnaHRdKTtcblxuICAvLyBYLWF4aXNcbiAgc3ZnLmFwcGVuZChcImdcIilcbiAgICAuYXR0cihcInRyYW5zZm9ybVwiLCBgdHJhbnNsYXRlKDAsJHtoZWlnaHQgLSBtYXJnaW4uYm90dG9tfSlgKVxuICAgIC5jYWxsKGQzLmF4aXNCb3R0b20oeCkpO1xuICBcbiAgLy8gWS1heGlzXG4gIGNvbnN0IHlBeGlzID0gc3ZnLmFwcGVuZChcImdcIilcbiAgICAuYXR0cihcInRyYW5zZm9ybVwiLCBgdHJhbnNsYXRlKCR7bWFyZ2luLmxlZnR9LDApYClcbiAgICAuY2FsbChkMy5heGlzTGVmdCh5KSk7XG4gIFxuICAvLyBYLWF4aXMgbGFiZWxcbiAgc3ZnLmFwcGVuZChcInRleHRcIilcbiAgICAuYXR0cihcInhcIiwgd2lkdGggLyAyKVxuICAgIC5hdHRyKFwieVwiLCBoZWlnaHQgLSA1KVxuICAgIC5hdHRyKFwidGV4dC1hbmNob3JcIiwgXCJtaWRkbGVcIilcbiAgICAudGV4dChcIlhcIik7XG5cbiAgLy8gWS1heGlzIGxhYmVsIChjZW50ZXJlZCBhbmQgcm90YXRlZClcbiAgc3ZnLmFwcGVuZChcInRleHRcIilcbiAgICAuYXR0cihcInRyYW5zZm9ybVwiLCBcInJvdGF0ZSgtOTApXCIpXG4gICAgLmF0dHIoXCJ4XCIsIC1oZWlnaHQgLyAyKVxuICAgIC5hdHRyKFwieVwiLCAxNSlcbiAgICAuYXR0cihcInRleHQtYW5jaG9yXCIsIFwibWlkZGxlXCIpXG4gICAgLnRleHQoXCJQcm9iYWJpbGl0eSBEZW5zaXR5XCIpO1xuXG4gIC8vIExpbmUgZm9yIFEgKGludGVyYWN0aXZlKVxuICBjb25zdCBwYXRoUSA9IHN2Zy5hcHBlbmQoXCJwYXRoXCIpXG4gICAgLmF0dHIoXCJmaWxsXCIsIFwibm9uZVwiKVxuICAgIC5hdHRyKFwic3Ryb2tlXCIsIFwic3RlZWxibHVlXCIpXG4gICAgLmF0dHIoXCJzdHJva2Utd2lkdGhcIiwgMik7XG4gIFxuICAvLyBMaW5lIGZvciBQIChzdGF0aWMgR01NKVxuICBzdmcuYXBwZW5kKFwicGF0aFwiKVxuICAgIC5kYXR1bShQKVxuICAgIC5hdHRyKFwiZmlsbFwiLCBcIm5vbmVcIilcbiAgICAuYXR0cihcInN0cm9rZVwiLCBcIm9yYW5nZVwiKVxuICAgIC5hdHRyKFwic3Ryb2tlLXdpZHRoXCIsIDIpXG4gICAgLmF0dHIoXCJkXCIsIGxpbmUpO1xuICBcbiAgLy8gTGVnZW5kXG4gIGNvbnN0IGxlZ2VuZCA9IHN2Zy5hcHBlbmQoXCJnXCIpXG4gICAgLmF0dHIoXCJ0cmFuc2Zvcm1cIiwgYHRyYW5zbGF0ZSgke3dpZHRoIC0gbWFyZ2luLnJpZ2h0IC0gMjV9LCR7bWFyZ2luLnRvcH0pYCk7XG4gIFxuICBsZWdlbmQuYXBwZW5kKFwicmVjdFwiKVxuICAgIC5hdHRyKFwid2lkdGhcIiwgMjApXG4gICAgLmF0dHIoXCJoZWlnaHRcIiwgMjApXG4gICAgLmF0dHIoXCJmaWxsXCIsIFwic3RlZWxibHVlXCIpO1xuICBcbiAgbGVnZW5kLmFwcGVuZChcInRleHRcIilcbiAgICAuYXR0cihcInhcIiwgMjUpXG4gICAgLmF0dHIoXCJ5XCIsIDE1KVxuICAgIC50ZXh0KFwiUVwiKTtcbiAgXG4gIGxlZ2VuZC5hcHBlbmQoXCJyZWN0XCIpXG4gICAgLmF0dHIoXCJ5XCIsIDI1KVxuICAgIC5hdHRyKFwid2lkdGhcIiwgMjApXG4gICAgLmF0dHIoXCJoZWlnaHRcIiwgMjApXG4gICAgLmF0dHIoXCJmaWxsXCIsIFwib3JhbmdlXCIpO1xuICBcbiAgbGVnZW5kLmFwcGVuZChcInRleHRcIilcbiAgICAuYXR0cihcInhcIiwgMjUpXG4gICAgLmF0dHIoXCJ5XCIsIDQwKVxuICAgIC50ZXh0KFwiUFwiKTtcblxuICAvLyBVcGRhdGUgUSBkaXN0cmlidXRpb25cbiAgeS5kb21haW4oWzAsIGQzLm1heChbLi4uUCwgLi4uZGF0YVFdLCBkID0+IGQueSldKTtcbiAgeUF4aXMuY2FsbChkMy5heGlzTGVmdCh5KSk7XG4gIHBhdGhRLmRhdHVtKGRhdGFRKS5hdHRyKFwiZFwiLCBsaW5lKTtcbiAgXG4gIHJldHVybiBzdmcubm9kZSgpO1xufVxuXG4vLyBDZWxsIDY6IFJlZmFjdG9yZWQgS0wgZGl2ZXJnZW5jZSBjb250b3VyIHBsb3RcbmZ1bmN0aW9uIGNyZWF0ZWtsQ29udG91clBsb3QobWVhbiwgdmFyaWFuY2UsIGtsR3JpZCwgY250VGl0bGUpIHtcbiAgY29uc3Qgd2lkdGggPSA2MDA7XG4gIGNvbnN0IGhlaWdodCA9IDQwMDtcbiAgY29uc3QgbWFyZ2luID0ge3RvcDogMzUsIHJpZ2h0OiAzMCwgYm90dG9tOiA0MCwgbGVmdDogNTB9O1xuICBjb25zdCBwbG90V2lkdGggPSB3aWR0aCAtIG1hcmdpbi5sZWZ0IC0gbWFyZ2luLnJpZ2h0O1xuICBjb25zdCBwbG90SGVpZ2h0ID0gaGVpZ2h0IC0gbWFyZ2luLnRvcCAtIG1hcmdpbi5ib3R0b207XG5cbiAgY29uc3QgdW5pcXVlTWVhbnMgPSBBcnJheS5mcm9tKG5ldyBTZXQoa2xHcmlkLm1hcChkID0+IGQubWVhbikpKTtcbiAgY29uc3QgdW5pcXVlVmFyaWFuY2VzID0gQXJyYXkuZnJvbShuZXcgU2V0KGtsR3JpZC5tYXAoZCA9PiBkLnZhcmlhbmNlKSkpO1xuXG4gIC8vIENyZWF0ZSAyRCBhcnJheSBvZiBLTCB2YWx1ZXNcbiAgY29uc3Qga2xWYWx1ZXMgPSB1bmlxdWVWYXJpYW5jZXMubWFwKHYgPT4gXG4gICAgdW5pcXVlTWVhbnMubWFwKG0gPT4ge1xuICAgICAgY29uc3QgcG9pbnQgPSBrbEdyaWQuZmluZChkID0+IGQubWVhbiA9PT0gbSAmJiBkLnZhcmlhbmNlID09PSB2KTtcbiAgICAgIHJldHVybiBwb2ludCA/IHBvaW50LmtsIDogbnVsbDtcbiAgICB9KVxuICApO1xuXG4gIC8vIFNjYWxlc1xuICBjb25zdCB4U2NhbGUgPSBkMy5zY2FsZUxpbmVhcigpXG4gICAgLmRvbWFpbihkMy5leHRlbnQodW5pcXVlTWVhbnMpKVxuICAgIC5yYW5nZShbMCwgcGxvdFdpZHRoXSk7XG5cbiAgY29uc3QgeVNjYWxlID0gZDMuc2NhbGVMaW5lYXIoKVxuICAgIC5kb21haW4oZDMuZXh0ZW50KHVuaXF1ZVZhcmlhbmNlcykpXG4gICAgLnJhbmdlKFtwbG90SGVpZ2h0LCAwXSk7XG5cbiAgY29uc3QgY29sb3JTY2FsZSA9IGQzLnNjYWxlU2VxdWVudGlhbChkMy5pbnRlcnBvbGF0ZVZpcmlkaXMpXG4gICAgLmRvbWFpbihkMy5leHRlbnQoa2xHcmlkLCBkID0+IGQua2wpKTtcbiAgXG4gIC8vIEdlbmVyYXRlIGNvbnRvdXJzXG4gIGNvbnN0IGNvbnRvdXJzID0gZDMuY29udG91cnMoKVxuICAgIC5zaXplKFt1bmlxdWVNZWFucy5sZW5ndGgsIHVuaXF1ZVZhcmlhbmNlcy5sZW5ndGhdKVxuICAgIC50aHJlc2hvbGRzKDUwKVxuICAgIChrbFZhbHVlcy5mbGF0KCkpO1xuXG4gIC8vIENyZWF0ZSBTVkcgZWxlbWVudFxuICBjb25zdCBzdmcgPSBkMy5jcmVhdGUoXCJzdmdcIilcbiAgICAuYXR0cihcInZpZXdCb3hcIiwgWzAsIDAsIHdpZHRoLCBoZWlnaHRdKVxuICAgIC5hdHRyKFwic3R5bGVcIiwgXCJtYXgtd2lkdGg6IDEwMCU7IGhlaWdodDogYXV0bztcIik7XG5cbiAgY29uc3QgZyA9IHN2Zy5hcHBlbmQoXCJnXCIpXG4gICAgLmF0dHIoXCJ0cmFuc2Zvcm1cIiwgYHRyYW5zbGF0ZSgke21hcmdpbi5sZWZ0fSwke21hcmdpbi50b3B9KWApO1xuXG4gIC8vIERyYXcgY29udG91ciBwYXRoc1xuICBnLmFwcGVuZChcImdcIilcbiAgICAuc2VsZWN0QWxsKFwicGF0aFwiKVxuICAgIC5kYXRhKGNvbnRvdXJzKVxuICAgIC5qb2luKFwicGF0aFwiKVxuICAgIC5hdHRyKFwiZmlsbFwiLCBkID0+IGNvbG9yU2NhbGUoZC52YWx1ZSkpXG4gICAgLmF0dHIoXCJkXCIsIGQzLmdlb1BhdGgoKVxuICAgICAgLnByb2plY3Rpb24oZDMuZ2VvVHJhbnNmb3JtKHtcbiAgICAgICAgcG9pbnQ6IGZ1bmN0aW9uKHgsIHkpIHtcbiAgICAgICAgICAvLyBQcm9qZWN0aW9uIG1hcHBpbmcgYmFzZWQgb24gZXhhY3QgZGF0YSBncmlkIHNpemVcbiAgICAgICAgICBjb25zdCBzY2FsZVggPSBwbG90V2lkdGggLyAodW5pcXVlTWVhbnMubGVuZ3RoIC0gMSk7XG4gICAgICAgICAgY29uc3Qgc2NhbGVZID0gcGxvdEhlaWdodCAvICh1bmlxdWVWYXJpYW5jZXMubGVuZ3RoIC0gMSk7XG4gICAgICAgICAgdGhpcy5zdHJlYW0ucG9pbnQoeCAqIHNjYWxlWCwgcGxvdEhlaWdodCAtIHkgKiBzY2FsZVkpOyAgLy8gQ29ycmVjdGVkIHByb2plY3Rpb25cbiAgICAgICAgfVxuICAgICAgfSkpXG4gICAgKTtcblxuICAvLyBYLWF4aXNcbiAgZy5hcHBlbmQoXCJnXCIpXG4gICAgLmF0dHIoXCJ0cmFuc2Zvcm1cIiwgYHRyYW5zbGF0ZSgwLCR7cGxvdEhlaWdodH0pYClcbiAgICAuY2FsbChkMy5heGlzQm90dG9tKHhTY2FsZSkudGlja3MoMTApKVxuICAgIC5hcHBlbmQoXCJ0ZXh0XCIpXG4gICAgLmF0dHIoXCJ4XCIsIHBsb3RXaWR0aCAvIDIpXG4gICAgLmF0dHIoXCJ5XCIsIDMwKVxuICAgIC5hdHRyKFwiZmlsbFwiLCBcImN1cnJlbnRDb2xvclwiKVxuICAgIC5hdHRyKFwidGV4dC1hbmNob3JcIiwgXCJtaWRkbGVcIilcbiAgICAudGV4dChcIk1lYW5cIik7XG5cbiAgLy8gWS1heGlzIChjZW50ZXJlZCBsYWJlbCBhbmQgcm90YXRlZClcbiAgZy5hcHBlbmQoXCJnXCIpXG4gICAgLmNhbGwoZDMuYXhpc0xlZnQoeVNjYWxlKS50aWNrcygxMCkpXG4gICAgLmFwcGVuZChcInRleHRcIilcbiAgICAuYXR0cihcInRyYW5zZm9ybVwiLCBcInJvdGF0ZSgtOTApXCIpXG4gICAgLmF0dHIoXCJ4XCIsIC1wbG90SGVpZ2h0IC8gMilcbiAgICAuYXR0cihcInlcIiwgLTM1KVxuICAgIC5hdHRyKFwidGV4dC1hbmNob3JcIiwgXCJtaWRkbGVcIilcbiAgICAuYXR0cihcImZpbGxcIiwgXCJjdXJyZW50Q29sb3JcIilcbiAgICAudGV4dChcIlZhcmlhbmNlXCIpO1xuXG4gIHN2Zy5hcHBlbmQoXCJ0ZXh0XCIpXG4gICAuYXR0cihcInhcIiwgd2lkdGggLyAyKVxuICAgLmF0dHIoXCJ5XCIsIG1hcmdpbi50b3AgLSAyMClcbiAgIC5hdHRyKFwidGV4dC1hbmNob3JcIiwgXCJtaWRkbGVcIilcbiAgIC5zdHlsZShcImZvbnQtc2l6ZVwiLCBcIjE2cHhcIilcbiAgIC50ZXh0KGNudFRpdGxlKTtcblxuICAvLyBGdW5jdGlvbiB0byB1cGRhdGUgcG9pbnQgZHluYW1pY2FsbHlcbiAgZnVuY3Rpb24gdXBkYXRlUG9pbnQobWVhbiwgdmFyaWFuY2UpIHtcbiAgICBjb25zdCBuZWFyZXN0UG9pbnQgPSBrbEdyaWQucmVkdWNlKChhLCBiKSA9PiBcbiAgICAgIChNYXRoLmFicyhiLm1lYW4gLSBtZWFuKSArIE1hdGguYWJzKGIudmFyaWFuY2UgLSB2YXJpYW5jZSkgPCBcbiAgICAgICBNYXRoLmFicyhhLm1lYW4gLSBtZWFuKSArIE1hdGguYWJzKGEudmFyaWFuY2UgLSB2YXJpYW5jZSkpID8gYiA6IGFcbiAgICApO1xuXG4gICAgZy5zZWxlY3RBbGwoXCIuY3VycmVudC1wb2ludCwgLmtsLXZhbHVlXCIpLnJlbW92ZSgpO1xuXG4gICAgZy5hcHBlbmQoXCJjaXJjbGVcIilcbiAgICAgIC5hdHRyKFwiY2xhc3NcIiwgXCJjdXJyZW50LXBvaW50XCIpXG4gICAgICAuYXR0cihcImN4XCIsIHhTY2FsZShtZWFuKSlcbiAgICAgIC5hdHRyKFwiY3lcIiwgeVNjYWxlKHZhcmlhbmNlKSlcbiAgICAgIC5hdHRyKFwiclwiLCA1KVxuICAgICAgLmF0dHIoXCJmaWxsXCIsIFwicmVkXCIpXG4gICAgICAuYXR0cihcInN0cm9rZVwiLCBcIndoaXRlXCIpO1xuXG4gICAgZy5hcHBlbmQoXCJ0ZXh0XCIpXG4gICAgICAuYXR0cihcImNsYXNzXCIsIFwia2wtdmFsdWVcIilcbiAgICAgIC5hdHRyKFwieFwiLCB4U2NhbGUobWVhbikpXG4gICAgICAuYXR0cihcInlcIiwgeVNjYWxlKHZhcmlhbmNlKSAtIDEwKVxuICAgICAgLmF0dHIoXCJ0ZXh0LWFuY2hvclwiLCBcIm1pZGRsZVwiKVxuICAgICAgLmF0dHIoXCJmaWxsXCIsIFwid2hpdGVcIilcbiAgICAgIC5hdHRyKFwic3Ryb2tlXCIsIFwiYmxhY2tcIilcbiAgICAgIC5hdHRyKFwic3Ryb2tlLXdpZHRoXCIsIDIpXG4gICAgICAuYXR0cihcInBhaW50LW9yZGVyXCIsIFwic3Ryb2tlXCIpXG4gICAgICAuYXR0cihcImZvbnQtd2VpZ2h0XCIsIFwiYm9sZFwiKVxuICAgICAgLnRleHQobmVhcmVzdFBvaW50LmtsLnRvRml4ZWQoMikpO1xuICB9XG5cbiAgdXBkYXRlUG9pbnQobWVhbiwgdmFyaWFuY2UpO1xuXG4gIHJldHVybiBPYmplY3QuYXNzaWduKHN2Zy5ub2RlKCksIHt1cGRhdGVQb2ludH0pO1xufVxuXG5rbEdyaWQgPSBjYWxjdWxhdGVLTERpdmVyZ2VuY2VHcmlkKFxuICAgIFAsXG4gICAgZDMucmFuZ2UoLTMsIDMuMSwgMC4xKSxcbiAgICBkMy5yYW5nZSgwLjUsIDMuMSwgMC4xKSxcbiAgICB0cnVlXG4pO1xuZ2F1c3NpYW5QbG90ID0gY3JlYXRlR3Vhc3NpYW5QbG90KG1lYW4sIHZhcmlhbmNlLCBQKTtcbmtsQ29udG91clBsb3QgPSBjcmVhdGVrbENvbnRvdXJQbG90KFxuICAgIG1lYW4sIHZhcmlhbmNlLCBrbEdyaWQsXG4gICAgXCJLTCBEaXZlcmdlbmNlIChQLCBRKSBDb250b3VyIFBsb3RcIlxuKTtcblxuaHRtbGA8ZGl2IHN0eWxlPVwiZGlzcGxheTogZmxleDsgYWxpZ24taXRlbXM6IGNlbnRlcjsgY29sdW1uLWdhcDogMWVtO1wiPlxuIDxkaXYgc3R5bGU9XCJmbGV4LWJhc2lzOjUwJVwiPiR7Z2F1c3NpYW5QbG90fTwvZGl2PlxuIDxkaXYgc3R5bGU9XCJmbGV4LWJhc2lzOjUwJVwiPiR7a2xDb250b3VyUGxvdH0gPC9kaXY+XG48L2Rpdj5gXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTIiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJcbnZpZXdvZiBtZWFuMiA9IHNsaWRlcih7XG4gIG1pbjogLTMsIFxuICBtYXg6IDMsIFxuICBzdGVwOiAwLjEsIFxuICB2YWx1ZTogMCwgXG4gIHRpdGxlOiBcIk1lYW5cIiwgXG59KVxudmlld29mIHZhcmlhbmNlMiA9IHNsaWRlcih7XG4gIG1pbjogMC41LCBcbiAgbWF4OiAzLCBcbiAgc3RlcDogMC4xLCBcbiAgdmFsdWU6IDEsIFxuICB0aXRsZTogXCJWYXJpYW5jZVwiLFxufSlcblxua2xHcmlkMiA9IGNhbGN1bGF0ZUtMRGl2ZXJnZW5jZUdyaWQoXG4gICAgUCxcbiAgICBkMy5yYW5nZSgtMywgMy4xLCAwLjEpLFxuICAgIGQzLnJhbmdlKDAuNSwgMy4xLCAwLjEpLFxuICAgIGZhbHNlLFxuKTtcbmdhdXNzaWFuUGxvdDIgPSBjcmVhdGVHdWFzc2lhblBsb3QobWVhbjIsIHZhcmlhbmNlMiwgUCk7XG5rbENvbnRvdXJQbG90MiA9IGNyZWF0ZWtsQ29udG91clBsb3QoXG4gICAgbWVhbjIsIHZhcmlhbmNlMiwga2xHcmlkMixcbiAgICBcIktMIERpdmVyZ2VuY2UgKFEsIFApIENvbnRvdXIgUGxvdFwiXG4pO1xuXG5odG1sYDxkaXYgc3R5bGU9XCJkaXNwbGF5OiBmbGV4OyBhbGlnbi1pdGVtczogY2VudGVyO1wiPlxuIDxkaXYgc3R5bGU9XCJmbGV4LWJhc2lzOjU1JVwiPiR7Z2F1c3NpYW5QbG90Mn08L2Rpdj5cbiA8ZGl2IHN0eWxlPVwiZmxleC1iYXNpczo0NSVcIj4ke2tsQ29udG91clBsb3QyfSA8L2Rpdj5cbjwvZGl2PmBcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgnbWVhbicpIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJzaGlueUlucHV0KCd2YXJpYW5jZScpIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJzaGlueUlucHV0KCdtZWFuMicpIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJzaGlueUlucHV0KCd2YXJpYW5jZTInKSJ9XX0=
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../blog/2024-08-24-information-theory";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "../..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

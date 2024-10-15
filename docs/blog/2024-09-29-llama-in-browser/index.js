@@ -30,13 +30,13 @@ export const formatBytes = (bytes, decimals = 2) => {
 
 async function getWebGPUBackend() {
     if (!navigator.gpu) {
-        return "WebGPU is not supported in this browser";
+        return "WebGPU is not supported in this browser.";
     }
 
     try {
         const adapter = await navigator.gpu.requestAdapter();
         if (!adapter) {
-            return "Failed to get GPU adapter";
+            return "Failed to get GPU adapter.";
         }
 
         const info = await adapter.requestAdapterInfo();
@@ -54,7 +54,7 @@ async function getWebGPUBackend() {
             return `Vendor: ${info.vendor}`;
         }
     } catch (error) {
-        return `Error querying WebGPU backend: ${error.message}`;
+        return `Error querying WebGPU backend: ${error.message}.`;
     }
 }
 
@@ -311,7 +311,7 @@ Remember to approach each query with curiosity and a desire to assist the user t
 ];
 
 const updateEngineInitProgressCallback = (report) => {
-    console.log("initialize", report.progress);
+    // console.log("initialize", report.progress);
     updateUI.updateDownloadStatus(report.text, report.progress);
 };
 
@@ -397,7 +397,7 @@ const onMessageSend = async () => {
     const onFinishGenerating = (finalMessage, usage) => {
         updateUI.updateLastMessage(finalMessage);
         updateUI.sendButton(false);
-        console.log("Usage:", usage);
+        // console.log("Usage:", usage);
         // Hide typing indicator
         document.querySelector('.typing-indicator').classList.remove('visible');
     };
@@ -415,7 +415,6 @@ const onMessageSend = async () => {
 const updateModelInfo = debounce(async () => {
     const selectedModel = document.getElementById('model-selection').value;
     updateUI.modelInfo('loading');
-    console.log(webllm.prebuiltAppConfig.model_list);
 
     try {
         const modelConfig = webllm.prebuiltAppConfig.model_list.find(m => m.model_id === selectedModel);

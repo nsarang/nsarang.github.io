@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Nima Sarang">
-<meta name="dcterms.date" content="2024-09-29">
+<meta name="dcterms.date" content="2024-10-06">
 <meta name="description" content="Chat with Llama that runs locally in your browser using WebLLM.">
 
 <title>Running Llama 3.2 in the Browser! – Nima Sarang</title>
@@ -101,7 +101,7 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top quarto-banner">
@@ -155,6 +155,9 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
         <div class="quarto-category">NLP</div>
         <div class="quarto-category">LLM</div>
         <div class="quarto-category">WebLLM</div>
+        <div class="quarto-category">MLC-LLM</div>
+        <div class="quarto-category">WebGPU</div>
+        <div class="quarto-category">TVM</div>
       </div>
   </div>
 
@@ -177,7 +180,7 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 29, 2024</p>
+      <p class="date">October 6, 2024</p>
     </div>
   </div>
   
@@ -189,8 +192,23 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 
 </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#chat-ui" id="toc-chat-ui" class="nav-link" data-scroll-target="#chat-ui"><span class="header-section-number">2</span> Chat UI</a></li>
+  <li><a href="#how-it-works" id="toc-how-it-works" class="nav-link" data-scroll-target="#how-it-works"><span class="header-section-number">3</span> How It Works</a></li>
+  <li><a href="#final-thoughts" id="toc-final-thoughts" class="nav-link" data-scroll-target="#final-thoughts"><span class="header-section-number">4</span> Final Thoughts</a></li>
+  <li><a href="#change-log" id="toc-change-log" class="nav-link" data-scroll-target="#change-log"><span class="header-section-number">5</span> Change Log</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
 <main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
 
@@ -204,14 +222,34 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 
 
 
-<p>In this post, I’ll show you how to run Llama 3.2 in your browser using WebLLM. <a href="https://github.com/mlc-ai/web-llm">WebLLM</a> is a project that enables running large language models in the browser without requiring a server. This means you can chat with Llama directly in your browser without sending your data to any external server. You only need to download the model once, and then you can chat with Llama offline.</p>
-<p>WebLLM is built on top of the MLC (Machine Learning Compiler) framework, which optimizes models for efficient execution on various hardware platforms using Apache TVM. One major advantage of WebLLM is that it utilizes WebGPU for accelerated inference. WebGPU is a web standard provided by most modern browsers that allows developers low-leevl access the GPU for general-purpose computing tasks. You can see the list of browsers that support it <a href="https://caniuse.com/webgpu">here</a>.</p>
-<p>Your browser must support WebGPU for a fast inference experience. Currently, your browser has the following backend: <span id="webgpu-status" style="font-weight: bold;"></span>. For more info, visit <a href="https://webgpureport.org/">https://webgpureport.org/</a>.</p>
-<p>If you see “WebGPU not supported” above but you’re sure your browser supports it, you can leave a comment below and I’ll try to help you troubleshoot the issue.</p>
+<!-- Writing a personal introduction -->
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
+<p>Recently, I came across a few cool projects that allow running LLMs (large language models) in the browser, and utilize GPU for fast inference! This is exciting for two main reasons: first, it’s great to run LLMs locally without sending your data to any external server. You can use custom prompts, configure the inference the way you want, and ensure your privacy. Second, you don’t have to deal with setting up Python environments, installing dependencies, and configuring the GPU. The browser takes care of all that! It’s incredibly convenient. With the release of smaller Llama 3.2 models, like the 1B parameter version, it’s now possible to generate quality text directly in your browser, perhaps even matching ChatGPT 3.5 on some tasks.</p>
+<p>The chat UI below will allow you to download a number of models hosted on HuggingFace, including Llama 3 variants. Once you download the model, you can disconnect and continue chatting offline. I’ve tried adding a bunch of customizations to play around, but the UI is meant more as a demonstration to showcase the potential of a web UI.</p>
+</section>
+<section id="chat-ui" class="level1 page-columns page-full" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Chat UI</h1>
+<p>Your browser must support WebGPU for a fast inference experience. You can see the list of browsers that support it <a href="https://caniuse.com/webgpu">here</a>. I personally tested it on Apple M1-M3 and Nvidia GPUs, and it worked quite well. If WebGPU is not supported, the engine will fall back to WebAssembly, which is slower but still functional.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Based on your browser’s information, you have the following backend ☞ <span id="webgpu-status" style="font-weight: bold;"></span><br>
+For more info, visit <a href="https://webgpureport.org/">https://webgpureport.org/</a>.</p>
+<p>If you see “WebGPU not supported” in the status above but you’re certain your browser supports it, you can leave a comment below and I’ll try to help you troubleshoot the issue.</p>
+</div>
+</div>
 <div class="column-screen-inset" style="margin: 3em 0;">
 <div class="chat-layout">
-  <div class="sidebar">
-    <h3 class="anchored">Model Settings</h3>
+  <div class="chat-sidebar">
+    <h3 class="anchored" data-anchor-id="chat-ui">Model Settings</h3>
     <div class="setting">
       <label for="model-selection">Model:
       <span class="info-icon" data-tooltip="
@@ -239,6 +277,7 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
       ">ⓘ</span>
       </label>
       <select id="model-selection"></select>
+      <span> First download may take a little bit. Subsequent loads will read from cache.</span>
       <div id="model-info" class="status-update">
         <span class="icon hidden"></span>
         <span class="text"></span>
@@ -315,20 +354,92 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
   </div>
 </div>
 </div>
-<p>Details on the implementation to be added soon.</p>
+</section>
+<section id="how-it-works" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> How It Works</h1>
+<p>The code above runs using <a href="https://github.com/mlc-ai/web-llm">WebLLM</a>, a project that enables running LLMs in browser without requiring a server. It’s built on top of the <a href="https://github.com/mlc-ai/mlc-llm">MLC-LLM</a> (Machine Learning Compiler for LLM) framework, which optimizes models for efficient execution on various hardware platforms. MLC-LLM itself is an application of Apache <a href="https://github.com/apache/tvm">TVM</a>, a machine learning compiler stack that takes in pre-trained models, compiles and generates deployable modules that can be embedded and run everywhere. MLC-LLM specializes in LLM-specific graph transformations and optimized kernels for common operations.</p>
+<p>One of the major advantages of WebLLM is that it can utilize WebGPU for accelerated inference. WebGPU is a web standard provided by most modern browsers that allows developers low-level access to the GPU for general-purpose computing tasks. It’s a new feature that is being adopted by browsers.</p>
+<pre class="{js}"><code>// Import WebLLM
+import * as webllm from 'https://esm.run/@mlc-ai/web-llm';
+
+// Initialize the engine
+engine = new webllm.MLCEngine();
+// Download and initialize the model or load from cache if available
+await engine.reload('Llama-3.2-1B-Instruct-q4f32_1-MLC', config);
+// List of available models can be found in
+console.log(webllm.prebuiltAppConfig.model_list);</code></pre>
+<p>With the engine initialized, I use the following to generate responses:</p>
+<pre class="{js}"><code>/**
+ * Generate a response using the engine
+ * @param {Array} messages - Array of conversation history. Each message is a dictionary 
+     with keys `role` and `content`.
+     - `role`: `user` or `assistant` or `system`. The prompt is encoded as the first
+        message with the role `system`.
+     - `content`: the message content
+ * @param {Function} onUpdate - Callback function to update the UI with the generated message
+ * @param {Function} onFinish - Callback function to handle the final message
+ * @param {Function} onError - Callback function to handle errors    
+ */
+const streamingGenerating = async (messages, onUpdate, onFinish, onError) =&gt; {
+    try {
+        let curMessage = "";
+        let usage;
+        // The model configuration such as temperature, max_tokens, etc.
+        const config = modelConfig.getConfig();
+        const completion = await engine.chat.completions.create({
+            stream: true,
+            messages,
+            ...config,
+            stream_options: { include_usage: true },
+        });
+        // Stream the completion
+        for await (const chunk of completion) {
+            const curDelta = chunk.choices[0]?.delta.content;
+            if (curDelta) {
+                curMessage += curDelta;
+            }
+            if (chunk.usage) {
+                usage = chunk.usage;
+            }
+            // Update the UI
+            onUpdate(curMessage);
+        }
+        // Get the final message
+        const finalMessage = await engine.getMessage();
+        onFinish(finalMessage, usage);
+    } catch (err) {
+        onError(err);
+    }
+};</code></pre>
+<p>You learn more about the other serve options and how to use them in the documentation.</p>
+</section>
+<section id="final-thoughts" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Final Thoughts</h1>
+<p>As of writing this I can WebLLM is the fastest library to run chat LLMs over web. For other tasks like speech to text, image generation, etc., you can look into the combination of <a href="https://huggingface.co/docs/transformers.js/en/index">Transformers.js</a> and <a href="https://onnxruntime.ai/docs/tutorials/web/">ONNX Runtime Web</a>, or just ONNX Runtime Web if you’re looking for a more general-purpose solution.If you have any questions or feedback, feel free to leave a comment below.</p>
+</section>
+<section id="change-log" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Change Log</h1>
+<ul>
+<li><strong>2024/10/12</strong>: Added “How It Works” section.</li>
+<li><strong>2024/10/04</strong>: Added Markdown support for the output messages.</li>
+<li><strong>2024/10/02</strong>: Added download size estimation for the models from the HF repo.</li>
+<li><strong>2024/10/01</strong>: Model configuration settings added to the UI with tooltips.</li>
+<li><strong>2024/09/29</strong>: Initial release.</li>
+</ul>
 
 
+</section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{sarang2024,
   author = {Sarang, Nima},
   title = {Running {Llama} 3.2 in the {Browser!}},
-  date = {2024-09-29},
+  date = {2024-10-06},
   url = {https://www.nimasarang.com/blog/2024-09-29-llama-in-browser/},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-sarang2024" class="csl-entry quarto-appendix-citeas" role="listitem">
 Sarang, Nima. 2024. <span>“Running Llama 3.2 in the Browser!”</span>
-September 29, 2024. <a href="https://www.nimasarang.com/blog/2024-09-29-llama-in-browser/">https://www.nimasarang.com/blog/2024-09-29-llama-in-browser/</a>.
+October 6, 2024. <a href="https://www.nimasarang.com/blog/2024-09-29-llama-in-browser/">https://www.nimasarang.com/blog/2024-09-29-llama-in-browser/</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
