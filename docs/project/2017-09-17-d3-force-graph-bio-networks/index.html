@@ -37,7 +37,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-html/quarto.js"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
@@ -86,6 +85,10 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <link href="https://fonts.googleapis.com/css2?family=Petrona:wght@400;500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:ital,wght@0,400;0,500;1,400;1,500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=B612:ital,wght@0,400;0,700;1,400;1,700&amp;family=B612+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css-js/styles.css">
 
 
@@ -256,19 +259,19 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 </div>
 <div class="g-col-4 flex-container block">
 <section id="network-details" class="level2 side-block">
-<h2 class="side-block anchored" data-anchor-id="network-details">Network Details</h2>
+<h2 class="side-block" data-anchor-id="network-details">Network Details</h2>
 <p><span class="label-width">Order:</span> <span id="graphOrder"></span><br>
 <span class="label-width">Size:</span> <span id="graphSize"></span><br>
 <span class="label-width">Components:</span> <span id="graphComps"></span></p>
 </section>
 <section id="pattern-details" class="level2 side-block">
-<h2 class="side-block anchored" data-anchor-id="pattern-details">Pattern Details</h2>
+<h2 class="side-block" data-anchor-id="pattern-details">Pattern Details</h2>
 <p><span class="label-width">Order:</span> <span id="patternOrder"></span><br>
 <span class="label-width">Size:</span> <span id="patternSize"></span><br>
 <span class="label-width">Frequency:</span> <span id="patternFreq"></span></p>
 </section>
 <section id="settings" class="level2 side-block">
-<h2 class="side-block anchored" data-anchor-id="settings">Settings</h2>
+<h2 class="side-block" data-anchor-id="settings">Settings</h2>
 <div id="chargeBlock" class="slider-block">
 <p><span class="label-width">Node Charge</span> <input id="chargeINPUT" class="range-slider__range" type="range" min="-200" max="20" step="1"> <span id="chargeVALUE" class="range-slider__value"></span></p>
 </div>
@@ -290,7 +293,7 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <p><label id="forceLabel" class="toggle-switch"> <input type="checkbox" id="toggleForce"> <span class="slider"> <span class="slider-text off">Force</span> <span class="slider-text on">Static</span> </span> </label> <button class="button btn-black" id="fisheyeButton">FishEye Distortion</button> <button class="button btn-blue" id="zoomButton">Zoom Function</button> <button class="button btn-violet" id="pinButton">Pin on Drop</button></p>
 </section>
 <section id="infoTitle" class="level2 side-block">
-<h2 class="anchored" data-anchor-id="infoTitle">About</h2>
+<h2 data-anchor-id="infoTitle">About</h2>
 <p><span id="infoDef"></span></p>
 </section>
 <!-- .g-col-8 -->
@@ -465,13 +468,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   } else {
     toggleColorMode(false);
   }
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
   const isCodeAnnotation = (el) => {
     for (const clz of el.classList) {
       if (clz.startsWith('code-annotation-')) {                     

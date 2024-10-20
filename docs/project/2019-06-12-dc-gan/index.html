@@ -37,7 +37,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-html/quarto.js"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
@@ -88,6 +87,10 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <link href="https://fonts.googleapis.com/css2?family=Petrona:wght@400;500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:ital,wght@0,400;0,500;1,400;1,500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=B612:ital,wght@0,400;0,700;1,400;1,700&amp;family=B612+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&amp;display=swap" rel="stylesheet">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -261,7 +264,7 @@ window.Quarto = {
 <p>DCGAN is an extension of the GAN architecture, where the generator and discriminator are deep convolutional networks. The discriminator that takes an image as input and outputs a single scalar value representing the probability that the input image is real (as opposed to fake). The generator takes a random vector as input and decodes it into a synthetic image, and is trained to generate images that the discriminator identifies as real.</p>
 <p>The code is available on my <a href="https://github.com/nsarang/gan_implementations/tree/master/DCGAN">GitHub</a>.</p>
 <section id="what-worked" class="level3">
-<h3 class="anchored" data-anchor-id="what-worked">What worked</h3>
+<h3 data-anchor-id="what-worked">What worked</h3>
 <ul>
 <li>Using dropout in the discriminator<br>
 </li>
@@ -274,7 +277,7 @@ window.Quarto = {
 </ul>
 </section>
 <section id="what-didnt-work" class="level3">
-<h3 class="anchored" data-anchor-id="what-didnt-work">What didn’t work</h3>
+<h3 data-anchor-id="what-didnt-work">What didn’t work</h3>
 <ul>
 <li>Using high learning rates (&gt;1e-3)</li>
 <li>I initially normalized the data between 0 and 1, but since I was using “tanh” as the last layer of the generator’s output, it made the convergence a lot harder</li>
@@ -284,7 +287,7 @@ window.Quarto = {
 </ul>
 </section>
 <section id="results" class="level3">
-<h3 class="anchored" data-anchor-id="results">Results</h3>
+<h3 data-anchor-id="results">Results</h3>
 <p>This is the first 5000 iterations of the training history. The random vectors are fixed at the beginning of the training. As the training progresses, the generator learns to generate more realistic images.<br>
 <br></p>
 <div class="vjs-theme-sea" style="display: flex; justify-content: center;">
@@ -459,13 +462,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   } else {
     toggleColorMode(false);
   }
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
   const isCodeAnnotation = (el) => {
     for (const clz of el.classList) {
       if (clz.startsWith('code-annotation-')) {                     

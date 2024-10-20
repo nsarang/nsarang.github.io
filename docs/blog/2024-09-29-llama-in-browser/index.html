@@ -37,7 +37,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-html/quarto.js"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
@@ -86,6 +85,10 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <link href="https://fonts.googleapis.com/css2?family=Petrona:wght@400;500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:ital,wght@0,400;0,500;1,400;1,500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=B612:ital,wght@0,400;0,700;1,400;1,700&amp;family=B612+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="style.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.10.0/build/styles/default.min.css">
 <script src="index.js" type="module"></script>
@@ -249,7 +252,7 @@ For more info, visit <a href="https://webgpureport.org/">https://webgpureport.or
 <div class="column-screen-inset" style="margin: 3em 0;">
 <div class="chat-layout">
   <div class="chat-sidebar">
-    <h3 class="anchored" data-anchor-id="chat-ui">Model Settings</h3>
+    <h3 data-anchor-id="chat-ui">Model Settings</h3>
     <div class="setting">
       <label for="model-selection">Model:
       <span class="info-icon" data-tooltip="
@@ -338,7 +341,7 @@ For more info, visit <a href="https://webgpureport.org/">https://webgpureport.or
   </div>
   <div class="chat-container">
     <div class="chat-header">
-      <h3 class="anchored">My Chat</h3>
+      <h3>My Chat</h3>
       <button id="clear-chat" class="icon-button" title="Clear chat">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
       </button>
@@ -359,6 +362,7 @@ For more info, visit <a href="https://webgpureport.org/">https://webgpureport.or
 <h1 data-number="3"><span class="header-section-number">3</span> How It Works</h1>
 <p>The code above runs using <a href="https://github.com/mlc-ai/web-llm">WebLLM</a>, a project that enables running LLMs in browser without requiring a server. It’s built on top of the <a href="https://github.com/mlc-ai/mlc-llm">MLC-LLM</a> (Machine Learning Compiler for LLM) framework, which optimizes models for efficient execution on various hardware platforms. MLC-LLM itself is an application of Apache <a href="https://github.com/apache/tvm">TVM</a>, a machine learning compiler stack that takes in pre-trained models, compiles and generates deployable modules that can be embedded and run everywhere. MLC-LLM specializes in LLM-specific graph transformations and optimized kernels for common operations.</p>
 <p>One of the major advantages of WebLLM is that it can utilize WebGPU for accelerated inference. WebGPU is a web standard provided by most modern browsers that allows developers low-level access to the GPU for general-purpose computing tasks. It’s a new feature that is being adopted by browsers.</p>
+<div class="sourceCode cell-output">
 <pre class="{js}"><code>// Import WebLLM
 import * as webllm from 'https://esm.run/@mlc-ai/web-llm';
 
@@ -368,13 +372,16 @@ engine = new webllm.MLCEngine();
 await engine.reload('Llama-3.2-1B-Instruct-q4f32_1-MLC', config);
 // List of available models can be found in
 console.log(webllm.prebuiltAppConfig.model_list);</code></pre>
-<p>With the engine initialized, I use the following to generate responses:</p>
+</div>
+<p><br><br>
+With the engine initialized, I use the following to generate responses:</p>
+<div class="sourceCode cell-output">
 <pre class="{js}"><code>/**
  * Generate a response using the engine
- * @param {Array} messages - Array of conversation history. Each message is a dictionary 
-     with keys `role` and `content`.
-     - `role`: `user` or `assistant` or `system`. The prompt is encoded as the first
-        message with the role `system`.
+ * @param {Array} messages - Array of conversation history. Each message is a 
+     dictionary with keys `role` and `content`.
+     - `role`: `user` or `assistant` or `system`. The prompt is encoded as the
+        first message with the role `system`.
      - `content`: the message content
  * @param {Function} onUpdate - Callback function to update the UI with the generated message
  * @param {Function} onFinish - Callback function to handle the final message
@@ -411,6 +418,7 @@ const streamingGenerating = async (messages, onUpdate, onFinish, onError) =&gt; 
         onError(err);
     }
 };</code></pre>
+</div>
 <p>You learn more about the other serve options and how to use them in the documentation.</p>
 </section>
 <section id="final-thoughts" class="level1" data-number="4">
@@ -605,13 +613,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   } else {
     toggleColorMode(false);
   }
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
   const isCodeAnnotation = (el) => {
     for (const clz of el.classList) {
       if (clz.startsWith('code-annotation-')) {                     

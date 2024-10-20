@@ -91,7 +91,6 @@ div.csl-indent {
 <script src="../../site_libs/quarto-html/quarto.js"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
@@ -142,6 +141,10 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <link href="https://fonts.googleapis.com/css2?family=Petrona:wght@400;500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:ital,wght@0,400;0,500;1,400;1,500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=B612:ital,wght@0,400;0,700;1,400;1,700&amp;family=B612+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&amp;display=swap" rel="stylesheet">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -348,24 +351,24 @@ window.Quarto = {
 <p>% General math % Display style</p>
 </div>
 <section id="introduction" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<h2 data-number="1" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
 <p>Every now and then, I find myself revisiting the basics of Information Theory when reading on papers about VAEs, GANs, or other generative models. I decided to compile a brief overview of the concepts for my own reference. Take it with a grain of salt, as it’s not meant to be a comprehensive guide.</p>
 <p>I’ll update this post as I learn more about the topic, so stay tuned!</p>
 </section>
 <section id="entropy" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="entropy"><span class="header-section-number">2</span> Entropy</h2>
+<h2 data-number="2" data-anchor-id="entropy"><span class="header-section-number">2</span> Entropy</h2>
 <p>Entropy is a fundamental concept in information theory that quantifies the uncertainty or randomness in a system. Let’s consider a couple of examples:</p>
 <p>Imagine you’re trying to guess the next card drawn from a deck. With a well-shuffled deck, each draw is unpredictable – this scenario has high entropy. On the other hand, if the cards were arranged in a known order, each draw would be predictable – this has low entropy.</p>
 <p>Now, let’s think about weather prediction. In a climate where it rains 90% of the days, predicting rain is usually correct but not very informative. This scenario has lower entropy than a climate where rain and sun are equally likely (50% each), making predictions more challenging and uncertain.</p>
 <section id="information-content" class="level3" data-number="2.1">
-<h3 data-number="2.1" class="anchored" data-anchor-id="information-content"><span class="header-section-number">2.1</span> Information Content</h3>
+<h3 data-number="2.1" data-anchor-id="information-content"><span class="header-section-number">2.1</span> Information Content</h3>
 <p>We quantify the uncertainty or information content of an event <span class="math inline">\(x\)</span> with probability <span class="math inline">\(p(x)\)</span> as:</p>
 <p><span class="math display">\[I(x) = -\log_2{p(x)}\]</span></p>
 <p>It measures the surprise or “news value” of observing event <span class="math inline">\(x\)</span>. <span class="math inline">\(I(x)\)</span> is also reffered to as the number of bits needed to encode the event, but we’ll get to that later.</p>
 <p>Why use <span class="math inline">\(-\log p\)</span>? Let’s visualize it:</p>
 <div id="cell-fig-log-ic" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display">
-<div id="fig-log-ic" class="quarto-float quarto-figure quarto-figure-center anchored" height="429" width="585">
+<div id="fig-log-ic" class="quarto-float quarto-figure quarto-figure-center" width="585" height="429">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-log-ic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="index_files/figure-html/fig-log-ic-output-1.png" id="fig-log-ic" width="585" height="429" class="figure-img">
@@ -384,7 +387,7 @@ window.Quarto = {
 </ol>
 </section>
 <section id="shannon-entropy" class="level3" data-number="2.2">
-<h3 data-number="2.2" class="anchored" data-anchor-id="shannon-entropy"><span class="header-section-number">2.2</span> Shannon Entropy</h3>
+<h3 data-number="2.2" data-anchor-id="shannon-entropy"><span class="header-section-number">2.2</span> Shannon Entropy</h3>
 <p>Shannon entropy is the expected value (weighted average) of information content across all possible events in a probability distribution:</p>
 <p><span id="eq-entropy"><span class="math display">\[H(X) = \mathbb{E}[-\log p(X)] = -\sum_x p(x) \log{p(x)} \tag{1}\]</span></span></p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -407,13 +410,13 @@ Note
 <p>This concept has practical applications in various fields. For instance, in cybersecurity, a truly random string of characters (like a strong password) approaches the maximum entropy of <span class="math inline">\(\log_2(n)\)</span> bits per character, where <span class="math inline">\(n\)</span> is the number of possible characters. The password “password123” has low entropy and is easily guessable, while “Tr0ub4dor&amp;Co” has higher entropy and is more secure. This difference in entropy reflects the varying degrees of unpredictability and, consequently, the strength of these passwords.</p>
 </section>
 <section id="a-bit-of-history" class="level3" data-number="2.3">
-<h3 data-number="2.3" class="anchored" data-anchor-id="a-bit-of-history"><span class="header-section-number">2.3</span> A bit of history</h3>
+<h3 data-number="2.3" data-anchor-id="a-bit-of-history"><span class="header-section-number">2.3</span> A bit of history</h3>
 <p>The terms “coding” and “encoded” in information theory stem from Claude Shannon’s work on efficient information transmission over noisy channels. Entropy <span class="math inline">\(H(X)\)</span> represents the theoretical lower bound on the average number of bits needed to encode symbols from a source, which is why we measure it in bits (using log base 2) - it directly relates to optimal coding length.</p>
 <p>Shannon’s Source Coding Theorem formalizes this: no lossless compression can exceed this efficiency on average. This explains why English text (~1.5 bits of entropy per character) compresses far more than random text (~4.7 bits per character), and why compression algorithms excel with natural language but struggle with random data. Understanding entropy as a limit on coding efficiency makes it a powerful tool across various domains like data compression, cryptography, and machine learning.</p>
 </section>
 </section>
 <section id="cross-entropy" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="cross-entropy"><span class="header-section-number">3</span> Cross Entropy</h2>
+<h2 data-number="3" data-anchor-id="cross-entropy"><span class="header-section-number">3</span> Cross Entropy</h2>
 <p>Imagine you have a source that produces messages according to a true distribution <span class="math inline">\(P\)</span>, but you’re using a different distribution <span class="math inline">\(Q\)</span> to encode these messages. Cross-entropy measures the average number of bits you’ll need using this possibly inefficient encoding.</p>
 <p>For example, consider describing a language you’ve never seen before. You start by guessing how often each letter appears.</p>
 <ul>
@@ -456,7 +459,7 @@ Note
 </ul>
 </section>
 <section id="kullbackleibler-divergence" class="level2 page-columns page-full" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="kullbackleibler-divergence"><span class="header-section-number">4</span> Kullback–Leibler Divergence</h2>
+<h2 data-number="4" data-anchor-id="kullbackleibler-divergence"><span class="header-section-number">4</span> Kullback–Leibler Divergence</h2>
 <p>To measure the expected number of extra bits required to code samples from <span class="math inline">\(P\)</span> using a code optimized for <span class="math inline">\(Q\)</span> rather than the code optimized for <span class="math inline">\(P\)</span>, we use the Kullback-Leibler divergence. It</p>
 <p><span id="eq-kl-divergence"><span class="math display">\[
 \begin{aligned}
@@ -484,7 +487,7 @@ Note
 </div>
 </div>
 <section id="non-negativity" class="level3" data-number="4.1">
-<h3 data-number="4.1" class="anchored" data-anchor-id="non-negativity"><span class="header-section-number">4.1</span> Non-Negativity</h3>
+<h3 data-number="4.1" data-anchor-id="non-negativity"><span class="header-section-number">4.1</span> Non-Negativity</h3>
 <p>If <span class="math inline">\(Q = P\)</span>, then <span class="math inline">\(D_{KL}(P \;\Vert\; P) = H(P, P) - H(P) = 0\)</span>. But is zero the lower bound for <span class="math inline">\(D_{KL}\)</span>? Basically the question is whether: <span class="math display">\[H(P, Q) \stackrel{?}{\geq} H(P) \quad \forall P, Q\]</span></p>
 <p>This is known as Gibbs’ inequality, and it’s a fundamental property of the Kullback-Leibler divergence. It tells us that if you try to use a probability distribution <span class="math inline">\(Q\)</span> to encode data that actually follows a different distribution <span class="math inline">\(P\)</span>, you will always need more bits on average, compared to using <span class="math inline">\(P\)</span> itself.</p>
 <p>To prove <span class="math inline">\(D_{KL}(P \;\Vert\; Q) \stackrel{?}{\ge} 0\)</span>, we can use the fact that <span class="math inline">\(-\log\)</span> is a convex function (see <a href="#fig-log-ic" class="quarto-xref">Figure&nbsp;1</a>). By Jensen’s inequality, we have:</p>
@@ -516,7 +519,7 @@ Jensen’s Inequality
 </div>
 </section>
 <section id="sec-zero-prob" class="level3" data-number="4.2">
-<h3 data-number="4.2" class="anchored" data-anchor-id="sec-zero-prob"><span class="header-section-number">4.2</span> At Zero Probabilities</h3>
+<h3 data-number="4.2" data-anchor-id="sec-zero-prob"><span class="header-section-number">4.2</span> At Zero Probabilities</h3>
 <p>Let’s consider the cases where <span class="math inline">\(p(x) = 0\)</span> or <span class="math inline">\(q(x) = 0\)</span>, because it’ll be useful later on:</p>
 <ol type="1">
 <li><p><span class="math inline">\(p(𝑋)=0 \text{ and } q(𝑋)\gt 0\)</span>:<br>
@@ -527,12 +530,12 @@ Then&nbsp;<span class="math inline">\(\displaystyle\lim_{q \to 0^+} \log{\frac{1
 </ol>
 </section>
 <section id="reverse-kl-vs-forward-kl" class="level3 page-columns page-full" data-number="4.3">
-<h3 data-number="4.3" class="anchored" data-anchor-id="reverse-kl-vs-forward-kl"><span class="header-section-number">4.3</span> Reverse KL vs Forward KL</h3>
+<h3 data-number="4.3" data-anchor-id="reverse-kl-vs-forward-kl"><span class="header-section-number">4.3</span> Reverse KL vs Forward KL</h3>
 <p>This is something that I had never thought about before, because I had only seen KL divergence in the context of variational inference. But it turns out that there are two ways to use KL divergence in an optimization problem. The practical difference between the two arises when the model cannot perfectly fit the true distribution, which is most often the case. This is where the two divergences diverge (pun intended).</p>
 <p>Let’s say we have a model <span class="math inline">\(Q\)</span> that we want to optimize to approximate the true distribution <span class="math inline">\(P\)</span>. It’d be fair assumption that <span class="math inline">\(P\)</span> would be a more complex distribution than <span class="math inline">\(Q\)</span>, with more modes and a more complex structure, since <span class="math inline">\(Q\)</span> is a simpler model. As example, <span class="math inline">\(P\)</span> could be a Gaussian mixture model with 10 components (multimodal), while <span class="math inline">\(Q\)</span> is a single Gaussian (unimodal).</p>
 <p>We had previously established that <span class="math inline">\(D_{KL}\)</span> is asymmetric. This means that minimizing <span class="math inline">\(D_{KL}(P \;\Vert\; Q)\)</span> is not the same as minimizing <span class="math inline">\(D_{KL}(Q \;\Vert\; P)\)</span>. The former is known as the <em>Forward KL</em> and the latter is known as the <em>Reverse KL</em>. Let’s look into each of them.</p>
 <section id="forward-kl" class="level4 page-columns page-full">
-<h4 class="anchored" data-anchor-id="forward-kl"><strong>Forward KL</strong></h4>
+<h4 data-anchor-id="forward-kl"><strong>Forward KL</strong></h4>
 <p><span class="math inline">\(D_{KL}(P \;\Vert\; Q)\)</span> measures the extra bits needed to encode samples from <span class="math inline">\(P\)</span> using a code optimized for <span class="math inline">\(Q\)</span>. By minimizing this, we’re trying to make <span class="math inline">\(Q\)</span> as close as possible to <span class="math inline">\(P\)</span>:</p>
 <p><span class="math display">\[ \begin{aligned}
 \mathop{\mathrm{arg\,min}}\limits_Q\; D_{KL}(P \;\Vert\; Q) &amp;= \mathop{\mathrm{arg\,min}}\limits_Q\; H(P, Q) - H(P) \\[1ex]
@@ -999,7 +1002,7 @@ Then&nbsp;<span class="math inline">\(\displaystyle\lim_{q \to 0^+} \log{\frac{1
 <p>As you can see, the minimum as achieved when <span class="math inline">\(Q\)</span> is spread out enough to cover the modes of <span class="math inline">\(P\)</span>. This is the <strong>mean-seeking</strong> behavior of the forward KL divergence.</p>
 </section>
 <section id="reverse-kl" class="level4 page-columns page-full">
-<h4 class="anchored" data-anchor-id="reverse-kl"><strong>Reverse KL</strong></h4>
+<h4 data-anchor-id="reverse-kl"><strong>Reverse KL</strong></h4>
 <p><span class="math inline">\(D_{KL}(Q \;\Vert\; P)\)</span> measures the extra bits needed to encode samples from <span class="math inline">\(Q\)</span> using a code optimized for <span class="math inline">\(P\)</span>. Similar to the <a href="#sec-zero-prob" class="quarto-xref">Section&nbsp;4.2</a> analysis:</p>
 <ul>
 <li>It penalizes distributions <span class="math inline">\(Q\)</span> that assign non-zero probability to regions where p is zero. Conversely, it doesn’t penalize <span class="math inline">\(Q\)</span> for missing regions where <span class="math inline">\(P\)</span> has non-zero probability. This is called <strong>zero-forcing</strong>.</li>
@@ -1087,7 +1090,7 @@ Then&nbsp;<span class="math inline">\(\displaystyle\lim_{q \to 0^+} \log{\frac{1
 </section>
 </section>
 <section id="relations-to-mutual-information" class="level3" data-number="4.4">
-<h3 data-number="4.4" class="anchored" data-anchor-id="relations-to-mutual-information"><span class="header-section-number">4.4</span> Relations to Mutual Information</h3>
+<h3 data-number="4.4" data-anchor-id="relations-to-mutual-information"><span class="header-section-number">4.4</span> Relations to Mutual Information</h3>
 <p>Let <span class="math inline">\((X,Y)\)</span> be a pair of random variables with values over the space <span class="math inline">\({\mathcal {X}}\times {\mathcal {Y}}\)</span>. If their joint distribution is <span class="math inline">\({P_{(X,Y)}}\)</span> and the marginal distributions are <span class="math inline">\({P_{Y}}\)</span> and <span class="math inline">\({P_{Y}}\)</span>, the mutual information is defined as:</p>
 <p><span id="eq-mutual-information"><span class="math display">\[{I(X;Y)=D_{\mathrm {KL} }(P_{(X,Y)}\|P_{X}P_{Y})} \tag{4}\]</span></span></p>
 <p>Notice, as per property of the KL divergence that <span class="math inline">\(I(X;Y)\)</span> is equal to zero precisely when the joint distribution coincides with the product of the marginals, i.e.&nbsp;when <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are independent (and hence observing <span class="math inline">\(Y\)</span> tells you nothing about <span class="math inline">\(X\)</span>). Intuitively, <span class="math inline">\(I(X;Y)\)</span> is a measure of the price for encoding <span class="math inline">\((X,Y)\)</span> as a pair of independent random variables when in reality they may not be.</p>
@@ -1098,7 +1101,7 @@ Then&nbsp;<span class="math inline">\(\displaystyle\lim_{q \to 0^+} \log{\frac{1
 </section>
 </section>
 <section id="jensen-shannon-divergence" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="jensen-shannon-divergence"><span class="header-section-number">5</span> Jensen-Shannon Divergence</h2>
+<h2 data-number="5" data-anchor-id="jensen-shannon-divergence"><span class="header-section-number">5</span> Jensen-Shannon Divergence</h2>
 <p>JS divergence is a symmetric measure, derived from KL divergence, and it does satisfy the properties of a metric. It is defined as the average of the KL divergence from each distribution to the average of both distributions:</p>
 <p><span id="eq-js-divergence"><span class="math display">\[{JS(P \;\Vert\; Q) = \frac{1}{2}KL(P \;\Vert\; M) + \frac{1}{2}KL(Q \;\Vert\; M)} \tag{5}\]</span></span></p>
 <p>where <span class="math inline">\(M=\dfrac{1}{2} (P+Q)\)</span> is a mixture of <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span>.</p>
@@ -1312,13 +1315,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   } else {
     toggleColorMode(false);
   }
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
   const isCodeAnnotation = (el) => {
     for (const clz of el.classList) {
       if (clz.startsWith('code-annotation-')) {                     

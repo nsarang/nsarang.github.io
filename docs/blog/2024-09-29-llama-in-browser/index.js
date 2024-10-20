@@ -208,7 +208,7 @@ export const updateUI = {
         errorElement.classList.add('error-message');
         errorElement.textContent = message;
         document.getElementById('chat-messages').prepend(errorElement);
-        setTimeout(() => errorElement.remove(), 5000);
+        setTimeout(() => errorElement.remove(), 4000);
     },
     enableParameterInputs: (enabled) => {
         const inputs = ['temperature', 'max-tokens', 'top-p', 'frequency-penalty', 'presence-penalty'];
@@ -586,6 +586,7 @@ const initializeApp = async () => {
     updateModelInfo();
     setupEventListeners();
     updateUI.enableParameterInputs(true);
+    updateUI.sendButton(false);
 };
 
 document.addEventListener('DOMContentLoaded', initializeApp);

@@ -40,7 +40,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-html/quarto.js"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
@@ -89,6 +88,10 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <link href="https://fonts.googleapis.com/css2?family=Petrona:wght@400;500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:ital,wght@0,400;0,500;1,400;1,500&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=B612:ital,wght@0,400;0,700;1,400;1,700&amp;family=B612+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&amp;display=swap" rel="stylesheet">
 
 
 <meta property="og:title" content="Protein design using native secondary sub-structures and solvent accessibility">
@@ -210,7 +213,7 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 
 
 <section id="abstract" class="level2">
-<h2 class="anchored" data-anchor-id="abstract">Abstract</h2>
+<h2 data-anchor-id="abstract">Abstract</h2>
 <p>According to structure-dependent function of proteins, two main challenging problems called Protein Structure Prediction (PSP) and Inverse Protein Folding (IPF) are investigated. In spite of IPF essential applications, it has not been studied as much as PSP problem. In fact, the ultimate goal of IPF problem or protein design is to create proteins with enhanced properties or even novel functions. One of the major computational challenges in protein design is large protein sequence space, namely searching through all plausible sequences is impossible. In our previous research, we introduced a genetic algorithm called GAPSSIF for designing protein secondary structure. This algorithm benefits from evolutionary information obtained by solved protein structures in PDB. Therefore, we constructed a repository of protein secondary sub-structures to accelerate convergence of the algorithm. The secondary structures of designed sequences by GAPSSIF are comparable with those obtained by Evolver and EvoDesign. In this paper, we modify GAPSSIF so it considers solvent accessibility. Therefore, the simple fitness function of GAPSSIF is improved by a multi-featured one to search through the sequence space more precisely.</p>
 
 
@@ -381,13 +384,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   } else {
     toggleColorMode(false);
   }
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
   const isCodeAnnotation = (el) => {
     for (const clz of el.classList) {
       if (clz.startsWith('code-annotation-')) {                     

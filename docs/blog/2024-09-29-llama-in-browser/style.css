@@ -1,12 +1,22 @@
 :root {
-  --max-width: 1200px;
   --primary-color: #007bff;
-  --secondary-color: #f8f8f8;
+  /* --secondary-color: #f8f8f8; */
   --border-color: #e0e0e0;
-  --text-color: #333;
+  /* --text-color: #333; */
   --light-text-color: #666;
+  /* --secondary-color: color-mix(in srgb, var(--bs-body-bg) 95%, var(--theme-color-end)); */
+  --secondary-color: color-mix(in srgb, #8bbdf2 10%, var(--bs-body-bg));
+  --text-color: var(--bs-body-color);
+
+  --max-width: 1200px;  
   --border-radius: 8px;
   --transition: 0.3s ease;
+}
+
+input,
+textarea,
+select {
+    color: var(--text-color);
 }
 
 /* Layout */
@@ -100,7 +110,7 @@
 }
 
 .chat-header {
-  background-color: #f0f0f0;
+  background-color: var(--secondary-color);
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
@@ -137,12 +147,13 @@
 
 .assistant-message {
   background-color: #f1f0f0;
-  color: var(--text-color);
+  color: #333;
   align-self: flex-start;
 }
 
 .chat-input-container {
   display: flex;
+  align-items: center;
   padding: 10px;
   background-color: var(--secondary-color);
 }
