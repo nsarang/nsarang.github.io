@@ -25,6 +25,7 @@
     let gui;
     let frameCount = 0;
     let animationId = null;
+    let isAnimationRunning = true;
 
     function init() {
 
@@ -69,6 +70,7 @@
         // set canvas size to parent size
         const parent = canvas.parentElement;
         screenWidth = canvas.width = parent.offsetWidth;
+        // screenWidth = canvas.width = window.innerWidth;
         screenHeight = canvas.height = parent.offsetHeight;
 
         centerX = screenWidth / 2;
@@ -77,6 +79,13 @@
         context = canvas.getContext('2d');
         context.lineWidth = 0.3;
         context.lineCap = context.lineJoin = 'round';
+
+        // canvas is cleared on resize
+        frameCount = 0;
+        if (!isAnimationRunning) {
+            isAnimationRunning = true;
+            update();
+        }
     }
 
     function onCanvasClick() {
@@ -115,7 +124,8 @@
     function update() {
         if (frameCount >= Configs.maxFrames) {
             // console.log("Animation completed after " + frameCount + " frames");
-            cancelAnimationFrame(animationId);  // Cancel the animation
+            cancelAnimationFrame(animationId);
+            isAnimationRunning = false;
             return;
         }
 

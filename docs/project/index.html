@@ -256,19 +256,21 @@ window.Quarto = {
     #simplex-noise-canvas {
         position: absolute;
         top: 0;
-        left: 0;
+        /* left: 0; */
         right: 0;
         bottom: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         z-index: -1;
         pointer-events: none;
+        /* Hack to set the canvas size to the viewport size.
+           The -2em is to account for the gap introduced by ancestors.*/
+        left: calc((100% - 100vw) / 2 - 2em);
+        width: 100vw;
+        height: 100%;
     }
 
     #title-block-header {
         display: block;
-        margin-top: 1.0em;
+        margin-top: 1.0em; /* Add space between the title and navbar */
         /* width: 100%; */
         /* height: auto; */
     }
@@ -278,10 +280,14 @@ window.Quarto = {
         position: relative;
         width: 100%;
         height: auto;
+        /* Add padding to the title == canvas size */
+        /* NOTE: the padding-right value was tuned manually to center the title */
+        padding: 2rem 1rem 2rem 0rem !important;
     }
 
     #title-block-header.quarto-title-block.default .quarto-title .title {
         margin: 0;
+        margin-top: 0.5%; /* The title didn't seem to be vertically centered */
         line-height: 1.4;
     }
 </style>
