@@ -14,7 +14,7 @@
         step: 5,
         base: 1000,
         zInc: 0.001,
-        maxFrames: 700
+        dpr: window.devicePixelRatio || 1,
     };
 
     let canvas, context, screenWidth, screenHeight, centerX, centerY;
@@ -26,6 +26,7 @@
     let frameCount = 0;
     let animationId = null;
     let isAnimationRunning = true;
+    let maxFrames = 700 * Configs.dpr;
 
     function init() {
 
@@ -68,15 +69,18 @@
 
     function onWindowResize() {
         // set canvas size to parent size
-        const parent = canvas.parentElement;
-        screenWidth = canvas.width = parent.offsetWidth;
-        // screenWidth = canvas.width = window.innerWidth;
-        screenHeight = canvas.height = parent.offsetHeight;
+        // const parent = canvas.parentElement;
+        // screenWidth = canvas.width = parent.offsetWidth;
+        // screenHeight = canvas.height = parent.offsetHeight;
+
+        screenWidth = canvas.width = canvas.clientWidth * Configs.dpr;
+        screenHeight = canvas.height = canvas.clientHeight * Configs.dpr;
 
         centerX = screenWidth / 2;
         centerY = screenHeight / 2;
 
         context = canvas.getContext('2d');
+        context.scale(Configs.dpr, Configs.dpr);
         context.lineWidth = 0.3;
         context.lineCap = context.lineJoin = 'round';
 
@@ -122,7 +126,7 @@
     }
 
     function update() {
-        if (frameCount >= Configs.maxFrames) {
+        if (frameCount >= maxFrames) {
             // console.log("Animation completed after " + frameCount + " frames");
             cancelAnimationFrame(animationId);
             isAnimationRunning = false;
