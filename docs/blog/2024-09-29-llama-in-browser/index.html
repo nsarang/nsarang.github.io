@@ -8,9 +8,9 @@
 
 <meta name="author" content="Nima Sarang">
 <meta name="dcterms.date" content="2024-10-06">
-<meta name="description" content="Chat with Llama that runs locally in your browser using WebLLM.">
+<meta name="description" content="Chat with Llama and other LLMs that run locally in your browser using WebLLM.">
 
-<title>Running Llama 3.2 in the Browser! – Nima Sarang</title>
+<title>Running Llama 3 in the Browser! – Nima Sarang</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -94,12 +94,12 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <script src="index.js" type="module"></script>
 
 
-<meta property="og:title" content="Running Llama 3.2 in the Browser!">
-<meta property="og:description" content="Chat with Llama that runs locally in your browser using WebLLM.">
+<meta property="og:title" content="Running Llama 3 in the Browser!">
+<meta property="og:description" content="Chat with Llama and other LLMs that run locally in your browser using WebLLM.">
 <meta property="og:image" content="https://www.nimasarang.com/blog/2024-09-29-llama-in-browser/featured.jpg">
 <meta property="og:site_name" content="Nima Sarang">
-<meta name="twitter:title" content="Running Llama 3.2 in the Browser!">
-<meta name="twitter:description" content="Chat with Llama that runs locally in your browser using WebLLM.">
+<meta name="twitter:title" content="Running Llama 3 in the Browser!">
+<meta name="twitter:description" content="Chat with Llama and other LLMs that run locally in your browser using WebLLM.">
 <meta name="twitter:image" content="https://www.nimasarang.com/blog/2024-09-29-llama-in-browser/featured.jpg">
 <meta name="twitter:card" content="summary_large_image">
 </head>
@@ -153,7 +153,7 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns">
 <div id="title-block-header-title" class="quarto-title page-columns page-full page-layout-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg); background-repeat: no-repeat;">
-<h1 class="title">Running Llama 3.2 in the Browser!</h1>
+<h1 class="title">Running Llama 3 in the Browser!</h1>
     <div class="quarto-categories">
         <div class="quarto-category">NLP</div>
         <div class="quarto-category">LLM</div>
@@ -166,7 +166,7 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 
 <div>
   <div id="title-block-title-desc" class="description pt-4">
-    Chat with Llama that runs locally in your browser using WebLLM.
+    Chat with Llama and other LLMs that run locally in your browser using WebLLM.
   </div>
 </div>
 
@@ -229,7 +229,7 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <section id="introduction" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>Recently, I came across a few cool projects that allow running LLMs (large language models) in the browser, and utilize GPU for fast inference! This is exciting for two main reasons: first, it’s great to run LLMs locally without sending your data to any external server. You can use custom prompts, configure the inference the way you want, and ensure your privacy. Second, you don’t have to deal with setting up Python environments, installing dependencies, and configuring the GPU. The browser takes care of all that! It’s incredibly convenient. With the release of smaller Llama 3.2 models, like the 1B parameter version, it’s now possible to generate quality text directly in your browser, perhaps even matching ChatGPT 3.5 on some tasks.</p>
-<p>The chat UI below will allow you to download a number of models hosted on HuggingFace, including Llama 3 variants. Once you download the model, you can disconnect and continue chatting offline. I’ve tried adding a bunch of customizations to play around, but the UI is meant more as a demonstration to showcase the potential of a web UI.</p>
+<p>The chat UI below will allow you to download a number of models hosted on HuggingFace, including Llama and Qwen variants. Once you download the model, you can disconnect and continue chatting offline. I’ve tried adding a bunch of customizations to play around, but the UI is meant more as a demonstration to showcase the potential of a web UI.</p>
 </section>
 <section id="chat-ui" class="level1 page-columns page-full" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Chat UI</h1>
@@ -440,13 +440,13 @@ const streamingGenerating = async (messages, onUpdate, onFinish, onError) =&gt; 
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{sarang2024,
   author = {Sarang, Nima},
-  title = {Running {Llama} 3.2 in the {Browser!}},
+  title = {Running {Llama} 3 in the {Browser!}},
   date = {2024-10-06},
   url = {https://www.nimasarang.com/blog/2024-09-29-llama-in-browser/},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-sarang2024" class="csl-entry quarto-appendix-citeas" role="listitem">
-Sarang, Nima. 2024. <span>“Running Llama 3.2 in the Browser!”</span>
+Sarang, Nima. 2024. <span>“Running Llama 3 in the Browser!”</span>
 October 6, 2024. <a href="https://www.nimasarang.com/blog/2024-09-29-llama-in-browser/">https://www.nimasarang.com/blog/2024-09-29-llama-in-browser/</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
