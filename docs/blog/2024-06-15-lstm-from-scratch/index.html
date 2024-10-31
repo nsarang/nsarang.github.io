@@ -2117,78 +2117,102 @@ First, you</code></pre>
 </section>
 <section id="training-loop" class="level3" data-number="6.4">
 <h3 data-number="6.4" data-anchor-id="training-loop"><span class="header-section-number">6.4</span> Training loop</h3>
-<div id="cell-35" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tqdm.auto <span class="im">import</span> tqdm</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> op <span class="im">import</span> cross_entropy</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>state <span class="op">=</span> <span class="va">None</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>train_losses <span class="op">=</span> defaultdict(<span class="bu">list</span>)</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>test_losses <span class="op">=</span> defaultdict(<span class="bu">list</span>)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> epoch <span class="kw">in</span> tqdm(<span class="bu">range</span>(NUM_EPOCHS), desc<span class="op">=</span><span class="st">"Epoch"</span>):</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># training loop</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> inputs, targets <span class="kw">in</span> (pbar <span class="op">:=</span> tqdm(trainloader, leave<span class="op">=</span><span class="va">False</span>)):</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> SHUFFLE_TRAIN:</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>            state <span class="op">=</span> <span class="va">None</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        probabilities, state, activations <span class="op">=</span> model.forward(inputs, state)</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>        <span class="co"># cross entropy loss</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> cross_entropy(probabilities, targets)</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># accuracy</span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>        accuracy <span class="op">=</span> np.mean(np.argmax(probabilities, axis<span class="op">=-</span><span class="dv">1</span>) <span class="op">==</span> targets)</span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>        <span class="co"># loss gradient w.r.t logits (before softmax)</span></span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>        gradient <span class="op">=</span> np.copy(probabilities)</span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Subtract 1 from the probabilities of the true classes</span></span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Since the gradient is p_i - y_i</span></span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>        gradient[np.arange(targets.shape[<span class="dv">0</span>])[:, <span class="va">None</span>], </span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>                 np.arange(targets.shape[<span class="dv">1</span>]), targets] <span class="op">-=</span> <span class="dv">1</span></span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Subtract 1 from the probabilities of the true classes</span></span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>        gradient <span class="op">/=</span> gradient.shape[<span class="dv">0</span>]</span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>        <span class="co"># backpropagate and update</span></span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>        optimizer.zero_grad()</span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>        model.backward(gradient, activations)</span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>        optimizer.step()</span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>        <span class="co"># log</span></span>
-<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>        pbar.set_postfix({<span class="st">"loss"</span>: <span class="ss">f"</span><span class="sc">{</span>loss<span class="sc">:.5f}</span><span class="ss">"</span>, </span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"accuracy"</span>: <span class="ss">f"</span><span class="sc">{</span>accuracy<span class="op">*</span><span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">"</span>})</span>
-<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>        train_losses[epoch].append(loss)</span>
-<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>    <span class="co"># testing loop</span></span>
-<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>    loss_sum <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>    accuracy_sum <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="bu">iter</span>, (inputs, targets) <span class="kw">in</span> (pbar <span class="op">:=</span> tqdm(<span class="bu">enumerate</span>(testloader),</span>
-<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>                                                 leave<span class="op">=</span><span class="va">False</span>)):</span>
-<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>        probabilities, state, _ <span class="op">=</span> model.forward(</span>
-<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>            inputs, state<span class="op">=</span><span class="va">None</span>, teacher_forcing<span class="op">=</span><span class="va">False</span></span>
-<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> cross_entropy(probabilities, targets)</span>
-<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>        accuracy <span class="op">=</span> np.mean(np.argmax(probabilities, axis<span class="op">=-</span><span class="dv">1</span>) <span class="op">==</span> targets)</span>
-<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>        loss_sum <span class="op">+=</span> loss</span>
-<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>        accuracy_sum <span class="op">+=</span> accuracy</span>
-<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>        pbar.set_postfix(</span>
-<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>            {</span>
-<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a>                <span class="st">"loss"</span>: <span class="ss">f"</span><span class="sc">{</span>loss_sum <span class="op">/</span> (<span class="bu">iter</span> <span class="op">+</span> <span class="dv">1</span>)<span class="sc">:.5f}</span><span class="ss">"</span>,</span>
-<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>                <span class="st">"accuracy"</span>: <span class="ss">f"</span><span class="sc">{</span>accuracy_sum <span class="op">/</span> (<span class="bu">iter</span> <span class="op">+</span> <span class="dv">1</span>)<span class="op">*</span><span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">"</span>,</span>
-<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>            }</span>
-<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>        test_losses[epoch].append(loss)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The training loop follows this standard structure:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> epoch <span class="op">=</span> <span class="dv">1</span> to TOTAL_EPOCHS<span class="op">:</span>    </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Training Phase</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> each batch <span class="kw">in</span> train_data<span class="op">:</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>        predictions <span class="op">=</span> <span class="fu">forward_pass</span>(model<span class="op">,</span> batch)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> <span class="fu">compute_loss</span>(predictions<span class="op">,</span> true_labels)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>        gradients <span class="op">=</span> <span class="fu">compute_gradients</span>(loss)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">update_model_parameters</span>(model<span class="op">,</span> gradients)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">record_metrics</span>(loss<span class="op">,</span> accuracy<span class="op">,</span> <span class="op">...</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Testing Phase</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> each batch <span class="kw">in</span> test_data<span class="op">:</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        predictions <span class="op">=</span> <span class="fu">forward_pass</span>(model<span class="op">,</span> batch)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> <span class="fu">compute_loss</span>(predictions<span class="op">,</span> true_labels)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">record_metrics</span>(loss<span class="op">,</span> accuracy<span class="op">,</span> <span class="op">...</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><br><br>
+Most of the implementation such as the forward and backward passes, optimization and data loading is already done. The remaining part is loss computation and gradient of loss w.r.t the predictions. Since next-token prediction is a classification task, we’ll use the cross-entropy loss function.</p>
+<div id="cell-36" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tqdm.auto <span class="im">import</span> tqdm</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> op <span class="im">import</span> cross_entropy</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>state <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>train_losses <span class="op">=</span> defaultdict(<span class="bu">list</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>test_losses <span class="op">=</span> defaultdict(<span class="bu">list</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> epoch <span class="kw">in</span> tqdm(<span class="bu">range</span>(NUM_EPOCHS), desc<span class="op">=</span><span class="st">"Epoch"</span>):</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># training loop</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> inputs, targets <span class="kw">in</span> (pbar <span class="op">:=</span> tqdm(trainloader, leave<span class="op">=</span><span class="va">False</span>)):</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> SHUFFLE_TRAIN:</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>            state <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>        probabilities, state, activations <span class="op">=</span> model.forward(inputs, state)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>        <span class="co"># cross entropy loss</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> cross_entropy(probabilities, targets)</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># accuracy</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>        accuracy <span class="op">=</span> np.mean(np.argmax(probabilities, axis<span class="op">=-</span><span class="dv">1</span>) <span class="op">==</span> targets)</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>        <span class="co"># loss gradient w.r.t logits (before softmax)</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>        gradient <span class="op">=</span> np.copy(probabilities)</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Subtract 1 from the probabilities of the true classes</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Since the gradient is p_i - y_i</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>        gradient[np.arange(targets.shape[<span class="dv">0</span>])[:, <span class="va">None</span>], </span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>                 np.arange(targets.shape[<span class="dv">1</span>]), targets] <span class="op">-=</span> <span class="dv">1</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Subtract 1 from the probabilities of the true classes</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>        gradient <span class="op">/=</span> gradient.shape[<span class="dv">0</span>]</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>        <span class="co"># backpropagate and update</span></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>        optimizer.zero_grad()</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>        model.backward(gradient, activations)</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>        optimizer.step()</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>        <span class="co"># log</span></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>        pbar.set_postfix({<span class="st">"loss"</span>: <span class="ss">f"</span><span class="sc">{</span>loss<span class="sc">:.5f}</span><span class="ss">"</span>, </span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"accuracy"</span>: <span class="ss">f"</span><span class="sc">{</span>accuracy<span class="op">*</span><span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">"</span>})</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>        train_losses[epoch].append(loss)</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>    <span class="co"># testing loop</span></span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>    loss_sum <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>    accuracy_sum <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="bu">iter</span>, (inputs, targets) <span class="kw">in</span> (pbar <span class="op">:=</span> tqdm(<span class="bu">enumerate</span>(testloader),</span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>                                                 leave<span class="op">=</span><span class="va">False</span>)):</span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>        probabilities, state, _ <span class="op">=</span> model.forward(</span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>            inputs, state<span class="op">=</span><span class="va">None</span>, teacher_forcing<span class="op">=</span><span class="va">False</span></span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> cross_entropy(probabilities, targets)</span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>        accuracy <span class="op">=</span> np.mean(np.argmax(probabilities, axis<span class="op">=-</span><span class="dv">1</span>) <span class="op">==</span> targets)</span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a>        loss_sum <span class="op">+=</span> loss</span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>        accuracy_sum <span class="op">+=</span> accuracy</span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>        pbar.set_postfix(</span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>            {</span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>                <span class="st">"loss"</span>: <span class="ss">f"</span><span class="sc">{</span>loss_sum <span class="op">/</span> (<span class="bu">iter</span> <span class="op">+</span> <span class="dv">1</span>)<span class="sc">:.5f}</span><span class="ss">"</span>,</span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>                <span class="st">"accuracy"</span>: <span class="ss">f"</span><span class="sc">{</span>accuracy_sum <span class="op">/</span> (<span class="bu">iter</span> <span class="op">+</span> <span class="dv">1</span>)<span class="op">*</span><span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">"</span>,</span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>        test_losses[epoch].append(loss)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><br><br>
+Now that it’s time for training, the bad news is that the process will be slow! Understandably so, since we’re using NumPy over CPU. Still, I trained the model for ~6000 iterations (batches) to make sure the implementation is correct and that the model is learning. The figure below shows the loss curve decreasing consistently over the iterations.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/loss.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption>Training Loss Curve</figcaption>
+</figure>
 </div>
 <p>For checkpointing, we can save the model to disk:</p>
-<div id="cell-37" class="cell" data-execution_count="50">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ckpt <span class="op">=</span> model.state_dict</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>np.save(<span class="st">"checkpoint.npy"</span>, ckpt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-39" class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>np.save(<span class="st">"checkpoint.npy"</span>, model.state_dict)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To reload from the checkpoint, use the <code>from_state_dict</code> method:</p>
-<div id="cell-39" class="cell styled-output" data-execution_count="51">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>state_dict <span class="op">=</span> np.load(<span class="st">"checkpoint.npy"</span>, allow_pickle<span class="op">=</span><span class="va">True</span>).item()</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> LSTMClassifier.from_state_dict(state_dict)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>state_dict.keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-41" class="cell styled-output" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>state_dict <span class="op">=</span> np.load(<span class="st">"checkpoint.npy"</span>, allow_pickle<span class="op">=</span><span class="va">True</span>).item()</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> LSTMClassifier.from_state_dict(state_dict)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>state_dict.keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="51">
 <pre><code>dict_keys(['config', 'weights', 'grad'])</code></pre>
 </div>
@@ -2197,23 +2221,23 @@ First, you</code></pre>
 <section id="generating-text" class="level3" data-number="6.5">
 <h3 data-number="6.5" data-anchor-id="generating-text"><span class="header-section-number">6.5</span> Generating text</h3>
 <p>At inference time, we feed the model a prefix text and let it generate the next characters. We can control the number of characters to generate by setting the <code>generate_length</code> parameter in <code>forward</code>. I used <strong>greedy decoding</strong> to generate the text which works by selecting the character with the highest probability at each time step.</p>
-<div id="cell-43" class="cell" data-execution_count="53">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">generate</span>(model, prefix: <span class="bu">str</span>, length: <span class="bu">int</span>):</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    inputs <span class="op">=</span> np.array(<span class="bu">list</span>(prefix))</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    inputs <span class="op">=</span> encoder.transform(inputs)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    inputs <span class="op">=</span> inputs[np.newaxis]</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    state <span class="op">=</span> <span class="va">None</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    probabilities, state, _ <span class="op">=</span> model.forward(</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>        inputs, state, teacher_forcing<span class="op">=</span><span class="va">False</span>, generation_length<span class="op">=</span>length</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    tokens <span class="op">=</span> np.argmax(probabilities[<span class="dv">0</span>, <span class="bu">len</span>(prefix) <span class="op">-</span> <span class="dv">1</span> :], axis<span class="op">=-</span><span class="dv">1</span>)</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> prefix <span class="op">+</span> <span class="st">""</span>.join(encoder.inverse_transform(tokens))</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> output</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-45" class="cell" data-execution_count="53">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">generate</span>(model, prefix: <span class="bu">str</span>, length: <span class="bu">int</span>):</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    inputs <span class="op">=</span> np.array(<span class="bu">list</span>(prefix))</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    inputs <span class="op">=</span> encoder.transform(inputs)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    inputs <span class="op">=</span> inputs[np.newaxis]</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    state <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    probabilities, state, _ <span class="op">=</span> model.forward(</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>        inputs, state, teacher_forcing<span class="op">=</span><span class="va">False</span>, generation_length<span class="op">=</span>length</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    tokens <span class="op">=</span> np.argmax(probabilities[<span class="dv">0</span>, <span class="bu">len</span>(prefix) <span class="op">-</span> <span class="dv">1</span> :], axis<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> prefix <span class="op">+</span> <span class="st">""</span>.join(encoder.inverse_transform(tokens))</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> output</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-44" class="cell styled-output" data-execution_count="54">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(generate(model, prefix<span class="op">=</span><span class="st">"I will"</span>, length<span class="op">=</span><span class="dv">400</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-46" class="cell styled-output" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(generate(model, prefix<span class="op">=</span><span class="st">"I will"</span>, length<span class="op">=</span><span class="dv">400</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>I will rest blood that bear blood at all,
 And stay the king to the consulships?
@@ -2231,7 +2255,7 @@ KING RICHARD II:
 Norfolk, throw down the coronat</code></pre>
 </div>
 </div>
-<p>As an alternative to basic sampling, more advanced techniques like beam search, Top-K sampling, and nucleus sampling can significantly enhance the text generation quality but that’d be beyond the scope of this post.</p>
+<p>Looks like the model was able to learn something! As an alternative to basic sampling, more advanced techniques like beam search, Top-K sampling, and nucleus sampling can significantly enhance the text generation quality but that’d be beyond the scope of this post.</p>
 <p><br><br>
 I hope you found this post helpful. If you have any questions or suggestions, feel free to leave a comment. Thanks for reading!</p>
 
