@@ -93,11 +93,11 @@ div.csl-indent {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -315,6 +315,18 @@ window.Quarto = {
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block page-columns page-full column-body" id="quarto-document-content">
+<style>
+  body {
+    visibility: hidden; /* initially hidden until DOM ready to prevent flicker */
+  }
+</style>
+<noscript>
+  <style>
+    body {
+      visibility: visible !important; /* Override hidden state when JS is disabled */
+    }
+  </style>
+</noscript>
 
 <!-- source: https://github.com/gadenbuie/garrickadenbuie-com/blob/main/_partials/title-block-link-buttons/title-block.html -->
 <!-- 
@@ -339,9 +351,9 @@ window.Quarto = {
 </li>
 <li>Training on the Shakespeare dataset</li>
 </ul>
-<p><br> I’ll be using a similar presentation style to <a href="https://nn.labml.ai/transformers/mha.html">labml.ai</a> as I find it much easier to follow the code when the explanation is right beside it. Check out their website if you haven’t already.</p>
-<p>I hope you find it helpful.<br>
-P.S. You can turn on the dark mode through the top right button.</p>
+<p><br> I’ll be using a similar presentation style to <a href="https://nn.labml.ai/transformers/mha.html">labml.ai</a> since it’s much easier to follow the code when the explanation is right beside it. Be sure to check out their website for some cool implementations if you haven’t already.</p>
+<p>I hope you’ll find this post helpful. 😎<br>
+P.S. You can toggle between light and dark mode through the button at the top right corner.</p>
 </section>
 <section id="multi-layer-lstm" class="level2 page-columns page-full" data-number="2">
 <h2 data-number="2" data-anchor-id="multi-layer-lstm"><span class="header-section-number">2</span> Multi-Layer LSTM</h2>
@@ -378,7 +390,7 @@ h_t &amp;= o_t \odot \tanh(C_t)
 </figure>
 </div>
 <p>Now let’s get into the implementation, step by step.</p>
-<div id="cell-6" class="cell page-columns page-full" data-execution_count="40">
+<div id="cell-6" class="cell page-columns page-full" data-execution_count="4">
 <div class="cell-output cell-output-display column-page">
 <h3 data-anchor-id="multi-layers">lstm.py</h3>
         <div class="docfuse ">
@@ -1259,7 +1271,7 @@ It can be used to save and load the model.</p>
 <li><code>Softmax</code> is used to compute the output probabilities.</li>
 </ul>
 <p>The loss function used is the cross-entropy loss, which is suitable for classification tasks. Next token prediction is indeed a classification task where the model predicts the probability distribution over the vocabulary for the next token in the sequence.</p>
-<div id="cell-8" class="cell page-columns page-full" data-execution_count="32">
+<div id="cell-8" class="cell page-columns page-full" data-execution_count="5">
 <div class="cell-output cell-output-display column-page">
 <h3>op.py</h3>
         <div class="docfuse ">
@@ -1412,7 +1424,7 @@ $$H(y, p) = -\sum_{i} y_i \log(p_i)$$</p>
 <section id="adamw" class="level2 page-columns page-full" data-number="4">
 <h2 data-number="4" data-anchor-id="adamw"><span class="header-section-number">4</span> AdamW</h2>
 <p>AdamW is a variant of the Adam optimizer that decouples weight penalty from the optimization steps, where the weight penalty is applied directly to the gradients. Adam optimizer uses both the first and second moments of the gradients to adapt the learning rate tailored to each parameter. The benefit of Adam/AdamW is that it requires little tuning of hyperparameters compared to RMSprop and SGD. We’ll go over each step of the optimization in the implementation.</p>
-<div id="cell-11" class="cell page-columns page-full" data-execution_count="33">
+<div id="cell-11" class="cell page-columns page-full" data-execution_count="6">
 <div class="cell-output cell-output-display column-page">
 <h3>optim.py</h3>
         <div class="docfuse ">
@@ -1790,7 +1802,7 @@ where \(p_{t-1}\) is the previous parameter value.</p>
 <li>The <code>Dataset</code> class implements the <code>__getitem__</code> method, which returns a single sample from the dataset.</li>
 <li>The <code>DataLoader</code> class will be used to sample mini-batches from the dataset, by calling the <code>__getitem__</code> method of the <code>Dataset</code>.</li>
 </ul>
-<div id="cell-14" class="cell page-columns page-full" data-execution_count="35">
+<div id="cell-14" class="cell page-columns page-full" data-execution_count="7">
 <div class="cell-output cell-output-display column-page">
 <h3>data.py</h3>
         <div class="docfuse ">
@@ -2012,7 +2024,7 @@ used in a <code>for</code> loop to iterate over the dataset. e.g.:</p>
 <p>An important distinction to make between the text generation at training time and inference time is that at training time, we feed the ground truth characters to the model to predict the next character; This is called <strong>teacher forcing</strong>. At inference time, we feed the model’s prediction at time step <span class="math inline">\(t\)</span> as the input at time step <span class="math inline">\(t+1\)</span> to predict the next character.</p>
 <section id="load" class="level3" data-number="6.1">
 <h3 data-number="6.1" data-anchor-id="load"><span class="header-section-number">6.1</span> Load</h3>
-<div id="cell-18" class="cell" data-execution_count="21">
+<div id="cell-18" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pylab <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -2021,7 +2033,7 @@ used in a <code>for</code> loop to iterate over the dataset. e.g.:</p>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"shakespeare.txt"</span>) <span class="im">as</span> <span class="bu">file</span>:</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> <span class="bu">file</span>.read()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-21" class="cell styled-output" data-execution_count="45">
+<div id="cell-21" class="cell styled-output" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(data[:<span class="dv">200</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>First Citizen:
@@ -2044,17 +2056,17 @@ First, you</code></pre>
 <section id="preprocess" class="level3" data-number="6.2">
 <h3 data-number="6.2" data-anchor-id="preprocess"><span class="header-section-number">6.2</span> Preprocess</h3>
 <p>We need to convert the text data into numerical data. Using scikit-learn’s <code>LabelEncoder</code> we can map each character to a unique integer. The same encoder will be used to inverse transform the predictions back to characters.</p>
-<div id="cell-23" class="cell" data-execution_count="46">
+<div id="cell-23" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> LabelEncoder</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>char_data <span class="op">=</span> np.array(<span class="bu">list</span>(data))</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>encoder <span class="op">=</span> LabelEncoder()</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>indices_data <span class="op">=</span> encoder.fit_transform(char_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-24" class="cell styled-output" data-execution_count="47">
+<div id="cell-24" class="cell styled-output" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>vocabulary <span class="op">=</span> encoder.classes_</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>vocabulary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="47">
+<div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>array(['\n', ' ', '!', '$', '&amp;', "'", ',', '-', '.', '3', ':', ';', '?',
        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
        'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
@@ -2064,9 +2076,9 @@ First, you</code></pre>
 </div>
 </div>
 <p>An example of the mapped data:</p>
-<div id="cell-26" class="cell styled-output" data-execution_count="44">
+<div id="cell-26" class="cell styled-output" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>indices_data[:<span class="dv">200</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="44">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>array([18, 47, 56, 57, 58,  1, 15, 47, 58, 47, 64, 43, 52, 10,  0, 14, 43,
        44, 53, 56, 43,  1, 61, 43,  1, 54, 56, 53, 41, 43, 43, 42,  1, 39,
        52, 63,  1, 44, 59, 56, 58, 46, 43, 56,  6,  1, 46, 43, 39, 56,  1,
@@ -2429,7 +2441,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  const darkModeDefault = false;
+  const darkModeDefault = true;
   let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
@@ -2857,10 +2869,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
-<script src="https://giscus.app/client.js" data-repo="nsarang/nsarang.github.io" data-repo-id="R_kgDOMZYgPg" data-category="Announcements" data-category-id="DIC_kwDOMZYgPs4ChVIN" data-mapping="pathname" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
+<script src="https://giscus.app/client.js" data-repo="nsarang/nsarang.github.io" data-repo-id="R_kgDOMZYgPg" data-category="Announcements" data-category-id="DIC_kwDOMZYgPs4ChVIN" data-mapping="pathname" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="dark" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
 </script>
-<input type="hidden" id="giscus-base-theme" value="light">
-<input type="hidden" id="giscus-alt-theme" value="dark">
+<input type="hidden" id="giscus-base-theme" value="dark">
+<input type="hidden" id="giscus-alt-theme" value="light">
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
@@ -2875,6 +2887,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+<script>
+async function loadBodyWhenReady() {
+    while (!document.body.classList.contains('quarto-light') && !document.body.classList.contains('quarto-dark')) {
+        await new Promise(resolve => setTimeout(resolve, 50));
+    }
+    setTimeout(() => {
+        document.body.style.visibility = "visible";
+    }, 50); // Adjust the delay to allow for the dark mode to be loaded
+}
+loadBodyWhenReady();
+</script>
 <script src="../../_assets/docfuse/render.js"></script>
 
 

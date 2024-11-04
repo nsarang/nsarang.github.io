@@ -36,11 +36,11 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -158,6 +158,18 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
     
 <!-- main -->
 <main class="content column-page" id="quarto-document-content">
+<style>
+  body {
+    visibility: hidden; /* initially hidden until DOM ready to prevent flicker */
+  }
+</style>
+<noscript>
+  <style>
+    body {
+      visibility: visible !important; /* Override hidden state when JS is disabled */
+    }
+  </style>
+</noscript>
 
 
 
@@ -486,7 +498,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  const darkModeDefault = false;
+  const darkModeDefault = true;
   let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
@@ -928,6 +940,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+<script>
+async function loadBodyWhenReady() {
+    while (!document.body.classList.contains('quarto-light') && !document.body.classList.contains('quarto-dark')) {
+        await new Promise(resolve => setTimeout(resolve, 50));
+    }
+    setTimeout(() => {
+        document.body.style.visibility = "visible";
+    }, 50); // Adjust the delay to allow for the dark mode to be loaded
+}
+loadBodyWhenReady();
+</script>
 
 
 
