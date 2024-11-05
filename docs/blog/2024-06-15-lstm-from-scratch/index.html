@@ -367,10 +367,10 @@ P.S. You can toggle between light and dark mode through the button at the top ri
 </div>
 <p>The LSTM cell consists of the following components: <span class="math display">\[
 \begin{aligned}
-f_t &amp;= \sigma(W_{if}x_t + b_{if} + W_{hf}h_{t-1} + b_{hf}) \\
-i_t &amp;= \sigma(W_{ii}x_t + b_{ii} + W_{hi}h_{t-1} + b_{hi}) \\
-o_t &amp;= \sigma(W_{io}x_t + b_{io} + W_{ho}h_{t-1} + b_{ho}) \\
-\tilde{C}_t &amp;= \tanh(W_{ic}x_t + b_{ic} + W_{hc}h_{t-1} + b_{hc}) \\
+f_t &amp;= \sigma(W_{if}x_t + b_{if} \;+\; W_{hf}h_{t-1} + b_{hf}) \\
+i_t &amp;= \sigma(W_{ii}x_t + b_{ii} \;+\; W_{hi}h_{t-1} + b_{hi}) \\
+o_t &amp;= \sigma(W_{io}x_t + b_{io} \;+\; W_{ho}h_{t-1} + b_{ho}) \\
+\tilde{C}_t &amp;= \tanh(W_{ic}x_t + b_{ic} \;+\; W_{hc}h_{t-1} + b_{hc}) \\
 C_t &amp;= f_t \odot C_{t-1} + i_t \odot \tilde{C}_t \\
 h_t &amp;= o_t \odot \tanh(C_t)
 \end{aligned}
@@ -390,7 +390,7 @@ h_t &amp;= o_t \odot \tanh(C_t)
 </figure>
 </div>
 <p>Now let’s get into the implementation, step by step.</p>
-<div id="cell-6" class="cell page-columns page-full" data-execution_count="4">
+<div id="cell-6" class="cell page-columns page-full" data-execution_count="25">
 <div class="cell-output cell-output-display column-page">
 <h3 data-anchor-id="multi-layers">lstm.py</h3>
         <div class="docfuse ">
@@ -533,8 +533,22 @@ The model is used to process input sequences and generate output logits.</p>
             <div class="code">
                 <div class="highlight"><pre><span class="linenos">21</span>                <span class="n">linp_sz</span> <span class="o">=</span> <span class="n">hidden_size</span> <span class="o">+</span> <span class="p">(</span>
 <span class="linenos">22</span>                    <span class="n">embed_size</span> <span class="k">if</span> <span class="n">cell_index</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">hidden_size</span>
-<span class="linenos">23</span>                <span class="p">)</span>
-<span class="linenos">24</span>                <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"W</span><span class="si">{</span><span class="n">layer_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cell_index</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">empty</span><span class="p">(</span>
+<span class="linenos">23</span>                <span class="p">)</span></pre></div>
+
+            </div>
+        </div>
+    
+
+        <div class="section" id="lstm-8">
+            <div class="docs">
+                <div class="section-link">
+                    <a href="#lstm-8">#</a>
+                </div>
+                <p>Weights and bias for the linear layer</p>
+
+            </div>
+            <div class="code">
+                <div class="highlight"><pre><span class="linenos">24</span>                <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"W</span><span class="si">{</span><span class="n">layer_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cell_index</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">empty</span><span class="p">(</span>
 <span class="linenos">25</span>                    <span class="p">(</span><span class="n">linp_sz</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
 <span class="linenos">26</span>                <span class="p">)</span>
 <span class="linenos">27</span>                <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"b</span><span class="si">{</span><span class="n">layer_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cell_index</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">empty</span><span class="p">(</span>
@@ -545,10 +559,10 @@ The model is used to process input sequences and generate output logits.</p>
         </div>
     
 
-        <div class="section" id="lstm-8">
+        <div class="section" id="lstm-9">
             <div class="docs">
                 <div class="section-link">
-                    <a href="#lstm-8">#</a>
+                    <a href="#lstm-9">#</a>
                 </div>
                 <p>Classification head (projection layer) to generate logits</p>
 
@@ -561,10 +575,10 @@ The model is used to process input sequences and generate output logits.</p>
         </div>
     
 
-        <div class="section" id="lstm-9">
+        <div class="section" id="lstm-10">
             <div class="docs">
                 <div class="section-link">
-                    <a href="#lstm-9">#</a>
+                    <a href="#lstm-10">#</a>
                 </div>
                 <p>Create the gradient arrays. These will be used to store the gradients during backpropagation.</p>
 
@@ -576,10 +590,10 @@ The model is used to process input sequences and generate output logits.</p>
         </div>
     
 
-        <div class="section" id="lstm-10">
+        <div class="section" id="lstm-11">
             <div class="docs">
                 <div class="section-link">
-                    <a href="#lstm-10">#</a>
+                    <a href="#lstm-11">#</a>
                 </div>
                 <p>Initialize the weights</p>
 
@@ -591,10 +605,10 @@ The model is used to process input sequences and generate output logits.</p>
         </div>
     
 
-        <div class="section" id="lstm-11">
+        <div class="section" id="lstm-12">
             <div class="docs">
                 <div class="section-link">
-                    <a href="#lstm-11">#</a>
+                    <a href="#lstm-12">#</a>
                 </div>
                 <p>Calculate the total number of parameters in the model.
 The <code>size</code> property of a numpy array returns the number of elements in the array.</p>
@@ -609,10 +623,10 @@ The <code>size</code> property of a numpy array returns the number of elements i
         </div>
     
 
-        <div class="section" id="lstm-12">
+        <div class="section" id="lstm-13">
             <div class="docs">
                 <div class="section-link">
-                    <a href="#lstm-12">#</a>
+                    <a href="#lstm-13">#</a>
                 </div>
                 <p><strong>Glorot/Xavier initialization</strong></p>
 <p>The weights are initialized from a uniform distribution in the range \([-d, d]\), where
@@ -636,10 +650,10 @@ training. The biases are initialized to zero.</p>
         </div>
     
 
-        <div class="section" id="lstm-13">
+        <div class="section" id="lstm-14">
             <div class="docs">
                 <div class="section-link">
-                    <a href="#lstm-13">#</a>
+                    <a href="#lstm-14">#</a>
                 </div>
                 <p>Initialize the hidden and cell states for the LSTM layers.</p>
 
@@ -652,10 +666,10 @@ training. The biases are initialized to zero.</p>
         </div>
     
 
-        <div class="section" id="lstm-14">
+        <div class="section" id="lstm-15">
             <div class="docs">
                 <div class="section-link">
-                    <a href="#lstm-14">#</a>
+                    <a href="#lstm-15">#</a>
                 </div>
                 <p>For every LSTM cell and every sample in the batch, initialize the hidden and cell states to zeros.</p>
 
@@ -669,10 +683,10 @@ training. The biases are initialized to zero.</p>
         </div>
     
 
-        <div class="section" id="lstm-15">
+        <div class="section" id="lstm-16">
             <div class="docs">
                 <div class="section-link">
-                    <a href="#lstm-15">#</a>
+                    <a href="#lstm-16">#</a>
                 </div>
                 <p>Forward pass through the LSTM model.</p>
 <ul>
@@ -693,39 +707,7 @@ If False, <code>inputs</code> is used as the prefix.</li>
 <span class="linenos">55</span>        <span class="k">if</span> <span class="n">teacher_forcing</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
 <span class="linenos">56</span>            <span class="k">assert</span> <span class="n">generation_length</span> <span class="o">==</span> <span class="mi">0</span>
 <span class="linenos">57</span>
-<span class="linenos">58</span>        <span class="n">n_timestamps</span> <span class="o">=</span> <span class="n">seq_len</span> <span class="o">+</span> <span class="n">generation_length</span>
-<span class="linenos">59</span>        <span class="n">activations</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">))</span>
-<span class="linenos">60</span>        <span class="n">outputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">zeros</span><span class="p">((</span><span class="n">batch_sz</span><span class="p">,</span> <span class="n">n_timestamps</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vocab_size</span><span class="p">))</span>
-<span class="linenos">61</span>
-<span class="linenos">62</span>        <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="linenos">63</span>            <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_state</span><span class="p">(</span><span class="n">batch_sz</span><span class="p">)</span>
-<span class="linenos">64</span>        <span class="k">else</span><span class="p">:</span>
-<span class="linenos">65</span>            <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># make a shallow copy</span>
-<span class="linenos">66</span>        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"h"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]:</span>
-<span class="linenos">67</span>            <span class="n">activations</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-<span class="linenos">68</span>
-<span class="linenos">69</span>        <span class="k">for</span> <span class="n">timestep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_timestamps</span><span class="p">):</span></pre></div>
-
-            </div>
-        </div>
-    
-
-        <div class="section" id="lstm-16">
-            <div class="docs">
-                <div class="section-link">
-                    <a href="#lstm-16">#</a>
-                </div>
-                <p>If teacher forcing is False and the prefix is consumed, use the previous prediction as the input
-for the next timestep</p>
-
-            </div>
-            <div class="code">
-                <div class="highlight"><pre><span class="linenos">70</span>            <span class="k">if</span> <span class="n">teacher_forcing</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">timestep</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
-<span class="linenos">71</span>                <span class="n">word_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">argmax</span><span class="p">(</span><span class="n">outputs</span><span class="p">[:,</span> <span class="n">timestep</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="linenos">72</span>            <span class="k">else</span><span class="p">:</span>
-<span class="linenos">73</span>                <span class="n">word_indices</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[:,</span> <span class="n">timestep</span><span class="p">]</span>
-<span class="linenos">74</span>            <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"embedding"</span><span class="p">][</span><span class="n">word_indices</span><span class="p">]</span>
-<span class="linenos">75</span>            <span class="n">activations</span><span class="p">[</span><span class="s2">"input"</span><span class="p">][</span><span class="n">timestep</span><span class="p">]</span> <span class="o">=</span> <span class="n">word_indices</span></pre></div>
+<span class="linenos">58</span>        <span class="n">n_timestamps</span> <span class="o">=</span> <span class="n">seq_len</span> <span class="o">+</span> <span class="n">generation_length</span></pre></div>
 
             </div>
         </div>
@@ -736,11 +718,11 @@ for the next timestep</p>
                 <div class="section-link">
                     <a href="#lstm-17">#</a>
                 </div>
-                <p>Forward pass through the LSTM cells</p>
+                <p>Dictionary to store the activations at each timestep. This'll be used during backpropagation.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">76</span>            <span class="k">for</span> <span class="n">cell_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">):</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">59</span>        <span class="n">activations</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">))</span></pre></div>
 
             </div>
         </div>
@@ -751,12 +733,11 @@ for the next timestep</p>
                 <div class="section-link">
                     <a href="#lstm-18">#</a>
                 </div>
-                <p>Previous cell states</p>
+                <p>Output probabilities of every token in the vocabulary at each timestep</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">77</span>                <span class="n">h_prev</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span>
-<span class="linenos">78</span>                <span class="n">c_prev</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">60</span>        <span class="n">outputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">zeros</span><span class="p">((</span><span class="n">batch_sz</span><span class="p">,</span> <span class="n">n_timestamps</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vocab_size</span><span class="p">))</span></pre></div>
 
             </div>
         </div>
@@ -767,11 +748,16 @@ for the next timestep</p>
                 <div class="section-link">
                     <a href="#lstm-19">#</a>
                 </div>
-                <p>Concatenate the input features and the previous hidden state</p>
+                <p>Initialize the hidden and cell states</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">79</span>                <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">concatenate</span><span class="p">((</span><span class="n">features</span><span class="p">,</span> <span class="n">h_prev</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">61</span>        <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos">62</span>            <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_state</span><span class="p">(</span><span class="n">batch_sz</span><span class="p">)</span>
+<span class="linenos">63</span>        <span class="k">else</span><span class="p">:</span>
+<span class="linenos">64</span>            <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># make a shallow copy</span>
+<span class="linenos">65</span>        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"h"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]:</span>
+<span class="linenos">66</span>            <span class="n">activations</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="n">k</span><span class="p">]</span></pre></div>
 
             </div>
         </div>
@@ -782,31 +768,11 @@ for the next timestep</p>
                 <div class="section-link">
                     <a href="#lstm-20">#</a>
                 </div>
-                <p>Apply the gates, which are linear operations followed by activation functions</p>
-<p>\(
-\begin{aligned}
-f_t &amp;= \sigma(W_{if}x_t + b_{if} \;+\; W_{hf}h_{t-1} + b_{hf}) \\[1ex]
-i_t &amp;= 1 - f_t \qquad\qquad \text{Coupled forget and input gates} \\[1ex]
-o_t &amp;= \sigma(W_{io}x_t + b_{io} \;+\; W_{ho}h_{t-1} + b_{ho}) \\[1ex]
-\tilde{C}_t &amp;= \tanh(W_{ic}x_t + b_{ic} \;+\; W_{hc}h_{t-1} + b_{hc}) \\[1ex]
-\end{aligned}
-\)</p>
+                <p>Process the input sequences</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">80</span>                <span class="n">f</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span>
-<span class="linenos">81</span>                    <span class="n">X</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"Wf_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
-<span class="linenos">82</span>                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"bf_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
-<span class="linenos">83</span>                <span class="p">)</span>
-<span class="linenos">84</span>                <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">f</span>
-<span class="linenos">85</span>                <span class="n">o</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span>
-<span class="linenos">86</span>                    <span class="n">X</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"Wo_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
-<span class="linenos">87</span>                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"bo_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
-<span class="linenos">88</span>                <span class="p">)</span>
-<span class="linenos">89</span>                <span class="n">c_bar</span> <span class="o">=</span> <span class="n">tanh</span><span class="p">(</span>
-<span class="linenos">90</span>                    <span class="n">X</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"Wc_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
-<span class="linenos">91</span>                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"bc_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
-<span class="linenos">92</span>                <span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">67</span>        <span class="k">for</span> <span class="n">timestep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_timestamps</span><span class="p">):</span></pre></div>
 
             </div>
         </div>
@@ -816,6 +782,109 @@ o_t &amp;= \sigma(W_{io}x_t + b_{io} \;+\; W_{ho}h_{t-1} + b_{ho}) \\[1ex]
             <div class="docs">
                 <div class="section-link">
                     <a href="#lstm-21">#</a>
+                </div>
+                <p>If teacher forcing is False and the prefix is consumed, use the previous prediction as the input
+for the next timestep</p>
+
+            </div>
+            <div class="code">
+                <div class="highlight"><pre><span class="linenos">68</span>            <span class="k">if</span> <span class="n">teacher_forcing</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">timestep</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+<span class="linenos">69</span>                <span class="n">word_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">argmax</span><span class="p">(</span><span class="n">outputs</span><span class="p">[:,</span> <span class="n">timestep</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">70</span>            <span class="k">else</span><span class="p">:</span>
+<span class="linenos">71</span>                <span class="n">word_indices</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[:,</span> <span class="n">timestep</span><span class="p">]</span>
+<span class="linenos">72</span>            <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"embedding"</span><span class="p">][</span><span class="n">word_indices</span><span class="p">]</span>
+<span class="linenos">73</span>            <span class="n">activations</span><span class="p">[</span><span class="s2">"input"</span><span class="p">][</span><span class="n">timestep</span><span class="p">]</span> <span class="o">=</span> <span class="n">word_indices</span></pre></div>
+
+            </div>
+        </div>
+    
+
+        <div class="section" id="lstm-22">
+            <div class="docs">
+                <div class="section-link">
+                    <a href="#lstm-22">#</a>
+                </div>
+                <p>Forward pass through the LSTM cells</p>
+
+            </div>
+            <div class="code">
+                <div class="highlight"><pre><span class="linenos">74</span>            <span class="k">for</span> <span class="n">cell_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">):</span></pre></div>
+
+            </div>
+        </div>
+    
+
+        <div class="section" id="lstm-23">
+            <div class="docs">
+                <div class="section-link">
+                    <a href="#lstm-23">#</a>
+                </div>
+                <p>Previous cell states</p>
+
+            </div>
+            <div class="code">
+                <div class="highlight"><pre><span class="linenos">75</span>                <span class="n">h_prev</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span>
+<span class="linenos">76</span>                <span class="n">c_prev</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span></pre></div>
+
+            </div>
+        </div>
+    
+
+        <div class="section" id="lstm-24">
+            <div class="docs">
+                <div class="section-link">
+                    <a href="#lstm-24">#</a>
+                </div>
+                <p>We can simplify the gate operation by concatenating the input features with the hidden state,
+and perform a single linear projection instead of two.</p>
+
+            </div>
+            <div class="code">
+                <div class="highlight"><pre><span class="linenos">77</span>                <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">concatenate</span><span class="p">((</span><span class="n">features</span><span class="p">,</span> <span class="n">h_prev</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span></pre></div>
+
+            </div>
+        </div>
+    
+
+        <div class="section" id="lstm-25">
+            <div class="docs">
+                <div class="section-link">
+                    <a href="#lstm-25">#</a>
+                </div>
+                <p>Apply the gates, which are linear operations followed by activation functions</p>
+<p>\(
+\begin{aligned}
+f_t &amp;= \sigma(W_{if}{input}_t + b_{if} \;+\; W_{hf}h_{t-1} + b_{hf}) \\[1ex]
+i_t &amp;= 1 - f_t \qquad\qquad \text{Coupled forget and input gates} \\[1ex]
+o_t &amp;= \sigma(W_{io}{input}_t + b_{io} \;+\; W_{ho}h_{t-1} + b_{ho}) \\[1ex]
+\tilde{C}_t &amp;= \tanh(W_{ic}{input}_t + b_{ic} \;+\; W_{hc}h_{t-1} + b_{hc}) \\[1ex]
+\end{aligned}
+\)</p>
+
+            </div>
+            <div class="code">
+                <div class="highlight"><pre><span class="linenos">78</span>                <span class="n">f</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span>
+<span class="linenos">79</span>                    <span class="n">X</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"Wf_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
+<span class="linenos">80</span>                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"bf_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
+<span class="linenos">81</span>                <span class="p">)</span>
+<span class="linenos">82</span>                <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">f</span>
+<span class="linenos">83</span>                <span class="n">o</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span>
+<span class="linenos">84</span>                    <span class="n">X</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"Wo_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
+<span class="linenos">85</span>                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"bo_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
+<span class="linenos">86</span>                <span class="p">)</span>
+<span class="linenos">87</span>                <span class="n">c_bar</span> <span class="o">=</span> <span class="n">tanh</span><span class="p">(</span>
+<span class="linenos">88</span>                    <span class="n">X</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"Wc_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
+<span class="linenos">89</span>                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"bc_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
+<span class="linenos">90</span>                <span class="p">)</span></pre></div>
+
+            </div>
+        </div>
+    
+
+        <div class="section" id="lstm-26">
+            <div class="docs">
+                <div class="section-link">
+                    <a href="#lstm-26">#</a>
                 </div>
                 <p>New memory cell and hidden state</p>
 <p>\(
@@ -827,91 +896,8 @@ h_t &amp;= o_t \odot \tanh(C_t)
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">93</span>                <span class="n">c</span> <span class="o">=</span> <span class="n">f</span> <span class="o">*</span> <span class="n">c_prev</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">c_bar</span>
-<span class="linenos">94</span>                <span class="n">h</span> <span class="o">=</span> <span class="n">o</span> <span class="o">*</span> <span class="n">tanh</span><span class="p">(</span><span class="n">c</span><span class="p">)</span></pre></div>
-
-            </div>
-        </div>
-    
-
-        <div class="section" id="lstm-22">
-            <div class="docs">
-                <div class="section-link">
-                    <a href="#lstm-22">#</a>
-                </div>
-                <p>Classification head</p>
-
-            </div>
-            <div class="code">
-                <div class="highlight"><pre><span class="linenos">95</span>                <span class="k">if</span> <span class="n">cell_idx</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
-<span class="linenos">96</span>                    <span class="n">logits</span> <span class="o">=</span> <span class="n">h</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"W_head"</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"b_head"</span><span class="p">]</span>
-<span class="linenos">97</span>                    <span class="n">probs</span> <span class="o">=</span> <span class="n">softmax</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="linenos">98</span>                    <span class="n">outputs</span><span class="p">[:,</span> <span class="n">timestep</span><span class="p">]</span> <span class="o">=</span> <span class="n">probs</span></pre></div>
-
-            </div>
-        </div>
-    
-
-        <div class="section" id="lstm-23">
-            <div class="docs">
-                <div class="section-link">
-                    <a href="#lstm-23">#</a>
-                </div>
-                <p>Update the state for the next timestep</p>
-
-            </div>
-            <div class="code">
-                <div class="highlight"><pre><span class="linenos"> 99</span>                <span class="n">state</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
-<span class="linenos">100</span>                <span class="n">state</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span>
-<span class="linenos">101</span>                <span class="n">features</span> <span class="o">=</span> <span class="n">h</span></pre></div>
-
-            </div>
-        </div>
-    
-
-        <div class="section" id="lstm-24">
-            <div class="docs">
-                <div class="section-link">
-                    <a href="#lstm-24">#</a>
-                </div>
-                <p>Save the activations for backpropagation</p>
-
-            </div>
-            <div class="code">
-                <div class="highlight"><pre><span class="linenos">102</span>                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-<span class="linenos">103</span>                    <span class="p">[</span><span class="s2">"x"</span><span class="p">,</span> <span class="s2">"f"</span><span class="p">,</span> <span class="s2">"o"</span><span class="p">,</span> <span class="s2">"c_bar"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">,</span> <span class="s2">"h"</span><span class="p">],</span> <span class="p">[</span><span class="n">X</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">c_bar</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span>
-<span class="linenos">104</span>                <span class="p">):</span>
-<span class="linenos">105</span>                    <span class="n">activations</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">timestep</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></pre></div>
-
-            </div>
-        </div>
-    
-
-        <div class="section" id="lstm-25">
-            <div class="docs">
-                <div class="section-link">
-                    <a href="#lstm-25">#</a>
-                </div>
-                
-            </div>
-            <div class="code">
-                <div class="highlight"><pre><span class="linenos">106</span>        <span class="k">return</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">activations</span></pre></div>
-
-            </div>
-        </div>
-    
-
-        <div class="section" id="lstm-26">
-            <div class="docs">
-                <div class="section-link">
-                    <a href="#lstm-26">#</a>
-                </div>
-                <p>Alias for the forward method, similar to PyTorch's <code>nn.Module</code>.
-This enables <code>model(inputs)</code> \(\equiv\) <code>model.forward(inputs)</code></p>
-
-            </div>
-            <div class="code">
-                <div class="highlight"><pre><span class="linenos">107</span>    <span class="fm">__call__</span> <span class="o">=</span> <span class="n">forward</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">91</span>                <span class="n">c</span> <span class="o">=</span> <span class="n">f</span> <span class="o">*</span> <span class="n">c_prev</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">c_bar</span>
+<span class="linenos">92</span>                <span class="n">h</span> <span class="o">=</span> <span class="n">o</span> <span class="o">*</span> <span class="n">tanh</span><span class="p">(</span><span class="n">c</span><span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -922,16 +908,14 @@ This enables <code>model(inputs)</code> \(\equiv\) <code>model.forward(inputs)</
                 <div class="section-link">
                     <a href="#lstm-27">#</a>
                 </div>
-                <p>Backward pass to compute the gradients.</p>
-<ul>
-<li><code>grad</code>: Gradient of the loss with respect to the output of the model, i.e. logits (pre-softmax scores)</li>
-<li><code>activations</code>: Activations from the forward pass.</li>
-</ul>
+                <p>Classification head</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">108</span>    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">activations</span><span class="p">):</span>
-<span class="linenos">109</span>        <span class="n">batch_sz</span><span class="p">,</span> <span class="n">seq_len</span> <span class="o">=</span> <span class="n">grad</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">93</span>                <span class="k">if</span> <span class="n">cell_idx</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+<span class="linenos">94</span>                    <span class="n">logits</span> <span class="o">=</span> <span class="n">h</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"W_head"</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"b_head"</span><span class="p">]</span>
+<span class="linenos">95</span>                    <span class="n">probs</span> <span class="o">=</span> <span class="n">softmax</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">96</span>                    <span class="n">outputs</span><span class="p">[:,</span> <span class="n">timestep</span><span class="p">]</span> <span class="o">=</span> <span class="n">probs</span></pre></div>
 
             </div>
         </div>
@@ -942,14 +926,13 @@ This enables <code>model(inputs)</code> \(\equiv\) <code>model.forward(inputs)</
                 <div class="section-link">
                     <a href="#lstm-28">#</a>
                 </div>
-                <p>Intialize the gradients of the next timestep to zeros. This will be updated as we move backward in time.</p>
+                <p>Update the state for the next timestep</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">110</span>        <span class="n">grad_next</span> <span class="o">=</span> <span class="p">{</span>
-<span class="linenos">111</span>            <span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">,</span> <span class="n">batch_sz</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">))</span>
-<span class="linenos">112</span>            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"h"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]</span>
-<span class="linenos">113</span>        <span class="p">}</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">97</span>                <span class="n">state</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+<span class="linenos">98</span>                <span class="n">state</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span>
+<span class="linenos">99</span>                <span class="n">features</span> <span class="o">=</span> <span class="n">h</span></pre></div>
 
             </div>
         </div>
@@ -959,6 +942,92 @@ This enables <code>model(inputs)</code> \(\equiv\) <code>model.forward(inputs)</
             <div class="docs">
                 <div class="section-link">
                     <a href="#lstm-29">#</a>
+                </div>
+                <p>Save the activations for backpropagation</p>
+
+            </div>
+            <div class="code">
+                <div class="highlight"><pre><span class="linenos">100</span>                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+<span class="linenos">101</span>                    <span class="p">[</span><span class="s2">"x"</span><span class="p">,</span> <span class="s2">"f"</span><span class="p">,</span> <span class="s2">"o"</span><span class="p">,</span> <span class="s2">"c_bar"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">,</span> <span class="s2">"h"</span><span class="p">],</span> <span class="p">[</span><span class="n">X</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">c_bar</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span>
+<span class="linenos">102</span>                <span class="p">):</span>
+<span class="linenos">103</span>                    <span class="n">activations</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">timestep</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></pre></div>
+
+            </div>
+        </div>
+    
+
+        <div class="section" id="lstm-30">
+            <div class="docs">
+                <div class="section-link">
+                    <a href="#lstm-30">#</a>
+                </div>
+                
+            </div>
+            <div class="code">
+                <div class="highlight"><pre><span class="linenos">104</span>        <span class="k">return</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">activations</span></pre></div>
+
+            </div>
+        </div>
+    
+
+        <div class="section" id="lstm-31">
+            <div class="docs">
+                <div class="section-link">
+                    <a href="#lstm-31">#</a>
+                </div>
+                <p>Alias for the forward method, similar to PyTorch's <code>nn.Module</code>.
+This enables <code>model(inputs)</code> \(\equiv\) <code>model.forward(inputs)</code></p>
+
+            </div>
+            <div class="code">
+                <div class="highlight"><pre><span class="linenos">105</span>    <span class="fm">__call__</span> <span class="o">=</span> <span class="n">forward</span></pre></div>
+
+            </div>
+        </div>
+    
+
+        <div class="section" id="lstm-32">
+            <div class="docs">
+                <div class="section-link">
+                    <a href="#lstm-32">#</a>
+                </div>
+                <p>Backward pass to compute the gradients.</p>
+<ul>
+<li><code>grad</code>: Gradient of the loss with respect to the output of the model, i.e. logits (pre-softmax scores)</li>
+<li><code>activations</code>: Activations from the forward pass.</li>
+</ul>
+
+            </div>
+            <div class="code">
+                <div class="highlight"><pre><span class="linenos">106</span>    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">activations</span><span class="p">):</span>
+<span class="linenos">107</span>        <span class="n">batch_sz</span><span class="p">,</span> <span class="n">seq_len</span> <span class="o">=</span> <span class="n">grad</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span></pre></div>
+
+            </div>
+        </div>
+    
+
+        <div class="section" id="lstm-33">
+            <div class="docs">
+                <div class="section-link">
+                    <a href="#lstm-33">#</a>
+                </div>
+                <p>Intialize the gradients of the next timestep to zeros. This will be updated as we move backward in time.</p>
+
+            </div>
+            <div class="code">
+                <div class="highlight"><pre><span class="linenos">108</span>        <span class="n">grad_next</span> <span class="o">=</span> <span class="p">{</span>
+<span class="linenos">109</span>            <span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">,</span> <span class="n">batch_sz</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">))</span>
+<span class="linenos">110</span>            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"h"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]</span>
+<span class="linenos">111</span>        <span class="p">}</span></pre></div>
+
+            </div>
+        </div>
+    
+
+        <div class="section" id="lstm-34">
+            <div class="docs">
+                <div class="section-link">
+                    <a href="#lstm-34">#</a>
                 </div>
                 <p>Helper function to compute the gradients of the linear layer.
 The gradients are computed with respect to the input, weights, and biases respectively.</p>
@@ -970,92 +1039,8 @@ The gradients are computed with respect to the input, weights, and biases respec
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">114</span>        <span class="k">def</span> <span class="nf">_lin_grad</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">dY</span><span class="p">):</span>
-<span class="linenos">115</span>            <span class="k">return</span> <span class="p">(</span><span class="n">dY</span> <span class="o">@</span> <span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">dY</span><span class="p">,</span> <span class="n">dY</span><span class="p">)</span></pre></div>
-
-            </div>
-        </div>
-    
-
-        <div class="section" id="lstm-30">
-            <div class="docs">
-                <div class="section-link">
-                    <a href="#lstm-30">#</a>
-                </div>
-                <p>Backpropagation through time</p>
-
-            </div>
-            <div class="code">
-                <div class="highlight"><pre><span class="linenos">116</span>        <span class="k">for</span> <span class="n">timestep</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">seq_len</span><span class="p">)):</span></pre></div>
-
-            </div>
-        </div>
-    
-
-        <div class="section" id="lstm-31">
-            <div class="docs">
-                <div class="section-link">
-                    <a href="#lstm-31">#</a>
-                </div>
-                <p>Classification head</p>
-
-            </div>
-            <div class="code">
-                <div class="highlight"><pre><span class="linenos">117</span>            <span class="n">dout_t</span> <span class="o">=</span> <span class="n">grad</span><span class="p">[:,</span> <span class="n">timestep</span><span class="p">]</span>
-<span class="linenos">118</span>            <span class="n">h_t</span> <span class="o">=</span> <span class="n">activations</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">timestep</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></pre></div>
-
-            </div>
-        </div>
-    
-
-        <div class="section" id="lstm-32">
-            <div class="docs">
-                <div class="section-link">
-                    <a href="#lstm-32">#</a>
-                </div>
-                <p>\(\text{logits}_t = h_t \mathbf{W}_{\text{head}} + \mathbf{b}_{\text{head}}\)</p>
-
-            </div>
-            <div class="code">
-                <div class="highlight"><pre><span class="linenos">119</span>            <span class="n">dh_t</span><span class="p">,</span> <span class="n">dW_head</span><span class="p">,</span> <span class="n">db_head</span> <span class="o">=</span> <span class="n">_lin_grad</span><span class="p">(</span>
-<span class="linenos">120</span>                <span class="n">X</span><span class="o">=</span><span class="n">h_t</span><span class="p">,</span> <span class="n">W</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"W_head"</span><span class="p">],</span> <span class="n">dY</span><span class="o">=</span><span class="n">dout_t</span>
-<span class="linenos">121</span>            <span class="p">)</span>
-<span class="linenos">122</span>            <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="sa">f</span><span class="s2">"W_head"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dW_head</span>
-<span class="linenos">123</span>            <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="sa">f</span><span class="s2">"b_head"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="kp">sum</span><span class="p">(</span><span class="n">db_head</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></pre></div>
-
-            </div>
-        </div>
-    
-
-        <div class="section" id="lstm-33">
-            <div class="docs">
-                <div class="section-link">
-                    <a href="#lstm-33">#</a>
-                </div>
-                <p>Iterate over the LSTM cells in reverse order</p>
-
-            </div>
-            <div class="code">
-                <div class="highlight"><pre><span class="linenos">124</span>            <span class="k">for</span> <span class="n">cell_idx</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">)):</span></pre></div>
-
-            </div>
-        </div>
-    
-
-        <div class="section" id="lstm-34">
-            <div class="docs">
-                <div class="section-link">
-                    <a href="#lstm-34">#</a>
-                </div>
-                <p>Get the activations for the current timestep</p>
-
-            </div>
-            <div class="code">
-                <div class="highlight"><pre><span class="linenos">125</span>                <span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">c_bar</span><span class="p">,</span> <span class="n">c_t</span> <span class="o">=</span> <span class="p">(</span>
-<span class="linenos">126</span>                    <span class="n">activations</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">timestep</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span>
-<span class="linenos">127</span>                    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"x"</span><span class="p">,</span> <span class="s2">"f"</span><span class="p">,</span> <span class="s2">"o"</span><span class="p">,</span> <span class="s2">"c_bar"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]</span>
-<span class="linenos">128</span>                <span class="p">)</span>
-<span class="linenos">129</span>                <span class="n">c_p</span> <span class="o">=</span> <span class="n">activations</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">timestep</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">112</span>        <span class="k">def</span> <span class="nf">_lin_grad</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">dY</span><span class="p">):</span>
+<span class="linenos">113</span>            <span class="k">return</span> <span class="p">(</span><span class="n">dY</span> <span class="o">@</span> <span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">dY</span><span class="p">,</span> <span class="n">dY</span><span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -1066,13 +1051,11 @@ The gradients are computed with respect to the input, weights, and biases respec
                 <div class="section-link">
                     <a href="#lstm-35">#</a>
                 </div>
-                <p>Gradients flowing from the next timestep. The gradient of the hidden state \(h_t\) is the sum of
-the gradients from the next cell and the next timestep.</p>
+                <p>Backpropagation through time</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">130</span>                <span class="n">dh_t</span> <span class="o">+=</span> <span class="n">grad_next</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span>
-<span class="linenos">131</span>                <span class="n">dc_t</span> <span class="o">=</span> <span class="n">grad_next</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">114</span>        <span class="k">for</span> <span class="n">timestep</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">seq_len</span><span class="p">)):</span></pre></div>
 
             </div>
         </div>
@@ -1083,12 +1066,12 @@ the gradients from the next cell and the next timestep.</p>
                 <div class="section-link">
                     <a href="#lstm-36">#</a>
                 </div>
-                <p>\(h_t = o * tanh(c_t)\)</p>
+                <p>Classification head</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">132</span>                <span class="n">do</span> <span class="o">=</span> <span class="n">dh_t</span> <span class="o">*</span> <span class="n">tanh</span><span class="p">(</span><span class="n">c_t</span><span class="p">)</span>
-<span class="linenos">133</span>                <span class="n">dc_t</span> <span class="o">=</span> <span class="n">dh_t</span> <span class="o">*</span> <span class="n">o</span> <span class="o">*</span> <span class="n">tanh</span><span class="p">(</span><span class="n">c_t</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">115</span>            <span class="n">dout_t</span> <span class="o">=</span> <span class="n">grad</span><span class="p">[:,</span> <span class="n">timestep</span><span class="p">]</span>
+<span class="linenos">116</span>            <span class="n">h_t</span> <span class="o">=</span> <span class="n">activations</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">timestep</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></pre></div>
 
             </div>
         </div>
@@ -1099,13 +1082,15 @@ the gradients from the next cell and the next timestep.</p>
                 <div class="section-link">
                     <a href="#lstm-37">#</a>
                 </div>
-                <p>\(c_t = f \times c_p + (1 - f) \times c_{\text{bar}}\)</p>
+                <p>\(\text{logits}_t = h_t \mathbf{W}_{\text{head}} + \mathbf{b}_{\text{head}}\)</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">134</span>                <span class="n">df</span> <span class="o">=</span> <span class="n">dc_t</span> <span class="o">*</span> <span class="p">(</span><span class="n">c_p</span> <span class="o">-</span> <span class="n">c_bar</span><span class="p">)</span>
-<span class="linenos">135</span>                <span class="n">dc_p</span> <span class="o">=</span> <span class="n">dc_t</span> <span class="o">*</span> <span class="n">f</span>
-<span class="linenos">136</span>                <span class="n">dc_bar</span> <span class="o">=</span> <span class="n">dc_t</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">f</span><span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">117</span>            <span class="n">dh_t</span><span class="p">,</span> <span class="n">dW_head</span><span class="p">,</span> <span class="n">db_head</span> <span class="o">=</span> <span class="n">_lin_grad</span><span class="p">(</span>
+<span class="linenos">118</span>                <span class="n">X</span><span class="o">=</span><span class="n">h_t</span><span class="p">,</span> <span class="n">W</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"W_head"</span><span class="p">],</span> <span class="n">dY</span><span class="o">=</span><span class="n">dout_t</span>
+<span class="linenos">119</span>            <span class="p">)</span>
+<span class="linenos">120</span>            <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="sa">f</span><span class="s2">"W_head"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dW_head</span>
+<span class="linenos">121</span>            <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="sa">f</span><span class="s2">"b_head"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="kp">sum</span><span class="p">(</span><span class="n">db_head</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -1116,13 +1101,11 @@ the gradients from the next cell and the next timestep.</p>
                 <div class="section-link">
                     <a href="#lstm-38">#</a>
                 </div>
-                <p>Pre-activation gradients</p>
+                <p>Iterate over the LSTM cells in reverse order</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">137</span>                <span class="n">dc_bar</span> <span class="o">*=</span> <span class="n">tanh</span><span class="p">(</span><span class="n">c_bar</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="linenos">138</span>                <span class="n">do</span> <span class="o">*=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="linenos">139</span>                <span class="n">df</span> <span class="o">*=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">122</span>            <span class="k">for</span> <span class="n">cell_idx</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">)):</span></pre></div>
 
             </div>
         </div>
@@ -1133,22 +1116,15 @@ the gradients from the next cell and the next timestep.</p>
                 <div class="section-link">
                     <a href="#lstm-39">#</a>
                 </div>
-                <p><code>f</code>, <code>o</code>, <code>c</code> Gates
-Since all the gates are linear operations, the calculation will be similar</p>
+                <p>Get the activations for the current timestep</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">140</span>                <span class="n">dinp</span><span class="p">,</span> <span class="n">dh_prev</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
-<span class="linenos">141</span>                <span class="k">for</span> <span class="n">gate</span><span class="p">,</span> <span class="n">doutput</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s2">"f"</span><span class="p">,</span> <span class="s2">"o"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">],</span> <span class="p">[</span><span class="n">df</span><span class="p">,</span> <span class="n">do</span><span class="p">,</span> <span class="n">dc_bar</span><span class="p">]):</span>
-<span class="linenos">142</span>                    <span class="n">dX</span><span class="p">,</span> <span class="n">dW</span><span class="p">,</span> <span class="n">db</span> <span class="o">=</span> <span class="n">_lin_grad</span><span class="p">(</span>
-<span class="linenos">143</span>                        <span class="n">X</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">W</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"W</span><span class="si">{</span><span class="n">gate</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">],</span> <span class="n">dY</span><span class="o">=</span><span class="n">doutput</span>
-<span class="linenos">144</span>                    <span class="p">)</span>
-<span class="linenos">145</span>                    <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="sa">f</span><span class="s2">"W</span><span class="si">{</span><span class="n">gate</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dW</span>
-<span class="linenos">146</span>                    <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="sa">f</span><span class="s2">"b</span><span class="si">{</span><span class="n">gate</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="kp">sum</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="linenos">147</span>                    <span class="n">dinp_gate</span><span class="p">,</span> <span class="n">dh_prev_gate</span> <span class="o">=</span> <span class="p">(</span>
-<span class="linenos">148</span>                        <span class="n">dX</span><span class="p">[:,</span> <span class="p">:</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">],</span>
-<span class="linenos">149</span>                        <span class="n">dX</span><span class="p">[:,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span> <span class="p">:],</span>
-<span class="linenos">150</span>                    <span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">123</span>                <span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">c_bar</span><span class="p">,</span> <span class="n">c_t</span> <span class="o">=</span> <span class="p">(</span>
+<span class="linenos">124</span>                    <span class="n">activations</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">timestep</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span>
+<span class="linenos">125</span>                    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"x"</span><span class="p">,</span> <span class="s2">"f"</span><span class="p">,</span> <span class="s2">"o"</span><span class="p">,</span> <span class="s2">"c_bar"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]</span>
+<span class="linenos">126</span>                <span class="p">)</span>
+<span class="linenos">127</span>                <span class="n">c_p</span> <span class="o">=</span> <span class="n">activations</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">timestep</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span></pre></div>
 
             </div>
         </div>
@@ -1159,13 +1135,13 @@ Since all the gates are linear operations, the calculation will be similar</p>
                 <div class="section-link">
                     <a href="#lstm-40">#</a>
                 </div>
-                <p>Accumulate the gradients for the input and the hidden state,
-since they are shared between the gates</p>
+                <p>Gradients flowing from the next timestep. The gradient of the hidden state \(h_t\) is the sum of
+the gradients from the next cell and the next timestep.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">151</span>                    <span class="n">dinp</span> <span class="o">+=</span> <span class="n">dinp_gate</span>
-<span class="linenos">152</span>                    <span class="n">dh_prev</span> <span class="o">+=</span> <span class="n">dh_prev_gate</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">128</span>                <span class="n">dh_t</span> <span class="o">+=</span> <span class="n">grad_next</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span>
+<span class="linenos">129</span>                <span class="n">dc_t</span> <span class="o">=</span> <span class="n">grad_next</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span></pre></div>
 
             </div>
         </div>
@@ -1176,13 +1152,12 @@ since they are shared between the gates</p>
                 <div class="section-link">
                     <a href="#lstm-41">#</a>
                 </div>
-                <p>Update the gradients for the previous timestep</p>
+                <p>\(h_t = o * tanh(c_t)\)</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">153</span>                <span class="n">dh_t</span> <span class="o">=</span> <span class="n">dinp</span>
-<span class="linenos">154</span>                <span class="n">grad_next</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">dc_p</span>
-<span class="linenos">155</span>                <span class="n">grad_next</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">dh_prev</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">130</span>                <span class="n">do</span> <span class="o">=</span> <span class="n">dh_t</span> <span class="o">*</span> <span class="n">tanh</span><span class="p">(</span><span class="n">c_t</span><span class="p">)</span>
+<span class="linenos">131</span>                <span class="n">dc_t</span> <span class="o">=</span> <span class="n">dh_t</span> <span class="o">*</span> <span class="n">o</span> <span class="o">*</span> <span class="n">tanh</span><span class="p">(</span><span class="n">c_t</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -1193,12 +1168,13 @@ since they are shared between the gates</p>
                 <div class="section-link">
                     <a href="#lstm-42">#</a>
                 </div>
-                <p>Embedding layer</p>
+                <p>\(c_t = f \times c_p + (1 - f) \times c_{\text{bar}}\)</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">156</span>            <span class="n">word_indices</span> <span class="o">=</span> <span class="n">activations</span><span class="p">[</span><span class="s2">"input"</span><span class="p">][</span><span class="n">timestep</span><span class="p">]</span>
-<span class="linenos">157</span>            <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="s2">"embedding"</span><span class="p">][</span><span class="n">word_indices</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dinp</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">132</span>                <span class="n">df</span> <span class="o">=</span> <span class="n">dc_t</span> <span class="o">*</span> <span class="p">(</span><span class="n">c_p</span> <span class="o">-</span> <span class="n">c_bar</span><span class="p">)</span>
+<span class="linenos">133</span>                <span class="n">dc_p</span> <span class="o">=</span> <span class="n">dc_t</span> <span class="o">*</span> <span class="n">f</span>
+<span class="linenos">134</span>                <span class="n">dc_bar</span> <span class="o">=</span> <span class="n">dc_t</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">f</span><span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -1209,24 +1185,13 @@ since they are shared between the gates</p>
                 <div class="section-link">
                     <a href="#lstm-43">#</a>
                 </div>
-                <p>Helper method to serialize the model state, similar to PyTorch's <code>state_dict</code>.
-The state dictionary contains the model configuration, weights, and gradients.
-It can be used to save and load the model.</p>
+                <p>Pre-activation gradients</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">158</span>    <span class="nd">@property</span>
-<span class="linenos">159</span>    <span class="k">def</span> <span class="nf">state_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="linenos">160</span>        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
-<span class="linenos">161</span>            <span class="n">config</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-<span class="linenos">162</span>                <span class="n">embed_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">embed_size</span><span class="p">,</span>
-<span class="linenos">163</span>                <span class="n">hidden_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
-<span class="linenos">164</span>                <span class="n">vocab_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vocab_size</span><span class="p">,</span>
-<span class="linenos">165</span>                <span class="n">n_cells</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">,</span>
-<span class="linenos">166</span>            <span class="p">),</span>
-<span class="linenos">167</span>            <span class="n">weights</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">),</span>
-<span class="linenos">168</span>            <span class="n">grad</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">),</span>
-<span class="linenos">169</span>        <span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">135</span>                <span class="n">dc_bar</span> <span class="o">*=</span> <span class="n">tanh</span><span class="p">(</span><span class="n">c_bar</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos">136</span>                <span class="n">do</span> <span class="o">*=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos">137</span>                <span class="n">df</span> <span class="o">*=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -1237,19 +1202,123 @@ It can be used to save and load the model.</p>
                 <div class="section-link">
                     <a href="#lstm-44">#</a>
                 </div>
+                <p><code>f</code>, <code>o</code>, <code>c</code> Gates
+Since all the gates are linear operations, the calculation will be similar</p>
+
+            </div>
+            <div class="code">
+                <div class="highlight"><pre><span class="linenos">138</span>                <span class="n">dinp</span><span class="p">,</span> <span class="n">dh_prev</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+<span class="linenos">139</span>                <span class="k">for</span> <span class="n">gate</span><span class="p">,</span> <span class="n">doutput</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s2">"f"</span><span class="p">,</span> <span class="s2">"o"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">],</span> <span class="p">[</span><span class="n">df</span><span class="p">,</span> <span class="n">do</span><span class="p">,</span> <span class="n">dc_bar</span><span class="p">]):</span>
+<span class="linenos">140</span>                    <span class="n">dX</span><span class="p">,</span> <span class="n">dW</span><span class="p">,</span> <span class="n">db</span> <span class="o">=</span> <span class="n">_lin_grad</span><span class="p">(</span>
+<span class="linenos">141</span>                        <span class="n">X</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">W</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"W</span><span class="si">{</span><span class="n">gate</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">],</span> <span class="n">dY</span><span class="o">=</span><span class="n">doutput</span>
+<span class="linenos">142</span>                    <span class="p">)</span>
+<span class="linenos">143</span>                    <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="sa">f</span><span class="s2">"W</span><span class="si">{</span><span class="n">gate</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dW</span>
+<span class="linenos">144</span>                    <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="sa">f</span><span class="s2">"b</span><span class="si">{</span><span class="n">gate</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="kp">sum</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos">145</span>                    <span class="n">dinp_gate</span><span class="p">,</span> <span class="n">dh_prev_gate</span> <span class="o">=</span> <span class="p">(</span>
+<span class="linenos">146</span>                        <span class="n">dX</span><span class="p">[:,</span> <span class="p">:</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">],</span>
+<span class="linenos">147</span>                        <span class="n">dX</span><span class="p">[:,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span> <span class="p">:],</span>
+<span class="linenos">148</span>                    <span class="p">)</span></pre></div>
+
+            </div>
+        </div>
+    
+
+        <div class="section" id="lstm-45">
+            <div class="docs">
+                <div class="section-link">
+                    <a href="#lstm-45">#</a>
+                </div>
+                <p>Accumulate the gradients for the input and the hidden state,
+since they are shared between the gates</p>
+
+            </div>
+            <div class="code">
+                <div class="highlight"><pre><span class="linenos">149</span>                    <span class="n">dinp</span> <span class="o">+=</span> <span class="n">dinp_gate</span>
+<span class="linenos">150</span>                    <span class="n">dh_prev</span> <span class="o">+=</span> <span class="n">dh_prev_gate</span></pre></div>
+
+            </div>
+        </div>
+    
+
+        <div class="section" id="lstm-46">
+            <div class="docs">
+                <div class="section-link">
+                    <a href="#lstm-46">#</a>
+                </div>
+                <p>Update the gradients for the previous timestep</p>
+
+            </div>
+            <div class="code">
+                <div class="highlight"><pre><span class="linenos">151</span>                <span class="n">dh_t</span> <span class="o">=</span> <span class="n">dinp</span>
+<span class="linenos">152</span>                <span class="n">grad_next</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">dc_p</span>
+<span class="linenos">153</span>                <span class="n">grad_next</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">dh_prev</span></pre></div>
+
+            </div>
+        </div>
+    
+
+        <div class="section" id="lstm-47">
+            <div class="docs">
+                <div class="section-link">
+                    <a href="#lstm-47">#</a>
+                </div>
+                <p>Embedding layer</p>
+
+            </div>
+            <div class="code">
+                <div class="highlight"><pre><span class="linenos">154</span>            <span class="n">word_indices</span> <span class="o">=</span> <span class="n">activations</span><span class="p">[</span><span class="s2">"input"</span><span class="p">][</span><span class="n">timestep</span><span class="p">]</span>
+<span class="linenos">155</span>            <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="s2">"embedding"</span><span class="p">][</span><span class="n">word_indices</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dinp</span></pre></div>
+
+            </div>
+        </div>
+    
+
+        <div class="section" id="lstm-48">
+            <div class="docs">
+                <div class="section-link">
+                    <a href="#lstm-48">#</a>
+                </div>
+                <p>Helper method to serialize the model state, similar to PyTorch's <code>state_dict</code>.
+The state dictionary contains the model configuration, weights, and gradients.
+It can be used to save and load the model.</p>
+
+            </div>
+            <div class="code">
+                <div class="highlight"><pre><span class="linenos">156</span>    <span class="nd">@property</span>
+<span class="linenos">157</span>    <span class="k">def</span> <span class="nf">state_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">158</span>        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+<span class="linenos">159</span>            <span class="n">config</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+<span class="linenos">160</span>                <span class="n">embed_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">embed_size</span><span class="p">,</span>
+<span class="linenos">161</span>                <span class="n">hidden_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
+<span class="linenos">162</span>                <span class="n">vocab_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vocab_size</span><span class="p">,</span>
+<span class="linenos">163</span>                <span class="n">n_cells</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">,</span>
+<span class="linenos">164</span>            <span class="p">),</span>
+<span class="linenos">165</span>            <span class="n">weights</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">),</span>
+<span class="linenos">166</span>            <span class="n">grad</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">),</span>
+<span class="linenos">167</span>        <span class="p">)</span></pre></div>
+
+            </div>
+        </div>
+    
+
+        <div class="section" id="lstm-49">
+            <div class="docs">
+                <div class="section-link">
+                    <a href="#lstm-49">#</a>
+                </div>
                 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">170</span>    <span class="nd">@classmethod</span>
-<span class="linenos">171</span>    <span class="k">def</span> <span class="nf">from_state_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">state_dict</span><span class="p">):</span>
-<span class="linenos">172</span>        <span class="n">obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">state_dict</span><span class="p">[</span><span class="s2">"config"</span><span class="p">])</span>
-<span class="linenos">173</span>        <span class="k">for</span> <span class="n">src</span><span class="p">,</span> <span class="n">tgt</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-<span class="linenos">174</span>            <span class="p">[</span><span class="n">state_dict</span><span class="p">[</span><span class="s2">"weights"</span><span class="p">],</span> <span class="n">state_dict</span><span class="p">[</span><span class="s2">"grad"</span><span class="p">]],</span>
-<span class="linenos">175</span>            <span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">layers</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">grad</span><span class="p">],</span>
-<span class="linenos">176</span>        <span class="p">):</span>
-<span class="linenos">177</span>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">src</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<span class="linenos">178</span>                <span class="n">tgt</span><span class="p">[</span><span class="n">k</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">v</span>
-<span class="linenos">179</span>        <span class="k">return</span> <span class="n">obj</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">168</span>    <span class="nd">@classmethod</span>
+<span class="linenos">169</span>    <span class="k">def</span> <span class="nf">from_state_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">state_dict</span><span class="p">):</span>
+<span class="linenos">170</span>        <span class="n">obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">state_dict</span><span class="p">[</span><span class="s2">"config"</span><span class="p">])</span>
+<span class="linenos">171</span>        <span class="k">for</span> <span class="n">src</span><span class="p">,</span> <span class="n">tgt</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+<span class="linenos">172</span>            <span class="p">[</span><span class="n">state_dict</span><span class="p">[</span><span class="s2">"weights"</span><span class="p">],</span> <span class="n">state_dict</span><span class="p">[</span><span class="s2">"grad"</span><span class="p">]],</span>
+<span class="linenos">173</span>            <span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">layers</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">grad</span><span class="p">],</span>
+<span class="linenos">174</span>        <span class="p">):</span>
+<span class="linenos">175</span>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">src</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="linenos">176</span>                <span class="n">tgt</span><span class="p">[</span><span class="n">k</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">v</span>
+<span class="linenos">177</span>        <span class="k">return</span> <span class="n">obj</span></pre></div>
 
             </div>
         </div>
