@@ -47,8 +47,7 @@
 }
 .bionet .button {
   float: left;
-  background-color: white;
-  color: black;
+  color: var(--bs-body-color);
   border: none;
   border-radius: 18px;
   padding: 10px 12px;
@@ -63,8 +62,6 @@
   outline: none;
 }
 .bionet .btn-blue {
-  background-color: white;
-  color: black;
   border: 2px solid #008CBA;
 }
 .bionet .blue-active {
@@ -74,8 +71,6 @@
   color: white;
 }
 .bionet .btn-black {
-  background-color: white;
-  color: black;
   border: 2px solid #888888;
 }
 .bionet .black-active {
@@ -85,8 +80,6 @@
   color: white;
 }
 .bionet .btn-violet {
-  background-color: white;
-  color: black;
   border: 2px solid #762187;
 }
 .bionet .violet-active {
@@ -223,7 +216,6 @@
   width: 100px;
   height: 42px;
   float: left;
-  background-color: white;
   padding: 10px 12px;
   text-align: center;
   text-decoration: none;
