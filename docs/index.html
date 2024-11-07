@@ -855,33 +855,35 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     const PARTICLE_COLOR_DARK = "#ffffff";
     const LINE_LINKED_COLOR_DARK = "#ffffff";
 
+    function updateTheme() {
+        const pJS = pJSDom[0].pJS;
+        // Dark theme
+        if (document.body.classList.contains('quarto-dark')) {
+            pJS.particles.color.value = PARTICLE_COLOR_DARK;
+            pJS.particles.line_linked.color = LINE_LINKED_COLOR_DARK;
+            // console.log('dark theme');
+        } else { // light theme (default)
+            // console.log('light theme');
+            pJS.particles.color.value = PARTICLE_COLOR_LIGHT;
+            pJS.particles.line_linked.color = LINE_LINKED_COLOR_LIGHT;
+        }
+        pJS.fn.particlesRefresh();
+    }
 
     particlesJS.load(parentID, configPath, function () {
-        console.log('callback - particles.js config loaded');
+        // console.log('callback - particles.js config loaded');
 
         // Add thme toggle observer to the body element
-        const bodyElement = document.body;
         const observer = new MutationObserver(mutationsList => {
             // Check if any class mutations occurred
             const hasClassMutation = mutationsList.some(mutation =>
                 mutation.attributeName === 'class'
             );
             if (hasClassMutation) {
-                const pJS = pJSDom[0].pJS;
-                // Dark theme
-                if (bodyElement.classList.contains('quarto-dark')) {
-                    pJS.particles.color.value = PARTICLE_COLOR_DARK;
-                    pJS.particles.line_linked.color = LINE_LINKED_COLOR_DARK;
-                    console.log('dark theme');
-                } else { // light theme (default)
-                    console.log('light theme');
-                    pJS.particles.color.value = PARTICLE_COLOR_LIGHT;
-                    pJS.particles.line_linked.color = LINE_LINKED_COLOR_LIGHT;
-                }
-                pJS.fn.particlesRefresh();
+                updateTheme();
             }
         });
-        observer.observe(bodyElement, { attributes: true });
+        observer.observe(document.body, { attributes: true });
 
         // Pass events from the parent element to the canvas since it's in the background
         const canvas = document.getElementsByClassName('particles-js-canvas-el')[0];
@@ -914,6 +916,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         // canvas.addEventListener('mouseleave', () => {
         //     console.log('Mouse left canvas');
         // });
+
+        // Update the theme initially
+        updateTheme();
     });
 </script>
 <script>
