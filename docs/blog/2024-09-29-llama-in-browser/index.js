@@ -117,6 +117,10 @@ import { marked } from 'https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js';
 import hljs from 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.10.0/build/es/highlight.min.js';
 
 // Initialize highlight.js
+// NOTE: quarto was crashing with ```js highlighting, so had to resort to this hack
+hljs.configure({
+    cssSelector: '.sourceCode.cell-output pre code'
+});
 hljs.highlightAll();
 
 // Configure marked to use highlight.js for code syntax highlighting

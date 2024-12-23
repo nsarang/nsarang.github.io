@@ -1,22 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.nimasarang.com/blog/2024-08-24-information-theory/index.html</loc>
-    <lastmod>2024-11-10T18:39:22.685Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/project/index.html</loc>
-    <lastmod>2024-08-14T21:20:43.443Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/blog/index.html</loc>
-    <lastmod>2024-09-17T00:31:16.166Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/about/index.html</loc>
-    <lastmod>2024-11-05T01:06:02.163Z</lastmod>
-  </url>
-  <url>
     <loc>https://www.nimasarang.com/publication/index.html</loc>
     <lastmod>2024-08-05T19:34:14.445Z</lastmod>
   </url>
@@ -25,31 +9,47 @@
     <lastmod>2024-07-14T18:16:19.923Z</lastmod>
   </url>
   <url>
-    <loc>https://www.nimasarang.com/blog/2024-06-15-lstm-from-scratch/index.html</loc>
-    <lastmod>2024-11-05T18:49:27.159Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/blog/2024-08-11-gbt-custom-loss/index.html</loc>
-    <lastmod>2024-10-20T18:21:15.055Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/publication/2023-07-01-tractable-reinforcement-learning/index.html</loc>
-    <lastmod>2024-07-14T18:04:22.680Z</lastmod>
+    <loc>https://www.nimasarang.com/project/2019-06-12-dc-gan/index.html</loc>
+    <lastmod>2024-11-05T01:31:17.633Z</lastmod>
   </url>
   <url>
     <loc>https://www.nimasarang.com/index.html</loc>
     <lastmod>2024-08-26T14:19:47.290Z</lastmod>
   </url>
   <url>
-    <loc>https://www.nimasarang.com/project/2019-06-12-dc-gan/index.html</loc>
-    <lastmod>2024-11-05T01:31:17.633Z</lastmod>
+    <loc>https://www.nimasarang.com/blog/2024-09-29-llama-in-browser/index.html</loc>
+    <lastmod>2024-12-23T01:50:28.330Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/blog/2024-08-11-gbt-custom-loss/index.html</loc>
+    <lastmod>2024-10-20T18:21:15.055Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/blog/2024-06-15-lstm-from-scratch/index.html</loc>
+    <lastmod>2024-11-05T18:49:27.159Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/about/index.html</loc>
+    <lastmod>2024-11-05T01:06:02.163Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/blog/2024-08-24-information-theory/index.html</loc>
+    <lastmod>2024-11-10T18:39:22.685Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/blog/index.html</loc>
+    <lastmod>2024-09-17T00:31:16.166Z</lastmod>
   </url>
   <url>
     <loc>https://www.nimasarang.com/project/2017-09-17-d3-force-graph-bio-networks/index.html</loc>
     <lastmod>2024-11-05T01:39:34.464Z</lastmod>
   </url>
   <url>
-    <loc>https://www.nimasarang.com/blog/2024-09-29-llama-in-browser/index.html</loc>
-    <lastmod>2024-10-27T17:59:25.492Z</lastmod>
+    <loc>https://www.nimasarang.com/project/index.html</loc>
+    <lastmod>2024-08-14T21:20:43.443Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/publication/2023-07-01-tractable-reinforcement-learning/index.html</loc>
+    <lastmod>2024-07-14T18:04:22.680Z</lastmod>
   </url>
 </urlset>
