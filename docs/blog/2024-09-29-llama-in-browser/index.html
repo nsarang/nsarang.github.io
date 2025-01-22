@@ -372,8 +372,9 @@ For more info, visit <a href="https://webgpureport.org/">https://webgpureport.or
 </section>
 <section id="how-it-works" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> How It Works</h1>
-<p>The code above runs using <a href="https://github.com/mlc-ai/web-llm">WebLLM</a>, a project that enables running LLMs in browser without requiring a server. It’s built on top of the <a href="https://github.com/mlc-ai/mlc-llm">MLC-LLM</a> (Machine Learning Compiler for LLM) framework, which optimizes models for efficient execution on various hardware platforms. MLC-LLM itself is an application of Apache <a href="https://github.com/apache/tvm">TVM</a>, a machine learning compiler stack that takes in pre-trained models, compiles and generates deployable modules that can be embedded and run everywhere. MLC-LLM specializes in LLM-specific graph transformations and optimized kernels for common operations.</p>
-<p>One of the major advantages of WebLLM is that it can utilize WebGPU for accelerated inference. WebGPU is a web standard provided by most modern browsers that allows developers low-level access to the GPU for general-purpose computing tasks. It’s a new feature that is being adopted by browsers.</p>
+<p>The code above runs using <a href="https://github.com/mlc-ai/web-llm">WebLLM</a>, a library that enables running LLMs in browser without requiring a server. It’s built on top of the <a href="https://github.com/mlc-ai/mlc-llm">MLC-LLM</a> (Machine Learning Compiler for LLM) framework, which optimizes models for efficient execution on various hardware platforms. MLC-LLM itself is an application of <a href="https://github.com/apache/tvm">Apache TVM</a>, a machine learning compiler stack that takes in pre-trained models, compiles and generates deployable modules that can be embedded and run everywhere. MLC-LLM specializes in LLM-specific graph transformations and optimized kernels for common operations.</p>
+<p>One of the major advantages of WebLLM is that it can utilize WebGPU for accelerated inference, which is a web standard provided by most modern browsers that allows developers low-level access to the GPU for general-purpose computing tasks. Make sure your browser is up-to-date.</p>
+<p>To initialize the engine and download the model, I use the following code:</p>
 <div class="sourceCode cell-output">
 <pre class="{js}"><code>// Import WebLLM
 import * as webllm from 'https://esm.run/@mlc-ai/web-llm';
@@ -431,11 +432,11 @@ const streamingGenerating = async (messages, onUpdate, onFinish, onError) =&gt; 
     }
 };</code></pre>
 </div>
-<p>You learn more about the other serve options and how to use them in the documentation.</p>
+<p>You learn more about the other serve options and how to use them in the <a href="https://webllm.mlc.ai/docs/">documentation</a>.</p>
 </section>
 <section id="final-thoughts" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Final Thoughts</h1>
-<p>As of writing this I can WebLLM is the fastest library to run chat LLMs over web. For other tasks like speech to text, image generation, etc., you can look into the combination of <a href="https://huggingface.co/docs/transformers.js/en/index">Transformers.js</a> and <a href="https://onnxruntime.ai/docs/tutorials/web/">ONNX Runtime Web</a>, or just ONNX Runtime Web if you’re looking for a more general-purpose solution.If you have any questions or feedback, feel free to leave a comment below.</p>
+<p>As of writing this I can WebLLM is the fastest library to run chat LLMs over web. For other tasks like speech to text, image generation, etc., you can look into using the combination of <a href="https://huggingface.co/docs/transformers.js/en/index">Transformers.js</a> and <a href="https://onnxruntime.ai/docs/tutorials/web/">ONNX Runtime Web</a>, or only ONNX Runtime Web alone if you’re looking for a more general-purpose solution.If you have any questions or feedback, feel free to leave a comment below.</p>
 </section>
 <section id="change-log" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> Change Log</h1>

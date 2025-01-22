@@ -38,8 +38,12 @@ async function getWebGPUBackend() {
         if (!adapter) {
             return "Failed to get GPU adapter.";
         }
-
-        const info = await adapter.requestAdapterInfo();
+        try {
+            var info = await adapter.info;
+        }
+        catch (error) {
+            var info = await adapter.requestAdapterInfo();
+        }
 
         // If 'architecture' is not available, we can make an educated guess based on other properties
         if (info.vendor.toLowerCase().includes("apple")) {
