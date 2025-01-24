@@ -1,4 +1,4 @@
-// config.js
+// ------ config.js ------
 export const CONFIG = {
     API_BASE_URL: 'https://huggingface.co/api',
     MODEL_WEIGHT_EXTENSIONS: ['.bin', '.pt', '.safetensors'],
@@ -10,7 +10,50 @@ export const CONFIG = {
     DEFAULT_PRESENCE_PENALTY: 0.1,
 };
 
-// utils.js
+export const MODEL_FAMILIES = [
+    'Llama-3.2',
+    'DeepSeek',
+    'Qwen2.5',
+    'Llama-3.1',
+    'Mistral',
+    'Phi-3',
+    'Hermes-3',
+    'Gemma-2-',
+];
+
+let defaultSystemPrompt = `You are an advanced AI assistant, designed to be helpful and knowledgeable across a wide range of topics.
+Your primary goal is to assist users with information, analysis, and creative tasks while maintaining a respectful and professional demeanor.
+
+Guidelines:
+1. Provide accurate, up-to-date information to the best of your knowledge.
+2. If unsure about something, express uncertainty and suggest ways to find reliable information.
+3. Maintain a neutral stance on controversial topics, presenting multiple viewpoints when appropriate.
+4. Respect user privacy and avoid asking for or storing personal information.
+6. Adapt your language and explanations to the user's apparent level of understanding.
+7. Offer creative solutions and brainstorm ideas when asked.
+8. Provide step-by-step explanations for complex topics or processes.
+9. Use markdown formatting for code snippets, lists, and emphasis when appropriate.
+10. Engage in follow-up questions to clarify user needs and provide more accurate assistance.
+
+Capabilities:
+- General knowledge: History, science, culture, current events (up to your knowledge cutoff date)
+- Language: Translation, grammar explanations, writing assistance
+- Math and logic: Basic to advanced calculations, problem-solving
+- Creative writing: Storytelling, poetry, dialogue creation
+- Code and technology: Programming help, explanations of tech concepts
+- Analysis: Data interpretation, trend identification, critical thinking
+- Task planning: Breaking down complex tasks, suggesting approaches
+
+When responding:
+1. Start with a brief, direct answer to the user's question if applicable.
+2. Provide context and additional information as needed.
+3. If relevant, offer examples or analogies to illustrate your points.
+4. Suggest follow-up questions or areas for further exploration.
+5. If asked about events after your knowledge cutoff date, remind the user of your limitations and suggest they verify the information from current sources.
+
+Remember to approach each query with curiosity and a desire to assist the user to the best of your abilities.`;
+
+// ------ utils.js ------
 export const debounce = (func, delay) => {
     let timeoutId;
     return (...args) => {
@@ -40,6 +83,9 @@ async function getWebGPUBackend() {
         }
         try {
             var info = await adapter.info;
+            if (info === undefined || info === null) {
+                throw new Error("Adapter info is undefined.");
+            }
         }
         catch (error) {
             var info = await adapter.requestAdapterInfo();
@@ -71,7 +117,7 @@ function deindent(str) {
     return lines.map(line => line.slice(minIndent)).join('\n').trim();
 }
 
-// api.js
+// ------ api.js ------
 export const getFileSizeFromURL = async (fileUrl) => {
     try {
         const response = await fetch(fileUrl, { method: 'HEAD' });
@@ -116,7 +162,7 @@ export const estimateRepoSize = async (repoId) => {
     }
 };
 
-// ui.js
+// ------ ui.js ------
 import { marked } from 'https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js';
 import hljs from 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.10.0/build/es/highlight.min.js';
 
@@ -231,7 +277,7 @@ export const updateUI = {
 };
 
 
-// modelConfig.js
+// ------ modelConfig.js ------
 const createModelConfig = () => {
     const config = {
         temperature: CONFIG.DEFAULT_TEMPERATURE,
@@ -253,7 +299,8 @@ const createModelConfig = () => {
 
 export const modelConfig = createModelConfig();
 
-// index.js
+
+// ------ index.js ------
 import * as webllm from 'https://esm.run/@mlc-ai/web-llm';
 // import { estimateRepoSize } from './api.js';
 // import { updateUI } from './ui.js';
@@ -279,44 +326,10 @@ const blob = new Blob([workerCode], { type: 'application/javascript' });
 const workerUrl = URL.createObjectURL(blob);
 
 
-const messages = [
-    {
-        content: `
-You are an advanced AI assistant, designed to be helpful and knowledgeable across a wide range of topics.
-Your primary goal is to assist users with information, analysis, and creative tasks while maintaining a respectful and professional demeanor.
-
-Guidelines:
-1. Provide accurate, up-to-date information to the best of your knowledge.
-2. If unsure about something, express uncertainty and suggest ways to find reliable information.
-3. Maintain a neutral stance on controversial topics, presenting multiple viewpoints when appropriate.
-4. Respect user privacy and avoid asking for or storing personal information.
-6. Adapt your language and explanations to the user's apparent level of understanding.
-7. Offer creative solutions and brainstorm ideas when asked.
-8. Provide step-by-step explanations for complex topics or processes.
-9. Use markdown formatting for code snippets, lists, and emphasis when appropriate.
-10. Engage in follow-up questions to clarify user needs and provide more accurate assistance.
-
-Capabilities:
-- General knowledge: History, science, culture, current events (up to your knowledge cutoff date)
-- Language: Translation, grammar explanations, writing assistance
-- Math and logic: Basic to advanced calculations, problem-solving
-- Creative writing: Storytelling, poetry, dialogue creation
-- Code and technology: Programming help, explanations of tech concepts
-- Analysis: Data interpretation, trend identification, critical thinking
-- Task planning: Breaking down complex tasks, suggesting approaches
-
-When responding:
-1. Start with a brief, direct answer to the user's question if applicable.
-2. Provide context and additional information as needed.
-3. If relevant, offer examples or analogies to illustrate your points.
-4. Suggest follow-up questions or areas for further exploration.
-5. If asked about events after your knowledge cutoff date, remind the user of your limitations and suggest they verify the information from current sources.
-
-Remember to approach each query with curiosity and a desire to assist the user to the best of your abilities.
-        `,
-        role: 'system'
-    },
-];
+let messages = [{
+    content: defaultSystemPrompt,
+    role: 'system'
+}];
 
 const updateEngineInitProgressCallback = (report) => {
     // console.log("initialize", report.progress);
@@ -402,16 +415,23 @@ const onMessageSend = async () => {
     const aiMessage = { content: '', role: 'assistant' };
     updateUI.appendMessage(aiMessage);
 
+    // Show typing indicator
+    const indicator = document.querySelector('.typing-indicator');
+    indicator.classList.add('visible', 'typing');
+    indicator.innerHTML = '';
+
     const onFinishGenerating = (finalMessage, usage) => {
         updateUI.updateLastMessage(finalMessage);
         updateUI.sendButton(false);
-        // console.log("Usage:", usage);
-        // Hide typing indicator
-        document.querySelector('.typing-indicator').classList.remove('visible');
+        
+        const indicator = document.querySelector('.typing-indicator');
+        indicator.classList.remove('typing');
+        indicator.innerHTML = `
+            <div>Prefill: ${usage.extra.prefill_tokens_per_s.toFixed(1)} token/s</div>
+            <div>Decode: ${usage.extra.decode_tokens_per_s.toFixed(1)} token/s</div>
+        `;
     };
 
-    // Show typing indicator
-    document.querySelector('.typing-indicator').classList.add('visible');
     streamingGenerating(
         messages,
         updateUI.updateLastMessage,
@@ -419,6 +439,7 @@ const onMessageSend = async () => {
         handleError
     );
 };
+
 
 const updateModelInfo = debounce(async () => {
     const selectedModel = document.getElementById('model-selection').value;
@@ -437,6 +458,44 @@ const updateModelInfo = debounce(async () => {
         updateUI.modelInfo('Unable to estimate model size');
     }
 }, 300);
+
+const setupPromptModal = () => {
+    const modal = document.getElementById('prompt-modal');
+    const btn = document.getElementById('configure-prompt');
+    const span = document.getElementsByClassName('close')[0];
+    const saveBtn = document.getElementById('save-prompt');
+    const resetBtn = document.getElementById('reset-prompt');
+    const textarea = document.getElementById('system-prompt');
+
+    // Set initial value
+    textarea.value = messages[0].content;
+
+    // Open modal
+    btn.onclick = () => modal.style.display = 'block';
+
+    // Close modal
+    span.onclick = () => modal.style.display = 'none';
+
+    // Close on outside click
+    window.onclick = (event) => {
+        if (event.target === modal) modal.style.display = 'none';
+    };
+
+    // Save prompt
+    saveBtn.onclick = () => {
+        const newPrompt = textarea.value.trim();
+        if (newPrompt) {
+            messages[0].content = newPrompt;
+            modal.style.display = 'none';
+        }
+    };
+
+    // Reset to default
+    resetBtn.onclick = () => {
+        textarea.value = defaultSystemPrompt;
+        messages[0].content = defaultSystemPrompt;
+    };
+};
 
 const handleError = (error) => {
     console.error("Error:", error);
@@ -580,19 +639,26 @@ const setupEventListeners = () => {
 const initializeApp = async () => {
     const webgpuStatus = await getWebGPUBackend();
     document.getElementById('webgpu-status').textContent = webgpuStatus;
-
+    
     const modelSelect = document.getElementById('model-selection');
-    webllm.prebuiltAppConfig.model_list.forEach((m) => {
-        const option = document.createElement('option');
-        option.value = m.model_id;
-        option.textContent = m.model_id;
-        modelSelect.appendChild(option);
-    });
+    webllm.prebuiltAppConfig.model_list
+        .filter(m => MODEL_FAMILIES.some(f => m.model_id.toLowerCase().startsWith(f.toLowerCase())))
+        .sort((a, b) => {
+            const familyA = MODEL_FAMILIES.find(f => a.model_id.toLowerCase().startsWith(f.toLowerCase()));
+            const familyB = MODEL_FAMILIES.find(f => b.model_id.toLowerCase().startsWith(f.toLowerCase()));
+            return MODEL_FAMILIES.indexOf(familyA) - MODEL_FAMILIES.indexOf(familyB);
+        })
+        .forEach(m => {
+            const option = document.createElement('option');
+            option.value = option.textContent = m.model_id;
+            modelSelect.appendChild(option);
+        });
     modelSelect.value = selectedModel;
 
     syncUIWithConfig();
     updateModelInfo();
     setupEventListeners();
+    setupPromptModal();
     updateUI.enableParameterInputs(true);
     updateUI.sendButton(false);
 };

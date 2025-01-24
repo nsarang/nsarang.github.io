@@ -187,6 +187,12 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
     </div>
   </div>
   
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">January 22, 2025</p>
+    </div>
+  </div>
     
   </div>
   
@@ -240,12 +246,12 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <!-- Writing a personal introduction -->
 <section id="introduction" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
-<p>Recently, I came across a few cool projects that allow running LLMs (large language models) in the browser, and utilize GPU for fast inference! This is exciting for two main reasons: first, it’s great to run LLMs locally without sending your data to any external server. You can use custom prompts, configure the inference the way you want, and ensure your privacy. Second, you don’t have to deal with setting up Python environments, installing dependencies, and configuring the GPU. The browser takes care of all that! It’s incredibly convenient. With the release of smaller Llama 3.2 models, like the 1B parameter version, it’s now possible to generate quality text directly in your browser, perhaps even matching ChatGPT 3.5 on some tasks.</p>
-<p>The chat UI below will allow you to download a number of models hosted on HuggingFace, including Llama and Qwen variants. Once you download the model, you can disconnect and continue chatting offline. I’ve tried adding a bunch of customizations to play around, but the UI is meant more as a demonstration to showcase the potential of a web UI.</p>
+<p>Recently I came across a few cool projects that allow running LLMs (large language models) in the browser and utilize GPU for fast inference! This is exciting for two main reasons: first, it’s great to run LLMs locally without sending your data to any external server. You can use custom prompts, configure the inference the way you want, and ensure your privacy. Second, you don’t have to deal with setting up Python environments, installing dependencies, and configuring the GPU. The browser takes care of all that! It’s incredibly convenient. With the release of smaller Llama 3.2 models, like the 1B parameter version, it’s now possible to generate quality text directly in your browser, perhaps even matching ChatGPT 3.5 on some tasks.</p>
+<p>The chat UI below will allow you to download a number of models hosted on HuggingFace, including Llama and Qwen variants. Once you download the model you can disconnect and continue chatting offline. I’ve tried adding a bunch of customizations to play around, but the UI is meant more as a demonstration to showcase the potential of a web UI.</p>
 </section>
 <section id="chat-ui" class="level1 page-columns page-full" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Chat UI</h1>
-<p>Your browser must support WebGPU for a fast inference experience. You can see the list of browsers that support it <a href="https://caniuse.com/webgpu">here</a>. I personally tested it on Apple M1-M3 and Nvidia GPUs, and it worked quite well. If WebGPU is not supported, the engine will fall back to WebAssembly, which is slower but still functional.</p>
+<p>Your browser must support WebGPU for a fast inference experience. You can find the list of supported browsers <a href="https://caniuse.com/webgpu">here</a>. I personally tested it on Apple M1-M3 and Nvidia GPUs, and it worked quite well. If WebGPU is not supported, the engine will fall back to WebAssembly, which is slower but still functional.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -261,12 +267,19 @@ For more info, visit <a href="https://webgpureport.org/">https://webgpureport.or
 <p>If you see “WebGPU not supported” in the status above but you’re certain your browser supports it, you can leave a comment below and I’ll try to help you troubleshoot the issue.</p>
 </div>
 </div>
+<p><br></p>
+<p>Models that are worth trying:</p>
+<ul>
+<li><p><strong>Llama 3.2</strong>: Operates approximately three times faster than comparable models, making it suitable for tasks requiring quick responses.</p></li>
+<li><p><strong>DeepSeek R1</strong>: Excels in reasoning, mathematics, and coding tasks, comparable to top proprietary models.</p></li>
+<li><p><strong>Qwen 2.5</strong>: Excels in complex tasks, including reasoning and comprehension, with an expanded context window.</p></li>
+</ul>
 <div class="column-screen-inset" style="margin: 3em 0;">
 <div class="chat-layout">
   <div class="chat-sidebar">
     <h3 data-anchor-id="chat-ui">Model Settings</h3>
     <div class="setting">
-      <label for="model-selection">Model:
+      <label for="model-selection">Model
       <span class="info-icon" data-tooltip="
       **Model Name Format**  
       - [Model Family]-[Version]-[Size]-[Type]-[Quantization]-[Extra Info]
@@ -289,24 +302,65 @@ For more info, visit <a href="https://webgpureport.org/">https://webgpureport.or
       **Extra Info**  
       - `MLC`: Optimized for MLC (Machine Learning Compiler)
       - `1k`: Context window of 1024 tokens. Most models have a 2k/4k context window.
-      ">ⓘ</span>
+      "></span>
       </label>
       <select id="model-selection"></select>
-      <span> First download may take a little bit. Subsequent loads will read from cache.</span>
+      <span class="model-info-text">First download may take a little bit. Subsequent loads will read from cache.</span>
       <div id="model-info" class="status-update">
         <span class="icon hidden"></span>
         <span class="text"></span>
       </div>
     </div>
-    <button id="initialize-model" class="initialize-button">Initialize Model</button>
+    <button id="initialize-model" class="initialize-button">
+      <span class="button-icon"></span>
+      Initialize Model
+    </button>
     <div id="download-status" class="status-update">
         <span class="icon hidden"></span>
         <span class="text"></span>
     </div>
+
+    <div class="setting prompt-setting">
+      <label>System Prompt
+        <span class="info-icon" data-tooltip="Configure the base personality and behavior of the AI assistant. This prompt sets the foundation for how the model will respond to your queries."></span>
+      </label>
+      <button id="configure-prompt" class="configure-button">
+        <span class="button-icon"></span>
+        Configure
+      </button>
+    </div>
+
+    <div id="prompt-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">
+            <h4>Configure System Prompt</h4>
+            <p class="modal-subtitle">Define the AI assistant's base personality and behavior</p>
+          </div>
+          <button class="close" aria-label="Close">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="editor-container">
+            <textarea id="system-prompt" placeholder="Enter system prompt here..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="reset-prompt" class="reset-button">
+            <span class="button-icon"></span>
+            Reset to Default
+          </button>
+          <button id="save-prompt" class="save-button">
+            <span class="button-icon"></span>
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+    
     <div class="setting">
       <label for="temperature">
-        Temperature:
-        <span class="info-icon" data-tooltip="Controls randomness in the output. Lower values (e.g., 0.2) make the output more focused and deterministic, while higher values (e.g., 0.8) make it more random and creative. Adjust based on whether you need more consistent or varied responses.">ⓘ</span>
+        Temperature
+        <span class="info-icon" data-tooltip="Controls randomness in the output. Lower values (e.g., 0.2) make the output more focused and deterministic, while higher values (e.g., 0.8) make it more random and creative. Adjust based on whether you need more consistent or varied responses."></span>
       </label>
       <div class="input-group">
         <input type="range" id="temperature" min="0" max="2" step="0.1" value="0.7">
@@ -315,15 +369,15 @@ For more info, visit <a href="https://webgpureport.org/">https://webgpureport.or
     </div>
     <div class="setting">
       <label for="max-tokens">
-        Max Tokens:
-        <span class="info-icon" data-tooltip="Sets the maximum length of the model's response in tokens. A token is roughly 4 characters for English text. Increasing this allows for longer responses but may increase processing time and token usage. Adjust based on the desired length of the model's output.">ⓘ</span>
+        Max Tokens
+        <span class="info-icon" data-tooltip="Sets the maximum length of the model's response in tokens. A token is roughly 4 characters for English text. Increasing this allows for longer responses but may increase processing time and token usage. Adjust based on the desired length of the model's output."></span>
       </label>
       <input type="number" id="max-tokens" min="1" max="4096" value="256">
     </div>
     <div class="setting">
       <label for="top-p">
-        Top P:
-        <span class="info-icon" data-tooltip="Controls diversity via nucleus sampling. It sets a probability threshold for token selection. A value of 0.1 considers only the tokens comprising the top 10% probability mass. Higher values (e.g., 0.9) allow more diverse outputs. Use in conjunction with temperature for fine-tuned control over randomness.">ⓘ</span>
+        Top P
+        <span class="info-icon" data-tooltip="Controls diversity via nucleus sampling. It sets a probability threshold for token selection. A value of 0.1 considers only the tokens comprising the top 10% probability mass. Higher values (e.g., 0.9) allow more diverse outputs. Use in conjunction with temperature for fine-tuned control over randomness."></span>
       </label>
       <div class="input-group">
         <input type="range" id="top-p" min="0" max="1" step="0.01" value="0.9">
@@ -332,8 +386,8 @@ For more info, visit <a href="https://webgpureport.org/">https://webgpureport.or
     </div>
     <div class="setting">
       <label for="frequency-penalty">
-        Frequency Penalty:
-        <span class="info-icon" data-tooltip="Reduces repetition by lowering the probability of tokens that have already appeared in the text. Positive values decrease the likelihood of repeated words or phrases. Use higher values (e.g., 0.8) to encourage more varied language, or lower values (e.g., 0.2) if some repetition is acceptable.">ⓘ</span>
+        Frequency Penalty
+        <span class="info-icon" data-tooltip="Reduces repetition by lowering the probability of tokens that have already appeared in the text. Positive values decrease the likelihood of repeated words or phrases. Use higher values (e.g., 0.8) to encourage more varied language, or lower values (e.g., 0.2) if some repetition is acceptable."></span>
       </label>
       <div class="input-group">
         <input type="range" id="frequency-penalty" min="-2" max="2" step="0.1" value="0">
@@ -342,9 +396,10 @@ For more info, visit <a href="https://webgpureport.org/">https://webgpureport.or
     </div>
     <div class="setting">
       <label for="presence-penalty">
-        Presence Penalty:
-        <span class="info-icon" data-tooltip="Encourages the model to talk about new topics by increasing the probability of tokens that haven't appeared in the text. Positive values promote the introduction of new concepts. Use higher values (e.g., 0.6) to encourage more diverse topics, or lower values if you want the model to stay more focused on the current subject.">ⓘ</span>
+        Presence Penalty
+        <span class="info-icon" data-tooltip="Encourages the model to talk about new topics by increasing the probability of tokens that haven't appeared in the text. Positive values promote the introduction of new concepts. Use higher values (e.g., 0.6) to encourage more diverse topics, or lower values if you want the model to stay more focused on the current subject."></span>
       </label>
+      
       <div class="input-group">
         <input type="range" id="presence-penalty" min="-2" max="2" step="0.1" value="0">
         <span id="presence-penalty-value" class="value-label">0</span>
@@ -441,6 +496,7 @@ const streamingGenerating = async (messages, onUpdate, onFinish, onError) =&gt; 
 <section id="change-log" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> Change Log</h1>
 <ul>
+<li><strong>2025/01/22</strong>: Added prompt configuration settings and updated the UI.</li>
 <li><strong>2024/10/12</strong>: Added “How It Works” section.</li>
 <li><strong>2024/10/04</strong>: Added Markdown support for the output messages.</li>
 <li><strong>2024/10/02</strong>: Added download size estimation for the models from the HF repo.</li>
