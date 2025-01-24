@@ -440,7 +440,6 @@ const onMessageSend = async () => {
     );
 };
 
-
 const updateModelInfo = debounce(async () => {
     const selectedModel = document.getElementById('model-selection').value;
     updateUI.modelInfo('loading');
