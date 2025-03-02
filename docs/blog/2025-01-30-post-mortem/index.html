@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nima Sarang">
+<meta name="dcterms.date" content="2025-01-30">
+<meta name="description" content="A bit of Python black magic that lets you efficiently inspect and manipulate execution contexts after crashes, aka, post-mortem debugging.">
+
+<title>Saving Time: Post-mortem Debugging in Python – Nima Sarang</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../_assets/favicon.svg" rel="icon" type="image/svg+xml">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-05bd8ddabd448a8ef5be2250ef0d9442.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-6a7799821fa2400ad85ae38c4598b577.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-836c1d78f9aab64da0bef2c8619085fd.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-af1c099a4d07cc2e62c858cc3db35af9.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-HWSGHN8N8N"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Petrona:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:ital,wght@0,400;0,500;1,400;1,500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=B612:ital,wght@0,400;0,700;1,400;1,700&amp;family=B612+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&amp;family=Roboto:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&amp;display=swap" rel="stylesheet">
+
+
+<meta property="og:title" content="Saving Time: Post-mortem Debugging in Python">
+<meta property="og:description" content="A bit of Python black magic that lets you efficiently inspect and manipulate execution contexts after crashes, aka, post-mortem debugging.">
+<meta property="og:image" content="https://www.nimasarang.com/blog/2025-01-30-post-mortem/featured.png">
+<meta property="og:site_name" content="Nima Sarang">
+<meta property="og:image:height" content="1047">
+<meta property="og:image:width" content="1400">
+<meta name="twitter:title" content="Saving Time: Post-mortem Debugging in Python">
+<meta name="twitter:description" content="A bit of Python black magic that lets you efficiently inspect and manipulate execution contexts after crashes, aka, post-mortem debugging.">
+<meta name="twitter:image" content="https://www.nimasarang.com/blog/2025-01-30-post-mortem/featured.png">
+<meta name="twitter:image-height" content="1047">
+<meta name="twitter:image-width" content="1400">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="citation_title" content="Saving Time: Post-mortem Debugging in Python">
+<meta name="citation_author" content="Nima Sarang">
+<meta name="citation_publication_date" content="2025-01-30">
+<meta name="citation_cover_date" content="2025-01-30">
+<meta name="citation_year" content="2025">
+<meta name="citation_online_date" content="2025-01-30">
+<meta name="citation_fulltext_html_url" content="https://www.nimasarang.com/blog/2025-01-30-post-mortem/">
+<meta name="citation_language" content="en">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../_assets/favicon.svg" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Nima Sarang</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about/index.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../project/index.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../publication/index.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools tools-wide">
+    <a href="https://www.github.com/nsarang" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+    <a href="https://www.linkedin.com/in/nima-sarang" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-linkedin"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns">
+<div id="title-block-header-title" class="quarto-title page-columns page-full page-layout-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg); background-repeat: no-repeat;">
+<h1 class="title">Saving Time: Post-mortem Debugging in Python</h1>
+    <div class="quarto-categories">
+        <div class="quarto-category">Python</div>
+        <div class="quarto-category">Debugging</div>
+      </div>
+  </div>
+
+<div>
+  <div id="title-block-title-desc" class="description pt-4">
+    A bit of Python black magic that lets you efficiently inspect and manipulate execution contexts after crashes, aka, post-mortem debugging.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nima Sarang </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 30, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+
+</header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#post-mortem" id="toc-post-mortem" class="nav-link" data-scroll-target="#post-mortem"><span class="header-section-number">2</span> Post-mortem</a></li>
+  <li><a href="#a-new-perspective" id="toc-a-new-perspective" class="nav-link" data-scroll-target="#a-new-perspective"><span class="header-section-number">3</span> A New Perspective</a></li>
+  <li><a href="#sec-in-action" id="toc-sec-in-action" class="nav-link" data-scroll-target="#sec-in-action"><span class="header-section-number">4</span> Working Examples</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+<style>
+  body {
+    visibility: hidden; /* initially hidden until DOM ready to prevent flicker */
+  }
+</style>
+<noscript>
+  <style>
+    body {
+      visibility: visible !important; /* Override hidden state when JS is disabled */
+    }
+  </style>
+</noscript>
+
+<!-- source: https://github.com/gadenbuie/garrickadenbuie-com/blob/main/_partials/title-block-link-buttons/title-block.html -->
+<!-- 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title"> 
+-->
+<!-- <header id="title-block-header" class="quarto-title-block default page-columns"> -->
+<!-- <div class="quarto-title page-columns page-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg);"> -->
+
+
+
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
+<p>I bet this experience sounds familiar:</p>
+<p><em>Your code has been running smoothly for a while, and you’re finally breathing easy. Then, an hour into execution, BOOM - an error. The worst part? You have no idea what caused it based on the logs alone. The source is buried 8 calls deep in the stack trace, and you’re dreading the thought of validating data at each step to find the root cause.</em></p>
+<p>Well, I’ve got great news for you! Python’s built-in <code>traceback</code> lets you inspect variables at each step of the stack trace, and even better, save the current context for reuse later! If you’re familiar with the <code>pdb</code> debugger, this article similar in spirit but with some improvements.</p>
+<p>This is the most useful code I’ve written in ages, and it took some serious effort to get it right due to the lack of documentation. If you want the TL;DR, just skip to <a href="#sec-in-action" class="quarto-xref">Section&nbsp;4</a>. Otherwise, let’s dive in!</p>
+</section>
+<section id="post-mortem" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Post-mortem</h1>
+<p>The term “post-mortem” in the context of debugging is when you’re trying to figure out what went wrong <em>after</em> an error has occurred, meaning it doesn’t require anything to set up in advance, like breakpoints or logging.</p>
+<p>When a Python program runs, it maintains a <strong><em>call stack</em></strong> that tracks the sequence of function calls. Each entry on this stack is called a <strong><em>frame</em></strong> and represents a function call in progress. A frame contains information about the function in progress, such as the function’s code object, its local variables, the global variables in its namespace, references to the previous frame, and so on. When an exception occurs in Python, the interpreter captures the entire call stack at the moment of the error, preserving all frames. This stack trace shows you the execution path that led to the error.</p>
+<p>To leverage this, the most common approach is using the Python debugger, <code>pdb</code>, which lets you inspect each frame in the traceback, and even execute code within the context of the frame. The IPython version of pdb, <code>ipdb</code>, is available in the <code>IPython/Jupyter</code> based environments and makes navigating the stack even easier.</p>
+<p>I won’t dive into pdb details since there are already plenty of great resources out there:</p>
+<ul>
+<li><a href="https://realpython.com/python-debugging-pdb/">Python Debugging With Pdb | Real Python</a></li>
+<li><a href="https://cedricvanrompay.fr/blog/post-mortem-debugging-python/">Post-Mortem Debugging in Python | Cédric Van Rompay</a></li>
+<li><a href="https://paris-swc.github.io/python-testing-debugging-profiling/07-debugging-post-mortem.html">Post-mortem debugging | Software Carpentry</a></li>
+<li><a href="https://almarklein.org/pm-debugging.html">The power of post-mortem debugging | Almar Klein</a></li>
+</ul>
+</section>
+<section id="a-new-perspective" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> A New Perspective</h1>
+<p>For years, I’ve wanted a way to easily inspect the context that led to an error. This is manageable in a notebook where all your code lives together, but for any decent-sized project where code sprawls across multiple files? Not so much.</p>
+<p>I understand that pdb offers a solution to some extent, but my main gripe with it is how clunky it feels in terms of navigation and code execution. Why should I need another interactive interface within a notebook?</p>
+<p>What sparked my interest was <a href="https://andyljones.com/posts/post-mortem-plotting.html">this article</a> by Andy Jones, where he created a helper function that grabs a frame’s context and copies it to IPython’s namespace. This is a great idea, but I wanted to take it further and make it even more user-friendly.</p>
+<p>What if we could pick and choose the frames we want to inspect based on error message, make a copy of the context, and skip pdb altogether as a bonus?</p>
+<section id="toy-example" class="level4">
+<h4 data-anchor-id="toy-example"><strong>Toy Example</strong></h4>
+<p>Let’s say we have a project structured like this:</p>
+<pre><code>notebook.ipynb
+src/
+    model.py
+    run.py</code></pre>
+<p>The code in <code>run.py</code> looks like:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> .model <span class="im">import</span> ModelClass</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">train_model</span>(length: <span class="bu">int</span>):</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> ModelClass()</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> np.arange(length)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    model.train(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And in <code>model.py</code> we have:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="fu">ModelClass</span>:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">train</span>(<span class="va">self</span>, data):</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>            data_norm <span class="op">=</span> data <span class="op">/</span> <span class="bu">sum</span>(data)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._validate_data(data_norm)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span>:</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">RuntimeError</span>(<span class="st">"Second exception: This is a dummy exception."</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">_validate_data</span>(<span class="va">self</span>, data):</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">len</span>(data) <span class="op">&lt;</span> <span class="dv">10</span>:</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"First exception: Data is too short."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Consider a simple scenario where we pass in the wrong data type:</p>
+<div id="cell-5" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> src.run <span class="im">import</span> train_model</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>train_model(length<span class="op">=</span><span class="st">"10"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[5], line 3</span>
+<span class="ansi-green-fg ansi-bold">      1</span> <span style="font-weight:bold;color:rgb(0,135,0)">from</span> <span style="font-weight:bold;color:rgb(0,0,255)">src</span><span style="font-weight:bold;color:rgb(0,0,255)">.</span><span style="font-weight:bold;color:rgb(0,0,255)">run</span> <span style="font-weight:bold;color:rgb(0,135,0)">import</span> train_model
+<span class="ansi-green-fg">----&gt; 3</span> <span class="ansi-yellow-bg">train_model</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">length</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">"</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">10</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">"</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/run.py:8</span>, in <span class="ansi-cyan-fg">train_model</span><span class="ansi-blue-fg">(length)</span>
+<span class="ansi-green-fg ansi-bold">      6</span> <span style="font-weight:bold;color:rgb(0,135,0)">def</span> <span style="color:rgb(0,0,255)">train_model</span>(length: <span style="color:rgb(0,135,0)">int</span>):
+<span class="ansi-green-fg ansi-bold">      7</span>     model <span style="color:rgb(98,98,98)">=</span> ModelClass()
+<span class="ansi-green-fg">----&gt; 8</span>     data <span style="color:rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">np</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">arange</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">length</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">      9</span>     model<span style="color:rgb(98,98,98)">.</span>train(data)
+
+<span class="ansi-red-fg">TypeError</span>: arange() not supported for inputs with DType &lt;class 'numpy.dtypes.StrDType'&gt;.</pre>
+</div>
+</div>
+</div>
+<p>Oops, wrong input! Before doing anything else, let’s grab a reference to the exception:</p>
+<div id="cell-7" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>exception_1 <span class="op">=</span> sys.last_value</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>exception_1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>TypeError("arange() not supported for inputs with DType &lt;class 'numpy.dtypes.StrDType'&gt;.")</code></pre>
+</div>
+</div>
+<p><code>sys.last_value</code> contains the most recent exception. There’s also <code>sys.last_type</code> and <code>sys.last_traceback</code>, but we can get those from <code>sys.last_value</code> directly.</p>
+<div id="cell-9" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> traceback</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>exec_type <span class="op">=</span> <span class="bu">type</span>(exception_1)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>exc_tb <span class="op">=</span> exception_1.__traceback__</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Helper function to print the traceback</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>traceback.print_tb(exc_tb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>  File "/Users/nsarang/micromamba/envs/arclight/lib/python3.11/site-packages/IPython/core/interactiveshell.py", line 3577, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File "/var/folders/29/fh16rbz95b99yz5df3c6yt2h0000gn/T/ipykernel_64069/205929029.py", line 3, in &lt;module&gt;
+    train_model(length="10")
+  File "/Users/nsarang/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/run.py", line 8, in train_model
+    data = np.arange(length)
+           ^^^^^^^^^^^^^^^^^</code></pre>
+</div>
+</div>
+<p>The traceback reveals the chain of events:</p>
+<ol type="1">
+<li>The first frame is from the IPython shell running our notebook.</li>
+<li>The second frame is our cell call, with that funky filename like <code>T/ipykernel_28470/3835444418.py</code>. That’s because IPython <a href="https://github.com/ipython/ipython/blob/f5661a01d16a76e32bbc66791c8957e091759a53/IPython/core/compilerop.py#L134-L151">temporarily writes your code to a file</a> and runs it.</li>
+<li>The third frame is where the error actually happened.</li>
+</ol>
+<p>The traceback <code>exc_tb</code> is an entry point to the exception traceback, and all the frames are linked together as a linked list. Each frame’s <code>tb_next</code> points to the next frame, and <code>tb_frame</code> gives you the actual frame object.</p>
+<div id="cell-12" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>traceback.print_tb(exc_tb.tb_next)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>  File "/var/folders/29/fh16rbz95b99yz5df3c6yt2h0000gn/T/ipykernel_64069/205929029.py", line 3, in &lt;module&gt;
+    train_model(length="10")
+  File "/Users/nsarang/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/run.py", line 8, in train_model
+    data = np.arange(length)
+           ^^^^^^^^^^^^^^^^^</code></pre>
+</div>
+</div>
+<div id="cell-13" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>traceback.print_tb(exc_tb.tb_next.tb_next)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>  File "/Users/nsarang/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/run.py", line 8, in train_model
+    data = np.arange(length)
+           ^^^^^^^^^^^^^^^^^</code></pre>
+</div>
+</div>
+<div id="cell-14" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>tb_last <span class="op">=</span> exc_tb.tb_next.tb_next</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>frame <span class="op">=</span> tb_last.tb_frame</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>frame</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>&lt;frame at 0x108c42b00, file '/Users/nsarang/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/run.py', line 8, code train_model&gt;</code></pre>
+</div>
+</div>
+<div id="cell-15" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> inspect</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>info <span class="op">=</span> inspect.getframeinfo(frame)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>info._asdict() <span class="co"># for pretty printing</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>{'filename': '/Users/nsarang/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/run.py',
+ 'lineno': 8,
+ 'function': 'train_model',
+ 'code_context': ['    data = np.arange(length)\n'],
+ 'index': 0}</code></pre>
+</div>
+</div>
+<p>Now we’re cooking! 🤘 This is exactly the info your IDE uses to create those colorful error messages. Let’s peek at the local variables in this frame:</p>
+<div id="cell-17" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>frame.f_locals</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>{'length': '10', 'model': &lt;src.model.ModelClass at 0x109104cd0&gt;}</code></pre>
+</div>
+</div>
+<p>The globals are too massive to print in full, so just the keys:</p>
+<div id="cell-19" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>frame.f_globals.keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>dict_keys(['__name__', '__doc__', '__package__', '__loader__', '__spec__', '__file__', '__cached__', '__builtins__', 'np', 'ModelClass', 'train_model'])</code></pre>
+</div>
+</div>
+<p>With all this data we can:</p>
+<ul>
+<li>Save local and global variables from each frame</li>
+<li>Control how much context code gets printed around the error</li>
+<li>Assign an index to each frame for easy selection later on</li>
+<li>Control code indentation for readability</li>
+</ul>
+<p>Here’s the implementation:</p>
+<div id="cell-21" class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> inspect</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> textwrap</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">process_exception</span>(exception, context_lines<span class="op">=</span><span class="dv">1</span>, max_indent<span class="op">=</span><span class="bu">float</span>(<span class="st">'inf'</span>), frame_index<span class="op">=</span><span class="dv">0</span>):</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co">    Process an exception and return a formatted traceback message and frame information.</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="co">    exception : Exception</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co">        The exception to process.</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co">    context_lines : int, optional</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="co">        The number of context lines to include around the current line, by default 1.</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="co">    max_indent : int, optional</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="co">        The maximum indentation to use for the code block in the error message. Defaults to no limit.</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="co">    frame_index : int, optional</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a><span class="co">        The index of the first frame, by default 0.</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>    tb <span class="op">=</span> exception.__traceback__</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>    frame_info <span class="op">=</span> []</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> tb <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Get high-level frame information</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>        filename, lineno, function_name, lines, index <span class="op">=</span> inspect.getframeinfo(</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>            tb, context<span class="op">=</span>context_lines</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Dedent the lines if the entire block is indented more than max_indent</span></span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>        lines_dedented <span class="op">=</span> textwrap.dedent(<span class="st">""</span>.join(lines)).splitlines()</span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> lines_dedented <span class="kw">and</span> lines[<span class="dv">0</span>] <span class="kw">and</span> <span class="bu">len</span>(lines[<span class="dv">0</span>]) <span class="op">-</span> <span class="bu">len</span>(lines_dedented[<span class="dv">0</span>]) <span class="op">&gt;</span> max_indent:</span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a>            lines <span class="op">=</span> textwrap.indent(</span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a>                <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(lines_dedented), <span class="st">" "</span> <span class="op">*</span> max_indent</span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a>            ).splitlines()</span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Construct the frame message</span></span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a>        start_no <span class="op">=</span> lineno <span class="op">-</span> index</span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a>        end_no <span class="op">=</span> lineno <span class="op">+</span> <span class="bu">len</span>(lines) <span class="op">-</span> index</span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a>        number_width <span class="op">=</span> <span class="bu">len</span>(<span class="bu">str</span>(end_no))</span>
+<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a>        frame_message <span class="op">=</span> [</span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"┌─── Frame </span><span class="sc">{</span>frame_index<span class="sc">}</span><span class="ss"> "</span> <span class="op">+</span> <span class="st">"─"</span> <span class="op">*</span> <span class="dv">40</span>,</span>
+<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f'Function </span><span class="sc">{</span>function_name<span class="sc">}</span><span class="ss">, in file "</span><span class="sc">{</span>filename<span class="sc">}</span><span class="ss">"'</span>,</span>
+<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, file_lineno <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">range</span>(start_no, end_no)):</span>
+<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a>            line <span class="op">=</span> lines[i].rstrip() <span class="cf">if</span> i <span class="op">&lt;</span> <span class="bu">len</span>(lines) <span class="cf">else</span> <span class="st">""</span></span>
+<span id="cb21-48"><a href="#cb21-48" aria-hidden="true" tabindex="-1"></a>            prefix <span class="op">=</span> <span class="st">"➤➤➤ "</span> <span class="cf">if</span> i <span class="op">==</span> index <span class="cf">else</span> <span class="st">"    "</span></span>
+<span id="cb21-49"><a href="#cb21-49" aria-hidden="true" tabindex="-1"></a>            frame_message.append(<span class="ss">f" </span><span class="sc">{</span>prefix<span class="sc">}{</span>file_lineno<span class="sc">:</span>{number_width}<span class="sc">}</span><span class="ss">:  </span><span class="sc">{</span>line<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb21-50"><a href="#cb21-50" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb21-51"><a href="#cb21-51" aria-hidden="true" tabindex="-1"></a>        frame_message.append(<span class="st">""</span>)</span>
+<span id="cb21-52"><a href="#cb21-52" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb21-53"><a href="#cb21-53" aria-hidden="true" tabindex="-1"></a>        frame_info.append({</span>
+<span id="cb21-54"><a href="#cb21-54" aria-hidden="true" tabindex="-1"></a>            <span class="st">"message"</span>: <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(frame_message),</span>
+<span id="cb21-55"><a href="#cb21-55" aria-hidden="true" tabindex="-1"></a>            <span class="st">"frame"</span>: tb.tb_frame,</span>
+<span id="cb21-56"><a href="#cb21-56" aria-hidden="true" tabindex="-1"></a>            <span class="st">"locals"</span>: tb.tb_frame.f_locals.copy(), <span class="co"># shallow copy just in case</span></span>
+<span id="cb21-57"><a href="#cb21-57" aria-hidden="true" tabindex="-1"></a>            <span class="st">"globals"</span>: tb.tb_frame.f_globals.copy(),</span>
+<span id="cb21-58"><a href="#cb21-58" aria-hidden="true" tabindex="-1"></a>            <span class="st">"metadata"</span>: {</span>
+<span id="cb21-59"><a href="#cb21-59" aria-hidden="true" tabindex="-1"></a>                <span class="st">"filename"</span>: filename,</span>
+<span id="cb21-60"><a href="#cb21-60" aria-hidden="true" tabindex="-1"></a>                <span class="st">"lineno"</span>: lineno,</span>
+<span id="cb21-61"><a href="#cb21-61" aria-hidden="true" tabindex="-1"></a>                <span class="st">"function_name"</span>: function_name,</span>
+<span id="cb21-62"><a href="#cb21-62" aria-hidden="true" tabindex="-1"></a>                <span class="st">"lines"</span>: lines <span class="cf">if</span> lines <span class="cf">else</span> [],</span>
+<span id="cb21-63"><a href="#cb21-63" aria-hidden="true" tabindex="-1"></a>                <span class="st">"index"</span>: index,</span>
+<span id="cb21-64"><a href="#cb21-64" aria-hidden="true" tabindex="-1"></a>            },</span>
+<span id="cb21-65"><a href="#cb21-65" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb21-66"><a href="#cb21-66" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb21-67"><a href="#cb21-67" aria-hidden="true" tabindex="-1"></a>        tb <span class="op">=</span> tb.tb_next</span>
+<span id="cb21-68"><a href="#cb21-68" aria-hidden="true" tabindex="-1"></a>        frame_index <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb21-69"><a href="#cb21-69" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-70"><a href="#cb21-70" aria-hidden="true" tabindex="-1"></a>    exception_header <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span><span class="bu">type</span>(exception)<span class="sc">.</span><span class="va">__name__</span><span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">str</span>(exception)<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb21-71"><a href="#cb21-71" aria-hidden="true" tabindex="-1"></a>    traceback_message <span class="op">=</span><span class="st">" </span><span class="ch">\n</span><span class="st">"</span>.join([frame[<span class="st">"message"</span>] <span class="cf">for</span> frame <span class="kw">in</span> frame_info] <span class="op">+</span> [exception_header])</span>
+<span id="cb21-72"><a href="#cb21-72" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> traceback_message, frame_info</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s give it a try:</p>
+<div id="cell-23" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>traceback_message, frame_info <span class="op">=</span> process_exception(exception_1, context_lines<span class="op">=</span><span class="dv">5</span>, max_indent<span class="op">=</span><span class="dv">6</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(traceback_message)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>┌─── Frame 0 ────────────────────────────────────────
+Function run_code, in file "/Users/nsarang/micromamba/envs/arclight/lib/python3.11/site-packages/IPython/core/interactiveshell.py"
+     3575:                await eval(code_obj, self.user_global_ns, self.user_ns)
+     3576:            else:
+ ➤➤➤ 3577:                exec(code_obj, self.user_global_ns, self.user_ns)
+     3578:        finally:
+     3579:            # Reset our crash handler in place
+ 
+┌─── Frame 1 ────────────────────────────────────────
+Function &lt;module&gt;, in file "/var/folders/29/fh16rbz95b99yz5df3c6yt2h0000gn/T/ipykernel_64069/205929029.py"
+     1:  from src.run import train_model
+     2:  
+ ➤➤➤ 3:  train_model(length="10")
+ 
+┌─── Frame 2 ────────────────────────────────────────
+Function train_model, in file "/Users/nsarang/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/run.py"
+      5:  
+      6:  def train_model(length: int):
+      7:      model = ModelClass()
+ ➤➤➤  8:      data = np.arange(length)
+      9:      model.train(data)
+ 
+TypeError: arange() not supported for inputs with DType &lt;class 'numpy.dtypes.StrDType'&gt;.</code></pre>
+</div>
+</div>
+<p><code>frame_info</code> gives us a list of dictionaries, each packed with a frame’s context:</p>
+<div id="cell-25" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>frame_info[<span class="dv">2</span>][<span class="st">"locals"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>{'length': '10', 'model': &lt;src.model.ModelClass at 0x109104cd0&gt;}</code></pre>
+</div>
+</div>
+</section>
+<section id="processing-chained-exceptions" class="level4">
+<h4 data-anchor-id="processing-chained-exceptions"><strong>Processing Chained Exceptions</strong></h4>
+<p>Chained exceptions happen when an exception is raised while another is being handled. There are two types explained in <a href="https://www.python.org/dev/peps/pep-3134/">PEP 3134</a>.</p>
+<p>To handle these, I’ll borrow a function from the <code>pdb</code> module that walks the linked exceptions and returns them in chronological order:</p>
+<div id="cell-27" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">get_chained_exceptions</span>(exc):</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Given a an exception, return a tuple of chained exceptions.</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Borrowed and modified from the `pdb` module.</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    _exceptions <span class="op">=</span> []</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    current <span class="op">=</span> exc</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    reason <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> current <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (current, reason) <span class="kw">in</span> _exceptions:</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>        _exceptions.append((current, reason))</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> current.__cause__ <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>            current <span class="op">=</span> current.__cause__</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>            reason <span class="op">=</span> <span class="st">"__cause__"</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> (</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>            current.__context__ <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="kw">and</span> <span class="kw">not</span> current.__suppress_context__</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>        ):</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>            current <span class="op">=</span> current.__context__</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>            reason <span class="op">=</span> <span class="st">"__context__"</span></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">reversed</span>(_exceptions)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now let’s wrap it all together:</p>
+<div id="cell-29" class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">extract_from_exception</span>(exception<span class="op">=</span><span class="va">None</span>, context_lines<span class="op">=</span><span class="dv">5</span>, max_indent<span class="op">=</span><span class="dv">8</span>):</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Print traceback with surrounding code context, supporting nested exceptions.</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co">    exception : Exception, optional</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co">        The exception to process. If not provided, the last exception will be used.</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co">    For other parameters, see `process_exception`.</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> exception <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>        exception <span class="op">=</span> sys.last_value</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>    frames_info <span class="op">=</span> []</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>    traceback_message <span class="op">=</span> []</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> exc_value, exc_reason <span class="kw">in</span> get_chained_exceptions(exception):</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>        traceback_message_single, frame_info_single <span class="op">=</span> process_exception(</span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>            exc_value, context_lines, max_indent, frame_index<span class="op">=</span><span class="bu">len</span>(frames_info)</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>        traceback_message.append(traceback_message_single)</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>        frames_info.extend(frame_info_single)</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> exc_reason <span class="op">==</span> <span class="st">"__context__"</span>:</span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>            traceback_message.append(</span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>                <span class="st">"</span><span class="ch">\n\n</span><span class="st">During handling of the above exception, "</span></span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>                <span class="st">"another exception occurred:</span><span class="ch">\n\n</span><span class="st">"</span></span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> exc_reason <span class="op">==</span> <span class="st">"__cause__"</span>:</span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>            traceback_message.append(</span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>                <span class="st">"</span><span class="ch">\n\n</span><span class="st">The above exception was the direct cause "</span></span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>                <span class="st">"of the following exception:</span><span class="ch">\n\n</span><span class="st">"</span></span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>    traceback_message <span class="op">=</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(traceback_message)</span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> traceback_message, frames_info</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="sec-in-action" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Working Examples</h1>
+<p>Let’s try a more complex example with multiple exceptions. Using our earlier example from <a href="#toy-example">Section 3</a>, let’s run <code>train_model</code> with a length of 5:</p>
+<div id="cell-31" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> src.run <span class="im">import</span> train_model</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>train_model(length<span class="op">=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
+File <span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/model.py:5</span>, in <span class="ansi-cyan-fg">ModelClass.train</span><span class="ansi-blue-fg">(self, data)</span>
+<span class="ansi-green-fg ansi-bold">      4</span>     data_norm <span style="color:rgb(98,98,98)">=</span> data <span style="color:rgb(98,98,98)">/</span> <span style="color:rgb(0,135,0)">sum</span>(data)
+<span class="ansi-green-fg">----&gt; 5</span>     <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_validate_data</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">data_norm</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">      6</span> <span style="font-weight:bold;color:rgb(0,135,0)">except</span>:
+
+File <span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/model.py:11</span>, in <span class="ansi-cyan-fg">ModelClass._validate_data</span><span class="ansi-blue-fg">(self, data)</span>
+<span class="ansi-green-fg ansi-bold">     10</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">len</span>(data) <span style="color:rgb(98,98,98)">&lt;</span> <span style="color:rgb(98,98,98)">10</span>:
+<span class="ansi-green-fg">---&gt; 11</span>     <span style="font-weight:bold;color:rgb(0,135,0)">raise</span> <span style="font-weight:bold;color:rgb(215,95,95)">ValueError</span>(<span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">First exception: Data is too short.</span><span style="color:rgb(175,0,0)">"</span>)
+
+<span class="ansi-red-fg">ValueError</span>: First exception: Data is too short.
+
+During handling of the above exception, another exception occurred:
+
+<span class="ansi-red-fg">RuntimeError</span>                              Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[33], line 3</span>
+<span class="ansi-green-fg ansi-bold">      1</span> <span style="font-weight:bold;color:rgb(0,135,0)">from</span> <span style="font-weight:bold;color:rgb(0,0,255)">src</span><span style="font-weight:bold;color:rgb(0,0,255)">.</span><span style="font-weight:bold;color:rgb(0,0,255)">run</span> <span style="font-weight:bold;color:rgb(0,135,0)">import</span> train_model
+<span class="ansi-green-fg">----&gt; 3</span> <span class="ansi-yellow-bg">train_model</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">length</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">5</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/run.py:9</span>, in <span class="ansi-cyan-fg">train_model</span><span class="ansi-blue-fg">(length)</span>
+<span class="ansi-green-fg ansi-bold">      7</span> model <span style="color:rgb(98,98,98)">=</span> ModelClass()
+<span class="ansi-green-fg ansi-bold">      8</span> data <span style="color:rgb(98,98,98)">=</span> np<span style="color:rgb(98,98,98)">.</span>arange(length)
+<span class="ansi-green-fg">----&gt; 9</span> <span class="ansi-yellow-bg">model</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">train</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">data</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/model.py:7</span>, in <span class="ansi-cyan-fg">ModelClass.train</span><span class="ansi-blue-fg">(self, data)</span>
+<span class="ansi-green-fg ansi-bold">      5</span>     <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_validate_data(data_norm)
+<span class="ansi-green-fg ansi-bold">      6</span> <span style="font-weight:bold;color:rgb(0,135,0)">except</span>:
+<span class="ansi-green-fg">----&gt; 7</span>     <span style="font-weight:bold;color:rgb(0,135,0)">raise</span> <span style="font-weight:bold;color:rgb(215,95,95)">RuntimeError</span>(<span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">Second exception: This is a dummy exception.</span><span style="color:rgb(175,0,0)">"</span>)
+
+<span class="ansi-red-fg">RuntimeError</span>: Second exception: This is a dummy exception.</pre>
+</div>
+</div>
+</div>
+<p>The above is Jupyter’s error message. Let’s see how ours compares:</p>
+<div id="cell-33" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>traceback_message, frame_info <span class="op">=</span> extract_from_exception(context_lines<span class="op">=</span><span class="dv">5</span>, max_indent<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(traceback_message)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>┌─── Frame 0 ────────────────────────────────────────
+Function train, in file "/Users/nsarang/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/model.py"
+     3:      try:
+     4:          data_norm = data / sum(data)
+ ➤➤➤ 5:          self._validate_data(data_norm)
+     6:      except:
+     7:          raise RuntimeError("Second exception: This is a dummy exception.")
+ 
+┌─── Frame 1 ────────────────────────────────────────
+Function _validate_data, in file "/Users/nsarang/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/model.py"
+      7:              raise RuntimeError("Second exception: This is a dummy exception.")
+      8:  
+      9:      def _validate_data(self, data):
+     10:          if len(data) &lt; 10:
+ ➤➤➤ 11:              raise ValueError("First exception: Data is too short.")
+ 
+ValueError: First exception: Data is too short.
+
+
+During handling of the above exception, another exception occurred:
+
+
+┌─── Frame 2 ────────────────────────────────────────
+Function run_code, in file "/Users/nsarang/micromamba/envs/arclight/lib/python3.11/site-packages/IPython/core/interactiveshell.py"
+     3575:              await eval(code_obj, self.user_global_ns, self.user_ns)
+     3576:          else:
+ ➤➤➤ 3577:              exec(code_obj, self.user_global_ns, self.user_ns)
+     3578:      finally:
+     3579:          # Reset our crash handler in place
+ 
+┌─── Frame 3 ────────────────────────────────────────
+Function &lt;module&gt;, in file "/var/folders/29/fh16rbz95b99yz5df3c6yt2h0000gn/T/ipykernel_64069/4277452375.py"
+     1:  from src.run import train_model
+     2:  
+ ➤➤➤ 3:  train_model(length=5)
+ 
+┌─── Frame 4 ────────────────────────────────────────
+Function train_model, in file "/Users/nsarang/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/run.py"
+      5:  
+      6:  def train_model(length: int):
+      7:      model = ModelClass()
+      8:      data = np.arange(length)
+ ➤➤➤  9:      model.train(data)
+ 
+┌─── Frame 5 ────────────────────────────────────────
+Function train, in file "/Users/nsarang/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/model.py"
+      5:              self._validate_data(data_norm)
+      6:          except:
+ ➤➤➤  7:              raise RuntimeError("Second exception: This is a dummy exception.")
+      8:  
+      9:      def _validate_data(self, data):
+ 
+RuntimeError: Second exception: This is a dummy exception.</code></pre>
+</div>
+</div>
+<p>Look at that! The full chain of exceptions is displayed with the relevant code context. We can now inspect the variables at each step and even rerun the code to see what happens.</p>
+<div id="cell-35" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>frame_info[<span class="dv">0</span>][<span class="st">"locals"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>{'self': &lt;src.model.ModelClass at 0x1091b6d90&gt;,
+ 'data': array([0, 1, 2, 3, 4]),
+ 'data_norm': array([0. , 0.1, 0.2, 0.3, 0.4])}</code></pre>
+</div>
+</div>
+<div id="cell-36" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(frame_info[<span class="dv">1</span>][<span class="st">"message"</span>])</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>frame_info[<span class="dv">1</span>][<span class="st">"locals"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>┌─── Frame 1 ────────────────────────────────────────
+Function _validate_data, in file "/Users/nsarang/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/model.py"
+      7:              raise RuntimeError("Second exception: This is a dummy exception.")
+      8:  
+      9:      def _validate_data(self, data):
+     10:          if len(data) &lt; 10:
+ ➤➤➤ 11:              raise ValueError("First exception: Data is too short.")
+</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>{'self': &lt;src.model.ModelClass at 0x1091b6d90&gt;,
+ 'data': array([0. , 0.1, 0.2, 0.3, 0.4])}</code></pre>
+</div>
+</div>
+<div id="cell-37" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(frame_info[<span class="dv">4</span>][<span class="st">"message"</span>])</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>frame_info[<span class="dv">4</span>][<span class="st">"locals"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>┌─── Frame 4 ────────────────────────────────────────
+Function train_model, in file "/Users/nsarang/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/run.py"
+      5:  
+      6:  def train_model(length: int):
+      7:      model = ModelClass()
+      8:      data = np.arange(length)
+ ➤➤➤  9:      model.train(data)
+</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="36">
+<pre><code>{'length': 5,
+ 'model': &lt;src.model.ModelClass at 0x109463610&gt;,
+ 'data': array([10, 11, 12, 13, 14])}</code></pre>
+</div>
+</div>
+<section id="code-execution" class="level4">
+<h4 data-anchor-id="code-execution"><strong>Code Execution</strong></h4>
+<p>What if we want to execute some code within a frame’s context, just like in <code>pdb</code>?</p>
+<div id="cell-39" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">execute</span>(source: <span class="bu">str</span>, context: <span class="bu">dict</span>):</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Execute the given source code in the given context.</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    source <span class="op">=</span> textwrap.dedent(source)</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># compile for better performance</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>    code <span class="op">=</span> <span class="bu">compile</span>(source, <span class="st">"&lt;string&gt;"</span>, <span class="st">"exec"</span>)</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">exec</span>(code, context[<span class="st">"globals"</span>], context[<span class="st">"locals"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-40" class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>execute(<span class="vs">r"""</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="vs">        data = data </span><span class="op">+</span><span class="vs"> 10</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="vs">        print</span><span class="kw">(</span><span class="vs">"data:", data</span><span class="kw">)</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="vs">        print</span><span class="kw">(</span><span class="vs">"locals:", locals</span><span class="kw">()</span><span class="dv">.</span><span class="vs">keys</span><span class="kw">())</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="vs">        """</span>,</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>        context<span class="op">=</span>frame_info[<span class="dv">4</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>data: [10 11 12 13 14]
+locals: dict_keys(['length', 'model', 'data'])</code></pre>
+</div>
+</div>
+<p>See that? The data variable got updated in place, and the new value shows up in the locals dictionary.</p>
+<p>We could also bring the frame’s locals into IPython’s namespace like in <a href="https://andyljones.com/posts/post-mortem-plotting.html">Andy’s approach</a>, but there’s a risk of overwriting existing variables. Best to be selective about what we bring in.</p>
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{sarang2025,
+  author = {Sarang, Nima},
+  title = {Saving {Time:} {Post-mortem} {Debugging} in {Python}},
+  date = {2025-01-30},
+  url = {https://www.nimasarang.com/blog/2025-01-30-post-mortem/},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-sarang2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+<div class="">N.
+Sarang, <span>“Saving Time: Post-mortem Debugging in Python.”</span>
+[Online]. Available: <a href="https://www.nimasarang.com/blog/2025-01-30-post-mortem/">https://www.nimasarang.com/blog/2025-01-30-post-mortem/</a></div>
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("^(?:http:|https:)\/\/(?:www\.)?(nimasarang\.com)\/.*$");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="nsarang/nsarang.github.io" data-repo-id="R_kgDOMZYgPg" data-category="Announcements" data-category-id="DIC_kwDOMZYgPs4ChVIN" data-mapping="pathname" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
+</script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark">
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2024, Nima Sarang</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+<script>
+async function loadBodyWhenReady() {
+    while (!document.body.classList.contains('quarto-light') && !document.body.classList.contains('quarto-dark')) {
+        await new Promise(resolve => setTimeout(resolve, 50));
+    }
+    setTimeout(() => {
+        document.body.style.visibility = "visible";
+    }, 50); // Adjust the delay to allow for the dark mode to be loaded
+}
+loadBodyWhenReady();
+</script>
+
+
+
+
+</body></html>

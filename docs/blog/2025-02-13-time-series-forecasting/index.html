@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nima Sarang">
+<meta name="dcterms.date" content="2025-02-28">
+<meta name="description" content="A review of some of the well-known machine learning time series forecasting models.">
+
+<title>A Review of ML Time Series Forecasting Models – Nima Sarang</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../_assets/favicon.svg" rel="icon" type="image/svg+xml">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-05bd8ddabd448a8ef5be2250ef0d9442.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-6a7799821fa2400ad85ae38c4598b577.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-5281842da90991dd95045407d90ff8db.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-b48ff3e3b564a25e50e48ba96b08f3db.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-HWSGHN8N8N"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Petrona:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:ital,wght@0,400;0,500;1,400;1,500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=B612:ital,wght@0,400;0,700;1,400;1,700&amp;family=B612+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&amp;family=Roboto:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&amp;display=swap" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="A Review of ML Time Series Forecasting Models">
+<meta property="og:description" content="A review of some of the well-known machine learning time series forecasting models.">
+<meta property="og:image" content="https://www.nimasarang.com/blog/2025-02-13-time-series-forecasting/featured.png">
+<meta property="og:site_name" content="Nima Sarang">
+<meta property="og:image:height" content="734">
+<meta property="og:image:width" content="1300">
+<meta name="twitter:title" content="A Review of ML Time Series Forecasting Models">
+<meta name="twitter:description" content="A review of some of the well-known machine learning time series forecasting models.">
+<meta name="twitter:image" content="https://www.nimasarang.com/blog/2025-02-13-time-series-forecasting/featured.png">
+<meta name="twitter:image-height" content="734">
+<meta name="twitter:image-width" content="1300">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="citation_title" content="A Review of ML Time Series Forecasting Models">
+<meta name="citation_author" content="Nima Sarang">
+<meta name="citation_publication_date" content="2025-02-28">
+<meta name="citation_cover_date" content="2025-02-28">
+<meta name="citation_year" content="2025">
+<meta name="citation_online_date" content="2025-02-28">
+<meta name="citation_fulltext_html_url" content="https://www.nimasarang.com/blog/2025-02-13-time-series-forecasting/">
+<meta name="citation_language" content="en">
+<meta name="citation_reference" content="citation_title=DeepAR: Probabilistic forecasting with autoregressive recurrent networks;,citation_author=David Salinas;,citation_author=Valentin Flunkert;,citation_author=Jan Gasthaus;,citation_author=Tim Januschowski;,citation_publication_date=2020;,citation_cover_date=2020;,citation_year=2020;,citation_issue=3;,citation_volume=36;,citation_journal_title=International journal of forecasting;,citation_publisher=Elsevier;">
+<meta name="citation_reference" content="citation_title=N-BEATS: Neural basis expansion analysis for interpretable time series forecasting;,citation_author=Boris N Oreshkin;,citation_author=Dmitri Carpov;,citation_author=Nicolas Chapados;,citation_author=Yoshua Bengio;,citation_publication_date=2019;,citation_cover_date=2019;,citation_year=2019;,citation_journal_title=arXiv preprint arXiv:1905.10437;">
+<meta name="citation_reference" content="citation_title=FITS: Modeling time series with $10 k$ parameters;,citation_author=Zhijian Xu;,citation_author=Ailing Zeng;,citation_author=Qiang Xu;,citation_publication_date=2023;,citation_cover_date=2023;,citation_year=2023;,citation_journal_title=arXiv preprint arXiv:2307.03756;">
+<meta name="citation_reference" content="citation_title=Temporal fusion transformers for interpretable multi-horizon time series forecasting;,citation_author=Bryan Lim;,citation_author=Sercan Ö Arık;,citation_author=Nicolas Loeff;,citation_author=Tomas Pfister;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_issue=4;,citation_volume=37;,citation_journal_title=International Journal of Forecasting;,citation_publisher=Elsevier;">
+<meta name="citation_reference" content="citation_title=Dam: Towards a foundation model for time series forecasting;,citation_author=Luke Darlow;,citation_author=Qiwen Deng;,citation_author=Ahmed Hassan;,citation_author=Martin Asenov;,citation_author=Rajkarn Singh;,citation_author=Artjom Joosen;,citation_author=Adam Barker;,citation_author=Amos Storkey;,citation_publication_date=2024;,citation_cover_date=2024;,citation_year=2024;,citation_journal_title=arXiv preprint arXiv:2407.17880;">
+<meta name="citation_reference" content="citation_title=Effective bayesian modeling of groups of related count time series;,citation_abstract=Time series of counts arise in a variety of forecasting applications, for which traditional models are generally inappropriate. This paper introduces a hierarchical Bayesian formulation applicable to count time series that can easily account for explanatory variables and share statistical strength across groups of related time series. We derive an efficient approximate inference technique, and illustrate its performance on a number of datasets from supply chain planning.;,citation_author=Nicolas Chapados;,citation_editor=Eric P. Xing;,citation_editor=Tony Jebara;,citation_publication_date=2014;,citation_cover_date=2014;,citation_year=2014;,citation_fulltext_html_url=https://proceedings.mlr.press/v32/chapados14.html;,citation_volume=32;,citation_conference_title=Proceedings of the 31st international conference on machine learning;,citation_conference=PMLR;,citation_series_title=Proceedings of machine learning research;">
+<meta name="citation_reference" content="citation_title=Effective bayesian heteroscedastic regression with deep neural networks;,citation_author=Alexander Immer;,citation_author=Emanuele Palumbo;,citation_author=Alexander Marx;,citation_author=Julia Vogt;,citation_publication_date=2024;,citation_cover_date=2024;,citation_year=2024;,citation_volume=36;,citation_journal_title=Advances in Neural Information Processing Systems;">
+<meta name="citation_reference" content="citation_title=Gradnorm: Gradient normalization for adaptive loss balancing in deep multitask networks;,citation_author=Zhao Chen;,citation_author=Vijay Badrinarayanan;,citation_author=Chen-Yu Lee;,citation_author=Andrew Rabinovich;,citation_publication_date=2018;,citation_cover_date=2018;,citation_year=2018;,citation_conference_title=International conference on machine learning;,citation_conference=PMLR;">
+<meta name="citation_reference" content="citation_title=Multi-task learning using uncertainty to weigh losses for scene geometry and semantics;,citation_author=Alex Kendall;,citation_author=Yarin Gal;,citation_author=Roberto Cipolla;,citation_publication_date=2018;,citation_cover_date=2018;,citation_year=2018;,citation_conference_title=Proceedings of the IEEE conference on computer vision and pattern recognition;">
+<meta name="citation_reference" content="citation_title=On the pitfalls of heteroscedastic uncertainty estimation with probabilistic neural networks;,citation_author=Maximilian Seitzer;,citation_author=Arash Tavakoli;,citation_author=Dimitrije Antic;,citation_author=Georg Martius;,citation_publication_date=2022;,citation_cover_date=2022;,citation_year=2022;,citation_journal_title=arXiv preprint arXiv:2203.09168;">
+<meta name="citation_reference" content="citation_title=The universal approximation theorem;,citation_author=Alexander Felbert;,citation_publication_date=2023;,citation_cover_date=2023;,citation_year=2023;,citation_fulltext_html_url=https://www.deep-mind.org/2023/03/26/the-universal-approximation-theorem/;">
+<meta name="citation_reference" content="citation_title=Deep residual learning for image recognition;,citation_author=Kaiming He;,citation_author=Xiangyu Zhang;,citation_author=Shaoqing Ren;,citation_author=Jian Sun;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_conference_title=Proceedings of the IEEE conference on computer vision and pattern recognition;">
+<meta name="citation_reference" content="citation_title=A dual-stage attention-based recurrent neural network for time series prediction;,citation_author=Yao Qin;,citation_author=Dongjin Song;,citation_author=Haifeng Chen;,citation_author=Wei Cheng;,citation_author=Guofei Jiang;,citation_author=Garrison Cottrell;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_journal_title=arXiv preprint arXiv:1704.02971;">
+<meta name="citation_reference" content="citation_title=Retain: An interpretable predictive model for healthcare using reverse time attention mechanism;,citation_author=Edward Choi;,citation_author=Mohammad Taha Bahadori;,citation_author=Jimeng Sun;,citation_author=Joshua Kulas;,citation_author=Andy Schuetz;,citation_author=Walter Stewart;,citation_publication_date=2016;,citation_cover_date=2016;,citation_year=2016;,citation_volume=29;,citation_journal_title=Advances in neural information processing systems;">
+<meta name="citation_reference" content="citation_title=Glu variants improve transformer;,citation_author=Noam Shazeer;,citation_publication_date=2020;,citation_cover_date=2020;,citation_year=2020;,citation_journal_title=arXiv preprint arXiv:2002.05202;">
+<meta name="citation_reference" content="citation_title=Are transformers effective for time series forecasting?;,citation_author=Ailing Zeng;,citation_author=Muxi Chen;,citation_author=Lei Zhang;,citation_author=Qiang Xu;,citation_publication_date=2023;,citation_cover_date=2023;,citation_year=2023;,citation_volume=37;,citation_conference_title=Proceedings of the AAAI conference on artificial intelligence;">
+<meta name="citation_reference" content="citation_title=Autoformer: Decomposition transformers with auto-correlation for long-term series forecasting;,citation_author=Haixu Wu;,citation_author=Jiehui Xu;,citation_author=Jianmin Wang;,citation_author=Mingsheng Long;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_volume=34;,citation_journal_title=Advances in neural information processing systems;">
+<meta name="citation_reference" content="citation_title=Informer: Beyond efficient transformer for long sequence time-series forecasting;,citation_author=Haoyi Zhou;,citation_author=Shanghang Zhang;,citation_author=Jieqi Peng;,citation_author=Shuai Zhang;,citation_author=Jianxin Li;,citation_author=Hui Xiong;,citation_author=Wancai Zhang;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_volume=35;,citation_conference_title=Proceedings of the AAAI conference on artificial intelligence;">
+<meta name="citation_reference" content="citation_title=An analysis of linear time series forecasting models;,citation_author=William Toner;,citation_author=Luke Darlow;,citation_publication_date=2024;,citation_cover_date=2024;,citation_year=2024;,citation_conference_title=Proceedings of the 41st international conference on machine learning;">
+<meta name="citation_reference" content="citation_title=Adaptive normalization: A novel data normalization approach for non-stationary time series;,citation_author=Eduardo Ogasawara;,citation_author=Leonardo C Martinez;,citation_author=Daniel De Oliveira;,citation_author=Geraldo Zimbrão;,citation_author=Gisele L Pappa;,citation_author=Marta Mattoso;,citation_publication_date=2010;,citation_cover_date=2010;,citation_year=2010;,citation_conference_title=The 2010 international joint conference on neural networks (IJCNN);,citation_conference=IEEE;">
+<meta name="citation_reference" content="citation_title=Reversible instance normalization for accurate time-series forecasting against distribution shift;,citation_author=Taesung Kim;,citation_author=Jinhee Kim;,citation_author=Yunwon Tae;,citation_author=Cheonbok Park;,citation_author=Jang-Ho Choi;,citation_author=Jaegul Choo;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_conference_title=International conference on learning representations;">
+<meta name="citation_reference" content="citation_title=Nhits: Neural hierarchical interpolation for time series forecasting;,citation_author=Cristian Challu;,citation_author=Kin G Olivares;,citation_author=Boris N Oreshkin;,citation_author=Federico Garza Ramirez;,citation_author=Max Mergenthaler Canseco;,citation_author=Artur Dubrawski;,citation_publication_date=2023;,citation_cover_date=2023;,citation_year=2023;,citation_volume=37;,citation_conference_title=Proceedings of the AAAI conference on artificial intelligence;">
+<meta name="citation_reference" content="citation_title=Lightgbm: A highly efficient gradient boosting decision tree;,citation_author=Guolin Ke;,citation_author=Qi Meng;,citation_author=Thomas Finley;,citation_author=Taifeng Wang;,citation_author=Wei Chen;,citation_author=Weidong Ma;,citation_author=Qiwei Ye;,citation_author=Tie-Yan Liu;,citation_publication_date=2017;,citation_cover_date=2017;,citation_year=2017;,citation_volume=30;,citation_journal_title=Advances in neural information processing systems;">
+<meta name="citation_reference" content="citation_title=An image is worth 16x16 words: Transformers for image recognition at scale;,citation_author=Alexey Dosovitskiy;,citation_author=Lucas Beyer;,citation_author=Alexander Kolesnikov;,citation_author=Dirk Weissenborn;,citation_author=Xiaohua Zhai;,citation_author=Thomas Unterthiner;,citation_author=Mostafa Dehghani;,citation_author=Matthias Minderer;,citation_author=Georg Heigold;,citation_author=Sylvain Gelly;,citation_author=others;,citation_publication_date=2020;,citation_cover_date=2020;,citation_year=2020;,citation_journal_title=arXiv preprint arXiv:2010.11929;">
+<meta name="citation_reference" content="citation_title=A time series is worth 64 words: Long-term forecasting with transformers;,citation_author=Yuqi Nie;,citation_author=Nam H Nguyen;,citation_author=Phanwadee Sinthong;,citation_author=Jayant Kalagnanam;,citation_publication_date=2022;,citation_cover_date=2022;,citation_year=2022;,citation_journal_title=arXiv preprint arXiv:2211.14730;">
+<meta name="citation_reference" content="citation_title=Understanding linear regression using the singular value decomposition;,citation_author=Thalles Santos Silva;,citation_publication_date=2020;,citation_cover_date=2020;,citation_year=2020;,citation_fulltext_html_url=https://sthalles.github.io/svd-for-regression/;,citation_journal_title=https://sthalles.github.io;">
+<meta name="citation_reference" content="citation_title=Tokens-to-token vit: Training vision transformers from scratch on imagenet;,citation_author=Li Yuan;,citation_author=Yunpeng Chen;,citation_author=Tao Wang;,citation_author=Weihao Yu;,citation_author=Yujun Shi;,citation_author=Zi-Hang Jiang;,citation_author=Francis EH Tay;,citation_author=Jiashi Feng;,citation_author=Shuicheng Yan;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_conference_title=Proceedings of the IEEE/CVF international conference on computer vision;">
+<meta name="citation_reference" content="citation_title=Swin transformer: Hierarchical vision transformer using shifted windows;,citation_author=Ze Liu;,citation_author=Yutong Lin;,citation_author=Yue Cao;,citation_author=Han Hu;,citation_author=Yixuan Wei;,citation_author=Zheng Zhang;,citation_author=Stephen Lin;,citation_author=Baining Guo;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_conference_title=Proceedings of the IEEE/CVF international conference on computer vision;">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../_assets/favicon.svg" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Nima Sarang</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about/index.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog/index.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../project/index.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../publication/index.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools tools-wide">
+    <a href="https://www.github.com/nsarang" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+    <a href="https://www.linkedin.com/in/nima-sarang" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-linkedin"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns">
+<div id="title-block-header-title" class="quarto-title page-columns page-full page-layout-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg); background-repeat: no-repeat;">
+<h1 class="title">A Review of ML Time Series Forecasting Models</h1>
+    <div class="quarto-categories">
+        <div class="quarto-category">ML</div>
+        <div class="quarto-category">Time Series</div>
+        <div class="quarto-category">Forecasting</div>
+        <div class="quarto-category">LSTM</div>
+        <div class="quarto-category">N-BEATS</div>
+        <div class="quarto-category">TFT</div>
+        <div class="quarto-category">DeepAR</div>
+      </div>
+  </div>
+
+<div>
+  <div id="title-block-title-desc" class="description pt-4">
+    A review of some of the well-known machine learning time series forecasting models.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nima Sarang </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 28, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+
+</header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#deepar" id="toc-deepar" class="nav-link" data-scroll-target="#deepar"><span class="header-section-number">2</span> DeepAR</a></li>
+  <li><a href="#n-beats" id="toc-n-beats" class="nav-link" data-scroll-target="#n-beats"><span class="header-section-number">3</span> N-BEATS</a></li>
+  <li><a href="#tft" id="toc-tft" class="nav-link" data-scroll-target="#tft"><span class="header-section-number">4</span> TFT</a></li>
+  <li><a href="#sec-dlinear" id="toc-sec-dlinear" class="nav-link" data-scroll-target="#sec-dlinear"><span class="header-section-number">5</span> DLinear</a></li>
+  <li><a href="#fits" id="toc-fits" class="nav-link" data-scroll-target="#fits"><span class="header-section-number">6</span> FITS</a></li>
+  <li><a href="#patchtst" id="toc-patchtst" class="nav-link" data-scroll-target="#patchtst"><span class="header-section-number">7</span> PatchTST</a></li>
+  <li><a href="#dam" id="toc-dam" class="nav-link" data-scroll-target="#dam"><span class="header-section-number">8</span> DAM</a></li>
+  <li><a href="#lightgbm" id="toc-lightgbm" class="nav-link" data-scroll-target="#lightgbm"><span class="header-section-number">9</span> LightGBM</a></li>
+  <li><a href="#closing-thoughts" id="toc-closing-thoughts" class="nav-link" data-scroll-target="#closing-thoughts"><span class="header-section-number">10</span> Closing Thoughts</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">11</span> References</a></li>
+  <li><a href="#sec-terminologies" id="toc-sec-terminologies" class="nav-link" data-scroll-target="#sec-terminologies"><span class="header-section-number">12</span> Appendix: Glossary of Terms</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+<style>
+  body {
+    visibility: hidden; /* initially hidden until DOM ready to prevent flicker */
+  }
+</style>
+<noscript>
+  <style>
+    body {
+      visibility: visible !important; /* Override hidden state when JS is disabled */
+    }
+  </style>
+</noscript>
+
+<!-- source: https://github.com/gadenbuie/garrickadenbuie-com/blob/main/_partials/title-block-link-buttons/title-block.html -->
+<!-- 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title"> 
+-->
+<!-- <header id="title-block-header" class="quarto-title-block default page-columns"> -->
+<!-- <div class="quarto-title page-columns page-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg);"> -->
+
+
+
+<div class="hidden">
+% Meta %
+<p>% Optional argument [#1]: Size modifier (e.g., , ) % #2: Opening delimiter % #3: Closing delimiter % #4: Content</p>
+<p>% Common sets % Real numbers % Integers % Natural numbers % Rational numbers % Complex numbers</p>
+<p>% Probability and statistics % Expectation % Variance % Covariance % Probability measure % Indicator function</p>
+% Linear algebra
+% Matrix
+<p>% Vector % Trace % Rank % Range (image) % Projection</p>
+% Calculus and analysis % For integrals, e.g., f(x) x
+% Partial derivative \newcommand{[2]}{ #1} % Partial derivative w/o fraction
+<p>% Second partial derivative % Gradient % Divergence % Curl</p>
+% Set theory
+% Set
+<p>% Set builder notation % Union % Intersection % Symmetric difference</p>
+<p>% Logic and proofs % Implies % If and only if % End of proof % Contradiction</p>
+% Norms and inner products
+% Norm
+<p>% Inner product</p>
+<p>% Common functions % Minimization problem % Maximization problem % Argument minimum % Argument maximum</p>
+<p>% Subject to constraints % Sign function % Span of a set</p>
+% Formatting
+% Absolute value
+% Parentheses
+% Brackets
+% Floor function
+<p>% Ceiling function</p>
+<p>% Asymptotic notations % Big O notation % Small o notation % Big Omega notation % Big Theta notation</p>
+<p>% Commonly used in algorithms and complexity % Polynomial time % Polylogarithmic time</p>
+<p>% Additional probability notations % Independent and identically distributed % Distributed as</p>
+<p>% Fourier transform % Fourier transform % Inverse Fourier transform</p>
+<p>% General math % Display style</p>
+</div>
+<style>
+  h4 {
+    margin-top: 4em;
+  }
+  figcaption {
+    margin: auto;
+    text-align: center;
+  }
+  section .header-section-number::after {
+    content: '.';
+  }
+  main ol > li:not(:first-child), main ul > li:not(:first-child) {
+    margin-top: 1.25em;
+  }
+  main ol > li:last-child, main ul > li:last-child {
+    margin-bottom: 1.5em;
+  }
+  main .small-li-space ol > li:not(:first-child), main .small-li-space ul > li:not(:first-child) {
+    margin-top: 0.5em;
+  }
+  #TOC > ul > li > a {
+    font-weight: 400;
+  }
+</style>
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>Hello there!</p>
+<p>Today I’ll be going over some of the most important and influential time series forecasting models in the machine learning community. My focus will be to capture the <em>overall intuition</em> behind each model and give a concise overview of their architecture. I’ll be skipping over the basics of time series forecasting, otherwise this post would have been far too long. You can find the definition of some of the terminologies I’ll be using in the <a href="#sec-terminologies">Appendix</a>.</p>
+<p>Papers that are covered are:</p>
+<div class="small-li-space">
+<ol type="1">
+<li><a href="https://arxiv.org/abs/1704.04110">DeepAR</a>: An early deep recurrent model for time series forecasting that worked quite well on a variety of datasets.<br>
+</li>
+<li><a href="https://arxiv.org/abs/1905.10437">N-BEATS</a>: A deep residual model that uses basis functions to decompose the target variable.<br>
+</li>
+<li><a href="https://arxiv.org/abs/1912.09363">TFT</a>: Google’s Transformer-based model.</li>
+<li><a href="https://arxiv.org/pdf/2205.13504">DLinear</a>: A linear model that blew the transformers out of the water.</li>
+<li><a href="https://openreview.net/pdf?id=bWcnvZ3qMb">FITS</a>: A univariate linear model that operates on the frequency domain.</li>
+<li><a href="https://arxiv.org/abs/2211.14730">PatchTST</a>: A transformer-based model that uses patches to model the time series data.</li>
+<li><a href="https://arxiv.org/abs/2407.17880">DAM</a>: A univariate model that uses multi-head attention, fourier basis functions, and leverages irregularly spaced data.<br>
+</li>
+<li><a href="https://lightgbm.readthedocs.io/en/stable/">LightGBM</a>: This is not a new model, but I have to mention it because it’s still widely used in practice and has a comparable performance.</li>
+</ol>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Disclaimer: Opinions Ahead">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Disclaimer: Opinions Ahead
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Before diving in, I should note that this review is deliberately opinionated. I’ll be sharing my takes on these models based on my personal experience implementing and working with them, and also I used the opportunity to dust off some old memes from my meme folder. If that sounds good to you, let’s get started!</p>
+</div>
+</div>
+</div>
+</section>
+<section id="deepar" class="level2" data-number="2">
+<h2 data-number="2" data-anchor-id="deepar"><span class="header-section-number">2</span> DeepAR</h2>
+<p>Amazon’s DeepAR <span class="citation" data-cites="salinas2020deepar">(<a href="#ref-salinas2020deepar" role="doc-biblioref">Salinas et al., 2020</a>)</span> was one of the early papers designed with having to be trained on large-scale data in mind. The first version of the paper was published in <em>2017</em>, and this was the era where deep learning was still gaining traction as a solution that could benefit and scale to larger datasets.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/sample_size.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%"></p>
+</figure>
+</div>
+<ul>
+<li>The architecture uses a vanilla LSTM with the forget cell’s bias set to 1, encouraging the model to retain information from the previous time steps.</li>
+<li>The model outputs a probability distribution, from which both uncertainty estimates and point forecasts can be derived. In my opinion, this is the highlight of the paper. The appeal behind probabilistic forecasts is that they can be used in downstream applications, for instance, to minimize risk functions.</li>
+<li>A few ideas regarding the handling of different scales of data are explored.</li>
+</ul>
+<section id="how-to-make-probabilistic-forecasts" class="level4">
+<h4 data-anchor-id="how-to-make-probabilistic-forecasts"><strong>How to make probabilistic forecasts?</strong></h4>
+<p>The recipe is as follows:</p>
+<ol type="1">
+<li><p><strong>Choose a distribution</strong> (e.g.&nbsp;Gaussian, Poisson, etc.) that best fits the target variable.</p>
+<ol type="a">
+<li><p>For real-valued data, such as stock prices or temperature readings, a Gaussian distribution is used: <span class="math inline">\(\mathcal{N}(\mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(y-\mu)^2}{2\sigma^2}}\)</span>.</p></li>
+<li><p>For positive natural numbers, such as counts of ad impressions or number of sales, a Negative Binomial distribution <span class="math inline">\(\text{NB}(\mu, \alpha) = \binom{y+\alpha-1}{y} \left(\frac{\mu}{\mu+\alpha}\right)^y \left(\frac{\alpha}{\mu+\alpha}\right)^\alpha\)</span> can be used, where <span class="math inline">\(\mu\)</span> is the mean and <span class="math inline">\(\alpha\)</span> is the dispersion parameter. <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Poisson distribution is also an alternative <span class="citation" data-cites="pmlr-v32-chapados14">(<a href="#ref-pmlr-v32-chapados14" role="doc-biblioref">Chapados, 2014</a>)</span>.</p></li>
+<li><p>For classification tasks, a categorical distribution <span class="math inline">\(\text{Cat}(p) = \prod_{i=1}^K p_i^{y_i}\)</span> is used, where <span class="math inline">\(y\)</span> is the one-hot encoded target variable.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p></li>
+</ol></li>
+<li><p><strong>Train the model</strong> to output the parameters of the chosen distribution by maximizing the likelihood of the observed data under the distribution, or in other words, minimize the negative log-likelihood (NLL) of the data. For example, for a Gaussian distribution the model would output the mean <span class="math inline">\(\mu_x\)</span> and variance <span class="math inline">\(\sigma_x^2\)</span> for input <span class="math inline">\(x\)</span>. For a categorical distribution the model would output the probabilities of each class.</p>
+<ol type="a">
+<li><p>Some parameters may be constrained, like the variance of a Gaussian distribution which must be positive. The paper uses a softplus activation function (see <a href="#fig-softplus-relu" class="quarto-xref">Figure&nbsp;1</a>) to ensure this:<br>
+<span class="math display">\[\sigma = \log(1 + e^{\sigma_{\text{raw}}})\]</span></p></li>
+<li><p>In classification tasks, softmax is used to ensure the probabilities sum to 1.</p></li>
+</ol></li>
+<li><p><strong>Sample</strong> from the predicted distribution to make a point prediction.</p></li>
+</ol>
+<div id="cell-fig-softplus-relu" class="cell no-style-output" data-execution_count="1">
+<div class="cell-output cell-output-display">
+<div id="fig-softplus-relu" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-softplus-relu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-softplus-relu-output-1.png" width="395" height="393" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-softplus-relu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Comparison of the ReLU and Softplus activation functions.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="scale-handling" class="level4">
+<h4 data-anchor-id="scale-handling"><strong>Scale handling</strong></h4>
+<p>The main idea behind DeepAR is that instead of independently modeling each time series, e.g.&nbsp;a product’s sales in a specific store, the model can learn from all time series in the dataset, allowing the model to learn from the similarities between the time series. This is done by adding the product-specific features to the input along with the time series data. Categorical features such as these are embedded using an embedding layer.</p>
+<p>One challenge is that time series may have different scales. For example, sales of a product in one store might be in the range of 0-10, while sales of another product in another store might be in the range of 1000-10000. To handle this:</p>
+<ul>
+<li>Instance normalization is used to normalize the time series, both in the context and the horizon, by dividing by the entire series by the mean of the series in the context window.</li>
+<li>Since the input and output are now scale-free, to give more weight to the series with larger scales, a non-uniform sampling regime is used to assign a higher probability to the series with larger scales.</li>
+</ul>
+</section>
+<section id="thoughts" class="level4">
+<h4 data-anchor-id="thoughts"><strong>Thoughts</strong></h4>
+<p>The model is simple and straightforward. Having probabilistic forecasts is a nice touch, but it’s more nuanced than what is presented; Learning a distribution rather than a point estimate can sometimes backfire and lead to worse mean fits:</p>
+<ul>
+<li>Learning a multi-parameter distribution includes all the drawbacks of multi-task learning, where the rate of convergence and loss scaling can be different for each parameter. Gradnorm <span class="citation" data-cites="chen2018gradnorm">(<a href="#ref-chen2018gradnorm" role="doc-biblioref">Chen et al., 2018</a>)</span> proposes a gradient magnitude balancing scheme, but introduces an additional hyperparameter. <span class="citation" data-cites="kendall2018multi">Kendall et al. (<a href="#ref-kendall2018multi" role="doc-biblioref">2018</a>)</span> adds the loss scaling to the optimization, both for regression and classification tasks.<br>
+</li>
+<li>In the case of Gaussian distributions, <span class="citation" data-cites="seitzer2022pitfalls">Seitzer et al. (<a href="#ref-seitzer2022pitfalls" role="doc-biblioref">2022</a>)</span> and <span class="citation" data-cites="immer2024effective">Immer et al. (<a href="#ref-immer2024effective" role="doc-biblioref">2024</a>)</span> discuss the natural parameterization of the distribution and posterior predictive. I especially recommend <span class="citation" data-cites="immer2024effective">Immer et al. (<a href="#ref-immer2024effective" role="doc-biblioref">2024</a>)</span> for a more in-depth discussion on the topic.</li>
+</ul>
+<p>Regarding the scale handling, an alternative approach could be using a sample-weighted loss function instead of non-uniform sampling. On top of that, assigning higher importance to the series with larger scales isn’t something that is applicable to all datasets.</p>
+</section>
+</section>
+<section id="n-beats" class="level2" data-number="3">
+<h2 data-number="3" data-anchor-id="n-beats"><span class="header-section-number">3</span> N-BEATS</h2>
+<p>N-BEATS <span class="citation" data-cites="oreshkin2019n">(<a href="#ref-oreshkin2019n" role="doc-biblioref">Oreshkin et al., 2019</a>)</span> is a univariate time series forecasting model consisting of a stack of linear layers, with skip connections between them. The model is claimed to be interpretable since the horizon function (considering the target values as a function of time) can be decomposed into a set of basis functions, such as polynomials and sinusoids. N-BEATS has been proven to be competitive in the M3 and M4 forecasting competitions, so the results speak for themselves.</p>
+<section id="residual-blocks" class="level4">
+<h4 data-anchor-id="residual-blocks"><strong>Residual Blocks</strong></h4>
+<div id="fig-nbeats-block" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-nbeats-block-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/nbeats_block.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nbeats-block-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: A basic building block in N-BEATS <span class="citation" data-cites="oreshkin2019n">(<a href="#ref-oreshkin2019n" role="doc-biblioref">Oreshkin et al., 2019</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>Building on the success of residual networks, which was first popularized through ResNet <span class="citation" data-cites="he2016deep">(<a href="#ref-he2016deep" role="doc-biblioref">He et al., 2016</a>)</span> and now used almost universally in deep learning, N-BEATS uses a stack of MLP blocks with skip connections. Each block (<a href="#fig-nbeats-block" class="quarto-xref">Figure&nbsp;2</a>) produces two outputs: a forecast and a residual.</p>
+<ol type="1">
+<li>The forecast output of every block, irrespective of the block’s depth, is summed up to produce the final prediction.</li>
+<li>The residual output is subtracted from the block’s input and passed on to the next block in the stack as input. In the paper, this is referred to as the “backcast” signal, but I’ll get to that in a bit.</li>
+</ol>
+</section>
+<section id="basis-functions" class="level4">
+<h4 data-anchor-id="basis-functions"><strong>Basis Functions</strong></h4>
+<p>By the Universal Approximation Theorem, a dense feedforward network can approximate any continuous function on a compact subset of R^n to arbitrary precision. However, this theoretical guarantee doesn’t speak to learnability or efficiency <span class="citation" data-cites="deepmind2023universal">(<a href="#ref-deepmind2023universal" role="doc-biblioref">Felbert, 2023</a>)</span>. One approach is to constrain the model to learn the parameters of a basis function, such that would best approximate the target variable. The basis function can be a polynomial (like Taylor expansion), a Fourier series, etc. The intuition is to add an inductive bias to the model which can help in generalizations and interpretability. This is not a novel idea and has been used extensively in the past.</p>
+<p>For example, to model the target variable <span class="math inline">\(y \in \mathbb{R}^{T}\)</span> with <span class="math inline">\(T\)</span> being the horizon length, instead of producing <span class="math inline">\(T\)</span> outputs the model can learn the coefficients of a polynomial of degree <span class="math inline">\(n\)</span> that best fits the variable. The inference is then done by evaluating the polynomial at <span class="math inline">\(T\)</span> points:</p>
+<p><span id="eq-polynomial"><span class="math display">\[
+\begin{array}{c}
+f(x) = \theta_0 + \theta_1 x + \theta_2 x^2 + \cdots + \theta_n x^n \\\\
+\hat{y} = \left[f(1), f(2), \ldots, f(T)\right]
+\end{array}
+\tag{1}\]</span></span></p>
+<p>where <span class="math inline">\(\hat{y}\)</span> is the prediction. In practice, we use a normalized time domain between <span class="math inline">\([0, 1]\)</span>, so the evaluation becomes: <span class="math display">\[ \hat{y} = \left[f(0), f(\frac{1}{T}), \ldots, f(\frac{T-1}{T})\right] \]</span></p>
+<p>For a fourier basis, the function would be:</p>
+<p><span id="eq-fourier"><span class="math display">\[
+\begin{gathered}
+f(x) = \sum_{i=1}^{n} a_n\cos(2 \pi i x) + b_n \sin(2 \pi i x)
+\end{gathered}
+\tag{2}\]</span></span></p>
+<p>where <span class="math inline">\(i\)</span> is the frequency of the sinusoid, and <span class="math inline">\(a_n\)</span> and <span class="math inline">\(b_n\)</span> are the learnable parameters. The number of frequencies <span class="math inline">\(n \leq T/2\)</span> is a hyperparameter. If you’re new to Fourier series, <a href="https://www.jezzamon.com/fourier/">this post</a> is a good introduction.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Nyquist-Shannon Sampling Theorem">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nyquist-Shannon Sampling Theorem
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The <span class="math inline">\(T/2\)</span> upper bound is due to the <a href="https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem">Nyquist-Shannon sampling theorem</a>, which states that the highest frequency that can be represented in a signal is half the sampling rate. This is because the signal can be perfectly reconstructed from its samples if the sampling rate is at least twice the highest frequency in the signal.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="a-stack-of-stacks" class="level4">
+<h4 data-anchor-id="a-stack-of-stacks"><strong>A Stack of Stacks</strong></h4>
+<p>What if we made the network deeper by stacking multiple stacks of building blocks? Well, that’s exactly what the authors imagined.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/deeper.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:65.0%"></p>
+</figure>
+</div>
+<p>The same recipe used to connect the blocks within a stack is used to connect the stacks. Each stack produces a forecast and a residual, where the forecast is summed up to produce the final prediction, and the residual, i.e.&nbsp;the residual output of the last block in the stack, is passed on to the next stack as input (<a href="#fig-nbeats-stack" class="quarto-xref">Figure&nbsp;3</a>). Aside from making the network deeper, this also allows to have stacks with different basis functions. Notably, one variation of N-BEATS uses two stacks, the first one learning a polynomial function of a small degree, and the second one learning a fourier decomposition. The idea is that first stack learns the overall trend of the time series, while the second stack learns the seasonality.</p>
+<div id="fig-nbeats-stack" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-nbeats-stack-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/nbeats_stack.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nbeats-stack-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: A stack of stacks in N-BEATS <span class="citation" data-cites="oreshkin2019n">(<a href="#ref-oreshkin2019n" role="doc-biblioref">Oreshkin et al., 2019</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>N-HiTS <span class="citation" data-cites="challu2023nhits">(<a href="#ref-challu2023nhits" role="doc-biblioref">Challu et al., 2023</a>)</span> is the follow up to N-BEATS, where hierarchical interpolation is added.</p>
+</section>
+<section id="thoughts-1" class="level4">
+<h4 data-anchor-id="thoughts-1"><strong>Thoughts</strong></h4>
+<p>The “backcast” signal, aka the residual, threw me off big time. The paper mentions that the goal of having a backcast branch is to predict the input, forcing the model to retain information. On the other hand, when looking at the <a href="https://github.com/ServiceNow/N-BEATS/blob/c746a4f13ffc957487e0c3279b182c3030836053/models/nbeats.py#L66-L74">official implementation</a>, the backcast output is not used in the loss function at all. At first I thought maybe I was missing something and having a backward forecasting is not the objective, but then I noticed even the Pytorch Forecasting library has implemented a <a href="https://github.com/sktime/pytorch-forecasting/blob/654b94d36587bf65f1c18d8034375488cae05b61/pytorch_forecasting/models/nbeats/_nbeats.py#L295-L303">backcast loss</a> based on the paper. This is not universally true and some other libraries like <a href="https://unit8co.github.io/darts/generated_api/darts.models.forecasting.nbeats.html">Darts</a> follow the official implementation. My main concern is:</p>
+<ul>
+<li>If “backcast” is not meant to be <em>backward forecasting</em>, then why call it backcast? Why not just call it a residual? This is confusing.</li>
+<li>If the goal <em>is</em> to predict the input, then it leads to another question. Based on <a href="#fig-nbeats-block" class="quarto-xref">Figure&nbsp;2</a>, the residual output of each block is subtracted from the input and passed on to the next block. Do we expect the network to learn to output zero-valued residuals so that information is retained post-subtraction?</li>
+</ul>
+<p>On a side note, I was surprised that not any kind of data normalization is used in the model. At least that’s my understanding from the paper and the official implementation.</p>
+</section>
+</section>
+<section id="tft" class="level2" data-number="4">
+<h2 data-number="4" data-anchor-id="tft"><span class="header-section-number">4</span> TFT</h2>
+<p>Google’s Temporal Fusion Transformers (TFT) <span class="citation" data-cites="lim2021temporal">(<a href="#ref-lim2021temporal" role="doc-biblioref">Lim et al., 2021</a>)</span> is a transformer-based model that uses a combination of attention mechanisms to model the time series data, and it’s been popular in the field since 2019. The paper is well-written and easy to follow, so kudos to the authors for that. But the more you actually understand the architecture and the ablation studies, the more questioning it gets as to why certain design choices were made, and how they were presented in the paper.</p>
+<div id="fig-tft-arch" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tft-arch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/tft.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tft-arch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: TFT’s architecture <span class="citation" data-cites="lim2021temporal">(<a href="#ref-lim2021temporal" role="doc-biblioref">Lim et al., 2021</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>In a nutshell, TFT is a composition of:</p>
+<ol type="1">
+<li><p>A sequence-to-sequence LSTM encoder-decoder. This component is actually the <em>core</em> of the model based on the ablation studies, not the transformer (<a href="#fig-tft-ablation" class="quarto-xref">Figure&nbsp;5</a>).</p></li>
+<li><p>A multi-head attention (MHA) mechanism takes the output of both the LSTM encoder and decoder as input.</p>
+<ol type="a">
+<li>There’s a shortcut connection that bypasses the MHA. So the model can choose to ignore MHA if it’s not needed.</li>
+<li>It uses masked attention to maintain the causality of the time series.</li>
+</ol></li>
+<li><p>The input features, are transformed, weighted, and then aggregated. The paper uses the term “Variable Selection” which in essence is a self-attention similar to <span class="citation" data-cites="qin2017dual">(<a href="#ref-qin2017dual" role="doc-biblioref">Qin et al., 2017</a>)</span>. You can also go for a recurrent version like <span class="citation" data-cites="choi2016retain">(<a href="#ref-choi2016retain" role="doc-biblioref">Choi et al., 2016</a>)</span>, but it wasn’t considered in the paper.</p></li>
+<li><p>Gated residual blocks that resemble ResNet blocks are used in several places as computational blocks. They are present in static feature transformation, variable selection, before and after the MHA, etc. The gated block itself consists of a GLU <span class="citation" data-cites="shazeer2020glu">(<a href="#ref-shazeer2020glu" role="doc-biblioref">Shazeer, 2020</a>)</span>, which in Noam’s own words, “we offer no explanation as to why these architectures seem to work; we attribute their success, as all else, to divine benevolence” 🙂</p></li>
+<li><p>Quantile regression (<a href="https://scikit-learn.org/1.5/modules/model_evaluation.html#pinball-loss">Pinball loss</a>) is used to predict the lower and upper quantiles of the target variable.</p></li>
+</ol>
+<div id="fig-tft-ablation" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tft-ablation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/tft_ablation.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tft-ablation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Results of ablation analysis in TFT <span class="citation" data-cites="lim2021temporal">(<a href="#ref-lim2021temporal" role="doc-biblioref">Lim et al., 2021</a>)</span>, where <em>Local processing</em> refers to the LSTM encoder-decoder. The removal of LSTM has the most significant impact on the model’s performance, with the Electricity dataset being the exception.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="sec-dlinear" class="level2" data-number="5">
+<h2 data-number="5" data-anchor-id="sec-dlinear"><span class="header-section-number">5</span> DLinear</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/kekw.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:65.0%"></p>
+</figure>
+</div>
+<p>This one is quite intriguing. <span class="citation" data-cites="zeng2023transformers">Zeng et al. (<a href="#ref-zeng2023transformers" role="doc-biblioref">2023</a>)</span> showed a simple <em>linear</em> model can outperform transformer-based models such as Autoformer <span class="citation" data-cites="wu2021autoformer">(<a href="#ref-wu2021autoformer" role="doc-biblioref">Wu et al., 2021</a>)</span> and Informer <span class="citation" data-cites="zhou2021informer">(<a href="#ref-zhou2021informer" role="doc-biblioref">Zhou et al., 2021</a>)</span> in long-term forecasting on several benchmarks.</p>
+<p>Two variants of the model are proposed:</p>
+<ul>
+<li><strong>DLinear</strong>: It first decomposes the input into trend and seasonal components; A moving average is calculated and dubbed as “trend”, and the “seasonal” component is calculated by subtracting the trend from the input. Two linear layers are applied to each component separately, and the outputs are summed up to get the final prediction. That’s it!<br>
+</li>
+<li><strong>NLinear</strong>: First, it subtracts the input by the last value in the input sequence. The input then goes through a linear layer, and the subtracted part is added back before making the final prediction.</li>
+</ul>
+<p><br></p>
+<div id="6f44b32b" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pseudo-code for DLinear</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="fu">DLinear</span>(nn.Module):</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, input_dim, output_dim, kernel_size):</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.trend_layer <span class="op">=</span> nn.Linear(input_dim, output_dim)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.seasonal_layer <span class="op">=</span> nn.Linear(input_dim, output_dim)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.kernel_size <span class="op">=</span> kernel_size</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">forward</span>(<span class="va">self</span>, x):</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># moving_average = torch.nn.functional.avg_pool1d for example</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        trend <span class="op">=</span> moving_average(x, <span class="va">self</span>.kernel_size) </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        seasonal <span class="op">=</span> x <span class="op">-</span> trend</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        trend_out <span class="op">=</span> <span class="va">self</span>.trend_layer(trend)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        seasonal_out <span class="op">=</span> <span class="va">self</span>.seasonal_layer(seasonal)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> trend_out <span class="op">+</span> seasonal_out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="fits" class="level2" data-number="6">
+<h2 data-number="6" data-anchor-id="fits"><span class="header-section-number">6</span> FITS</h2>
+<p>Frequency Interpolation Time Series (FITS) <span class="citation" data-cites="xu2023fits">(<a href="#ref-xu2023fits" role="doc-biblioref">Xu et al., 2023</a>)</span> is the continuation of DLinear (<a href="#sec-dlinear" class="quarto-xref">Section&nbsp;5</a>) but instead the linear model operates on the frequency domain. The model first applies a fourier transform to the input time series, then applies a noise removal followed by a linear projection, and finally applies an inverse fourier transform to get the final prediction. Torch has a built-in <a href="https://pytorch.org/docs/stable/fft.html">fft module</a> that can be used for this purpose. The papers shows that FITS outperforms DLinear on multiple benchmarks, but we’ll get to that in a bit.</p>
+<div id="fig-fits" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-fits-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/fits.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fits-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: FITS Pipeline. The model predicts both the lookback window <em>and</em> the forecast horizon (backcast and forecast) to provide more supervision. The low-pass filter (LPF) is used to remove high-frequency components above a certain threshold, with the threshold being a hyperparameter <span class="citation" data-cites="xu2023fits">(<a href="#ref-xu2023fits" role="doc-biblioref">Xu et al., 2023</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>The authors also claimed that they had used Reversible Instance Normalization (RevIN) <span class="citation" data-cites="kim2021reversible">(<a href="#ref-kim2021reversible" role="doc-biblioref">Kim et al., 2021</a>)</span> to stabilize the training process. But when going through the official code, I noticed it uses a simple standardization and de-standardization process, that is widely used in the field, and was first introduced by <span class="citation" data-cites="ogasawara2010adaptive">(<a href="#ref-ogasawara2010adaptive" role="doc-biblioref">Ogasawara et al., 2010</a>)</span>. I <a href="https://github.com/VEWOXIC/FITS/issues/23">notified</a> one of the authors about this, but sadly they’re not acknowledging the mistake.</p>
+<p>If you’ve been following so far, then you’ll love to know that <span class="citation" data-cites="toner2024analysis">Toner and Darlow (<a href="#ref-toner2024analysis" role="doc-biblioref">2024</a>)</span> showed that DLinear and FITS can be reduced to simple linear regression of form <span class="math inline">\(y = Wx + b\)</span>, and that the closed-form solution <span class="citation" data-cites="silva2020svdregression">(<a href="#ref-silva2020svdregression" role="doc-biblioref">Silva, 2020</a>)</span> has superior performance most of the time compared to the mentioned models! So take everything with a grain of salt, and thread lightly.</p>
+</section>
+<section id="patchtst" class="level2" data-number="7">
+<h2 data-number="7" data-anchor-id="patchtst"><span class="header-section-number">7</span> PatchTST</h2>
+<p>PatchTST <span class="citation" data-cites="nie2022time">(<a href="#ref-nie2022time" role="doc-biblioref">Nie et al., 2022</a>)</span> is basically the idea borrowed from Vision Transformers (ViT) <span class="citation" data-cites="dosovitskiy2020image">(<a href="#ref-dosovitskiy2020image" role="doc-biblioref">Dosovitskiy et al., 2020</a>)</span> but applied to time series data instead. It takes the input series, divides it into partially overlapping patches (intervals), applies a light transformation to each patch, feeds them to a transformer backbone, and then passes the output to a prediction head to make forecast. There are two more things worth noting:</p>
+<ul>
+<li><p>In a multivariate setting, each time series (channel) is treated independently, but they share the same model and are optimized jointly.</p></li>
+<li><p>The authors applied masked pre-training for self-supervision, which is a common practice in language models. During training, random patches are set to zero, and the task would be to predict the missing patches. For this purpose a different prediction head is used, but the transformer backbone and the patch transformation remains the same.</p></li>
+</ul>
+<div id="fig-patchtst-arch" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-patchtst-arch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/patchtst_arch.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-patchtst-arch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: PatchTST’s architecture <span class="citation" data-cites="nie2022time">(<a href="#ref-nie2022time" role="doc-biblioref">Nie et al., 2022</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p>PatchTST is shown to have superior performance, consistently beating DLinear on multiple benchmarks.</p>
+<p>Thinking out loud here, since PatchTST is mostly a ViT applied to time series data, I wonder if the extensions of ViT such as Swin Transformer <span class="citation" data-cites="liu2021swin">(<a href="#ref-liu2021swin" role="doc-biblioref">Liu et al., 2021</a>)</span> or T2T-ViT <span class="citation" data-cites="yuan2021tokens">(<a href="#ref-yuan2021tokens" role="doc-biblioref">Yuan et al., 2021</a>)</span> could be applied here as well. Or perhaps someone has already done it and I’m not aware of it :)</p>
+</section>
+<section id="dam" class="level2" data-number="8">
+<h2 data-number="8" data-anchor-id="dam"><span class="header-section-number">8</span> DAM</h2>
+<p>Deep data-dependent approximate analytical model (DAM) <span class="citation" data-cites="darlow2024dam">(<a href="#ref-darlow2024dam" role="doc-biblioref">Darlow et al., 2024</a>)</span> is a univariate model that leverages fourier series decomposition and multi-head attention, and mixes a few ideas from the previous models we’ve reviewed so far.</p>
+<div id="fig-dam-arch" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dam-arch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/dam_architecture.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dam-arch-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: DAM’s architecture <span class="citation" data-cites="darlow2024dam">(<a href="#ref-darlow2024dam" role="doc-biblioref">Darlow et al., 2024</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<ul>
+<li><p>Somewhat similar to N-BEATS and FITS, it operates on the frequency domain and uses fourier basis functions to decompose both the input and the output.</p></li>
+<li><p><a href="#eq-fourier" class="quarto-xref">Equation&nbsp;2</a> is used to decompose the input time series using a linear solver. The authors <em>pre-selected</em> 437 frequencies that covers from 1 minute to 10 years, and the solver find the best coefficients that fit the input. The same equation is used as a basis function to generate the output, but the coefficients are learned by the model. Similar to FITS, the model makes predictions on both the lookback window and the forecast horizon (backcast and forecast).</p></li>
+<li><p>The fourier decomposition of the input enables us to have input series sampled at irregular intervals, and DAM leverages this by using a history sampling regime (HSR) (<a href="#fig-dam-hsr" class="quarto-xref">Figure&nbsp;9</a>) with longer lookback windows. During training, data points are sampled from a long-tailed distribution based on the temporal distance, where recent data points are assigned a higher probability: <span class="math display">\[p(t) = c^{-1} \frac{1}{1 + \frac{t}{\sigma}^2}\]</span> where <span class="math inline">\(t\)</span> is the normalized time relative to the last time step in the context window, <span class="math inline">\(\sigma\)</span> is the width hyperparameter, and <span class="math inline">\(c\)</span> is a normalization constant which is the sum of all unnormalized probabilities. Note that <span class="math inline">\(t &lt; 0\)</span> would refer to the context window, and <span class="math inline">\(t \geq 0\)</span> would refer to the forecast horizon.</p></li>
+<li><p>Besides the frequency transformation, DAM <em>also</em> embeds the time and value pairs of the input series, and then uses multi-head cross-attention to jointly learn from this and the frequency domain.</p></li>
+<li><p>RevIN <span class="citation" data-cites="kim2021reversible">(<a href="#ref-kim2021reversible" role="doc-biblioref">Kim et al., 2021</a>)</span> is used to normalize the input series before any processing is done, but instead of using mean and standard deviation, the authors used the median and the inter-quartile range (IQR) to normalize the series, which is more robust to outliers. Conversely, the output series is de-normalized using the aforementioned statistics.</p></li>
+</ul>
+<div id="fig-dam-hsr" class="quarto-float quarto-figure quarto-figure-center" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dam-hsr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/dam_hsr.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:85.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dam-hsr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9: History Sampling Regime (HSR) in DAM <span class="citation" data-cites="darlow2024dam">(<a href="#ref-darlow2024dam" role="doc-biblioref">Darlow et al., 2024</a>)</span>. Data points are sampled from both the context window and the forecast horizon, with recent data points (closer to now) having a higher probability.
+</figcaption>
+</figure>
+</div>
+<p>The model is shown to outperform DLinear and PatchTST, but bear in mind that it’s a univariate model.</p>
+</section>
+<section id="lightgbm" class="level2" data-number="9">
+<h2 data-number="9" data-anchor-id="lightgbm"><span class="header-section-number">9</span> LightGBM</h2>
+<p>The uncrowned king, LightGBM <span class="citation" data-cites="ke2017lightgbm">(<a href="#ref-ke2017lightgbm" role="doc-biblioref">Ke et al., 2017</a>)</span>, is the special mention here because even though it’s not brought up as a comparison model in recent research papers, it’s still one of the most used models in the industry and Kaggle-like competitions, and has considerable performance in time-series forecasting, even though it’s mostly well-suited for tabular data.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/gdb.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:65.0%"></p>
+</figure>
+</div>
+<p>LightGBM and its counterparts (Catboost and Xgboost), are easy to set up and tune, and fast to train. Did I mention that they work very well with categorical data? In the time series forecasting setting, they’re autoregressive models that make one-step predictions. Most of the development time is often spent on feature engineering, feature selection and cross-validation. A few examples of features are:</p>
+<ul>
+<li>Lag features: The time series values at previous time steps, e.g.&nbsp;<span class="math inline">\(x_{t-1}, x_{t-7}, \ldots\)</span>.</li>
+<li>Rolling statistics: Rolling means, standard deviations, mins, and maxes over different windows can capture trends and volatility.</li>
+<li>Time-Based features: Cyclical encoding of time components (hour, day, week, month)</li>
+<li>Differential features: First and second-order differences, percentage changes, and rates of change help capture dynamics and remove trends.</li>
+</ul>
+</section>
+<section id="closing-thoughts" class="level2" data-number="10">
+<h2 data-number="10" data-anchor-id="closing-thoughts"><span class="header-section-number">10</span> Closing Thoughts</h2>
+<p>My takeaways from this review are that DLinear and LightGBM are strong baselines that are easy to set up and have decent performance. PatchTST also has a simple architecture, and could be a good starting point to extend and improve upon, for example by using the extensions of ViT.</p>
+<p>I’m eager to try probabilistic forecasting and see whether probabilistic approaches, when properly implemented with appropriate uncertainty calibration, can lead to better results. I like the idea of decomposing the input and output into fourier series like in DAM, which allows for irregularly-spaced and long lookback and horizon windows.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/matt.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:35.0%"></p>
+</figure>
+</div>
+<p>One thing I would like to see in future papers is including the persistence forecast as a baseline in the comparison section. Depending on the dataset, it can not only be a strong baseline, but also help us better understand the added value by the more complex models.</p>
+<p>There wasn’t much time to go over the evaluation metrics, but given that most papers only report the MAE and MSE, it would be nice to see scale-free metrics like MASE (Mean Absolute Scaled Error) and sMAPE (Symmetric Mean Absolute Percentage Error) as well.</p>
+</section>
+<section id="references" class="level2" data-number="11">
+<h2 data-number="11" data-anchor-id="references"><span class="header-section-number">11</span> References</h2>
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="ref-challu2023nhits" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">Cristian Challu, Kin G Olivares, Boris N Oreshkin, Federico Garza Ramirez, Max Mergenthaler Canseco, and Artur Dubrawski. Nhits: Neural hierarchical interpolation for time series forecasting, In <em>Proceedings of the AAAI conference on artificial intelligence</em>, 6989–6997, 2023.</div>
+</div>
+<div id="ref-pmlr-v32-chapados14" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">Nicolas Chapados. Effective bayesian modeling of groups of related count time series, In <em>Proceedings of the 31st international conference on machine learning</em>, Bejing, China: PMLR, 1395–1403, 2014. Available: <a href="https://proceedings.mlr.press/v32/chapados14.html">https://proceedings.mlr.press/v32/chapados14.html</a>.</div>
+</div>
+<div id="ref-chen2018gradnorm" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">Zhao Chen, Vijay Badrinarayanan, Chen-Yu Lee, and Andrew Rabinovich. Gradnorm: Gradient normalization for adaptive loss balancing in deep multitask networks, In <em>International conference on machine learning</em>, PMLR, 794–803, 2018.</div>
+</div>
+<div id="ref-choi2016retain" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[4] </div><div class="csl-right-inline">Edward Choi, Mohammad Taha Bahadori, Jimeng Sun, Joshua Kulas, Andy Schuetz, and Walter Stewart. Retain: An interpretable predictive model for healthcare using reverse time attention mechanism, <em>Advances in neural information processing systems</em>, vol. 29, 2016.</div>
+</div>
+<div id="ref-darlow2024dam" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[5] </div><div class="csl-right-inline">Luke Darlow, Qiwen Deng, Ahmed Hassan, Martin Asenov, Rajkarn Singh, Artjom Joosen, Adam Barker, and Amos Storkey. Dam: Towards a foundation model for time series forecasting, <em>arXiv preprint arXiv:2407.17880</em>, 2024.</div>
+</div>
+<div id="ref-dosovitskiy2020image" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[6] </div><div class="csl-right-inline">Alexey Dosovitskiy, Lucas Beyer, Alexander Kolesnikov, Dirk Weissenborn, Xiaohua Zhai, Thomas Unterthiner, Mostafa Dehghani, Matthias Minderer, Georg Heigold, Sylvain Gelly, and others. An image is worth 16x16 words: Transformers for image recognition at scale, <em>arXiv preprint arXiv:2010.11929</em>, 2020.</div>
+</div>
+<div id="ref-deepmind2023universal" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[7] </div><div class="csl-right-inline">Alexander von Felbert. The universal approximation theorem, 2023. Available: <a href="https://www.deep-mind.org/2023/03/26/the-universal-approximation-theorem/">https://www.deep-mind.org/2023/03/26/the-universal-approximation-theorem/</a>. Accessed: 26 March 2023.</div>
+</div>
+<div id="ref-he2016deep" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[8] </div><div class="csl-right-inline">Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition, In <em>Proceedings of the IEEE conference on computer vision and pattern recognition</em>, 770–778, 2016.</div>
+</div>
+<div id="ref-immer2024effective" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[9] </div><div class="csl-right-inline">Alexander Immer, Emanuele Palumbo, Alexander Marx, and Julia Vogt. Effective bayesian heteroscedastic regression with deep neural networks, <em>Advances in Neural Information Processing Systems</em>, vol. 36, 2024.</div>
+</div>
+<div id="ref-ke2017lightgbm" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[10] </div><div class="csl-right-inline">Guolin Ke, Qi Meng, Thomas Finley, Taifeng Wang, Wei Chen, Weidong Ma, Qiwei Ye, and Tie-Yan Liu. Lightgbm: A highly efficient gradient boosting decision tree, <em>Advances in neural information processing systems</em>, vol. 30, 2017.</div>
+</div>
+<div id="ref-kendall2018multi" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[11] </div><div class="csl-right-inline">Alex Kendall, Yarin Gal, and Roberto Cipolla. Multi-task learning using uncertainty to weigh losses for scene geometry and semantics, In <em>Proceedings of the IEEE conference on computer vision and pattern recognition</em>, 7482–7491, 2018.</div>
+</div>
+<div id="ref-kim2021reversible" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[12] </div><div class="csl-right-inline">Taesung Kim, Jinhee Kim, Yunwon Tae, Cheonbok Park, Jang-Ho Choi, and Jaegul Choo. Reversible instance normalization for accurate time-series forecasting against distribution shift, In <em>International conference on learning representations</em>, 2021.</div>
+</div>
+<div id="ref-lim2021temporal" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[13] </div><div class="csl-right-inline">Bryan Lim, Sercan Ö Arık, Nicolas Loeff, and Tomas Pfister. Temporal fusion transformers for interpretable multi-horizon time series forecasting, <em>International Journal of Forecasting</em>, vol. 37, no. 4, 1748–1764, 2021.</div>
+</div>
+<div id="ref-liu2021swin" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[14] </div><div class="csl-right-inline">Ze Liu, Yutong Lin, Yue Cao, Han Hu, Yixuan Wei, Zheng Zhang, Stephen Lin, and Baining Guo. Swin transformer: Hierarchical vision transformer using shifted windows, In <em>Proceedings of the IEEE/CVF international conference on computer vision</em>, 10012–10022, 2021.</div>
+</div>
+<div id="ref-nie2022time" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[15] </div><div class="csl-right-inline">Yuqi Nie, Nam H Nguyen, Phanwadee Sinthong, and Jayant Kalagnanam. A time series is worth 64 words: Long-term forecasting with transformers, <em>arXiv preprint arXiv:2211.14730</em>, 2022.</div>
+</div>
+<div id="ref-ogasawara2010adaptive" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[16] </div><div class="csl-right-inline">Eduardo Ogasawara, Leonardo C Martinez, Daniel De Oliveira, Geraldo Zimbrão, Gisele L Pappa, and Marta Mattoso. Adaptive normalization: A novel data normalization approach for non-stationary time series, In <em>The 2010 international joint conference on neural networks (IJCNN)</em>, IEEE, 1–8, 2010.</div>
+</div>
+<div id="ref-oreshkin2019n" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[17] </div><div class="csl-right-inline">Boris N Oreshkin, Dmitri Carpov, Nicolas Chapados, and Yoshua Bengio. N-BEATS: Neural basis expansion analysis for interpretable time series forecasting, <em>arXiv preprint arXiv:1905.10437</em>, 2019.</div>
+</div>
+<div id="ref-qin2017dual" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[18] </div><div class="csl-right-inline">Yao Qin, Dongjin Song, Haifeng Chen, Wei Cheng, Guofei Jiang, and Garrison Cottrell. A dual-stage attention-based recurrent neural network for time series prediction, <em>arXiv preprint arXiv:1704.02971</em>, 2017.</div>
+</div>
+<div id="ref-salinas2020deepar" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[19] </div><div class="csl-right-inline">David Salinas, Valentin Flunkert, Jan Gasthaus, and Tim Januschowski. DeepAR: Probabilistic forecasting with autoregressive recurrent networks, <em>International journal of forecasting</em>, vol. 36, no. 3, 1181–1191, 2020.</div>
+</div>
+<div id="ref-seitzer2022pitfalls" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[20] </div><div class="csl-right-inline">Maximilian Seitzer, Arash Tavakoli, Dimitrije Antic, and Georg Martius. On the pitfalls of heteroscedastic uncertainty estimation with probabilistic neural networks, <em>arXiv preprint arXiv:2203.09168</em>, 2022.</div>
+</div>
+<div id="ref-shazeer2020glu" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[21] </div><div class="csl-right-inline">Noam Shazeer. Glu variants improve transformer, <em>arXiv preprint arXiv:2002.05202</em>, 2020.</div>
+</div>
+<div id="ref-silva2020svdregression" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[22] </div><div class="csl-right-inline">Thalles Santos Silva. Understanding linear regression using the singular value decomposition, <em>https://sthalles.github.io</em>, 2020. Available: <a href="https://sthalles.github.io/svd-for-regression/">https://sthalles.github.io/svd-for-regression/</a>.</div>
+</div>
+<div id="ref-toner2024analysis" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[23] </div><div class="csl-right-inline">William Toner and Luke Darlow. An analysis of linear time series forecasting models, In <em>Proceedings of the 41st international conference on machine learning</em>, 48404–48427, 2024.</div>
+</div>
+<div id="ref-wu2021autoformer" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[24] </div><div class="csl-right-inline">Haixu Wu, Jiehui Xu, Jianmin Wang, and Mingsheng Long. Autoformer: Decomposition transformers with auto-correlation for long-term series forecasting, <em>Advances in neural information processing systems</em>, vol. 34, 22419–22430, 2021.</div>
+</div>
+<div id="ref-xu2023fits" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[25] </div><div class="csl-right-inline">Zhijian Xu, Ailing Zeng, and Qiang Xu. FITS: Modeling time series with <span class="math inline">\(10 k\)</span> parameters, <em>arXiv preprint arXiv:2307.03756</em>, 2023.</div>
+</div>
+<div id="ref-yuan2021tokens" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[26] </div><div class="csl-right-inline">Li Yuan, Yunpeng Chen, Tao Wang, Weihao Yu, Yujun Shi, Zi-Hang Jiang, Francis EH Tay, Jiashi Feng, and Shuicheng Yan. Tokens-to-token vit: Training vision transformers from scratch on imagenet, In <em>Proceedings of the IEEE/CVF international conference on computer vision</em>, 558–567, 2021.</div>
+</div>
+<div id="ref-zeng2023transformers" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[27] </div><div class="csl-right-inline">Ailing Zeng, Muxi Chen, Lei Zhang, and Qiang Xu. Are transformers effective for time series forecasting?, In <em>Proceedings of the AAAI conference on artificial intelligence</em>, 11121–11128, 2023.</div>
+</div>
+<div id="ref-zhou2021informer" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[28] </div><div class="csl-right-inline">Haoyi Zhou, Shanghang Zhang, Jieqi Peng, Shuai Zhang, Jianxin Li, Hui Xiong, and Wancai Zhang. Informer: Beyond efficient transformer for long sequence time-series forecasting, In <em>Proceedings of the AAAI conference on artificial intelligence</em>, 11106–11115, 2021.</div>
+</div>
+</div>
+</section>
+<section id="sec-terminologies" class="level2" data-number="12">
+<h2 data-number="12" data-anchor-id="sec-terminologies"><span class="header-section-number">12</span> Appendix: Glossary of Terms</h2>
+<p><strong>Autoregressive:</strong> The prefix “auto” means “self” in Greek. So “autoregressive” literally means “self-regressing” - the model regresses (predicts) a variable using previous values of the same variable.”</p>
+<p><strong>Iterative Forecasting:</strong> Also known as recursive forecasting or one-step-ahead forecasting. Forecasting that makes predictions one time step at a time. The model uses its own predictions as input for multi-step forecasting.</p>
+<p><strong>Direct Forecasting:</strong> Also known as direct multi-step forecasting. The model outputs the entire forecast horizon at once.</p>
+<p><strong>Context Window</strong>: Also known as lookback window, history window, or observation window. The fixed interval of past time steps used as input to the forecasting model. The data within the window can expressed as <span class="math inline">\(X = \left[x_{t-l+1}, x_{t-l+2}, ..., x_t\right]\)</span> where <span class="math inline">\(l\)</span> is the context length and <span class="math inline">\(t\)</span> is the current time step.</p>
+<p><strong>Forecast Horizon:</strong> Also known as prediction window, target window, forecast window, or decoder output. The future time steps for which predictions are made by the model. Often denoted as <span class="math inline">\(Y = \left[y_{t+1}, y_{t+2}, ..., y_{t+h}\right]\)</span> where <span class="math inline">\(h\)</span> is the horizon length.</p>
+<p><strong>Backcast:</strong> Also known as backward forecasting or input reconstruction. The model’s attempt to reconstruct the input sequence often used as an intermediate step or auxiliary task for extra supervision.</p>
+<p><strong>Point Forecast:</strong> Also known as deterministic forecast or single-valued prediction. A single value prediction for each time step in the forecast horizon, representing the model’s best estimate.</p>
+<p><strong>Static Features/Covariates:</strong> Also known as time-invariant features, entity embeddings, or global features. Features that remain constant across all time steps for a given time series (e.g., store ID, product category).</p>
+<p><strong>Temporal Features:</strong> Also known as time-varying features, dynamic features, or exogenous variables. Features that change over time and may or may not be known in the forecast horizon (e.g., day of week, holidays, promotions).</p>
+<p><strong>Persistence Forecast:</strong> Also known as naive forecast. A simple forecasting method that assumes the future value will be the same as the last observed value: <span class="math inline">\(\hat{y}_{t+h} = y_t\)</span> for any horizon <span class="math inline">\(h\)</span>, where <span class="math inline">\(\hat{y}\)</span> is the forecast and <span class="math inline">\(y\)</span> is the target variable. This baseline gives a lower bound for what we consider an acceptable model performance.</p>
+<p><strong>Univariate Forecasting:</strong> Also known as single-variable forecasting. Forecasting that considers only the past values of the target variable itself.</p>
+<p><strong>Multivariate Forecasting:</strong> Also known as multi-variable forecasting or multi-channel forecasting. Forecasting that incorporates multiple related time series or covariates in a single model.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>There are several variations of the Negative Binomial distribution, and the one mentioned here is but one of them.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Minimizing the cross-entropy loss used in classification tasks is essentially equivalent to maximizing the log-likelihood of the model parameters under a categorical distribution assumption. For a categorical distribution with parameters <span class="math inline">\(p\)</span>, the NLL is: <span class="math display">\[-\log P(y|p) = -\log \prod_{i=1}^K p_i^{y_i} = -\sum_{i=1}^K y_i \log p_i\]</span></p>
+<p>While the cross-entropy loss is:</p>
+<p><span class="math display">\[H(y,p) = -\sum_{i=1}^K y_i \log p_i\]</span><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{sarang2025,
+  author = {Sarang, Nima},
+  title = {A {Review} of {ML} {Time} {Series} {Forecasting} {Models}},
+  date = {2025-02-28},
+  url = {https://www.nimasarang.com/blog/2025-02-13-time-series-forecasting/},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-sarang2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+<div class="">Nima Sarang. A Review of ML Time Series
+Forecasting Models, 2025. Available: <a href="https://www.nimasarang.com/blog/2025-02-13-time-series-forecasting/">https://www.nimasarang.com/blog/2025-02-13-time-series-forecasting/</a>.</div>
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("^(?:http:|https:)\/\/(?:www\.)?(nimasarang\.com)\/.*$");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="nsarang/nsarang.github.io" data-repo-id="R_kgDOMZYgPg" data-category="Announcements" data-category-id="DIC_kwDOMZYgPs4ChVIN" data-mapping="pathname" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
+</script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark">
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2024, Nima Sarang</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+<script>
+async function loadBodyWhenReady() {
+    while (!document.body.classList.contains('quarto-light') && !document.body.classList.contains('quarto-dark')) {
+        await new Promise(resolve => setTimeout(resolve, 50));
+    }
+    setTimeout(() => {
+        document.body.style.visibility = "visible";
+    }, 50); // Adjust the delay to allow for the dark mode to be loaded
+}
+loadBodyWhenReady();
+</script>
+
+
+
+
+</body></html>

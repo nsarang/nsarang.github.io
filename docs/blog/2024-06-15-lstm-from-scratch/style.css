@@ -1056,11 +1056,6 @@
   border-radius: 0;
 }
 
-figcaption {
-  margin: auto;
-  text-align: center;
-}
-
 .cell:has(.docfuse) {
-  margin-bottom: 4lh;
+  margin-top: 1.5lh;
 }

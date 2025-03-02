@@ -42,8 +42,8 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-6a7799821fa2400ad85ae38c4598b577.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-a27bb30877b044fe16c4106550582eaa.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-82f67ef7c9e778dcb3163d6b515551f8.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-5281842da90991dd95045407d90ff8db.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-b48ff3e3b564a25e50e48ba96b08f3db.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -89,6 +89,8 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&amp;family=Roboto:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="style.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.10.0/build/styles/default.min.css">
 <script src="index.js" type="module"></script>
@@ -102,6 +104,14 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <meta name="twitter:description" content="Chat with Llama and other LLMs that run locally in your browser using WebLLM.">
 <meta name="twitter:image" content="https://www.nimasarang.com/blog/2024-09-29-llama-in-browser/featured.jpg">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="citation_title" content="Running Llama 3 in the Browser!">
+<meta name="citation_author" content="Nima Sarang">
+<meta name="citation_publication_date" content="2024-10-06">
+<meta name="citation_cover_date" content="2024-10-06">
+<meta name="citation_year" content="2024">
+<meta name="citation_online_date" content="2024-10-06">
+<meta name="citation_fulltext_html_url" content="https://www.nimasarang.com/blog/2024-09-29-llama-in-browser/">
+<meta name="citation_language" content="en">
 </head>
 
 <body class="floating nav-fixed">
@@ -274,7 +284,8 @@ For more info, visit <a href="https://webgpureport.org/">https://webgpureport.or
 <li><p><strong>DeepSeek R1</strong>: Excels in reasoning, mathematics, and coding tasks, comparable to top proprietary models.</p></li>
 <li><p><strong>Qwen 2.5</strong>: Excels in complex tasks, including reasoning and comprehension, with an expanded context window.</p></li>
 </ul>
-<div class="column-screen-inset" style="margin: 3em 0;">
+<p><br></p>
+<div class="column-screen-inset">
 <div class="chat-layout">
   <div class="chat-sidebar">
     <h3 data-anchor-id="chat-ui">Model Settings</h3>
@@ -441,8 +452,7 @@ await engine.reload('Llama-3.2-1B-Instruct-q4f32_1-MLC', config);
 // List of available models can be found in
 console.log(webllm.prebuiltAppConfig.model_list);</code></pre>
 </div>
-<p><br><br>
-With the engine initialized, I use the following to generate responses:</p>
+<p>With the engine initialized, I use the following to generate responses:</p>
 <div class="sourceCode cell-output">
 <pre class="{js}"><code>/**
  * Generate a response using the engine
@@ -764,8 +774,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
           if (link.getAttribute("rel") === null) {
             link.setAttribute("rel", "noopener");
           }
-          // default icon
-          link.classList.add("external");
       }
     }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
