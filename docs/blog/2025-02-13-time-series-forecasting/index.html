@@ -98,6 +98,8 @@ div.csl-indent {
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap-5281842da90991dd95045407d90ff8db.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../../site_libs/bootstrap/bootstrap-dark-b48ff3e3b564a25e50e48ba96b08f3db.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -524,6 +526,7 @@ Figure&nbsp;1: Comparison of the ReLU and Softplus activation functions.
 <li>In the case of Gaussian distributions, <span class="citation" data-cites="seitzer2022pitfalls">Seitzer et al. (<a href="#ref-seitzer2022pitfalls" role="doc-biblioref">2022</a>)</span> and <span class="citation" data-cites="immer2024effective">Immer et al. (<a href="#ref-immer2024effective" role="doc-biblioref">2024</a>)</span> discuss the natural parameterization of the distribution and posterior predictive. I especially recommend <span class="citation" data-cites="immer2024effective">Immer et al. (<a href="#ref-immer2024effective" role="doc-biblioref">2024</a>)</span> for a more in-depth discussion on the topic.</li>
 </ul>
 <p>Regarding the scale handling, an alternative approach could be using a sample-weighted loss function instead of non-uniform sampling. On top of that, assigning higher importance to the series with larger scales isn’t something that is applicable to all datasets.</p>
+<p>Code: <i class="fa-brands fa-github fa-Large" aria-label="github"></i> <a href="https://github.com/sktime/pytorch-forecasting/blob/1a2d83c7a5e6769c13164eeae7f447002f61f254/pytorch_forecasting/models/deepar/_deepar.py">Pytorch Forecasting</a></p>
 </section>
 </section>
 <section id="n-beats" class="level2" data-number="3">
@@ -611,6 +614,8 @@ Figure&nbsp;3: A stack of stacks in N-BEATS <span class="citation" data-cites="o
 <li>If the goal <em>is</em> to predict the input, then it leads to another question. Based on <a href="#fig-nbeats-block" class="quarto-xref">Figure&nbsp;2</a>, the residual output of each block is subtracted from the input and passed on to the next block. Do we expect the network to learn to output zero-valued residuals so that information is retained post-subtraction?</li>
 </ul>
 <p>On a side note, I was surprised that not any kind of data normalization is used in the model. At least that’s my understanding from the paper and the official implementation.</p>
+<p>Code: <i class="fa-brands fa-github fa-Large" aria-label="github"></i> <a href="https://github.com/ServiceNow/N-BEATS">ServiceNow/N-BEATS (Official)</a><br>
+Code: <i class="fa-brands fa-github fa-Large" aria-label="github"></i> <a href="https://github.com/sktime/pytorch-forecasting/blob/1a2d83c7a5e6769c13164eeae7f447002f61f254/pytorch_forecasting/models/nbeats/_nbeats.py">Pytorch Forecasting</a></p>
 </section>
 </section>
 <section id="tft" class="level2" data-number="4">
@@ -648,6 +653,8 @@ Figure&nbsp;5: Results of ablation analysis in TFT <span class="citation" data-c
 </figcaption>
 </figure>
 </div>
+<p>Code: <i class="fa-brands fa-github fa-Large" aria-label="github"></i> <a href="https://github.com/google-research/google-research/blob/master/tft/libs/tft_model.py">Google Research (Official)</a><br>
+Code: <i class="fa-brands fa-github fa-Large" aria-label="github"></i> <a href="https://github.com/sktime/pytorch-forecasting/tree/main/pytorch_forecasting/models/temporal_fusion_transformer">Pytorch Forecasting</a></p>
 </section>
 <section id="sec-dlinear" class="level2" data-number="5">
 <h2 data-number="5" data-anchor-id="sec-dlinear"><span class="header-section-number">5</span> DLinear</h2>
@@ -664,7 +671,7 @@ Figure&nbsp;5: Results of ablation analysis in TFT <span class="citation" data-c
 <li><strong>NLinear</strong>: First, it subtracts the input by the last value in the input sequence. The input then goes through a linear layer, and the subtracted part is added back before making the final prediction.</li>
 </ul>
 <p><br></p>
-<div id="6f44b32b" class="cell" data-execution_count="2">
+<div id="42ef7d6a" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pseudo-code for DLinear</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -699,6 +706,7 @@ Figure&nbsp;6: FITS Pipeline. The model predicts both the lookback window <em>an
 </div>
 <p>The authors also claimed that they had used Reversible Instance Normalization (RevIN) <span class="citation" data-cites="kim2021reversible">(<a href="#ref-kim2021reversible" role="doc-biblioref">Kim et al., 2021</a>)</span> to stabilize the training process. But when going through the official code, I noticed it uses a simple standardization and de-standardization process, that is widely used in the field, and was first introduced by <span class="citation" data-cites="ogasawara2010adaptive">(<a href="#ref-ogasawara2010adaptive" role="doc-biblioref">Ogasawara et al., 2010</a>)</span>. I <a href="https://github.com/VEWOXIC/FITS/issues/23">notified</a> one of the authors about this, but sadly they’re not acknowledging the mistake.</p>
 <p>If you’ve been following so far, then you’ll love to know that <span class="citation" data-cites="toner2024analysis">Toner and Darlow (<a href="#ref-toner2024analysis" role="doc-biblioref">2024</a>)</span> showed that DLinear and FITS can be reduced to simple linear regression of form <span class="math inline">\(y = Wx + b\)</span>, and that the closed-form solution <span class="citation" data-cites="silva2020svdregression">(<a href="#ref-silva2020svdregression" role="doc-biblioref">Silva, 2020</a>)</span> has superior performance most of the time compared to the mentioned models! So take everything with a grain of salt, and thread lightly.</p>
+<p>Code: <i class="fa-brands fa-github fa-Large" aria-label="github"></i> <a href="https://github.com/VEWOXIC/FITS">VEWOXIC/FITS (Official)</a></p>
 </section>
 <section id="patchtst" class="level2" data-number="7">
 <h2 data-number="7" data-anchor-id="patchtst"><span class="header-section-number">7</span> PatchTST</h2>
@@ -719,6 +727,7 @@ Figure&nbsp;7: PatchTST’s architecture <span class="citation" data-cites="nie2
 </div>
 <p>PatchTST is shown to have superior performance, consistently beating DLinear on multiple benchmarks.</p>
 <p>Thinking out loud here, since PatchTST is mostly a ViT applied to time series data, I wonder if the extensions of ViT such as Swin Transformer <span class="citation" data-cites="liu2021swin">(<a href="#ref-liu2021swin" role="doc-biblioref">Liu et al., 2021</a>)</span> or T2T-ViT <span class="citation" data-cites="yuan2021tokens">(<a href="#ref-yuan2021tokens" role="doc-biblioref">Yuan et al., 2021</a>)</span> could be applied here as well. Or perhaps someone has already done it and I’m not aware of it :)</p>
+<p>Code: <i class="fa-brands fa-github fa-Large" aria-label="github"></i> <a href="https://github.com/yuqinie98/PatchTST">yuqinie98/PatchTST (Official)</a></p>
 </section>
 <section id="dam" class="level2" data-number="8">
 <h2 data-number="8" data-anchor-id="dam"><span class="header-section-number">8</span> DAM</h2>
@@ -751,6 +760,7 @@ Figure&nbsp;9: History Sampling Regime (HSR) in DAM <span class="citation" data-
 </figure>
 </div>
 <p>The model is shown to outperform DLinear and PatchTST, but bear in mind that it’s a univariate model.</p>
+<p>You can find the code in the appendix of the paper.</p>
 </section>
 <section id="lightgbm" class="level2" data-number="9">
 <h2 data-number="9" data-anchor-id="lightgbm"><span class="header-section-number">9</span> LightGBM</h2>
