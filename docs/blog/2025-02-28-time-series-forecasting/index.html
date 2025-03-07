@@ -457,7 +457,7 @@ Disclaimer: Opinions Ahead
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p>Before diving in, I should note that this review is deliberately opinionated. I’ll be sharing my takes on these models based on my personal experience implementing and working with them, and also I used the opportunity to dust off some old memes from my meme folder. If that sounds good to you, let’s get started!</p>
+<p>Before diving in, I should note that this review is deliberately opinionated. I’ll be sharing my takes on these models based on my personal experience implementing and working with them. I also used the opportunity to dust off some old memes from my meme folder :) If that sounds good to you, let’s get started!</p>
 </div>
 </div>
 </div>
@@ -472,7 +472,7 @@ Disclaimer: Opinions Ahead
 </div>
 <ul>
 <li>The architecture uses a vanilla LSTM with the forget cell’s bias set to 1, encouraging the model to retain information from the previous time steps.</li>
-<li>The model outputs a probability distribution, from which both uncertainty estimates and point forecasts can be derived. In my opinion, this is the highlight of the paper. The appeal behind probabilistic forecasts is that they can be used in downstream applications, for instance, to minimize risk functions.</li>
+<li>The model outputs a probability distribution, from which both uncertainty estimates and point forecasts can be derived. In my opinion, this is the highlight of the paper. The appeal behind probabilistic forecasts is that they can be used in downstream applications, such as minimizing risk functions.</li>
 <li>A few ideas regarding the handling of different scales of data are explored.</li>
 </ul>
 <section id="how-to-make-probabilistic-forecasts" class="level4">
@@ -552,7 +552,7 @@ Figure&nbsp;2: A basic building block in N-BEATS <span class="citation" data-cit
 </section>
 <section id="basis-functions" class="level4">
 <h4 data-anchor-id="basis-functions"><strong>Basis Functions</strong></h4>
-<p>By the Universal Approximation Theorem, a dense feedforward network can approximate any continuous function on a compact subset of R^n to arbitrary precision. However, this theoretical guarantee doesn’t speak to learnability or efficiency <span class="citation" data-cites="deepmind2023universal">(<a href="#ref-deepmind2023universal" role="doc-biblioref">Felbert, 2023</a>)</span>. One approach is to constrain the model to learn the parameters of a basis function, such that would best approximate the target variable. The basis function can be a polynomial (like Taylor expansion), a Fourier series, etc. The intuition is to add an inductive bias to the model which can help in generalizations and interpretability. This is not a novel idea and has been used extensively in the past.</p>
+<p>By the Universal Approximation Theorem, a dense feedforward network can approximate any continuous function on a compact subset of R^n to arbitrary precision. However, this theoretical guarantee doesn’t speak to learnability or efficiency <span class="citation" data-cites="deepmind2023universal">(<a href="#ref-deepmind2023universal" role="doc-biblioref">Felbert, 2023</a>)</span>. One approach is to constrain the model to learn the parameters of a basis function that best approximates the target variable. The basis function can be a polynomial (like Taylor expansion), a Fourier series, etc. The intuition is to add an inductive bias to the model which can help in generalizations and interpretability. This is not a novel idea and has been used extensively in the past.</p>
 <p>For example, to model the target variable <span class="math inline">\(y \in \mathbb{R}^{T}\)</span> with <span class="math inline">\(T\)</span> being the horizon length, instead of producing <span class="math inline">\(T\)</span> outputs the model can learn the coefficients of a polynomial of degree <span class="math inline">\(n\)</span> that best fits the variable. The inference is then done by evaluating the polynomial at <span class="math inline">\(T\)</span> points:</p>
 <p><span id="eq-polynomial"><span class="math display">\[
 \begin{array}{c}
@@ -613,7 +613,7 @@ Figure&nbsp;3: A stack of stacks in N-BEATS <span class="citation" data-cites="o
 <li>If “backcast” is not meant to be <em>backward forecasting</em>, then why call it backcast? Why not just call it a residual? This is confusing.</li>
 <li>If the goal <em>is</em> to predict the input, then it leads to another question. Based on <a href="#fig-nbeats-block" class="quarto-xref">Figure&nbsp;2</a>, the residual output of each block is subtracted from the input and passed on to the next block. Do we expect the network to learn to output zero-valued residuals so that information is retained post-subtraction?</li>
 </ul>
-<p>On a side note, I was surprised that not any kind of data normalization is used in the model. At least that’s my understanding from the paper and the official implementation.</p>
+<p>On a side note, I was surprised that no data normalization is used in the model. At least that’s my understanding from the paper and the official implementation.</p>
 <p>Code: <i class="fa-brands fa-github fa-Large" aria-label="github"></i> <a href="https://github.com/ServiceNow/N-BEATS">ServiceNow/N-BEATS (Official)</a><br>
 Code: <i class="fa-brands fa-github fa-Large" aria-label="github"></i> <a href="https://github.com/sktime/pytorch-forecasting/blob/1a2d83c7a5e6769c13164eeae7f447002f61f254/pytorch_forecasting/models/nbeats/_nbeats.py">Pytorch Forecasting</a></p>
 </section>
@@ -671,7 +671,7 @@ Code: <i class="fa-brands fa-github fa-Large" aria-label="github"></i> <a href="
 <li><strong>NLinear</strong>: First, it subtracts the input by the last value in the input sequence. The input then goes through a linear layer, and the subtracted part is added back before making the final prediction.</li>
 </ul>
 <p><br></p>
-<div id="69bcc677" class="cell" data-execution_count="2">
+<div id="f3577e34" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pseudo-code for DLinear</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -787,7 +787,7 @@ Figure&nbsp;9: History Sampling Regime (HSR) in DAM <span class="citation" data-
 <p><img src="figures/matt.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:35.0%"></p>
 </figure>
 </div>
-<p>One thing I would like to see in future papers is including the persistence forecast as a baseline in the comparison section. Depending on the dataset, it can not only be a strong baseline, but also help us better understand the added value by the more complex models.</p>
+<p>One thing I would like to see in future papers is the inclusion of the persistence forecast as a baseline in the comparison section. Depending on the dataset, it can not only be a strong baseline, but also help us better understand the added value by the more complex models.</p>
 <p>There wasn’t much time to go over the evaluation metrics, but given that most papers only report the MAE and MSE, it would be nice to see scale-free metrics like MASE (Mean Absolute Scaled Error) and sMAPE (Symmetric Mean Absolute Percentage Error) as well.</p>
 </section>
 <section id="references" class="level2" data-number="11">
