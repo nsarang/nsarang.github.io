@@ -6,9 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="I write about the things that spark my curiosity. Some posts will be polished, while others serve as a journal for me.  Hopefully you’ll find something here to inspire you too.">
+<meta name="author" content="Nima Sarang">
+<meta name="dcterms.date" content="2025-05-16">
+<meta name="description" content="Post-Mortem Debugging in Python">
 
-<title>Musings from My Corner of the World – Nima Sarang</title>
+<title>Pymortem – Nima Sarang</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,29 +23,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href="../_assets/favicon.svg" rel="icon" type="image/svg+xml">
-<script src="../site_libs/quarto-listing/list.min.js"></script>
-<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="../site_libs/quarto-html/quarto.js"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-05bd8ddabd448a8ef5be2250ef0d9442.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-6a7799821fa2400ad85ae38c4598b577.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-3bff5619fa932fc7f278bfc13ff23bba.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-aa3d78a59877574b380cb4906c536703.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../_assets/favicon.svg" rel="icon" type="image/svg+xml">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-05bd8ddabd448a8ef5be2250ef0d9442.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-6a7799821fa2400ad85ae38c4598b577.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-3bff5619fa932fc7f278bfc13ff23bba.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-aa3d78a59877574b380cb4906c536703.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -70,35 +104,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-HWSGHN8N8N"></script>
 
 <script type="text/javascript">
@@ -120,63 +125,37 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&amp;family=Roboto:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../_assets/hugo/listing-default.css">
-<script src="../_assets/simplex-banner/simplex-noise.js"></script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<meta property="og:title" content="Musings from My Corner of the World">
-<meta property="og:description" content="I write about the things that spark my curiosity. Some posts will be polished, while others serve as a journal for me. Hopefully you’ll find something here to inspire you too.">
-<meta property="og:image" content="https://www.nimasarang.com/blog/2025-05-10-interactive-pandas/featured.jpg">
+<meta property="og:title" content="Pymortem">
+<meta property="og:description" content="Post-Mortem Debugging in Python">
+<meta property="og:image" content="https://www.nimasarang.com/project/2025-05-16-pymortem/featured.jpg">
 <meta property="og:site_name" content="Nima Sarang">
-<meta name="twitter:title" content="Musings from My Corner of the World">
-<meta name="twitter:description" content="I write about the things that spark my curiosity. Some posts will be polished, while others serve as a journal for me. Hopefully you’ll find something here to inspire you too.">
-<meta name="twitter:image" content="https://www.nimasarang.com/blog/2025-05-10-interactive-pandas/featured.jpg">
+<meta name="twitter:title" content="Pymortem">
+<meta name="twitter:description" content="Post-Mortem Debugging in Python">
+<meta name="twitter:image" content="https://www.nimasarang.com/project/2025-05-16-pymortem/featured.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="citation_title" content="Musings from My Corner of the World">
-<meta name="citation_fulltext_html_url" content="https://www.nimasarang.com/blog/">
+<meta name="citation_title" content="Pymortem">
+<meta name="citation_author" content="Nima Sarang">
+<meta name="citation_publication_date" content="2025-05-16">
+<meta name="citation_cover_date" content="2025-05-16">
+<meta name="citation_year" content="2025">
+<meta name="citation_online_date" content="2025-05-16">
+<meta name="citation_fulltext_html_url" content="https://www.nimasarang.com/project/2025-05-16-pymortem/">
 <meta name="citation_language" content="en">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../_assets/favicon.svg" alt="" class="navbar-logo">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../_assets/favicon.svg" alt="" class="navbar-logo">
     </a>
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Nima Sarang</span>
     </a>
   </div>
@@ -187,19 +166,19 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../about/index.html"> 
+    <a class="nav-link" href="../../about/index.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../blog/index.html" aria-current="page"> 
+    <a class="nav-link" href="../../blog/index.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../project/index.html"> 
+    <a class="nav-link" href="../../project/index.html"> 
 <span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../publication/index.html"> 
+    <a class="nav-link" href="../../publication/index.html"> 
 <span class="menu-text">Publications</span></a>
   </li>  
 </ul>
@@ -213,12 +192,50 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns">
+<div id="title-block-header-title" class="quarto-title page-columns page-full page-layout-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg); background-repeat: no-repeat;">
+<h1 class="title">Pymortem</h1>
+    <div class="quarto-categories">
+        <div class="quarto-category">Python</div>
+        <div class="quarto-category">Debugging</div>
+      </div>
+  </div>
+
+<div>
+  <div id="title-block-title-desc" class="description pt-4">
+    Post-Mortem Debugging in Python
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nima Sarang </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 16, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+
+</header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content column-page" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 <style>
   body {
     visibility: hidden; /* initially hidden until DOM ready to prevent flicker */
@@ -239,366 +256,140 @@ window.Quarto = {
 -->
 <!-- <header id="title-block-header" class="quarto-title-block default page-columns"> -->
 <!-- <div class="quarto-title page-columns page-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg);"> -->
-<header id="title-block-header" class="quarto-title-block default page-columns">
-<div id="title-block-header-title" class="quarto-title page-columns page-full page-layout-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg); background-repeat: no-repeat;">
-<h1 class="title">Musings from My Corner of the World</h1>
-</div>
 
-<div>
-  <div id="title-block-title-desc" class="description pt-4">
-    <p>I write about the things that spark my curiosity. Some posts will be polished, while others serve as a journal for me.<br> Hopefully you’ll find something here to inspire you too.</p>
-  </div>
-</div>
-
-
-<div class="quarto-title-meta column-page">
-
-    
-  
-    
-  </div>
-  
-
-
-
-</header>
 
 
 <style>
-    #simplex-noise-canvas {
-        position: absolute;
-        top: 0;
-        /* left: 0; */
-        right: 0;
-        bottom: 0;
-        z-index: -1;
-        pointer-events: none;
-        /* Hack to set the canvas size to the viewport size.
-           The -2em is to account for the gap introduced by ancestors.*/
-        left: calc((100% - 100vw) / 2 - 0.5em);
-        width: 100vw;
-        height: 100%;
-    }
-
-    #title-block-header {
-        display: block;
-        margin-top: 1.0em; /* Add space between the title and navbar */
-        /* width: 100%; */
-        /* height: auto; */
-    }
-
-    #title-block-header-title {
-        display: inline-block;
-        position: relative;
-        width: 100%;
-        height: auto;
-        /* Add padding to the title == canvas size */
-        /* NOTE: the padding-right value was tuned manually to center the title */
-        padding: 2rem 1rem 2rem 0rem !important;
-    }
-
-    #title-block-header.quarto-title-block.default .quarto-title .title {
-        margin: 0;
-        margin-top: 0.5%; /* The title didn't seem to be vertically centered */
-        line-height: 1.4;
-    }
+main > section:not(:first-of-type) {
+    margin-top: 4em;
+}
 </style>
+<div style="display: flex; justify-content: center;">
+<p><a href="https://pypi.org/project/pymortem/"><img src="https://img.shields.io/pypi/v/pymortem?logoSize=auto.png" class="img-fluid" alt="PyPI"></a> <a href="https://pypi.org/project/pymortem/"><img src="https://img.shields.io/pypi/pyversions/pymortem?logoSize=auto.png" class="img-fluid" alt="Python Versions"></a> <img src="https://img.shields.io/pypi/l/pymortem?logo=auto.png" class="img-fluid" alt="License"> <a href="https://codecov.io/gh/nsarang/pymortem"><img src="https://codecov.io/gh/nsarang/pymortem/branch/main/graph/badge.svg" class="img-fluid" alt="Codecov"></a></p>
+</div>
+<p>Pymortem is a post-mortem debugging tool that lets you inspect and manipulate execution contexts after exceptions occur. Unlike traditional debuggers that require a separate interactive shell, pymortem gives you direct access to all variables and frames in the exception stack, making it valuable in Jupyter notebooks and interactive environments.</p>
+<blockquote class="blockquote">
+<p>This package evolved from an educational <a href="https://nimasarang.com/blog/2025-01-30-post-mortem/">blog post</a> on post-mortem debugging techniques. What began as educational code examples has been refined into a practical debugging library.</p>
+</blockquote>
+<section id="installation" class="level2" data-number="1">
+<h2 data-number="1" data-anchor-id="installation"><span class="header-section-number">1</span> Installation</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install pymortem</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="features" class="level2" data-number="2">
+<h2 data-number="2" data-anchor-id="features"><span class="header-section-number">2</span> Features</h2>
+<ul>
+<li><strong>Enhanced Tracebacks</strong>: Rich, visual traceback output showing code context around errors with line numbers and error indicators</li>
+<li><strong>Frame Inspection</strong>: Directly examine variables at any level in the call stack without navigating through a separate command interface</li>
+<li><strong>Code Execution in Context</strong>: Run arbitrary code in the context of any stack frame without restarting your program</li>
+<li><strong>Chained Exception Support</strong>: Clear visualization of exception chains, showing both “raised from” and “during handling” relationships</li>
+<li><strong>No Special Setup</strong>: Works with standard Python without requiring breakpoints or special execution modes</li>
+</ul>
+</section>
+<section id="usage" class="level2" data-number="3">
+<h2 data-number="3" data-anchor-id="usage"><span class="header-section-number">3</span> Usage</h2>
+<section id="examining-an-exception-after-it-occurs" class="level3">
+<h3 data-anchor-id="examining-an-exception-after-it-occurs">Examining an Exception after it Occurs</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In one cell where an error happens:</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">foo</span>():</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> x <span class="op">/</span> <span class="dv">0</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> output</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>foo()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In the next cell, examine the exception:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pymortem</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get enhanced traceback and frame information</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>traceback_msg, frames <span class="op">=</span> pymortem.extract_from_exception()</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the improved traceback</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(traceback_msg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="inspecting-variables-in-the-error-context" class="level3">
+<h3 data-anchor-id="inspecting-variables-in-the-error-context">Inspecting Variables in the Error Context</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># After running the above cells</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's examine the local variables in different frames</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># The frame where the error occurred</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Locals in error frame:"</span>, frames[<span class="op">-</span><span class="dv">1</span>][<span class="st">"locals"</span>])</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check global variables too</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Some globals:"</span>, {k: v <span class="cf">for</span> k, v <span class="kw">in</span> <span class="bu">list</span>(frames[<span class="op">-</span><span class="dv">1</span>][<span class="st">"globals"</span>].items())[:<span class="dv">5</span>]})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="executing-code-in-a-frames-context" class="level3">
+<h3 data-anchor-id="executing-code-in-a-frames-context">Executing Code in a Frame’s Context</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pymortem</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the most recent exception</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>exception <span class="op">=</span> pymortem.retrieve_the_last_exception() <span class="co"># Store the exception</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>_, frames <span class="op">=</span> pymortem.extract_from_exception(exception)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Choose a frame to work with (e.g., frames[1] for a specific frame)</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>work_frame <span class="op">=</span> frames[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Execute code in that frame's context</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>pymortem.execute(</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"""</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="st">    # You can access all variables that existed when the error occurred</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="st">    print("Available variables:", list(locals().keys()))</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="st">    # Test potential fixes without rerunning the entire notebook</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="st">    try:</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="st">        # Try a fix for a ZeroDivisionError</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="st">        denominator = 2  # Was 0 before</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="st">        fixed_result = x / denominator</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="st">        print(f"Fix worked! Result = </span><span class="sc">{fixed_result}</span><span class="st">")</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="st">    except Exception as e:</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="st">        print(f"Fix didn't work: </span><span class="sc">{e}</span><span class="st">")</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="st">    """</span>,</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    work_frame</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="handling-chained-exceptions" class="level3">
+<h3 data-anchor-id="handling-chained-exceptions">Handling Chained Exceptions</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a chained exception scenario</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> {<span class="st">"key"</span>: <span class="st">"value"</span>}</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> x[<span class="st">"missing_key"</span>]  <span class="co"># Will raise KeyError</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">KeyError</span>:</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> <span class="dv">10</span> <span class="op">+</span> <span class="st">"0"</span>  <span class="co"># Will raise ValueError</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    chain_exception <span class="op">=</span> e</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine the exception chain</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>traceback_msg, all_frames <span class="op">=</span> pymortem.extract_from_exception(chain_exception)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(traceback_msg)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">""</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Frames are arranged in chronological order, with the first exception first</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>original_error_frame <span class="op">=</span> all_frames[<span class="dv">0</span>]  <span class="co"># Frame from the KeyError</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>raised_from_frame <span class="op">=</span> all_frames[<span class="op">-</span><span class="dv">1</span>]    <span class="co"># Frame from the ValueError</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"First exception type: </span><span class="sc">{</span><span class="bu">type</span>(chain_exception.__cause__)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Second exception type: </span><span class="sc">{</span><span class="bu">type</span>(chain_exception)<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="why-use-pymortem" class="level2" data-number="4">
+<h2 data-number="4" data-anchor-id="why-use-pymortem"><span class="header-section-number">4</span> Why Use Pymortem?</h2>
+<p>Post-mortem debugging in Python traditionally requires using tools like <code>pdb.pm()</code> or <code>%debug</code> in IPython, which launch a separate command interface with its own syntax and navigation model. Pymortem takes a different approach:</p>
+<ol type="1">
+<li><strong>Direct Context Access</strong>: Instead of a separate debugging shell, access frame data directly in your current Python environment</li>
+<li><strong>Better Visualization</strong>: See more context around exceptions with cleaner, more informative tracebacks</li>
+<li><strong>Natural Code Execution</strong>: Run diagnostic code directly in frame contexts using standard Python syntax</li>
+<li><strong>Stays in Flow</strong>: Particularly valuable in notebooks where switching to a separate debugging interface breaks your workflow</li>
+<li><strong>Handles Complexity</strong>: Elegantly deals with nested and chained exceptions that can be confusing in traditional debuggers</li>
+</ol>
+</section>
+<section id="license" class="level2" data-number="5">
+<h2 data-number="5" data-anchor-id="license"><span class="header-section-number">5</span> License</h2>
+<p>MIT</p>
 
-<canvas id="simplex-noise-canvas" data-target-parent="title-block-header-title"></canvas>
 
+</section>
 
-
-
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="TkxQJTJDTExNJTJDV2ViTExNJTJDTUxDLUxMTSUyQ1dlYkdQVSUyQ1RWTQ==" data-listing-date-sort="1746822600000" data-listing-file-modified-sort="1747166840990" data-listing-date-modified-sort="1737491400000" data-listing-reading-time-sort="11" data-listing-word-count-sort="2094">
-<div class="thumbnail">
-<p><a href="../blog/2025-05-10-interactive-pandas/index.html" class="no-external"></a></p><a href="../blog/2025-05-10-interactive-pandas/index.html" class="no-external">
-<p><img loading="lazy" src="../blog/2025-05-10-interactive-pandas/featured.jpg" class="thumbnail-image"></p>
-</a><p><a href="../blog/2025-05-10-interactive-pandas/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/2025-05-10-interactive-pandas/index.html" class="no-external">Interactive Pandas Display</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../blog/2025-05-10-interactive-pandas/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('TkxQ'); return false;">
-NLP
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('TExN'); return false;">
-LLM
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('V2ViTExN'); return false;">
-WebLLM
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('TUxDLUxMTQ=='); return false;">
-MLC-LLM
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('V2ViR1BV'); return false;">
-WebGPU
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('VFZN'); return false;">
-TVM
-</div>
-</div>
-<div class="listing-description">
-<a href="../blog/2025-05-10-interactive-pandas/index.html" class="no-external">Ayo?</a>
-</div>
-</div>
-<div class="metadata">
-<a href="../blog/2025-05-10-interactive-pandas/index.html" class="no-external">
-<div class="listing-date">
-May 10, 2025
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="TUwlMkNUaW1lJTIwU2VyaWVzJTJDRm9yZWNhc3RpbmclMkNMU1RNJTJDTi1CRUFUUyUyQ1RGVCUyQ0RlZXBBUg==" data-listing-date-sort="1740688200000" data-listing-file-modified-sort="1741371267753" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="23" data-listing-word-count-sort="4474">
-<div class="thumbnail">
-<p><a href="../blog/2025-02-28-time-series-forecasting/index.html" class="no-external"></a></p><a href="../blog/2025-02-28-time-series-forecasting/index.html" class="no-external">
-<p><img loading="lazy" src="../blog/2025-02-28-time-series-forecasting/featured.png" class="thumbnail-image"></p>
-</a><p><a href="../blog/2025-02-28-time-series-forecasting/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/2025-02-28-time-series-forecasting/index.html" class="no-external">A Review of ML Time Series Forecasting Models</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../blog/2025-02-28-time-series-forecasting/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('TUw='); return false;">
-ML
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('VGltZSUyMFNlcmllcw=='); return false;">
-Time Series
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Rm9yZWNhc3Rpbmc='); return false;">
-Forecasting
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('TFNUTQ=='); return false;">
-LSTM
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Ti1CRUFUUw=='); return false;">
-N-BEATS
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('VEZU'); return false;">
-TFT
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('RGVlcEFS'); return false;">
-DeepAR
-</div>
-</div>
-<div class="listing-description">
-<a href="../blog/2025-02-28-time-series-forecasting/index.html" class="no-external">A review of some of the well-known machine learning time series forecasting models.</a>
-</div>
-</div>
-<div class="metadata">
-<a href="../blog/2025-02-28-time-series-forecasting/index.html" class="no-external">
-<div class="listing-date">
-Feb 28, 2025
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="UHl0aG9uJTJDRGVidWdnaW5n" data-listing-date-sort="1738182600000" data-listing-file-modified-sort="1747377644349" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1172">
-<div class="thumbnail">
-<p><a href="../blog/2025-01-30-post-mortem/index.html" class="no-external"></a></p><a href="../blog/2025-01-30-post-mortem/index.html" class="no-external">
-<p><img loading="lazy" src="../blog/2025-01-30-post-mortem/featured.png" class="thumbnail-image"></p>
-</a><p><a href="../blog/2025-01-30-post-mortem/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/2025-01-30-post-mortem/index.html" class="no-external">Saving Time: Post-mortem Debugging in Python</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../blog/2025-01-30-post-mortem/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('UHl0aG9u'); return false;">
-Python
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('RGVidWdnaW5n'); return false;">
-Debugging
-</div>
-</div>
-<div class="listing-description">
-<a href="../blog/2025-01-30-post-mortem/index.html" class="no-external">A bit of Python black magic that lets you efficiently inspect and manipulate execution contexts after crashes, aka, post-mortem debugging.</a>
-</div>
-</div>
-<div class="metadata">
-<a href="../blog/2025-01-30-post-mortem/index.html" class="no-external">
-<div class="listing-date">
-Jan 30, 2025
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="TkxQJTJDTExNJTJDV2ViTExNJTJDTUxDLUxMTSUyQ1dlYkdQVSUyQ1RWTQ==" data-listing-date-sort="1728160200000" data-listing-file-modified-sort="1740941975338" data-listing-date-modified-sort="1737491400000" data-listing-reading-time-sort="14" data-listing-word-count-sort="2602">
-<div class="thumbnail">
-<p><a href="../blog/2024-09-29-llama-in-browser/index.html" class="no-external"></a></p><a href="../blog/2024-09-29-llama-in-browser/index.html" class="no-external">
-<p><img loading="lazy" src="../blog/2024-09-29-llama-in-browser/featured.jpg" class="thumbnail-image"></p>
-</a><p><a href="../blog/2024-09-29-llama-in-browser/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/2024-09-29-llama-in-browser/index.html" class="no-external">Running Llama 3 in the Browser!</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../blog/2024-09-29-llama-in-browser/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('TkxQ'); return false;">
-NLP
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('TExN'); return false;">
-LLM
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('V2ViTExN'); return false;">
-WebLLM
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('TUxDLUxMTQ=='); return false;">
-MLC-LLM
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('V2ViR1BV'); return false;">
-WebGPU
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('VFZN'); return false;">
-TVM
-</div>
-</div>
-<div class="listing-description">
-<a href="../blog/2024-09-29-llama-in-browser/index.html" class="no-external">Chat with Llama and other LLMs that run locally in your browser using WebLLM.</a>
-</div>
-</div>
-<div class="metadata">
-<a href="../blog/2024-09-29-llama-in-browser/index.html" class="no-external">
-<div class="listing-date">
-Oct 6, 2024
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="TUwlMkNJbmZvcm1hdGlvbiUyMFRoZW9yeQ==" data-listing-date-sort="1724445000000" data-listing-file-modified-sort="1740941023399" data-listing-date-modified-sort="1728937800000" data-listing-reading-time-sort="13" data-listing-word-count-sort="2446">
-<div class="thumbnail">
-<p><a href="../blog/2024-08-24-information-theory/index.html" class="no-external"></a></p><a href="../blog/2024-08-24-information-theory/index.html" class="no-external">
-<p><img loading="lazy" src="../blog/2024-08-24-information-theory/featured.png" class="thumbnail-image"></p>
-</a><p><a href="../blog/2024-08-24-information-theory/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/2024-08-24-information-theory/index.html" class="no-external">My Notes on Information Theory</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../blog/2024-08-24-information-theory/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('TUw='); return false;">
-ML
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('SW5mb3JtYXRpb24lMjBUaGVvcnk='); return false;">
-Information Theory
-</div>
-</div>
-<div class="listing-description">
-<a href="../blog/2024-08-24-information-theory/index.html" class="no-external">A brief overview of Information Theory concepts that I compiled for my own reference.</a>
-</div>
-</div>
-<div class="metadata">
-<a href="../blog/2024-08-24-information-theory/index.html" class="no-external">
-<div class="listing-date">
-Aug 24, 2024
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-categories="TUwlMkNMaWdodEdCTSUyQ0NhdEJvb3N0JTJDR0JU" data-listing-date-sort="1723321800000" data-listing-file-modified-sort="1740708841985" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1074">
-<div class="thumbnail">
-<p><a href="../blog/2024-08-11-gbt-custom-loss/index.html" class="no-external"></a></p><a href="../blog/2024-08-11-gbt-custom-loss/index.html" class="no-external">
-<p><img loading="lazy" src="../blog/2024-08-11-gbt-custom-loss/featured.png" class="thumbnail-image"></p>
-</a><p><a href="../blog/2024-08-11-gbt-custom-loss/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/2024-08-11-gbt-custom-loss/index.html" class="no-external">Custom Loss Functions for LightGBM and CatBoost</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../blog/2024-08-11-gbt-custom-loss/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('TUw='); return false;">
-ML
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('TGlnaHRHQk0='); return false;">
-LightGBM
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Q2F0Qm9vc3Q='); return false;">
-CatBoost
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('R0JU'); return false;">
-GBT
-</div>
-</div>
-<div class="listing-description">
-<a href="../blog/2024-08-11-gbt-custom-loss/index.html" class="no-external">Guide on how to implement custom loss functions and evaluation metrics for LightGBM and CatBoost</a>
-</div>
-</div>
-<div class="metadata">
-<a href="../blog/2024-08-11-gbt-custom-loss/index.html" class="no-external">
-<div class="listing-date">
-Aug 11, 2024
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="6" data-categories="TUwlMkNOTFAlMkNPcHRpbWl6YXRpb24lMkNBbmFseXNpcw==" data-listing-date-sort="1718397000000" data-listing-file-modified-sort="1740941362818" data-listing-date-modified-sort="1728505800000" data-listing-reading-time-sort="8" data-listing-word-count-sort="1429">
-<div class="thumbnail">
-<p><a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external"></a></p><a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external">
-<p><img loading="lazy" src="../blog/2024-06-15-lstm-from-scratch/featured.png" class="thumbnail-image"></p>
-</a><p><a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external">Implementing Multi-Layer LSTM and AdamW from Scratch using NumPy</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('TUw='); return false;">
-ML
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('TkxQ'); return false;">
-NLP
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('T3B0aW1pemF0aW9u'); return false;">
-Optimization
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('QW5hbHlzaXM='); return false;">
-Analysis
-</div>
-</div>
-<div class="listing-description">
-<a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external">This tutorial walks through the implementation of a multi-layer LSTM model from scratch in pure NumPy, and trains it on the Shakespeare dataset. It also covers the implementation of the AdamW optimizer and the necessary data modules.</a>
-</div>
-</div>
-<div class="metadata">
-<a href="../blog/2024-06-15-lstm-from-scratch/index.html" class="no-external">
-<div class="listing-date">
-Jun 15, 2024
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></div></div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -1183,7 +974,6 @@ async function loadBodyWhenReady() {
 }
 loadBodyWhenReady();
 </script>
-<script type="module" src="../_assets/simplex-banner/render-canvas.js"></script>
 
 
 

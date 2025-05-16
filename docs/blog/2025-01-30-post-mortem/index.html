@@ -78,6 +78,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap-287c7ba6e4a27dbed014b5bfeb62b726.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../../site_libs/bootstrap/bootstrap-dark-27cc2a1b87587a1e65fef9cea5fee6c6.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -287,6 +289,19 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <p><em>Your code has been running smoothly for a while, and you’re finally breathing easy. Then, an hour into execution an error occurs. The worst part? You have no idea what caused it based on the logs alone, and source is buried 8 calls deep in the stack trace. You’re dreading the thought of validating the data from start to finish to find the root cause, but there’s no other way.</em></p>
 <p>Well, I might’ve found the solution to this. Python’s built-in <code>traceback</code> lets you inspect variables at each step of the stack trace, and even better, save the current context for reuse later! If you’re familiar with the <code>pdb</code> debugger, this article is similar in spirit but with major differences.</p>
 <p>This is the most useful code I’ve written in ages, and it took some mighty effort to get it right due to the lack of proper documentation. If you want the TL;DR, just skip to <a href="#sec-in-action" class="quarto-xref">Section&nbsp;4</a>. Otherwise, let’s dive in.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Update: May 16, 2025">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Update: May 16, 2025
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The code in this article has been packaged into the <i class="fa-brands fa-github fa-large" aria-label="github"></i> <a href="https://github.com/nsarang/pymortem">Pymortem</a> library, which is available on PyPI.</p>
+</div>
+</div>
 </section>
 <section id="post-mortem" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Post-mortem</h1>
@@ -335,7 +350,7 @@ src/
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">len</span>(data) <span class="op">&lt;</span> <span class="dv">10</span>:</span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"First exception: Data is too short."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Consider a simple scenario where we pass in the wrong data type:</p>
-<div id="cell-5" class="cell" data-execution_count="1">
+<div id="cell-6" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> src.run <span class="im">import</span> train_model</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>train_model(length<span class="op">=</span><span class="st">"10"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -343,22 +358,22 @@ src/
 <div class="ansi-escaped-output">
 <pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In[1], line 3</span>
-<span class="ansi-green-fg ansi-bold">      1</span> <span style="font-weight:bold;color:rgb(0,135,0)">from</span> <span style="font-weight:bold;color:rgb(0,0,255)">src</span><span style="font-weight:bold;color:rgb(0,0,255)">.</span><span style="font-weight:bold;color:rgb(0,0,255)">run</span> <span style="font-weight:bold;color:rgb(0,135,0)">import</span> train_model
-<span class="ansi-green-fg">----&gt; 3</span> <span class="ansi-yellow-bg">train_model</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">length</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">"</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">10</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">"</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[1]</span><span class="ansi-green-fg">, line 3</span>
+<span class="ansi-green-fg">      1</span> <span style="font-weight:bold;color:rgb(0,135,0)">from</span><span style="color:rgb(188,188,188)"> </span><span class="ansi-blue-fg ansi-bold">src</span><span class="ansi-blue-fg ansi-bold">.</span><span class="ansi-blue-fg ansi-bold">run</span><span style="color:rgb(188,188,188)"> </span><span style="font-weight:bold;color:rgb(0,135,0)">import</span> train_model
+<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">3</span> <span class="ansi-yellow-bg">train_model</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">length</span><span class="ansi-yellow-bg">=</span><span class="ansi-yellow-fg ansi-yellow-bg">"</span><span class="ansi-yellow-fg ansi-yellow-bg">10</span><span class="ansi-yellow-fg ansi-yellow-bg">"</span><span class="ansi-yellow-bg">)</span>
 
-File <span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/run.py:8</span>, in <span class="ansi-cyan-fg">train_model</span><span class="ansi-blue-fg">(length)</span>
-<span class="ansi-green-fg ansi-bold">      6</span> <span style="font-weight:bold;color:rgb(0,135,0)">def</span> <span style="color:rgb(0,0,255)">train_model</span>(length: <span style="color:rgb(0,135,0)">int</span>):
-<span class="ansi-green-fg ansi-bold">      7</span>     model <span style="color:rgb(98,98,98)">=</span> ModelClass()
-<span class="ansi-green-fg">----&gt; 8</span>     data <span style="color:rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">np</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">arange</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">length</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-fg ansi-bold">      9</span>     model<span style="color:rgb(98,98,98)">.</span>train(data)
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/run.py:8</span>, in <span class="ansi-cyan-fg">train_model</span><span class="ansi-blue-fg">(length)</span>
+<span class="ansi-green-fg">      6</span> <span style="font-weight:bold;color:rgb(0,135,0)">def</span><span style="color:rgb(188,188,188)"> </span><span class="ansi-blue-fg">train_model</span>(length: <span style="color:rgb(0,135,0)">int</span>):
+<span class="ansi-green-fg">      7</span>     model = ModelClass()
+<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">8</span>     data = <span class="ansi-yellow-bg">np</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">arange</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">length</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">      9</span>     model.train(data)
 
 <span class="ansi-red-fg">TypeError</span>: arange() not supported for inputs with DType &lt;class 'numpy.dtypes.StrDType'&gt;.</pre>
 </div>
 </div>
 </div>
 <p>Oops, wrong input! Before doing anything else, let’s grab a reference to the exception:</p>
-<div id="cell-7" class="cell" data-execution_count="2">
+<div id="cell-8" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>exception_1 <span class="op">=</span> sys.last_value</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>exception_1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -367,7 +382,7 @@ File <span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-
 </div>
 </div>
 <p><code>sys.last_value</code> contains the most recent exception. There’s also <code>sys.last_type</code> and <code>sys.last_traceback</code>, but we can get those from <code>sys.last_value</code> directly.</p>
-<div id="cell-9" class="cell" data-execution_count="3">
+<div id="cell-10" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> traceback</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>exec_type <span class="op">=</span> <span class="bu">type</span>(exception_1)</span>
@@ -376,9 +391,9 @@ File <span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Helper function to print the traceback</span></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>traceback.print_tb(exc_tb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>  File "/Users/nsarang/micromamba/envs/arclight/lib/python3.11/site-packages/IPython/core/interactiveshell.py", line 3577, in run_code
+<pre><code>  File "/Users/nsarang/conda/envs/arsem-bidding/lib/python3.11/site-packages/IPython/core/interactiveshell.py", line 3549, in run_code
     exec(code_obj, self.user_global_ns, self.user_ns)
-  File "/var/folders/29/fh16rbz95b99yz5df3c6yt2h0000gn/T/ipykernel_8225/205929029.py", line 3, in &lt;module&gt;
+  File "/var/folders/29/fh16rbz95b99yz5df3c6yt2h0000gn/T/ipykernel_96683/205929029.py", line 3, in &lt;module&gt;
     train_model(length="10")
   File "/Users/nsarang/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/run.py", line 8, in train_model
     data = np.arange(length)
@@ -392,17 +407,17 @@ File <span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-
 <li>The third frame is where the error actually happened.</li>
 </ol>
 <p>The traceback <code>exc_tb</code> is an entry point to the exception traceback, and all the frames are linked together as a linked list. Each frame’s <code>tb_next</code> points to the next frame, and <code>tb_frame</code> gives you the actual frame object.</p>
-<div id="cell-12" class="cell" data-execution_count="4">
+<div id="cell-13" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>traceback.print_tb(exc_tb.tb_next)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>  File "/var/folders/29/fh16rbz95b99yz5df3c6yt2h0000gn/T/ipykernel_8225/205929029.py", line 3, in &lt;module&gt;
+<pre><code>  File "/var/folders/29/fh16rbz95b99yz5df3c6yt2h0000gn/T/ipykernel_96683/205929029.py", line 3, in &lt;module&gt;
     train_model(length="10")
   File "/Users/nsarang/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/run.py", line 8, in train_model
     data = np.arange(length)
            ^^^^^^^^^^^^^^^^^</code></pre>
 </div>
 </div>
-<div id="cell-13" class="cell" data-execution_count="5">
+<div id="cell-14" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>traceback.print_tb(exc_tb.tb_next.tb_next)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>  File "/Users/nsarang/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/run.py", line 8, in train_model
@@ -410,15 +425,15 @@ File <span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-
            ^^^^^^^^^^^^^^^^^</code></pre>
 </div>
 </div>
-<div id="cell-14" class="cell" data-execution_count="6">
+<div id="cell-15" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>tb_last <span class="op">=</span> exc_tb.tb_next.tb_next</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>frame <span class="op">=</span> tb_last.tb_frame</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>frame</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
-<pre><code>&lt;frame at 0x107b065c0, file '/Users/nsarang/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/run.py', line 8, code train_model&gt;</code></pre>
+<pre><code>&lt;frame at 0x1065e6380, file '/Users/nsarang/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/run.py', line 8, code train_model&gt;</code></pre>
 </div>
 </div>
-<div id="cell-15" class="cell" data-execution_count="7">
+<div id="cell-16" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> inspect</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>info <span class="op">=</span> inspect.getframeinfo(frame)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>info._asdict() <span class="co"># for pretty printing</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -431,14 +446,14 @@ File <span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-
 </div>
 </div>
 <p>Now we’re cooking! 🤘 This is exactly the info your IDE uses to create those colorful error messages. Let’s peek at the local variables in this frame:</p>
-<div id="cell-17" class="cell" data-execution_count="8">
+<div id="cell-18" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>frame.f_locals</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
-<pre><code>{'length': '10', 'model': &lt;src.model.ModelClass at 0x107a8af50&gt;}</code></pre>
+<pre><code>{'length': '10', 'model': &lt;src.model.ModelClass at 0x10666b290&gt;}</code></pre>
 </div>
 </div>
 <p>The globals are too massive to print in full, so just the keys:</p>
-<div id="cell-19" class="cell" data-execution_count="9">
+<div id="cell-20" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>frame.f_globals.keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>dict_keys(['__name__', '__doc__', '__package__', '__loader__', '__spec__', '__file__', '__cached__', '__builtins__', 'np', 'ModelClass', 'train_model'])</code></pre>
@@ -452,95 +467,110 @@ File <span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-
 <li>Control code indentation for readability</li>
 </ul>
 <p>Here’s the implementation:</p>
-<div id="cell-21" class="cell" data-execution_count="10">
+<div id="cell-22" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> inspect</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> textwrap</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">process_exception</span>(exception, context_lines<span class="op">=</span><span class="dv">1</span>, max_indent<span class="op">=</span><span class="bu">float</span>(<span class="st">'inf'</span>), frame_index<span class="op">=</span><span class="dv">0</span>):</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co">    Process an exception and return a formatted traceback message and frame information.</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="co">    exception : Exception</span></span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co">        The exception to process.</span></span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co">    context_lines : int, optional</span></span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="co">        The number of context lines to include around the current line, by default 1.</span></span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="co">    max_indent : int, optional</span></span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="co">        The maximum indentation to use for the code block in the error message. Defaults to no limit.</span></span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="co">    frame_index : int, optional</span></span>
-<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a><span class="co">        The index of the first frame, by default 0.</span></span>
-<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>    tb <span class="op">=</span> exception.__traceback__</span>
-<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>    frame_info <span class="op">=</span> []</span>
-<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> tb <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Get high-level frame information</span></span>
-<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>        filename, lineno, function_name, lines, index <span class="op">=</span> inspect.getframeinfo(</span>
-<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>            tb, context<span class="op">=</span>context_lines</span>
-<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Dedent the lines if the entire block is indented more than max_indent</span></span>
-<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>        lines_dedented <span class="op">=</span> textwrap.dedent(<span class="st">""</span>.join(lines)).splitlines()</span>
-<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> lines_dedented <span class="kw">and</span> lines[<span class="dv">0</span>] <span class="kw">and</span> <span class="bu">len</span>(lines[<span class="dv">0</span>]) <span class="op">-</span> <span class="bu">len</span>(lines_dedented[<span class="dv">0</span>]) <span class="op">&gt;</span> max_indent:</span>
-<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a>            lines <span class="op">=</span> textwrap.indent(</span>
-<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a>                <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(lines_dedented), <span class="st">" "</span> <span class="op">*</span> max_indent</span>
-<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a>            ).splitlines()</span>
-<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Construct the frame message</span></span>
-<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a>        start_no <span class="op">=</span> lineno <span class="op">-</span> index</span>
-<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a>        end_no <span class="op">=</span> lineno <span class="op">+</span> <span class="bu">len</span>(lines) <span class="op">-</span> index</span>
-<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a>        number_width <span class="op">=</span> <span class="bu">len</span>(<span class="bu">str</span>(end_no))</span>
-<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a>        frame_message <span class="op">=</span> [</span>
-<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"┌─── Frame </span><span class="sc">{</span>frame_index<span class="sc">}</span><span class="ss"> "</span> <span class="op">+</span> <span class="st">"─"</span> <span class="op">*</span> <span class="dv">40</span>,</span>
-<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f'Function </span><span class="sc">{</span>function_name<span class="sc">}</span><span class="ss">, in file "</span><span class="sc">{</span>filename<span class="sc">}</span><span class="ss">"'</span>,</span>
-<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a>        ]</span>
-<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, file_lineno <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">range</span>(start_no, end_no)):</span>
-<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a>            line <span class="op">=</span> lines[i].rstrip() <span class="cf">if</span> i <span class="op">&lt;</span> <span class="bu">len</span>(lines) <span class="cf">else</span> <span class="st">""</span></span>
-<span id="cb21-48"><a href="#cb21-48" aria-hidden="true" tabindex="-1"></a>            prefix <span class="op">=</span> <span class="st">"➤➤➤ "</span> <span class="cf">if</span> i <span class="op">==</span> index <span class="cf">else</span> <span class="st">"    "</span></span>
-<span id="cb21-49"><a href="#cb21-49" aria-hidden="true" tabindex="-1"></a>            frame_message.append(<span class="ss">f" </span><span class="sc">{</span>prefix<span class="sc">}{</span>file_lineno<span class="sc">:</span>{number_width}<span class="sc">}</span><span class="ss">:  </span><span class="sc">{</span>line<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb21-50"><a href="#cb21-50" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb21-51"><a href="#cb21-51" aria-hidden="true" tabindex="-1"></a>        frame_message.append(<span class="st">""</span>)</span>
-<span id="cb21-52"><a href="#cb21-52" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb21-53"><a href="#cb21-53" aria-hidden="true" tabindex="-1"></a>        frame_info.append({</span>
-<span id="cb21-54"><a href="#cb21-54" aria-hidden="true" tabindex="-1"></a>            <span class="st">"message"</span>: <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(frame_message),</span>
-<span id="cb21-55"><a href="#cb21-55" aria-hidden="true" tabindex="-1"></a>            <span class="st">"frame"</span>: tb.tb_frame,</span>
-<span id="cb21-56"><a href="#cb21-56" aria-hidden="true" tabindex="-1"></a>            <span class="st">"locals"</span>: tb.tb_frame.f_locals.copy(), <span class="co"># shallow copy just in case</span></span>
-<span id="cb21-57"><a href="#cb21-57" aria-hidden="true" tabindex="-1"></a>            <span class="st">"globals"</span>: tb.tb_frame.f_globals.copy(),</span>
-<span id="cb21-58"><a href="#cb21-58" aria-hidden="true" tabindex="-1"></a>            <span class="st">"metadata"</span>: {</span>
-<span id="cb21-59"><a href="#cb21-59" aria-hidden="true" tabindex="-1"></a>                <span class="st">"filename"</span>: filename,</span>
-<span id="cb21-60"><a href="#cb21-60" aria-hidden="true" tabindex="-1"></a>                <span class="st">"lineno"</span>: lineno,</span>
-<span id="cb21-61"><a href="#cb21-61" aria-hidden="true" tabindex="-1"></a>                <span class="st">"function_name"</span>: function_name,</span>
-<span id="cb21-62"><a href="#cb21-62" aria-hidden="true" tabindex="-1"></a>                <span class="st">"lines"</span>: lines <span class="cf">if</span> lines <span class="cf">else</span> [],</span>
-<span id="cb21-63"><a href="#cb21-63" aria-hidden="true" tabindex="-1"></a>                <span class="st">"index"</span>: index,</span>
-<span id="cb21-64"><a href="#cb21-64" aria-hidden="true" tabindex="-1"></a>            },</span>
-<span id="cb21-65"><a href="#cb21-65" aria-hidden="true" tabindex="-1"></a>        })</span>
-<span id="cb21-66"><a href="#cb21-66" aria-hidden="true" tabindex="-1"></a>            </span>
-<span id="cb21-67"><a href="#cb21-67" aria-hidden="true" tabindex="-1"></a>        tb <span class="op">=</span> tb.tb_next</span>
-<span id="cb21-68"><a href="#cb21-68" aria-hidden="true" tabindex="-1"></a>        frame_index <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb21-69"><a href="#cb21-69" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb21-70"><a href="#cb21-70" aria-hidden="true" tabindex="-1"></a>    exception_header <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span><span class="bu">type</span>(exception)<span class="sc">.</span><span class="va">__name__</span><span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">str</span>(exception)<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb21-71"><a href="#cb21-71" aria-hidden="true" tabindex="-1"></a>    traceback_message <span class="op">=</span><span class="st">" </span><span class="ch">\n</span><span class="st">"</span>.join([frame[<span class="st">"message"</span>] <span class="cf">for</span> frame <span class="kw">in</span> frame_info] <span class="op">+</span> [exception_header])</span>
-<span id="cb21-72"><a href="#cb21-72" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> traceback_message, frame_info</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">process_single_exception</span>(</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    exception, context_lines<span class="op">=</span><span class="dv">1</span>, max_indent<span class="op">=</span><span class="bu">float</span>(<span class="st">"inf"</span>), frame_index<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co">    Process an exception and return a formatted traceback message and frame information.</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="co">    exception : Exception</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="co">        The exception to process.</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="co">    context_lines : int, optional</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="co">        The number of context lines to include around the current line, by default 1.</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a><span class="co">    max_indent : int, optional</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="co">        The maximum indentation to use for the code block in the error message. Defaults to no limit.</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="co">    frame_index : int, optional</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="co">        The index of the first frame, by default 0.</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>    tb <span class="op">=</span> exception.__traceback__</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>    frame_info <span class="op">=</span> []</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> tb <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Get high-level frame information</span></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>        filename, lineno, function_name, lines, index <span class="op">=</span> inspect.getframeinfo(</span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>            tb, context<span class="op">=</span>context_lines</span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Dedent the lines if the entire block is indented more than max_indent</span></span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a>        lines_dedented <span class="op">=</span> textwrap.dedent(<span class="st">""</span>.join(lines)).splitlines()</span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (</span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a>            lines_dedented</span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a>            <span class="kw">and</span> lines[<span class="dv">0</span>]</span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a>            <span class="kw">and</span> <span class="bu">len</span>(lines[<span class="dv">0</span>]) <span class="op">-</span> <span class="bu">len</span>(lines_dedented[<span class="dv">0</span>]) <span class="op">&gt;</span> max_indent</span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a>        ):</span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a>            lines <span class="op">=</span> textwrap.indent(</span>
+<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a>                <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(lines_dedented), <span class="st">" "</span> <span class="op">*</span> max_indent</span>
+<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a>            ).splitlines()</span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Construct the frame message</span></span>
+<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a>        start_no <span class="op">=</span> lineno <span class="op">-</span> index</span>
+<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a>        end_no <span class="op">=</span> lineno <span class="op">+</span> <span class="bu">len</span>(lines) <span class="op">-</span> index</span>
+<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a>        number_width <span class="op">=</span> <span class="bu">len</span>(<span class="bu">str</span>(end_no))</span>
+<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-48"><a href="#cb21-48" aria-hidden="true" tabindex="-1"></a>        frame_message <span class="op">=</span> [</span>
+<span id="cb21-49"><a href="#cb21-49" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"┌─── Frame </span><span class="sc">{</span>frame_index<span class="sc">}</span><span class="ss"> "</span> <span class="op">+</span> <span class="st">"─"</span> <span class="op">*</span> <span class="dv">40</span>,</span>
+<span id="cb21-50"><a href="#cb21-50" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f'Function </span><span class="sc">{</span>function_name<span class="sc">}</span><span class="ss">, in file "</span><span class="sc">{</span>filename<span class="sc">}</span><span class="ss">"'</span>,</span>
+<span id="cb21-51"><a href="#cb21-51" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb21-52"><a href="#cb21-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-53"><a href="#cb21-53" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, file_lineno <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">range</span>(start_no, end_no)):</span>
+<span id="cb21-54"><a href="#cb21-54" aria-hidden="true" tabindex="-1"></a>            line <span class="op">=</span> lines[i].rstrip() <span class="cf">if</span> i <span class="op">&lt;</span> <span class="bu">len</span>(lines) <span class="cf">else</span> <span class="st">""</span></span>
+<span id="cb21-55"><a href="#cb21-55" aria-hidden="true" tabindex="-1"></a>            prefix <span class="op">=</span> <span class="st">"➤➤➤ "</span> <span class="cf">if</span> i <span class="op">==</span> index <span class="cf">else</span> <span class="st">"    "</span></span>
+<span id="cb21-56"><a href="#cb21-56" aria-hidden="true" tabindex="-1"></a>            frame_message.append(</span>
+<span id="cb21-57"><a href="#cb21-57" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f" </span><span class="sc">{</span>prefix<span class="sc">}{</span>file_lineno<span class="sc">:</span>{number_width}<span class="sc">}</span><span class="ss">:  </span><span class="sc">{</span>line<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb21-58"><a href="#cb21-58" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb21-59"><a href="#cb21-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-60"><a href="#cb21-60" aria-hidden="true" tabindex="-1"></a>        frame_message.append(<span class="st">""</span>)</span>
+<span id="cb21-61"><a href="#cb21-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-62"><a href="#cb21-62" aria-hidden="true" tabindex="-1"></a>        frame_info.append(</span>
+<span id="cb21-63"><a href="#cb21-63" aria-hidden="true" tabindex="-1"></a>            {</span>
+<span id="cb21-64"><a href="#cb21-64" aria-hidden="true" tabindex="-1"></a>                <span class="st">"message"</span>: <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(frame_message),</span>
+<span id="cb21-65"><a href="#cb21-65" aria-hidden="true" tabindex="-1"></a>                <span class="st">"frame"</span>: tb.tb_frame,</span>
+<span id="cb21-66"><a href="#cb21-66" aria-hidden="true" tabindex="-1"></a>                <span class="st">"locals"</span>: tb.tb_frame.f_locals.copy(),  <span class="co"># shallow copy just in case</span></span>
+<span id="cb21-67"><a href="#cb21-67" aria-hidden="true" tabindex="-1"></a>                <span class="st">"globals"</span>: tb.tb_frame.f_globals.copy(),</span>
+<span id="cb21-68"><a href="#cb21-68" aria-hidden="true" tabindex="-1"></a>                <span class="st">"metadata"</span>: {</span>
+<span id="cb21-69"><a href="#cb21-69" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"filename"</span>: filename,</span>
+<span id="cb21-70"><a href="#cb21-70" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"lineno"</span>: lineno,</span>
+<span id="cb21-71"><a href="#cb21-71" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"function_name"</span>: function_name,</span>
+<span id="cb21-72"><a href="#cb21-72" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"lines"</span>: lines <span class="cf">if</span> lines <span class="cf">else</span> [],</span>
+<span id="cb21-73"><a href="#cb21-73" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"index"</span>: index,</span>
+<span id="cb21-74"><a href="#cb21-74" aria-hidden="true" tabindex="-1"></a>                },</span>
+<span id="cb21-75"><a href="#cb21-75" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb21-76"><a href="#cb21-76" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb21-77"><a href="#cb21-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-78"><a href="#cb21-78" aria-hidden="true" tabindex="-1"></a>        tb <span class="op">=</span> tb.tb_next</span>
+<span id="cb21-79"><a href="#cb21-79" aria-hidden="true" tabindex="-1"></a>        frame_index <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb21-80"><a href="#cb21-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-81"><a href="#cb21-81" aria-hidden="true" tabindex="-1"></a>    exception_header <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span><span class="bu">type</span>(exception)<span class="sc">.</span><span class="va">__name__</span><span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">str</span>(exception)<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb21-82"><a href="#cb21-82" aria-hidden="true" tabindex="-1"></a>    traceback_message <span class="op">=</span> <span class="st">" </span><span class="ch">\n</span><span class="st">"</span>.join(</span>
+<span id="cb21-83"><a href="#cb21-83" aria-hidden="true" tabindex="-1"></a>        [frame[<span class="st">"message"</span>] <span class="cf">for</span> frame <span class="kw">in</span> frame_info] <span class="op">+</span> [exception_header]</span>
+<span id="cb21-84"><a href="#cb21-84" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb21-85"><a href="#cb21-85" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> traceback_message, frame_info</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s give it a try:</p>
-<div id="cell-23" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>traceback_message, frame_info <span class="op">=</span> process_exception(exception_1, context_lines<span class="op">=</span><span class="dv">5</span>, max_indent<span class="op">=</span><span class="dv">6</span>)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(traceback_message)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-24" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>traceback_message, frame_info <span class="op">=</span> process_single_exception(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    exception_1, context_lines<span class="op">=</span><span class="dv">5</span>, max_indent<span class="op">=</span><span class="dv">6</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(traceback_message)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>┌─── Frame 0 ────────────────────────────────────────
-Function run_code, in file "/Users/nsarang/micromamba/envs/arclight/lib/python3.11/site-packages/IPython/core/interactiveshell.py"
-     3575:                await eval(code_obj, self.user_global_ns, self.user_ns)
-     3576:            else:
- ➤➤➤ 3577:                exec(code_obj, self.user_global_ns, self.user_ns)
-     3578:        finally:
-     3579:            # Reset our crash handler in place
+Function run_code, in file "/Users/nsarang/conda/envs/arsem-bidding/lib/python3.11/site-packages/IPython/core/interactiveshell.py"
+     3547:                await eval(code_obj, self.user_global_ns, self.user_ns)
+     3548:            else:
+ ➤➤➤ 3549:                exec(code_obj, self.user_global_ns, self.user_ns)
+     3550:        finally:
+     3551:            # Reset our crash handler in place
  
 ┌─── Frame 1 ────────────────────────────────────────
-Function &lt;module&gt;, in file "/var/folders/29/fh16rbz95b99yz5df3c6yt2h0000gn/T/ipykernel_8225/205929029.py"
+Function &lt;module&gt;, in file "/var/folders/29/fh16rbz95b99yz5df3c6yt2h0000gn/T/ipykernel_96683/205929029.py"
      1:  from src.run import train_model
      2:  
  ➤➤➤ 3:  train_model(length="10")
@@ -557,10 +587,10 @@ TypeError: arange() not supported for inputs with DType &lt;class 'numpy.dtypes.
 </div>
 </div>
 <p><code>frame_info</code> gives us a list of dictionaries, each packed with a frame’s context:</p>
-<div id="cell-25" class="cell" data-execution_count="12">
+<div id="cell-26" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>frame_info[<span class="dv">2</span>][<span class="st">"locals"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
-<pre><code>{'length': '10', 'model': &lt;src.model.ModelClass at 0x107a8af50&gt;}</code></pre>
+<pre><code>{'length': '10', 'model': &lt;src.model.ModelClass at 0x10666b290&gt;}</code></pre>
 </div>
 </div>
 </section>
@@ -568,7 +598,7 @@ TypeError: arange() not supported for inputs with DType &lt;class 'numpy.dtypes.
 <h4 data-anchor-id="processing-chained-exceptions"><strong>Processing Chained Exceptions</strong></h4>
 <p>Chained exceptions happen when an exception is raised while another is being handled. There are two types explained in <a href="https://www.python.org/dev/peps/pep-3134/">PEP 3134</a>.</p>
 <p>To handle these, I’ll borrow a function from the <code>pdb</code> module that walks the linked exceptions and returns them in chronological order:</p>
-<div id="cell-27" class="cell" data-execution_count="13">
+<div id="cell-28" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">get_chained_exceptions</span>(exc):</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Given a an exception, return a tuple of chained exceptions.</span></span>
@@ -596,7 +626,7 @@ TypeError: arange() not supported for inputs with DType &lt;class 'numpy.dtypes.
 <span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">reversed</span>(_exceptions)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now let’s wrap it all together:</p>
-<div id="cell-29" class="cell" data-execution_count="14">
+<div id="cell-30" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">extract_from_exception</span>(exception<span class="op">=</span><span class="va">None</span>, context_lines<span class="op">=</span><span class="dv">5</span>, max_indent<span class="op">=</span><span class="dv">8</span>):</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Print traceback with surrounding code context, supporting nested exceptions.</span></span>
@@ -604,7 +634,7 @@ TypeError: arange() not supported for inputs with DType &lt;class 'numpy.dtypes.
 <span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co">    exception : Exception, optional</span></span>
 <span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co">        The exception to process. If not provided, the last exception will be used.</span></span>
 <span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co">    For other parameters, see `process_exception`.</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co">    For other parameters, see `process_single_exception`.</span></span>
 <span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
 <span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> exception <span class="kw">is</span> <span class="va">None</span>:</span>
 <span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>        exception <span class="op">=</span> sys.last_value</span>
@@ -613,7 +643,7 @@ TypeError: arange() not supported for inputs with DType &lt;class 'numpy.dtypes.
 <span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>    traceback_message <span class="op">=</span> []</span>
 <span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> exc_value, exc_reason <span class="kw">in</span> get_chained_exceptions(exception):</span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>        traceback_message_single, frame_info_single <span class="op">=</span> process_exception(</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>        traceback_message_single, frame_info_single <span class="op">=</span> process_single_exception(</span>
 <span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>            exc_value, context_lines, max_indent, frame_index<span class="op">=</span><span class="bu">len</span>(frames_info)</span>
 <span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>        )</span>
 <span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>        traceback_message.append(traceback_message_single)</span>
@@ -640,7 +670,7 @@ TypeError: arange() not supported for inputs with DType &lt;class 'numpy.dtypes.
 <section id="frame-inspection" class="level2" data-number="4.1">
 <h2 data-number="4.1" data-anchor-id="frame-inspection"><span class="header-section-number">4.1</span> Frame Inspection</h2>
 <p>Let’s try a more complex example with multiple exceptions. Using our earlier example from <a href="#toy-example">Section 3</a>, let’s run <code>train_model</code> with a length of 5:</p>
-<div id="cell-31" class="cell" data-execution_count="15">
+<div id="cell-32" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> src.run <span class="im">import</span> train_model</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>train_model(length<span class="op">=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -648,40 +678,40 @@ TypeError: arange() not supported for inputs with DType &lt;class 'numpy.dtypes.
 <div class="ansi-escaped-output">
 <pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
-File <span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/model.py:5</span>, in <span class="ansi-cyan-fg">ModelClass.train</span><span class="ansi-blue-fg">(self, data)</span>
-<span class="ansi-green-fg ansi-bold">      4</span>     data_norm <span style="color:rgb(98,98,98)">=</span> data <span style="color:rgb(98,98,98)">/</span> <span style="color:rgb(0,135,0)">sum</span>(data)
-<span class="ansi-green-fg">----&gt; 5</span>     <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_validate_data</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">data_norm</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-fg ansi-bold">      6</span> <span style="font-weight:bold;color:rgb(0,135,0)">except</span>:
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/model.py:5</span>, in <span class="ansi-cyan-fg">ModelClass.train</span><span class="ansi-blue-fg">(self, data)</span>
+<span class="ansi-green-fg">      4</span>     data_norm = data / <span style="color:rgb(0,135,0)">sum</span>(data)
+<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">5</span>     <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_validate_data</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">data_norm</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">      6</span> <span style="font-weight:bold;color:rgb(0,135,0)">except</span>:
 
-File <span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/model.py:11</span>, in <span class="ansi-cyan-fg">ModelClass._validate_data</span><span class="ansi-blue-fg">(self, data)</span>
-<span class="ansi-green-fg ansi-bold">     10</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">len</span>(data) <span style="color:rgb(98,98,98)">&lt;</span> <span style="color:rgb(98,98,98)">10</span>:
-<span class="ansi-green-fg">---&gt; 11</span>     <span style="font-weight:bold;color:rgb(0,135,0)">raise</span> <span style="font-weight:bold;color:rgb(215,95,95)">ValueError</span>(<span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">First exception: Data is too short.</span><span style="color:rgb(175,0,0)">"</span>)
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/model.py:11</span>, in <span class="ansi-cyan-fg">ModelClass._validate_data</span><span class="ansi-blue-fg">(self, data)</span>
+<span class="ansi-green-fg">     10</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">len</span>(data) &lt; <span class="ansi-green-fg">10</span>:
+<span class="ansi-green-fg">---&gt; </span><span class="ansi-green-fg">11</span>     <span style="font-weight:bold;color:rgb(0,135,0)">raise</span> <span style="font-weight:bold;color:rgb(215,95,95)">ValueError</span>(<span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">First exception: Data is too short.</span><span class="ansi-yellow-fg">"</span>)
 
 <span class="ansi-red-fg">ValueError</span>: First exception: Data is too short.
 
 During handling of the above exception, another exception occurred:
 
 <span class="ansi-red-fg">RuntimeError</span>                              Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In[15], line 3</span>
-<span class="ansi-green-fg ansi-bold">      1</span> <span style="font-weight:bold;color:rgb(0,135,0)">from</span> <span style="font-weight:bold;color:rgb(0,0,255)">src</span><span style="font-weight:bold;color:rgb(0,0,255)">.</span><span style="font-weight:bold;color:rgb(0,0,255)">run</span> <span style="font-weight:bold;color:rgb(0,135,0)">import</span> train_model
-<span class="ansi-green-fg">----&gt; 3</span> <span class="ansi-yellow-bg">train_model</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">length</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">5</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[15]</span><span class="ansi-green-fg">, line 3</span>
+<span class="ansi-green-fg">      1</span> <span style="font-weight:bold;color:rgb(0,135,0)">from</span><span style="color:rgb(188,188,188)"> </span><span class="ansi-blue-fg ansi-bold">src</span><span class="ansi-blue-fg ansi-bold">.</span><span class="ansi-blue-fg ansi-bold">run</span><span style="color:rgb(188,188,188)"> </span><span style="font-weight:bold;color:rgb(0,135,0)">import</span> train_model
+<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">3</span> <span class="ansi-yellow-bg">train_model</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">length</span><span class="ansi-yellow-bg">=</span><span class="ansi-green-fg ansi-yellow-bg">5</span><span class="ansi-yellow-bg">)</span>
 
-File <span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/run.py:9</span>, in <span class="ansi-cyan-fg">train_model</span><span class="ansi-blue-fg">(length)</span>
-<span class="ansi-green-fg ansi-bold">      7</span> model <span style="color:rgb(98,98,98)">=</span> ModelClass()
-<span class="ansi-green-fg ansi-bold">      8</span> data <span style="color:rgb(98,98,98)">=</span> np<span style="color:rgb(98,98,98)">.</span>arange(length)
-<span class="ansi-green-fg">----&gt; 9</span> <span class="ansi-yellow-bg">model</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">train</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">data</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/run.py:9</span>, in <span class="ansi-cyan-fg">train_model</span><span class="ansi-blue-fg">(length)</span>
+<span class="ansi-green-fg">      7</span> model = ModelClass()
+<span class="ansi-green-fg">      8</span> data = np.arange(length)
+<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">9</span> <span class="ansi-yellow-bg">model</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">train</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">data</span><span class="ansi-yellow-bg">)</span>
 
-File <span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/model.py:7</span>, in <span class="ansi-cyan-fg">ModelClass.train</span><span class="ansi-blue-fg">(self, data)</span>
-<span class="ansi-green-fg ansi-bold">      5</span>     <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_validate_data(data_norm)
-<span class="ansi-green-fg ansi-bold">      6</span> <span style="font-weight:bold;color:rgb(0,135,0)">except</span>:
-<span class="ansi-green-fg">----&gt; 7</span>     <span style="font-weight:bold;color:rgb(0,135,0)">raise</span> <span style="font-weight:bold;color:rgb(215,95,95)">RuntimeError</span>(<span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">Second exception: This is a dummy exception.</span><span style="color:rgb(175,0,0)">"</span>)
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/Nimas/nsarang.github.io/blog/2025-01-30-post-mortem/src/model.py:7</span>, in <span class="ansi-cyan-fg">ModelClass.train</span><span class="ansi-blue-fg">(self, data)</span>
+<span class="ansi-green-fg">      5</span>     <span style="color:rgb(0,135,0)">self</span>._validate_data(data_norm)
+<span class="ansi-green-fg">      6</span> <span style="font-weight:bold;color:rgb(0,135,0)">except</span>:
+<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">7</span>     <span style="font-weight:bold;color:rgb(0,135,0)">raise</span> <span style="font-weight:bold;color:rgb(215,95,95)">RuntimeError</span>(<span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">Second exception: This is a dummy exception.</span><span class="ansi-yellow-fg">"</span>)
 
 <span class="ansi-red-fg">RuntimeError</span>: Second exception: This is a dummy exception.</pre>
 </div>
 </div>
 </div>
 <p>The above is Jupyter’s error message. Let’s see how ours compares:</p>
-<div id="cell-33" class="cell" data-execution_count="16">
+<div id="cell-34" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>traceback_message, frame_info <span class="op">=</span> extract_from_exception(context_lines<span class="op">=</span><span class="dv">5</span>, max_indent<span class="op">=</span><span class="dv">4</span>)</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(traceback_message)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -708,15 +738,15 @@ During handling of the above exception, another exception occurred:
 
 
 ┌─── Frame 2 ────────────────────────────────────────
-Function run_code, in file "/Users/nsarang/micromamba/envs/arclight/lib/python3.11/site-packages/IPython/core/interactiveshell.py"
-     3575:              await eval(code_obj, self.user_global_ns, self.user_ns)
-     3576:          else:
- ➤➤➤ 3577:              exec(code_obj, self.user_global_ns, self.user_ns)
-     3578:      finally:
-     3579:          # Reset our crash handler in place
+Function run_code, in file "/Users/nsarang/conda/envs/arsem-bidding/lib/python3.11/site-packages/IPython/core/interactiveshell.py"
+     3547:              await eval(code_obj, self.user_global_ns, self.user_ns)
+     3548:          else:
+ ➤➤➤ 3549:              exec(code_obj, self.user_global_ns, self.user_ns)
+     3550:      finally:
+     3551:          # Reset our crash handler in place
  
 ┌─── Frame 3 ────────────────────────────────────────
-Function &lt;module&gt;, in file "/var/folders/29/fh16rbz95b99yz5df3c6yt2h0000gn/T/ipykernel_8225/4277452375.py"
+Function &lt;module&gt;, in file "/var/folders/29/fh16rbz95b99yz5df3c6yt2h0000gn/T/ipykernel_96683/4277452375.py"
      1:  from src.run import train_model
      2:  
  ➤➤➤ 3:  train_model(length=5)
@@ -741,15 +771,15 @@ RuntimeError: Second exception: This is a dummy exception.</code></pre>
 </div>
 </div>
 <p>Look at that! The full chain of exceptions is displayed with the relevant code context. We can now inspect the variables at each step and even rerun the code to see what happens.</p>
-<div id="cell-35" class="cell" data-execution_count="17">
+<div id="cell-36" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>frame_info[<span class="dv">0</span>][<span class="st">"locals"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
-<pre><code>{'self': &lt;src.model.ModelClass at 0x107a5f6d0&gt;,
+<pre><code>{'self': &lt;src.model.ModelClass at 0x105e1ee10&gt;,
  'data': array([0, 1, 2, 3, 4]),
  'data_norm': array([0. , 0.1, 0.2, 0.3, 0.4])}</code></pre>
 </div>
 </div>
-<div id="cell-36" class="cell">
+<div id="cell-37" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(frame_info[<span class="dv">1</span>][<span class="st">"message"</span>])</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if the length of 'data' is actually less than 10</span></span>
@@ -765,11 +795,11 @@ Function _validate_data, in file "/Users/nsarang/Nimas/nsarang.github.io/blog/20
 </code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="18">
-<pre><code>{'self': &lt;src.model.ModelClass at 0x107a5f6d0&gt;,
+<pre><code>{'self': &lt;src.model.ModelClass at 0x105e1ee10&gt;,
  'data': array([0. , 0.1, 0.2, 0.3, 0.4])}</code></pre>
 </div>
 </div>
-<div id="cell-37" class="cell" data-execution_count="20">
+<div id="cell-38" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(frame_info[<span class="dv">4</span>][<span class="st">"message"</span>])</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Going back to the 'train_model' call</span></span>
@@ -784,9 +814,9 @@ Function train_model, in file "/Users/nsarang/Nimas/nsarang.github.io/blog/2025-
  ➤➤➤  9:      model.train(data)
 </code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="20">
+<div class="cell-output cell-output-display" data-execution_count="19">
 <pre><code>{'length': 5,
- 'model': &lt;src.model.ModelClass at 0x107a5f6d0&gt;,
+ 'model': &lt;src.model.ModelClass at 0x105e1ee10&gt;,
  'data': array([0, 1, 2, 3, 4])}</code></pre>
 </div>
 </div>
@@ -794,7 +824,7 @@ Function train_model, in file "/Users/nsarang/Nimas/nsarang.github.io/blog/2025-
 <section id="code-execution" class="level2" data-number="4.2">
 <h2 data-number="4.2" data-anchor-id="code-execution"><span class="header-section-number">4.2</span> Code Execution</h2>
 <p>What if we want to execute some code within a frame’s context, just like in <code>pdb</code>?</p>
-<div id="cell-39" class="cell" data-execution_count="31">
+<div id="cell-40" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">execute</span>(source: <span class="bu">str</span>, context: <span class="bu">dict</span>):</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Execute the given source code in the given context.</span></span>
@@ -804,7 +834,7 @@ Function train_model, in file "/Users/nsarang/Nimas/nsarang.github.io/blog/2025-
 <span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>    code <span class="op">=</span> <span class="bu">compile</span>(source, <span class="st">"&lt;string&gt;"</span>, <span class="st">"exec"</span>)</span>
 <span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">exec</span>(code, context[<span class="st">"globals"</span>], context[<span class="st">"locals"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-40" class="cell" data-execution_count="35">
+<div id="cell-41" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>execute(<span class="vs">r"""</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="vs">        data = data </span><span class="op">+</span><span class="vs"> 10</span></span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="vs">        print</span><span class="kw">(</span><span class="vs">"data:", data</span><span class="kw">)</span></span>
