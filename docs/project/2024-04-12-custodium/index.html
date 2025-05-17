@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Nima Sarang">
-<meta name="dcterms.date" content="2025-05-16">
-<meta name="description" content="A post-mortem debugging tool for inspection and manipulation of execution contexts after exceptions occur.">
+<meta name="dcterms.date" content="2025-04-12">
+<meta name="description" content="A Python package for tracking investment portfolios and calculating adjusted cost basis (ACB) for Canadian capital gain/loss calculations.">
 
-<title>Pymortem – Nima Sarang</title>
+<title>Custodium – Nima Sarang</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -127,21 +127,21 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&amp;display=swap" rel="stylesheet">
 
 
-<meta property="og:title" content="Pymortem">
-<meta property="og:description" content="A post-mortem debugging tool for inspection and manipulation of execution contexts after exceptions occur.">
-<meta property="og:image" content="https://www.nimasarang.com/project/2025-05-16-pymortem/featured.jpg">
+<meta property="og:title" content="Custodium">
+<meta property="og:description" content="A Python package for tracking investment portfolios and calculating adjusted cost basis (ACB) for Canadian capital gain/loss calculations.">
+<meta property="og:image" content="https://www.nimasarang.com/project/2024-04-12-custodium/featured.jpg">
 <meta property="og:site_name" content="Nima Sarang">
-<meta name="twitter:title" content="Pymortem">
-<meta name="twitter:description" content="A post-mortem debugging tool for inspection and manipulation of execution contexts after exceptions occur.">
-<meta name="twitter:image" content="https://www.nimasarang.com/project/2025-05-16-pymortem/featured.jpg">
+<meta name="twitter:title" content="Custodium">
+<meta name="twitter:description" content="A Python package for tracking investment portfolios and calculating adjusted cost basis (ACB) for Canadian capital gain/loss calculations.">
+<meta name="twitter:image" content="https://www.nimasarang.com/project/2024-04-12-custodium/featured.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="citation_title" content="Pymortem">
+<meta name="citation_title" content="Custodium">
 <meta name="citation_author" content="Nima Sarang">
-<meta name="citation_publication_date" content="2025-05-16">
-<meta name="citation_cover_date" content="2025-05-16">
+<meta name="citation_publication_date" content="2025-04-12">
+<meta name="citation_cover_date" content="2025-04-12">
 <meta name="citation_year" content="2025">
-<meta name="citation_online_date" content="2025-05-16">
-<meta name="citation_fulltext_html_url" content="https://www.nimasarang.com/project/2025-05-16-pymortem/">
+<meta name="citation_online_date" content="2025-04-12">
+<meta name="citation_fulltext_html_url" content="https://www.nimasarang.com/project/2024-04-12-custodium/">
 <meta name="citation_language" content="en">
 </head>
 
@@ -194,16 +194,18 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns">
 <div id="title-block-header-title" class="quarto-title page-columns page-full page-layout-full featured-image p-4" style="background-image: url(featured.png), url(featured.jpg), url(../featured.jpg); background-repeat: no-repeat;">
-<h1 class="title">Pymortem</h1>
+<h1 class="title">Custodium</h1>
     <div class="quarto-categories">
         <div class="quarto-category">Python</div>
-        <div class="quarto-category">Debugging</div>
+        <div class="quarto-category">Finance</div>
+        <div class="quarto-category">Portfolio Management</div>
+        <div class="quarto-category">Tax</div>
       </div>
   </div>
 
 <div>
   <div id="title-block-title-desc" class="description pt-4">
-    A post-mortem debugging tool for inspection and manipulation of execution contexts after exceptions occur.
+    A Python package for tracking investment portfolios and calculating adjusted cost basis (ACB) for Canadian capital gain/loss calculations.
   </div>
 </div>
 
@@ -220,7 +222,7 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 16, 2025</p>
+      <p class="date">April 12, 2025</p>
     </div>
   </div>
   
@@ -265,126 +267,127 @@ main > section:not(:first-of-type) {
 }
 </style>
 <div style="display: flex; justify-content: center;">
-<p><a href="https://pypi.org/project/pymortem/"><img src="https://img.shields.io/pypi/v/pymortem?logoSize=auto.png" class="img-fluid" alt="PyPI"></a> <a href="https://pypi.org/project/pymortem/"><img src="https://img.shields.io/pypi/pyversions/pymortem?logoSize=auto.png" class="img-fluid" alt="Python Versions"></a> <img src="https://img.shields.io/pypi/l/pymortem?logo=auto.png" class="img-fluid" alt="License"> <a href="https://codecov.io/gh/nsarang/pymortem"><img src="https://codecov.io/gh/nsarang/pymortem/branch/main/graph/badge.svg" class="img-fluid" alt="Codecov"></a></p>
+<p><img alt="Custodium" src="https://raw.githubusercontent.com/nsarang/custodium/refs/heads/main/logo.jpg" width="500px" style="max-width: 100%;"></p>
 </div>
-<p>Pymortem is a post-mortem debugging tool that lets you inspect and manipulate execution contexts after exceptions occur. Unlike traditional debuggers that require a separate interactive shell, pymortem gives you direct access to all variables and frames in the exception stack, making it valuable in Jupyter notebooks and interactive environments.</p>
-<blockquote class="blockquote">
-<p>This package evolved from an educational <a href="https://nimasarang.com/blog/2025-01-30-post-mortem/">blog post</a> on post-mortem debugging techniques. What began as educational code examples has been refined into a practical debugging library.</p>
-</blockquote>
-<section id="installation" class="level2" data-number="1">
-<h2 data-number="1" data-anchor-id="installation"><span class="header-section-number">1</span> Installation</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install pymortem</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="features" class="level2" data-number="2">
-<h2 data-number="2" data-anchor-id="features"><span class="header-section-number">2</span> Features</h2>
+<div style="display: flex; justify-content: center;">
+<p><a href="https://pypi.org/project/custodium/"><img src="https://img.shields.io/pypi/v/custodium?logoSize=auto.png" class="img-fluid" alt="PyPI"></a> <a href="https://pypi.org/project/custodium/"><img src="https://img.shields.io/pypi/pyversions/custodium?logoSize=auto.png" class="img-fluid" alt="Python Versions"></a> <img src="https://img.shields.io/pypi/l/custodium?logo=auto.png" class="img-fluid" alt="License"></p>
+</div>
+<p>Custodium is a Python package for tracking investment portfolios and calculating adjusted cost basis (ACB) for Canadian capital gain/loss calculations. Primarily designed for educational purposes, so please read the source code and understand the logic before using it for real-world applications and having fun with it!</p>
+<section id="table-of-contents" class="level2" data-number="1">
+<h2 data-number="1" data-anchor-id="table-of-contents"><span class="header-section-number">1</span> Table of Contents</h2>
 <ul>
-<li><strong>Enhanced Tracebacks</strong>: Rich, visual traceback output showing code context around errors with line numbers and error indicators</li>
-<li><strong>Frame Inspection</strong>: Directly examine variables at any level in the call stack without navigating through a separate command interface</li>
-<li><strong>Code Execution in Context</strong>: Run arbitrary code in the context of any stack frame without restarting your program</li>
-<li><strong>Chained Exception Support</strong>: Clear visualization of exception chains, showing both “raised from” and “during handling” relationships</li>
-<li><strong>No Special Setup</strong>: Works with standard Python without requiring breakpoints or special execution modes</li>
+<li><a href="#custodium">Custodium</a>
+<ul>
+<li><a href="#table-of-contents">Table of Contents</a></li>
+<li><a href="#key-features">Key Features</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#usage">Usage</a>
+<ul>
+<li><a href="#processing-transactions">Processing Transactions</a></li>
+</ul></li>
+<li><a href="#code-structure">Code Structure</a></li>
+<li><a href="#disclaimer">Disclaimer</a></li>
+<li><a href="#license">LICENSE</a></li>
+</ul></li>
 </ul>
 </section>
-<section id="usage" class="level2" data-number="3">
-<h2 data-number="3" data-anchor-id="usage"><span class="header-section-number">3</span> Usage</h2>
-<section id="examining-an-exception-after-it-occurs" class="level3">
-<h3 data-anchor-id="examining-an-exception-after-it-occurs">Examining an Exception after it Occurs</h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In one cell where an error happens:</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">foo</span>():</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="dv">10</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> x <span class="op">/</span> <span class="dv">0</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> output</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>foo()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In the next cell, examine the exception:</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pymortem</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get enhanced traceback and frame information</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>traceback_msg, frames <span class="op">=</span> pymortem.extract_from_exception()</span>
+<section id="key-features" class="level2" data-number="2">
+<h2 data-number="2" data-anchor-id="key-features"><span class="header-section-number">2</span> Key Features</h2>
+<ul>
+<li>Track investment transactions across multiple currencies with automatic exchange rate handling</li>
+<li>Calculate and maintain adjusted cost basis (ACB) over time</li>
+<li>Process special transaction types (e.g., equity vesting)</li>
+<li>Generate capital gains reports for tax purposes</li>
+</ul>
+</section>
+<section id="installation" class="level2" data-number="3">
+<h2 data-number="3" data-anchor-id="installation"><span class="header-section-number">3</span> Installation</h2>
+<pre><code>pip install custodium</code></pre>
+</section>
+<section id="usage" class="level2" data-number="4">
+<h2 data-number="4" data-anchor-id="usage"><span class="header-section-number">4</span> Usage</h2>
+<section id="processing-transactions" class="level3">
+<h3 data-anchor-id="processing-transactions">Processing Transactions</h3>
+<p>Create a CSV file (e.g.&nbsp;my_transactions.csv) with these columns:</p>
+<pre class="csv"><code>date,description,base_currency,quote_currency,quantity,price,fees,note
+2023-01-15,Buy AAPL shares,AAPL,USD,10,150.25,9.95,Initial purchase
+2023-03-10,Buy MSFT shares,MSFT,USD,15,280.45,9.95,Portfolio diversification
+2023-06-30,Sell AAPL shares,AAPL,USD,-5,175.50,9.95,Partial profit taking
+2023-08-15,Convert USD to CAD,CAD,USD,1000,0.73,5.00,Currency repatriation</code></pre>
+<p>Then load and process:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> decimal <span class="im">import</span> Decimal</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> custodium.portfolio <span class="im">import</span> Asset, Holdings</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> custodium.processing <span class="im">import</span> load_transactions, process_transactions</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> custodium.reporting <span class="im">import</span> calculate_yearly_gains, plot_holdings_history</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> custodium.utils <span class="im">import</span> displayPandas</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the improved traceback</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(traceback_msg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="inspecting-variables-in-the-error-context" class="level3">
-<h3 data-anchor-id="inspecting-variables-in-the-error-context">Inspecting Variables in the Error Context</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># After running the above cells</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's examine the local variables in different frames</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># The frame where the error occurred</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Locals in error frame:"</span>, frames[<span class="op">-</span><span class="dv">1</span>][<span class="st">"locals"</span>])</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check global variables too</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Some globals:"</span>, {k: v <span class="cf">for</span> k, v <span class="kw">in</span> <span class="bu">list</span>(frames[<span class="op">-</span><span class="dv">1</span>][<span class="st">"globals"</span>].items())[:<span class="dv">5</span>]})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="executing-code-in-a-frames-context" class="level3">
-<h3 data-anchor-id="executing-code-in-a-frames-context">Executing Code in a Frame’s Context</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pymortem</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the most recent exception</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>exception <span class="op">=</span> pymortem.retrieve_the_last_exception() <span class="co"># Store the exception</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>_, frames <span class="op">=</span> pymortem.extract_from_exception(exception)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Choose a frame to work with (e.g., frames[1] for a specific frame)</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>work_frame <span class="op">=</span> frames[<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Execute code in that frame's context</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>pymortem.execute(</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"""</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="st">    # You can access all variables that existed when the error occurred</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="st">    print("Available variables:", list(locals().keys()))</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="st">    # Test potential fixes without rerunning the entire notebook</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="st">    try:</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="st">        # Try a fix for a ZeroDivisionError</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="st">        denominator = 2  # Was 0 before</span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="st">        fixed_result = x / denominator</span></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="st">        print(f"Fix worked! Result = </span><span class="sc">{fixed_result}</span><span class="st">")</span></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="st">    except Exception as e:</span></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="st">        print(f"Fix didn't work: </span><span class="sc">{e}</span><span class="st">")</span></span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="st">    """</span>,</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    work_frame</span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="handling-chained-exceptions" class="level3">
-<h3 data-anchor-id="handling-chained-exceptions">Handling Chained Exceptions</h3>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a chained exception scenario</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> {<span class="st">"key"</span>: <span class="st">"value"</span>}</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> x[<span class="st">"missing_key"</span>]  <span class="co"># Will raise KeyError</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">KeyError</span>:</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> <span class="dv">10</span> <span class="op">+</span> <span class="st">"0"</span>  <span class="co"># Will raise ValueError</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    chain_exception <span class="op">=</span> e</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine the exception chain</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>traceback_msg, all_frames <span class="op">=</span> pymortem.extract_from_exception(chain_exception)</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(traceback_msg)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">""</span>)</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Frames are arranged in chronological order, with the first exception first</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>original_error_frame <span class="op">=</span> all_frames[<span class="dv">0</span>]  <span class="co"># Frame from the KeyError</span></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>raised_from_frame <span class="op">=</span> all_frames[<span class="op">-</span><span class="dv">1</span>]    <span class="co"># Frame from the ValueError</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"First exception type: </span><span class="sc">{</span><span class="bu">type</span>(chain_exception.__cause__)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Second exception type: </span><span class="sc">{</span><span class="bu">type</span>(chain_exception)<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Load transactions from CSV</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>transactions, df_log <span class="op">=</span> load_transactions(<span class="st">"my_transactions.csv"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the portfolio</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>holdings <span class="op">=</span> Holdings()</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>reporting_currency <span class="op">=</span> <span class="st">"CAD"</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Create initial holdings with funding</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>holdings <span class="op">=</span> Holdings()</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>holdings.add(</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    Asset(</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        date<span class="op">=</span><span class="st">"2023-01-01"</span>,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        asset<span class="op">=</span><span class="st">"CAD"</span>,</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        quantity<span class="op">=</span>Decimal(<span class="st">"10000"</span>),</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        acb<span class="op">=</span>Decimal(<span class="st">"1"</span>), <span class="co"># Must be 1 for the reporting currency</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>holdings.add(</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    Asset(</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>        date<span class="op">=</span><span class="st">"2023-01-01"</span>,</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>        asset<span class="op">=</span><span class="st">"USD"</span>,</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>        quantity<span class="op">=</span>Decimal(<span class="st">"10000"</span>),</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>        acb<span class="op">=</span>Decimal(<span class="st">"1.35"</span>),</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Process transactions</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>holdings, gains <span class="op">=</span> process_transactions(transactions, holdings<span class="op">=</span>holdings, reporting_currency<span class="op">=</span>reporting_currency)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="co"># View current holdings with readable formatting</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>displayPandas(holdings.current, precision<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate and display the yearly gains/losses</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>yearly_gains <span class="op">=</span> calculate_yearly_gains(gains)</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>displayPandas(yearly_gains, precision<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the history of holdings (Ploty is required)</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plot_holdings_history(holdings)</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
-<section id="why-use-pymortem" class="level2" data-number="4">
-<h2 data-number="4" data-anchor-id="why-use-pymortem"><span class="header-section-number">4</span> Why Use Pymortem?</h2>
-<p>Post-mortem debugging in Python traditionally requires using tools like <code>pdb.pm()</code> or <code>%debug</code> in IPython, which launch a separate command interface with its own syntax and navigation model. Pymortem takes a different approach:</p>
-<ol type="1">
-<li><strong>Direct Context Access</strong>: Instead of a separate debugging shell, access frame data directly in your current Python environment</li>
-<li><strong>Better Visualization</strong>: See more context around exceptions with cleaner, more informative tracebacks</li>
-<li><strong>Natural Code Execution</strong>: Run diagnostic code directly in frame contexts using standard Python syntax</li>
-<li><strong>Stays in Flow</strong>: Particularly valuable in notebooks where switching to a separate debugging interface breaks your workflow</li>
-<li><strong>Handles Complexity</strong>: Elegantly deals with nested and chained exceptions that can be confusing in traditional debuggers</li>
-</ol>
+<section id="code-structure" class="level2" data-number="5">
+<h2 data-number="5" data-anchor-id="code-structure"><span class="header-section-number">5</span> Code Structure</h2>
+<pre><code>├── custodium
+│   ├── exchange.py     # Currency exchange rate management
+│   ├── portfolio.py    # Core data structures (Transaction, Asset, Holdings)
+│   ├── processing.py   # Transaction processing logic and CSV loading
+│   ├── reporting.py    # Capital gains reporting and visualization tools
+│   ├── utils.py        # Utility functions
+│   └── __init__.py     # Package version and imports
+├── requirements        # Package dependencies
+├── tests               # Unit tests for package components
+├── .gitignore
+├── .pre-commit-config.yaml  # Pre-commit hooks configuration
+├── LICENSE
+├── Makefile                 # Build and test automation
+├── pyproject.toml           # CI/CD configuration
+├── README.md
+└── setup.py                 # Package installation configuration</code></pre>
 </section>
-<section id="license" class="level2" data-number="5">
-<h2 data-number="5" data-anchor-id="license"><span class="header-section-number">5</span> License</h2>
-<p>MIT</p>
+<section id="disclaimer" class="level2" data-number="6">
+<h2 data-number="6" data-anchor-id="disclaimer"><span class="header-section-number">6</span> Disclaimer</h2>
+<p>This package is provided for educational purposes only. Users should not rely on this software for financial advice, tax reporting, or investment decisions without independent verification. The authors accept no responsibility for any financial losses, tax implications, or other issues that may arise from the use of this software.</p>
+</section>
+<section id="license" class="level2" data-number="7">
+<h2 data-number="7" data-anchor-id="license"><span class="header-section-number">7</span> LICENSE</h2>
+<p>This project is licensed under the MIT License. See the <a href="LICENSE">LICENSE</a> file for details.</p>
 
 
 </section>
