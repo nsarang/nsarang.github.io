@@ -403,7 +403,7 @@ h_t &amp;= o_t \odot \tanh(C_t)
 </figure>
 </div>
 <p>Now let’s get into the implementation, step by step.</p>
-<div id="cell-6" class="cell no-style-output page-columns page-full" data-execution_count="4">
+<div id="cell-6" class="cell no-style-output page-columns page-full" data-execution_count="11">
 <div class="cell-output cell-output-display column-page">
 <h3 style="margin-top: 0;" data-anchor-id="multi-layers">lstm.py</h3>
         <div class="docfuse ">
@@ -418,10 +418,11 @@ The activation functions are defined in a separate module</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">1</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="linenos">2</span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
-<span class="linenos">3</span><span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="linenos">4</span><span class="kn">from</span> <span class="nn">op</span> <span class="kn">import</span> <span class="n">sigmoid</span><span class="p">,</span> <span class="n">tanh</span><span class="p">,</span> <span class="n">softmax</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">1</span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="linenos">2</span><span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="linenos">5</span><span class="kn">from</span><span class="w"> </span><span class="nn">op</span><span class="w"> </span><span class="kn">import</span> <span class="n">sigmoid</span><span class="p">,</span> <span class="n">softmax</span><span class="p">,</span> <span class="n">tanh</span></pre></div>
 
             </div>
         </div>
@@ -439,7 +440,7 @@ The model is used to process input sequences and generate output logits.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">5</span><span class="k">class</span> <span class="nc">LSTMClassifier</span><span class="p">:</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">6</span><span class="k">class</span><span class="w"> </span><span class="nc">LSTMClassifier</span><span class="p">:</span></pre></div>
 
             </div>
         </div>
@@ -459,13 +460,13 @@ The model is used to process input sequences and generate output logits.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos"> 6</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-<span class="linenos"> 7</span>        <span class="bp">self</span><span class="p">,</span>
-<span class="linenos"> 8</span>        <span class="n">embed_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-<span class="linenos"> 9</span>        <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-<span class="linenos">10</span>        <span class="n">vocab_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-<span class="linenos">11</span>        <span class="n">n_cells</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-<span class="linenos">12</span>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
+                <div class="highlight"><pre><span class="linenos"> 7</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+<span class="linenos"> 8</span>        <span class="bp">self</span><span class="p">,</span>
+<span class="linenos"> 9</span>        <span class="n">embed_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="linenos">10</span>        <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="linenos">11</span>        <span class="n">vocab_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="linenos">12</span>        <span class="n">n_cells</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+<span class="linenos">13</span>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
 
             </div>
         </div>
@@ -480,11 +481,11 @@ The model is used to process input sequences and generate output logits.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">13</span>        <span class="bp">self</span><span class="o">.</span><span class="n">embed_size</span> <span class="o">=</span> <span class="n">embed_size</span>
-<span class="linenos">14</span>        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span> <span class="o">=</span> <span class="n">hidden_size</span>
-<span class="linenos">15</span>        <span class="bp">self</span><span class="o">.</span><span class="n">vocab_size</span> <span class="o">=</span> <span class="n">vocab_size</span>
-<span class="linenos">16</span>        <span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span> <span class="o">=</span> <span class="n">n_cells</span>
-<span class="linenos">17</span>        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">14</span>        <span class="bp">self</span><span class="o">.</span><span class="n">embed_size</span> <span class="o">=</span> <span class="n">embed_size</span>
+<span class="linenos">15</span>        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span> <span class="o">=</span> <span class="n">hidden_size</span>
+<span class="linenos">16</span>        <span class="bp">self</span><span class="o">.</span><span class="n">vocab_size</span> <span class="o">=</span> <span class="n">vocab_size</span>
+<span class="linenos">17</span>        <span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span> <span class="o">=</span> <span class="n">n_cells</span>
+<span class="linenos">18</span>        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span></pre></div>
 
             </div>
         </div>
@@ -499,7 +500,7 @@ The model is used to process input sequences and generate output logits.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">18</span>        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"embedding"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">empty</span><span class="p">((</span><span class="n">vocab_size</span><span class="p">,</span> <span class="n">embed_size</span><span class="p">))</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">19</span>        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"embedding"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">empty</span><span class="p">((</span><span class="n">vocab_size</span><span class="p">,</span> <span class="n">embed_size</span><span class="p">))</span></pre></div>
 
             </div>
         </div>
@@ -514,7 +515,7 @@ The model is used to process input sequences and generate output logits.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">19</span>        <span class="k">for</span> <span class="n">cell_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_cells</span><span class="p">):</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">20</span>        <span class="k">for</span> <span class="n">cell_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_cells</span><span class="p">):</span></pre></div>
 
             </div>
         </div>
@@ -529,7 +530,7 @@ The model is used to process input sequences and generate output logits.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">20</span>            <span class="k">for</span> <span class="n">layer_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"f"</span><span class="p">,</span> <span class="s2">"o"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]:</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">21</span>            <span class="k">for</span> <span class="n">layer_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"f"</span><span class="p">,</span> <span class="s2">"o"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]:</span></pre></div>
 
             </div>
         </div>
@@ -544,9 +545,9 @@ The model is used to process input sequences and generate output logits.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">21</span>                <span class="n">linp_sz</span> <span class="o">=</span> <span class="n">hidden_size</span> <span class="o">+</span> <span class="p">(</span>
-<span class="linenos">22</span>                    <span class="n">embed_size</span> <span class="k">if</span> <span class="n">cell_index</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">hidden_size</span>
-<span class="linenos">23</span>                <span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">22</span>                <span class="n">linp_sz</span> <span class="o">=</span> <span class="n">hidden_size</span> <span class="o">+</span> <span class="p">(</span>
+<span class="linenos">23</span>                    <span class="n">embed_size</span> <span class="k">if</span> <span class="n">cell_index</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">hidden_size</span>
+<span class="linenos">24</span>                <span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -561,12 +562,12 @@ The model is used to process input sequences and generate output logits.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">24</span>                <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"W</span><span class="si">{</span><span class="n">layer_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cell_index</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">empty</span><span class="p">(</span>
-<span class="linenos">25</span>                    <span class="p">(</span><span class="n">linp_sz</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
-<span class="linenos">26</span>                <span class="p">)</span>
-<span class="linenos">27</span>                <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"b</span><span class="si">{</span><span class="n">layer_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cell_index</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">empty</span><span class="p">(</span>
-<span class="linenos">28</span>                    <span class="p">(</span><span class="n">hidden_size</span><span class="p">)</span>
-<span class="linenos">29</span>                <span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">25</span>                <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"W</span><span class="si">{</span><span class="n">layer_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cell_index</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">empty</span><span class="p">(</span>
+<span class="linenos">26</span>                    <span class="p">(</span><span class="n">linp_sz</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
+<span class="linenos">27</span>                <span class="p">)</span>
+<span class="linenos">28</span>                <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"b</span><span class="si">{</span><span class="n">layer_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cell_index</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">empty</span><span class="p">(</span>
+<span class="linenos">29</span>                    <span class="p">(</span><span class="n">hidden_size</span><span class="p">)</span>
+<span class="linenos">30</span>                <span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -581,8 +582,8 @@ The model is used to process input sequences and generate output logits.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">30</span>        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"W_head"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">empty</span><span class="p">((</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">vocab_size</span><span class="p">))</span>
-<span class="linenos">31</span>        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"b_head"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">empty</span><span class="p">((</span><span class="n">vocab_size</span><span class="p">))</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">31</span>        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"W_head"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">empty</span><span class="p">((</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">vocab_size</span><span class="p">))</span>
+<span class="linenos">32</span>        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"b_head"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">empty</span><span class="p">((</span><span class="n">vocab_size</span><span class="p">))</span></pre></div>
 
             </div>
         </div>
@@ -597,7 +598,7 @@ The model is used to process input sequences and generate output logits.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">32</span>        <span class="bp">self</span><span class="o">.</span><span class="n">grad</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">empty_like</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">33</span>        <span class="bp">self</span><span class="o">.</span><span class="n">grad</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">empty_like</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></pre></div>
 
             </div>
         </div>
@@ -612,7 +613,7 @@ The model is used to process input sequences and generate output logits.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">33</span>        <span class="bp">self</span><span class="o">.</span><span class="n">init_weights</span><span class="p">()</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">34</span>        <span class="bp">self</span><span class="o">.</span><span class="n">init_weights</span><span class="p">()</span></pre></div>
 
             </div>
         </div>
@@ -628,9 +629,9 @@ The <code>size</code> property of a numpy array returns the number of elements i
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">34</span>    <span class="nd">@property</span>
-<span class="linenos">35</span>    <span class="k">def</span> <span class="nf">num_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="linenos">36</span>        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">size</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">35</span>    <span class="nd">@property</span>
+<span class="linenos">36</span>    <span class="k">def</span><span class="w"> </span><span class="nf">num_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">37</span>        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">size</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></pre></div>
 
             </div>
         </div>
@@ -650,14 +651,14 @@ training. The biases are initialized to zero.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">37</span>    <span class="k">def</span> <span class="nf">init_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="linenos">38</span>        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<span class="linenos">39</span>            <span class="k">if</span> <span class="n">layer</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-<span class="linenos">40</span>                <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">zeros</span><span class="p">((</span><span class="n">layer</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-<span class="linenos">41</span>            <span class="k">elif</span> <span class="n">layer</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-<span class="linenos">42</span>                <span class="n">r</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">shape</span>
-<span class="linenos">43</span>                <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">sqrt</span><span class="p">(</span><span class="mf">6.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">c</span><span class="p">))</span>
-<span class="linenos">44</span>                <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="n">d</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">38</span>    <span class="k">def</span><span class="w"> </span><span class="nf">init_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">39</span>        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="linenos">40</span>            <span class="k">if</span> <span class="n">layer</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+<span class="linenos">41</span>                <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">zeros</span><span class="p">((</span><span class="n">layer</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="linenos">42</span>            <span class="k">elif</span> <span class="n">layer</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+<span class="linenos">43</span>                <span class="n">r</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">shape</span>
+<span class="linenos">44</span>                <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">sqrt</span><span class="p">(</span><span class="mf">6.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">c</span><span class="p">))</span>
+<span class="linenos">45</span>                <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="n">d</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span></pre></div>
 
             </div>
         </div>
@@ -672,8 +673,8 @@ training. The biases are initialized to zero.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">45</span>    <span class="k">def</span> <span class="nf">init_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">):</span>
-<span class="linenos">46</span>        <span class="n">state</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">46</span>    <span class="k">def</span><span class="w"> </span><span class="nf">init_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">):</span>
+<span class="linenos">47</span>        <span class="n">state</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span></pre></div>
 
             </div>
         </div>
@@ -688,9 +689,9 @@ training. The biases are initialized to zero.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">47</span>        <span class="n">state</span><span class="p">[</span><span class="s2">"h"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">))</span>
-<span class="linenos">48</span>        <span class="n">state</span><span class="p">[</span><span class="s2">"c"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">))</span>
-<span class="linenos">49</span>        <span class="k">return</span> <span class="n">state</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">48</span>        <span class="n">state</span><span class="p">[</span><span class="s2">"h"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">))</span>
+<span class="linenos">49</span>        <span class="n">state</span><span class="p">[</span><span class="s2">"c"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">))</span>
+<span class="linenos">50</span>        <span class="k">return</span> <span class="n">state</span></pre></div>
 
             </div>
         </div>
@@ -712,15 +713,15 @@ If False, <code>inputs</code> is used as the prefix.</li>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">50</span>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
-<span class="linenos">51</span>        <span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">teacher_forcing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">generation_length</span><span class="o">=</span><span class="mi">0</span>
-<span class="linenos">52</span>    <span class="p">):</span>
-<span class="linenos">53</span>        <span class="n">batch_sz</span><span class="p">,</span> <span class="n">seq_len</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
-<span class="linenos">54</span>
-<span class="linenos">55</span>        <span class="k">if</span> <span class="n">teacher_forcing</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-<span class="linenos">56</span>            <span class="k">assert</span> <span class="n">generation_length</span> <span class="o">==</span> <span class="mi">0</span>
-<span class="linenos">57</span>
-<span class="linenos">58</span>        <span class="n">n_timestamps</span> <span class="o">=</span> <span class="n">seq_len</span> <span class="o">+</span> <span class="n">generation_length</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">51</span>    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span>
+<span class="linenos">52</span>        <span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">teacher_forcing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">generation_length</span><span class="o">=</span><span class="mi">0</span>
+<span class="linenos">53</span>    <span class="p">):</span>
+<span class="linenos">54</span>        <span class="n">batch_sz</span><span class="p">,</span> <span class="n">seq_len</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+<span class="linenos">55</span>
+<span class="linenos">56</span>        <span class="k">if</span> <span class="n">teacher_forcing</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+<span class="linenos">57</span>            <span class="k">assert</span> <span class="n">generation_length</span> <span class="o">==</span> <span class="mi">0</span>
+<span class="linenos">58</span>
+<span class="linenos">59</span>        <span class="n">n_timestamps</span> <span class="o">=</span> <span class="n">seq_len</span> <span class="o">+</span> <span class="n">generation_length</span></pre></div>
 
             </div>
         </div>
@@ -735,7 +736,7 @@ If False, <code>inputs</code> is used as the prefix.</li>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">59</span>        <span class="n">activations</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">))</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">60</span>        <span class="n">activations</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">))</span></pre></div>
 
             </div>
         </div>
@@ -750,7 +751,7 @@ If False, <code>inputs</code> is used as the prefix.</li>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">60</span>        <span class="n">outputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">zeros</span><span class="p">((</span><span class="n">batch_sz</span><span class="p">,</span> <span class="n">n_timestamps</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vocab_size</span><span class="p">))</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">61</span>        <span class="n">outputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">zeros</span><span class="p">((</span><span class="n">batch_sz</span><span class="p">,</span> <span class="n">n_timestamps</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vocab_size</span><span class="p">))</span></pre></div>
 
             </div>
         </div>
@@ -765,12 +766,12 @@ If False, <code>inputs</code> is used as the prefix.</li>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">61</span>        <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="linenos">62</span>            <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_state</span><span class="p">(</span><span class="n">batch_sz</span><span class="p">)</span>
-<span class="linenos">63</span>        <span class="k">else</span><span class="p">:</span>
-<span class="linenos">64</span>            <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># make a shallow copy</span>
-<span class="linenos">65</span>        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"h"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]:</span>
-<span class="linenos">66</span>            <span class="n">activations</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="n">k</span><span class="p">]</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">62</span>        <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos">63</span>            <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_state</span><span class="p">(</span><span class="n">batch_sz</span><span class="p">)</span>
+<span class="linenos">64</span>        <span class="k">else</span><span class="p">:</span>
+<span class="linenos">65</span>            <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># make a shallow copy</span>
+<span class="linenos">66</span>        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"h"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]:</span>
+<span class="linenos">67</span>            <span class="n">activations</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="n">k</span><span class="p">]</span></pre></div>
 
             </div>
         </div>
@@ -785,7 +786,7 @@ If False, <code>inputs</code> is used as the prefix.</li>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">67</span>        <span class="k">for</span> <span class="n">timestep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_timestamps</span><span class="p">):</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">68</span>        <span class="k">for</span> <span class="n">timestep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_timestamps</span><span class="p">):</span></pre></div>
 
             </div>
         </div>
@@ -801,12 +802,12 @@ for the next timestep</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">68</span>            <span class="k">if</span> <span class="n">teacher_forcing</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">timestep</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
-<span class="linenos">69</span>                <span class="n">word_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">argmax</span><span class="p">(</span><span class="n">outputs</span><span class="p">[:,</span> <span class="n">timestep</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="linenos">70</span>            <span class="k">else</span><span class="p">:</span>
-<span class="linenos">71</span>                <span class="n">word_indices</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[:,</span> <span class="n">timestep</span><span class="p">]</span>
-<span class="linenos">72</span>            <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"embedding"</span><span class="p">][</span><span class="n">word_indices</span><span class="p">]</span>
-<span class="linenos">73</span>            <span class="n">activations</span><span class="p">[</span><span class="s2">"input"</span><span class="p">][</span><span class="n">timestep</span><span class="p">]</span> <span class="o">=</span> <span class="n">word_indices</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">69</span>            <span class="k">if</span> <span class="n">teacher_forcing</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">timestep</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+<span class="linenos">70</span>                <span class="n">word_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">argmax</span><span class="p">(</span><span class="n">outputs</span><span class="p">[:,</span> <span class="n">timestep</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">71</span>            <span class="k">else</span><span class="p">:</span>
+<span class="linenos">72</span>                <span class="n">word_indices</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[:,</span> <span class="n">timestep</span><span class="p">]</span>
+<span class="linenos">73</span>            <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"embedding"</span><span class="p">][</span><span class="n">word_indices</span><span class="p">]</span>
+<span class="linenos">74</span>            <span class="n">activations</span><span class="p">[</span><span class="s2">"input"</span><span class="p">][</span><span class="n">timestep</span><span class="p">]</span> <span class="o">=</span> <span class="n">word_indices</span></pre></div>
 
             </div>
         </div>
@@ -821,7 +822,7 @@ for the next timestep</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">74</span>            <span class="k">for</span> <span class="n">cell_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">):</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">75</span>            <span class="k">for</span> <span class="n">cell_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">):</span></pre></div>
 
             </div>
         </div>
@@ -836,8 +837,8 @@ for the next timestep</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">75</span>                <span class="n">h_prev</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span>
-<span class="linenos">76</span>                <span class="n">c_prev</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">76</span>                <span class="n">h_prev</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span>
+<span class="linenos">77</span>                <span class="n">c_prev</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span></pre></div>
 
             </div>
         </div>
@@ -853,7 +854,7 @@ and perform a single linear projection instead of two.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">77</span>                <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">concatenate</span><span class="p">((</span><span class="n">features</span><span class="p">,</span> <span class="n">h_prev</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">78</span>                <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">concatenate</span><span class="p">((</span><span class="n">features</span><span class="p">,</span> <span class="n">h_prev</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -876,19 +877,19 @@ o_t &amp;= \sigma(W_{io}{input}_t + b_{io} \;+\; W_{ho}h_{t-1} + b_{ho}) \\[1ex]
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">78</span>                <span class="n">f</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span>
-<span class="linenos">79</span>                    <span class="n">X</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"Wf_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
-<span class="linenos">80</span>                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"bf_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
-<span class="linenos">81</span>                <span class="p">)</span>
-<span class="linenos">82</span>                <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">f</span>
-<span class="linenos">83</span>                <span class="n">o</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span>
-<span class="linenos">84</span>                    <span class="n">X</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"Wo_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
-<span class="linenos">85</span>                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"bo_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
-<span class="linenos">86</span>                <span class="p">)</span>
-<span class="linenos">87</span>                <span class="n">c_bar</span> <span class="o">=</span> <span class="n">tanh</span><span class="p">(</span>
-<span class="linenos">88</span>                    <span class="n">X</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"Wc_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
-<span class="linenos">89</span>                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"bc_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
-<span class="linenos">90</span>                <span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">79</span>                <span class="n">f</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span>
+<span class="linenos">80</span>                    <span class="n">X</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"Wf_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
+<span class="linenos">81</span>                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"bf_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
+<span class="linenos">82</span>                <span class="p">)</span>
+<span class="linenos">83</span>                <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">f</span>
+<span class="linenos">84</span>                <span class="n">o</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span>
+<span class="linenos">85</span>                    <span class="n">X</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"Wo_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
+<span class="linenos">86</span>                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"bo_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
+<span class="linenos">87</span>                <span class="p">)</span>
+<span class="linenos">88</span>                <span class="n">c_bar</span> <span class="o">=</span> <span class="n">tanh</span><span class="p">(</span>
+<span class="linenos">89</span>                    <span class="n">X</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"Wc_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
+<span class="linenos">90</span>                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"bc_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
+<span class="linenos">91</span>                <span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -909,8 +910,8 @@ h_t &amp;= o_t \odot \tanh(C_t)
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">91</span>                <span class="n">c</span> <span class="o">=</span> <span class="n">f</span> <span class="o">*</span> <span class="n">c_prev</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">c_bar</span>
-<span class="linenos">92</span>                <span class="n">h</span> <span class="o">=</span> <span class="n">o</span> <span class="o">*</span> <span class="n">tanh</span><span class="p">(</span><span class="n">c</span><span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">92</span>                <span class="n">c</span> <span class="o">=</span> <span class="n">f</span> <span class="o">*</span> <span class="n">c_prev</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">c_bar</span>
+<span class="linenos">93</span>                <span class="n">h</span> <span class="o">=</span> <span class="n">o</span> <span class="o">*</span> <span class="n">tanh</span><span class="p">(</span><span class="n">c</span><span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -925,10 +926,10 @@ h_t &amp;= o_t \odot \tanh(C_t)
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">93</span>                <span class="k">if</span> <span class="n">cell_idx</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
-<span class="linenos">94</span>                    <span class="n">logits</span> <span class="o">=</span> <span class="n">h</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"W_head"</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"b_head"</span><span class="p">]</span>
-<span class="linenos">95</span>                    <span class="n">probs</span> <span class="o">=</span> <span class="n">softmax</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="linenos">96</span>                    <span class="n">outputs</span><span class="p">[:,</span> <span class="n">timestep</span><span class="p">]</span> <span class="o">=</span> <span class="n">probs</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">94</span>                <span class="k">if</span> <span class="n">cell_idx</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+<span class="linenos">95</span>                    <span class="n">logits</span> <span class="o">=</span> <span class="n">h</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"W_head"</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"b_head"</span><span class="p">]</span>
+<span class="linenos">96</span>                    <span class="n">probs</span> <span class="o">=</span> <span class="n">softmax</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">97</span>                    <span class="n">outputs</span><span class="p">[:,</span> <span class="n">timestep</span><span class="p">]</span> <span class="o">=</span> <span class="n">probs</span></pre></div>
 
             </div>
         </div>
@@ -943,9 +944,9 @@ h_t &amp;= o_t \odot \tanh(C_t)
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">97</span>                <span class="n">state</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
-<span class="linenos">98</span>                <span class="n">state</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span>
-<span class="linenos">99</span>                <span class="n">features</span> <span class="o">=</span> <span class="n">h</span></pre></div>
+                <div class="highlight"><pre><span class="linenos"> 98</span>                <span class="n">state</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+<span class="linenos"> 99</span>                <span class="n">state</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span>
+<span class="linenos">100</span>                <span class="n">features</span> <span class="o">=</span> <span class="n">h</span></pre></div>
 
             </div>
         </div>
@@ -960,10 +961,10 @@ h_t &amp;= o_t \odot \tanh(C_t)
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">100</span>                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-<span class="linenos">101</span>                    <span class="p">[</span><span class="s2">"x"</span><span class="p">,</span> <span class="s2">"f"</span><span class="p">,</span> <span class="s2">"o"</span><span class="p">,</span> <span class="s2">"c_bar"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">,</span> <span class="s2">"h"</span><span class="p">],</span> <span class="p">[</span><span class="n">X</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">c_bar</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span>
-<span class="linenos">102</span>                <span class="p">):</span>
-<span class="linenos">103</span>                    <span class="n">activations</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">timestep</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">101</span>                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+<span class="linenos">102</span>                    <span class="p">[</span><span class="s2">"x"</span><span class="p">,</span> <span class="s2">"f"</span><span class="p">,</span> <span class="s2">"o"</span><span class="p">,</span> <span class="s2">"c_bar"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">,</span> <span class="s2">"h"</span><span class="p">],</span> <span class="p">[</span><span class="n">X</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">c_bar</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span>
+<span class="linenos">103</span>                <span class="p">):</span>
+<span class="linenos">104</span>                    <span class="n">activations</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">timestep</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -977,7 +978,7 @@ h_t &amp;= o_t \odot \tanh(C_t)
                 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">104</span>        <span class="k">return</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">activations</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">105</span>        <span class="k">return</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">activations</span></pre></div>
 
             </div>
         </div>
@@ -993,7 +994,7 @@ This enables <code>model(inputs)</code> \(\equiv\) <code>model.forward(inputs)</
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">105</span>    <span class="fm">__call__</span> <span class="o">=</span> <span class="n">forward</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">106</span>    <span class="fm">__call__</span> <span class="o">=</span> <span class="n">forward</span></pre></div>
 
             </div>
         </div>
@@ -1012,8 +1013,8 @@ This enables <code>model(inputs)</code> \(\equiv\) <code>model.forward(inputs)</
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">106</span>    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">activations</span><span class="p">):</span>
-<span class="linenos">107</span>        <span class="n">batch_sz</span><span class="p">,</span> <span class="n">seq_len</span> <span class="o">=</span> <span class="n">grad</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">107</span>    <span class="k">def</span><span class="w"> </span><span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">activations</span><span class="p">):</span>
+<span class="linenos">108</span>        <span class="n">batch_sz</span><span class="p">,</span> <span class="n">seq_len</span> <span class="o">=</span> <span class="n">grad</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span></pre></div>
 
             </div>
         </div>
@@ -1024,14 +1025,14 @@ This enables <code>model(inputs)</code> \(\equiv\) <code>model.forward(inputs)</
                 <div class="section-link">
                     <a href="#lstm-33">#</a>
                 </div>
-                <p>Intialize the gradients of the next timestep to zeros. This will be updated as we move backward in time.</p>
+                <p>Initialize the gradients of the next timestep to zeros. This will be updated as we move backward in time.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">108</span>        <span class="n">grad_next</span> <span class="o">=</span> <span class="p">{</span>
-<span class="linenos">109</span>            <span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">,</span> <span class="n">batch_sz</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">))</span>
-<span class="linenos">110</span>            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"h"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]</span>
-<span class="linenos">111</span>        <span class="p">}</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">109</span>        <span class="n">grad_next</span> <span class="o">=</span> <span class="p">{</span>
+<span class="linenos">110</span>            <span class="n">k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">,</span> <span class="n">batch_sz</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">))</span>
+<span class="linenos">111</span>            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"h"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]</span>
+<span class="linenos">112</span>        <span class="p">}</span></pre></div>
 
             </div>
         </div>
@@ -1052,8 +1053,8 @@ The gradients are computed with respect to the input, weights, and biases respec
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">112</span>        <span class="k">def</span> <span class="nf">_lin_grad</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">dY</span><span class="p">):</span>
-<span class="linenos">113</span>            <span class="k">return</span> <span class="p">(</span><span class="n">dY</span> <span class="o">@</span> <span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">dY</span><span class="p">,</span> <span class="n">dY</span><span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">113</span>        <span class="k">def</span><span class="w"> </span><span class="nf">_lin_grad</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">dY</span><span class="p">):</span>
+<span class="linenos">114</span>            <span class="k">return</span> <span class="p">(</span><span class="n">dY</span> <span class="o">@</span> <span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">dY</span><span class="p">,</span> <span class="n">dY</span><span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -1068,7 +1069,7 @@ The gradients are computed with respect to the input, weights, and biases respec
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">114</span>        <span class="k">for</span> <span class="n">timestep</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">seq_len</span><span class="p">)):</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">115</span>        <span class="k">for</span> <span class="n">timestep</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">seq_len</span><span class="p">)):</span></pre></div>
 
             </div>
         </div>
@@ -1083,8 +1084,8 @@ The gradients are computed with respect to the input, weights, and biases respec
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">115</span>            <span class="n">dout_t</span> <span class="o">=</span> <span class="n">grad</span><span class="p">[:,</span> <span class="n">timestep</span><span class="p">]</span>
-<span class="linenos">116</span>            <span class="n">h_t</span> <span class="o">=</span> <span class="n">activations</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">timestep</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">116</span>            <span class="n">dout_t</span> <span class="o">=</span> <span class="n">grad</span><span class="p">[:,</span> <span class="n">timestep</span><span class="p">]</span>
+<span class="linenos">117</span>            <span class="n">h_t</span> <span class="o">=</span> <span class="n">activations</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">timestep</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></pre></div>
 
             </div>
         </div>
@@ -1099,11 +1100,11 @@ The gradients are computed with respect to the input, weights, and biases respec
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">117</span>            <span class="n">dh_t</span><span class="p">,</span> <span class="n">dW_head</span><span class="p">,</span> <span class="n">db_head</span> <span class="o">=</span> <span class="n">_lin_grad</span><span class="p">(</span>
-<span class="linenos">118</span>                <span class="n">X</span><span class="o">=</span><span class="n">h_t</span><span class="p">,</span> <span class="n">W</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"W_head"</span><span class="p">],</span> <span class="n">dY</span><span class="o">=</span><span class="n">dout_t</span>
-<span class="linenos">119</span>            <span class="p">)</span>
-<span class="linenos">120</span>            <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="sa">f</span><span class="s2">"W_head"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dW_head</span>
-<span class="linenos">121</span>            <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="sa">f</span><span class="s2">"b_head"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="kp">sum</span><span class="p">(</span><span class="n">db_head</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">118</span>            <span class="n">dh_t</span><span class="p">,</span> <span class="n">dW_head</span><span class="p">,</span> <span class="n">db_head</span> <span class="o">=</span> <span class="n">_lin_grad</span><span class="p">(</span>
+<span class="linenos">119</span>                <span class="n">X</span><span class="o">=</span><span class="n">h_t</span><span class="p">,</span> <span class="n">W</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"W_head"</span><span class="p">],</span> <span class="n">dY</span><span class="o">=</span><span class="n">dout_t</span>
+<span class="linenos">120</span>            <span class="p">)</span>
+<span class="linenos">121</span>            <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="sa">f</span><span class="s2">"W_head"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dW_head</span>
+<span class="linenos">122</span>            <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="sa">f</span><span class="s2">"b_head"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="kp">sum</span><span class="p">(</span><span class="n">db_head</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -1118,7 +1119,7 @@ The gradients are computed with respect to the input, weights, and biases respec
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">122</span>            <span class="k">for</span> <span class="n">cell_idx</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">)):</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">123</span>            <span class="k">for</span> <span class="n">cell_idx</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">)):</span></pre></div>
 
             </div>
         </div>
@@ -1133,11 +1134,11 @@ The gradients are computed with respect to the input, weights, and biases respec
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">123</span>                <span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">c_bar</span><span class="p">,</span> <span class="n">c_t</span> <span class="o">=</span> <span class="p">(</span>
-<span class="linenos">124</span>                    <span class="n">activations</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">timestep</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span>
-<span class="linenos">125</span>                    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"x"</span><span class="p">,</span> <span class="s2">"f"</span><span class="p">,</span> <span class="s2">"o"</span><span class="p">,</span> <span class="s2">"c_bar"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]</span>
-<span class="linenos">126</span>                <span class="p">)</span>
-<span class="linenos">127</span>                <span class="n">c_p</span> <span class="o">=</span> <span class="n">activations</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">timestep</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">124</span>                <span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">c_bar</span><span class="p">,</span> <span class="n">c_t</span> <span class="o">=</span> <span class="p">(</span>
+<span class="linenos">125</span>                    <span class="n">activations</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">timestep</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span>
+<span class="linenos">126</span>                    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"x"</span><span class="p">,</span> <span class="s2">"f"</span><span class="p">,</span> <span class="s2">"o"</span><span class="p">,</span> <span class="s2">"c_bar"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]</span>
+<span class="linenos">127</span>                <span class="p">)</span>
+<span class="linenos">128</span>                <span class="n">c_p</span> <span class="o">=</span> <span class="n">activations</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">timestep</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span></pre></div>
 
             </div>
         </div>
@@ -1153,8 +1154,8 @@ the gradients from the next cell and the next timestep.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">128</span>                <span class="n">dh_t</span> <span class="o">+=</span> <span class="n">grad_next</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span>
-<span class="linenos">129</span>                <span class="n">dc_t</span> <span class="o">=</span> <span class="n">grad_next</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">129</span>                <span class="n">dh_t</span> <span class="o">+=</span> <span class="n">grad_next</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span>
+<span class="linenos">130</span>                <span class="n">dc_t</span> <span class="o">=</span> <span class="n">grad_next</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span></pre></div>
 
             </div>
         </div>
@@ -1169,8 +1170,8 @@ the gradients from the next cell and the next timestep.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">130</span>                <span class="n">do</span> <span class="o">=</span> <span class="n">dh_t</span> <span class="o">*</span> <span class="n">tanh</span><span class="p">(</span><span class="n">c_t</span><span class="p">)</span>
-<span class="linenos">131</span>                <span class="n">dc_t</span> <span class="o">=</span> <span class="n">dh_t</span> <span class="o">*</span> <span class="n">o</span> <span class="o">*</span> <span class="n">tanh</span><span class="p">(</span><span class="n">c_t</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">131</span>                <span class="n">do</span> <span class="o">=</span> <span class="n">dh_t</span> <span class="o">*</span> <span class="n">tanh</span><span class="p">(</span><span class="n">c_t</span><span class="p">)</span>
+<span class="linenos">132</span>                <span class="n">dc_t</span> <span class="o">=</span> <span class="n">dh_t</span> <span class="o">*</span> <span class="n">o</span> <span class="o">*</span> <span class="n">tanh</span><span class="p">(</span><span class="n">c_t</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -1185,9 +1186,9 @@ the gradients from the next cell and the next timestep.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">132</span>                <span class="n">df</span> <span class="o">=</span> <span class="n">dc_t</span> <span class="o">*</span> <span class="p">(</span><span class="n">c_p</span> <span class="o">-</span> <span class="n">c_bar</span><span class="p">)</span>
-<span class="linenos">133</span>                <span class="n">dc_p</span> <span class="o">=</span> <span class="n">dc_t</span> <span class="o">*</span> <span class="n">f</span>
-<span class="linenos">134</span>                <span class="n">dc_bar</span> <span class="o">=</span> <span class="n">dc_t</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">f</span><span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">133</span>                <span class="n">df</span> <span class="o">=</span> <span class="n">dc_t</span> <span class="o">*</span> <span class="p">(</span><span class="n">c_p</span> <span class="o">-</span> <span class="n">c_bar</span><span class="p">)</span>
+<span class="linenos">134</span>                <span class="n">dc_p</span> <span class="o">=</span> <span class="n">dc_t</span> <span class="o">*</span> <span class="n">f</span>
+<span class="linenos">135</span>                <span class="n">dc_bar</span> <span class="o">=</span> <span class="n">dc_t</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">f</span><span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -1202,9 +1203,9 @@ the gradients from the next cell and the next timestep.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">135</span>                <span class="n">dc_bar</span> <span class="o">*=</span> <span class="n">tanh</span><span class="p">(</span><span class="n">c_bar</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="linenos">136</span>                <span class="n">do</span> <span class="o">*=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="linenos">137</span>                <span class="n">df</span> <span class="o">*=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">136</span>                <span class="n">dc_bar</span> <span class="o">*=</span> <span class="n">tanh</span><span class="p">(</span><span class="n">c_bar</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos">137</span>                <span class="n">do</span> <span class="o">*=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos">138</span>                <span class="n">df</span> <span class="o">*=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -1220,17 +1221,17 @@ Since all the gates are linear operations, the calculation will be similar</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">138</span>                <span class="n">dinp</span><span class="p">,</span> <span class="n">dh_prev</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
-<span class="linenos">139</span>                <span class="k">for</span> <span class="n">gate</span><span class="p">,</span> <span class="n">doutput</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s2">"f"</span><span class="p">,</span> <span class="s2">"o"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">],</span> <span class="p">[</span><span class="n">df</span><span class="p">,</span> <span class="n">do</span><span class="p">,</span> <span class="n">dc_bar</span><span class="p">]):</span>
-<span class="linenos">140</span>                    <span class="n">dX</span><span class="p">,</span> <span class="n">dW</span><span class="p">,</span> <span class="n">db</span> <span class="o">=</span> <span class="n">_lin_grad</span><span class="p">(</span>
-<span class="linenos">141</span>                        <span class="n">X</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">W</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"W</span><span class="si">{</span><span class="n">gate</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">],</span> <span class="n">dY</span><span class="o">=</span><span class="n">doutput</span>
-<span class="linenos">142</span>                    <span class="p">)</span>
-<span class="linenos">143</span>                    <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="sa">f</span><span class="s2">"W</span><span class="si">{</span><span class="n">gate</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dW</span>
-<span class="linenos">144</span>                    <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="sa">f</span><span class="s2">"b</span><span class="si">{</span><span class="n">gate</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="kp">sum</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="linenos">145</span>                    <span class="n">dinp_gate</span><span class="p">,</span> <span class="n">dh_prev_gate</span> <span class="o">=</span> <span class="p">(</span>
-<span class="linenos">146</span>                        <span class="n">dX</span><span class="p">[:,</span> <span class="p">:</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">],</span>
-<span class="linenos">147</span>                        <span class="n">dX</span><span class="p">[:,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span> <span class="p">:],</span>
-<span class="linenos">148</span>                    <span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">139</span>                <span class="n">dinp</span><span class="p">,</span> <span class="n">dh_prev</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+<span class="linenos">140</span>                <span class="k">for</span> <span class="n">gate</span><span class="p">,</span> <span class="n">doutput</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s2">"f"</span><span class="p">,</span> <span class="s2">"o"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">],</span> <span class="p">[</span><span class="n">df</span><span class="p">,</span> <span class="n">do</span><span class="p">,</span> <span class="n">dc_bar</span><span class="p">]):</span>
+<span class="linenos">141</span>                    <span class="n">dX</span><span class="p">,</span> <span class="n">dW</span><span class="p">,</span> <span class="n">db</span> <span class="o">=</span> <span class="n">_lin_grad</span><span class="p">(</span>
+<span class="linenos">142</span>                        <span class="n">X</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">W</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="sa">f</span><span class="s2">"W</span><span class="si">{</span><span class="n">gate</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">],</span> <span class="n">dY</span><span class="o">=</span><span class="n">doutput</span>
+<span class="linenos">143</span>                    <span class="p">)</span>
+<span class="linenos">144</span>                    <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="sa">f</span><span class="s2">"W</span><span class="si">{</span><span class="n">gate</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dW</span>
+<span class="linenos">145</span>                    <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="sa">f</span><span class="s2">"b</span><span class="si">{</span><span class="n">gate</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cell_idx</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="kp">sum</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="linenos">146</span>                    <span class="n">dinp_gate</span><span class="p">,</span> <span class="n">dh_prev_gate</span> <span class="o">=</span> <span class="p">(</span>
+<span class="linenos">147</span>                        <span class="n">dX</span><span class="p">[:,</span> <span class="p">:</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">],</span>
+<span class="linenos">148</span>                        <span class="n">dX</span><span class="p">[:,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span> <span class="p">:],</span>
+<span class="linenos">149</span>                    <span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -1246,8 +1247,8 @@ since they are shared between the gates</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">149</span>                    <span class="n">dinp</span> <span class="o">+=</span> <span class="n">dinp_gate</span>
-<span class="linenos">150</span>                    <span class="n">dh_prev</span> <span class="o">+=</span> <span class="n">dh_prev_gate</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">150</span>                    <span class="n">dinp</span> <span class="o">+=</span> <span class="n">dinp_gate</span>
+<span class="linenos">151</span>                    <span class="n">dh_prev</span> <span class="o">+=</span> <span class="n">dh_prev_gate</span></pre></div>
 
             </div>
         </div>
@@ -1262,9 +1263,9 @@ since they are shared between the gates</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">151</span>                <span class="n">dh_t</span> <span class="o">=</span> <span class="n">dinp</span>
-<span class="linenos">152</span>                <span class="n">grad_next</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">dc_p</span>
-<span class="linenos">153</span>                <span class="n">grad_next</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">dh_prev</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">152</span>                <span class="n">dh_t</span> <span class="o">=</span> <span class="n">dinp</span>
+<span class="linenos">153</span>                <span class="n">grad_next</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">dc_p</span>
+<span class="linenos">154</span>                <span class="n">grad_next</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">dh_prev</span></pre></div>
 
             </div>
         </div>
@@ -1279,8 +1280,8 @@ since they are shared between the gates</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">154</span>            <span class="n">word_indices</span> <span class="o">=</span> <span class="n">activations</span><span class="p">[</span><span class="s2">"input"</span><span class="p">][</span><span class="n">timestep</span><span class="p">]</span>
-<span class="linenos">155</span>            <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="s2">"embedding"</span><span class="p">][</span><span class="n">word_indices</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dinp</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">155</span>            <span class="n">word_indices</span> <span class="o">=</span> <span class="n">activations</span><span class="p">[</span><span class="s2">"input"</span><span class="p">][</span><span class="n">timestep</span><span class="p">]</span>
+<span class="linenos">156</span>            <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="s2">"embedding"</span><span class="p">][</span><span class="n">word_indices</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dinp</span></pre></div>
 
             </div>
         </div>
@@ -1297,18 +1298,18 @@ It can be used to save and load the model.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">156</span>    <span class="nd">@property</span>
-<span class="linenos">157</span>    <span class="k">def</span> <span class="nf">state_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="linenos">158</span>        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
-<span class="linenos">159</span>            <span class="n">config</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-<span class="linenos">160</span>                <span class="n">embed_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">embed_size</span><span class="p">,</span>
-<span class="linenos">161</span>                <span class="n">hidden_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
-<span class="linenos">162</span>                <span class="n">vocab_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vocab_size</span><span class="p">,</span>
-<span class="linenos">163</span>                <span class="n">n_cells</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">,</span>
-<span class="linenos">164</span>            <span class="p">),</span>
-<span class="linenos">165</span>            <span class="n">weights</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">),</span>
-<span class="linenos">166</span>            <span class="n">grad</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">),</span>
-<span class="linenos">167</span>        <span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">157</span>    <span class="nd">@property</span>
+<span class="linenos">158</span>    <span class="k">def</span><span class="w"> </span><span class="nf">state_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">159</span>        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+<span class="linenos">160</span>            <span class="n">config</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+<span class="linenos">161</span>                <span class="n">embed_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">embed_size</span><span class="p">,</span>
+<span class="linenos">162</span>                <span class="n">hidden_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
+<span class="linenos">163</span>                <span class="n">vocab_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vocab_size</span><span class="p">,</span>
+<span class="linenos">164</span>                <span class="n">n_cells</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">,</span>
+<span class="linenos">165</span>            <span class="p">),</span>
+<span class="linenos">166</span>            <span class="n">weights</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">),</span>
+<span class="linenos">167</span>            <span class="n">grad</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">),</span>
+<span class="linenos">168</span>        <span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -1322,16 +1323,16 @@ It can be used to save and load the model.</p>
                 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">168</span>    <span class="nd">@classmethod</span>
-<span class="linenos">169</span>    <span class="k">def</span> <span class="nf">from_state_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">state_dict</span><span class="p">):</span>
-<span class="linenos">170</span>        <span class="n">obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">state_dict</span><span class="p">[</span><span class="s2">"config"</span><span class="p">])</span>
-<span class="linenos">171</span>        <span class="k">for</span> <span class="n">src</span><span class="p">,</span> <span class="n">tgt</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-<span class="linenos">172</span>            <span class="p">[</span><span class="n">state_dict</span><span class="p">[</span><span class="s2">"weights"</span><span class="p">],</span> <span class="n">state_dict</span><span class="p">[</span><span class="s2">"grad"</span><span class="p">]],</span>
-<span class="linenos">173</span>            <span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">layers</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">grad</span><span class="p">],</span>
-<span class="linenos">174</span>        <span class="p">):</span>
-<span class="linenos">175</span>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">src</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<span class="linenos">176</span>                <span class="n">tgt</span><span class="p">[</span><span class="n">k</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">v</span>
-<span class="linenos">177</span>        <span class="k">return</span> <span class="n">obj</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">169</span>    <span class="nd">@classmethod</span>
+<span class="linenos">170</span>    <span class="k">def</span><span class="w"> </span><span class="nf">from_state_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">state_dict</span><span class="p">):</span>
+<span class="linenos">171</span>        <span class="n">obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">state_dict</span><span class="p">[</span><span class="s2">"config"</span><span class="p">])</span>
+<span class="linenos">172</span>        <span class="k">for</span> <span class="n">src</span><span class="p">,</span> <span class="n">tgt</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+<span class="linenos">173</span>            <span class="p">[</span><span class="n">state_dict</span><span class="p">[</span><span class="s2">"weights"</span><span class="p">],</span> <span class="n">state_dict</span><span class="p">[</span><span class="s2">"grad"</span><span class="p">]],</span>
+<span class="linenos">174</span>            <span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">layers</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">grad</span><span class="p">],</span>
+<span class="linenos">175</span>        <span class="p">):</span>
+<span class="linenos">176</span>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">src</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="linenos">177</span>                <span class="n">tgt</span><span class="p">[</span><span class="n">k</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">v</span>
+<span class="linenos">178</span>        <span class="k">return</span> <span class="n">obj</span></pre></div>
 
             </div>
         </div>
@@ -1373,10 +1374,10 @@ $$\frac{\partial \sigma(z)}{\partial z} = \sigma(z) * (1 - \sigma(z))= x(1-x)$$.
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">1</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+                <div class="highlight"><pre><span class="linenos">1</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="linenos">2</span>
 <span class="linenos">3</span>
-<span class="linenos">4</span><span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="linenos">4</span><span class="k">def</span><span class="w"> </span><span class="nf">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="linenos">5</span>    <span class="k">if</span> <span class="ow">not</span> <span class="n">grad</span><span class="p">:</span>
 <span class="linenos">6</span>        <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="kp">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
 <span class="linenos">7</span>    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span></pre></div>
@@ -1396,7 +1397,7 @@ $$\tanh(x) = \frac{e^{x} - e^{-x}}{e^{x} + e^{-x}}$$</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos"> 8</span><span class="k">def</span> <span class="nf">tanh</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                <div class="highlight"><pre><span class="linenos"> 8</span><span class="k">def</span><span class="w"> </span><span class="nf">tanh</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="linenos"> 9</span>    <span class="k">if</span> <span class="ow">not</span> <span class="n">grad</span><span class="p">:</span>
 <span class="linenos">10</span>        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="kp">tanh</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="linenos">11</span>    <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span></pre></div>
@@ -1418,7 +1419,7 @@ $$\text{softmax}(x_i) = \frac{e^{x_i}}{\sum_{j} e^{x_j}}$$</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">12</span><span class="k">def</span> <span class="nf">softmax</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="p">):</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">12</span><span class="k">def</span><span class="w"> </span><span class="nf">softmax</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="p">):</span></pre></div>
 
             </div>
         </div>
@@ -1455,7 +1456,7 @@ $$H(y, p) = -\sum_{i} y_i \log(p_i)$$</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">15</span><span class="k">def</span> <span class="nf">cross_entropy</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s2">"mean"</span><span class="p">):</span>
+                <div class="highlight"><pre><span class="linenos">15</span><span class="k">def</span><span class="w"> </span><span class="nf">cross_entropy</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s2">"mean"</span><span class="p">):</span>
 <span class="linenos">16</span>    <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">finfo</span><span class="p">(</span><span class="n">prediction</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
 <span class="linenos">17</span>    <span class="n">prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">clip</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">eps</span><span class="p">)</span></pre></div>
 
@@ -1520,7 +1521,7 @@ $$H(y, p) = -\sum_{i} y_i \log(p_i)$$</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">1</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">1</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span></pre></div>
 
             </div>
         </div>
@@ -1534,7 +1535,7 @@ $$H(y, p) = -\sum_{i} y_i \log(p_i)$$</p>
                 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">2</span><span class="k">class</span> <span class="nc">AdamW</span><span class="p">:</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">2</span><span class="k">class</span><span class="w"> </span><span class="nc">AdamW</span><span class="p">:</span></pre></div>
 
             </div>
         </div>
@@ -1559,7 +1560,7 @@ $$H(y, p) = -\sum_{i} y_i \log(p_i)$$</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos"> 3</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+                <div class="highlight"><pre><span class="linenos"> 3</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
 <span class="linenos"> 4</span>        <span class="bp">self</span><span class="p">,</span>
 <span class="linenos"> 5</span>        <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
 <span class="linenos"> 6</span>        <span class="n">grads</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
@@ -1655,7 +1656,7 @@ gradients in the training loop.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">28</span>    <span class="k">def</span> <span class="nf">zero_grad</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <div class="highlight"><pre><span class="linenos">28</span>    <span class="k">def</span><span class="w"> </span><span class="nf">zero_grad</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="linenos">29</span>        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grads</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
 <span class="linenos">30</span>            <span class="n">v</span><span class="p">[:]</span> <span class="o">=</span> <span class="mi">0</span></pre></div>
 
@@ -1674,7 +1675,7 @@ includes bias correction, optional AMSGrad, and weight decay.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">31</span>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">31</span>    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
 
             </div>
         </div>
@@ -1898,7 +1899,7 @@ where \(p_{t-1}\) is the previous parameter value.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">1</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">1</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span></pre></div>
 
             </div>
         </div>
@@ -1929,7 +1930,7 @@ The task is to predict each character in \(y_i\) given the corresponding prefix 
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">2</span><span class="k">class</span> <span class="nc">NextCharDataset</span><span class="p">:</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">2</span><span class="k">class</span><span class="w"> </span><span class="nc">NextCharDataset</span><span class="p">:</span></pre></div>
 
             </div>
         </div>
@@ -1943,7 +1944,7 @@ The task is to predict each character in \(y_i\) given the corresponding prefix 
                 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">3</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">):</span>
+                <div class="highlight"><pre><span class="linenos">3</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">):</span>
 <span class="linenos">4</span>        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></pre></div>
 
             </div>
@@ -1975,7 +1976,7 @@ The task is to predict each character in \(y_i\) given the corresponding prefix 
                 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">8</span>    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <div class="highlight"><pre><span class="linenos">8</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="linenos">9</span>        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_view</span><span class="p">)</span></pre></div>
 
             </div>
@@ -1992,7 +1993,7 @@ The task is to predict each character in \(y_i\) given the corresponding prefix 
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">10</span>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+                <div class="highlight"><pre><span class="linenos">10</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
 <span class="linenos">11</span>        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">window_view</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">window_view</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">:]</span>
 <span class="linenos">12</span>        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span></pre></div>
 
@@ -2010,7 +2011,7 @@ The task is to predict each character in \(y_i\) given the corresponding prefix 
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">13</span><span class="k">class</span> <span class="nc">DataLoader</span><span class="p">:</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">13</span><span class="k">class</span><span class="w"> </span><span class="nc">DataLoader</span><span class="p">:</span></pre></div>
 
             </div>
         </div>
@@ -2024,7 +2025,7 @@ The task is to predict each character in \(y_i\) given the corresponding prefix 
                 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">14</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">drop_last</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                <div class="highlight"><pre><span class="linenos">14</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">drop_last</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="linenos">15</span>        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span>
 <span class="linenos">16</span>        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
 <span class="linenos">17</span>        <span class="bp">self</span><span class="o">.</span><span class="n">shuffle</span> <span class="o">=</span> <span class="n">shuffle</span>
@@ -2048,7 +2049,7 @@ used in a <code>for</code> loop to iterate over the dataset. e.g.:</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">19</span>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <div class="highlight"><pre><span class="linenos">19</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="linenos">20</span>        <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">))</span>
 <span class="linenos">21</span>
 <span class="linenos">22</span>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shuffle</span><span class="p">:</span>
@@ -2076,13 +2077,13 @@ used in a <code>for</code> loop to iterate over the dataset. e.g.:</p>
                 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">34</span>    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <div class="highlight"><pre><span class="linenos">34</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="linenos">35</span>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">drop_last</span><span class="p">:</span>
 <span class="linenos">36</span>            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span>
 <span class="linenos">37</span>        <span class="k">else</span><span class="p">:</span>
 <span class="linenos">38</span>            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="kp">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 <span class="linenos">39</span>
-<span class="linenos">40</span>    <span class="k">def</span> <span class="nf">collate_fn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
+<span class="linenos">40</span>    <span class="k">def</span><span class="w"> </span><span class="nf">collate_fn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
 <span class="linenos">41</span>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
 <span class="linenos">42</span>            <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="kp">array</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span> <span class="k">for</span> <span class="n">samples</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">batch</span><span class="p">)]</span>
 <span class="linenos">43</span>        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>

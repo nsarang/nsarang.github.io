@@ -256,12 +256,12 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <!-- Writing a personal introduction -->
 <section id="introduction" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
-<p>Recently I came across a few cool projects that allow running LLMs (large language models) in the browser and utilize GPU for fast inference! This is exciting for two main reasons: first, it’s great to run LLMs locally without sending your data to any external server. You can use custom prompts, configure the inference the way you want, and ensure your privacy. Second, you don’t have to deal with setting up Python environments, installing dependencies, and configuring the GPU. The browser takes care of all that! It’s incredibly convenient. With the release of smaller Llama 3.2 models, like the 1B parameter version, it’s now possible to generate quality text directly in your browser, perhaps even matching ChatGPT 3.5 on some tasks.</p>
+<p>Recently I came across a few cool projects that allow running LLMs (large language models) in the browser and utilize GPUs for fast inference! This is exciting for two main reasons: first, it’s great to run LLMs locally without sending your data to any external server. You can use custom prompts, configure inference the way you want, and ensure your privacy. Second, you don’t have to deal with setting up Python environments, installing dependencies, and configuring the GPU. The browser takes care of all that! It’s incredibly convenient. With the release of smaller Llama 3.2 models, like the 1B parameter version, it’s now possible to generate quality text directly in your browser, perhaps even matching ChatGPT 3.5 on some tasks.</p>
 <p>The chat UI below will allow you to download a number of models hosted on HuggingFace, including Llama and Qwen variants. Once you download the model you can disconnect and continue chatting offline. I’ve tried adding a bunch of customizations to play around, but the UI is meant more as a demonstration to showcase the potential of a web UI.</p>
 </section>
 <section id="chat-ui" class="level1 page-columns page-full" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Chat UI</h1>
-<p>Your browser must support WebGPU for a fast inference experience. You can find the list of supported browsers <a href="https://caniuse.com/webgpu">here</a>. I personally tested it on Apple M1-M3 and Nvidia GPUs, and it worked quite well. If WebGPU is not supported, the engine will fall back to WebAssembly, which is slower but still functional.</p>
+<p>Your browser must support WebGPU for a fast inference. You can find the list of supported browsers <a href="https://caniuse.com/webgpu">here</a>. I personally tested it on Apple M1-M3 and Nvidia GPUs, and it worked quite well. If WebGPU is not supported, the engine will fall back on WebAssembly, which is slower but still functional.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -278,7 +278,7 @@ For more info, visit <a href="https://webgpureport.org/">https://webgpureport.or
 </div>
 </div>
 <p><br></p>
-<p>Models that are worth trying:</p>
+<p>Here are some models worth trying:</p>
 <ul>
 <li><p><strong>Llama 3.2</strong>: Operates approximately three times faster than comparable models, making it suitable for tasks requiring quick responses.</p></li>
 <li><p><strong>DeepSeek R1</strong>: Excels in reasoning, mathematics, and coding tasks, comparable to top proprietary models.</p></li>
@@ -316,7 +316,7 @@ For more info, visit <a href="https://webgpureport.org/">https://webgpureport.or
       "></span>
       </label>
       <select id="model-selection"></select>
-      <span class="model-info-text">First download may take a little bit. Subsequent loads will read from cache.</span>
+      <span class="model-info-text">The first download may take a little bit. Subsequent loads will read from cache.</span>
       <div id="model-info" class="status-update">
         <span class="icon hidden"></span>
         <span class="text"></span>
@@ -333,7 +333,7 @@ For more info, visit <a href="https://webgpureport.org/">https://webgpureport.or
 
     <div class="setting prompt-setting">
       <label>System Prompt
-        <span class="info-icon" data-tooltip="Configure the base personality and behavior of the AI assistant. This prompt sets the foundation for how the model will respond to your queries."></span>
+        <span class="info-icon" data-tooltip="You can configure the base personality and behavior of the AI assistant. This prompt sets the foundation for how the model will respond to your queries."></span>
       </label>
       <button id="configure-prompt" class="configure-button">
         <span class="button-icon"></span>
@@ -501,7 +501,7 @@ const streamingGenerating = async (messages, onUpdate, onFinish, onError) =&gt; 
 </section>
 <section id="final-thoughts" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Final Thoughts</h1>
-<p>As of writing this I can WebLLM is the fastest library to run chat LLMs over web. For other tasks like speech to text, image generation, etc., you can look into using the combination of <a href="https://huggingface.co/docs/transformers.js/en/index">Transformers.js</a> and <a href="https://onnxruntime.ai/docs/tutorials/web/">ONNX Runtime Web</a>, or only ONNX Runtime Web alone if you’re looking for a more general-purpose solution.If you have any questions or feedback, feel free to leave a comment below.</p>
+<p>As of writing this I can say WebLLM is the fastest library to run chat LLMs over the web. For other tasks like speech to text, image generation, etc., you can look into using the combination of <a href="https://huggingface.co/docs/transformers.js/en/index">Transformers.js</a> and <a href="https://onnxruntime.ai/docs/tutorials/web/">ONNX Runtime Web</a>, or only ONNX Runtime Web alone if you’re looking for a more general-purpose solution. If you have any questions or feedback, you can leave a comment below.</p>
 </section>
 <section id="change-log" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> Change Log</h1>

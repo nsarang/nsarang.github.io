@@ -363,7 +363,7 @@ window.Quarto = {
 </style>
 <section id="introduction" class="level2" data-number="1">
 <h2 data-number="1" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
-<p>As a data scientist, I’ve often found myself pushing the boundaries of popular gradient boosting frameworks. Recently I’ve been exploring the implementation of custom loss functions in LightGBM and CatBoost, two powerful tools in learning from tabular data. These frameworks offer a wide range of built-in loss functions, but sometimes you need to optimize for a specific metric or tackle a unique problem that requires a custom loss.</p>
+<p>As a data scientist, I’ve often found myself pushing the boundaries of popular gradient boosting frameworks. Recently I’ve been exploring the implementation of custom loss functions in LightGBM and CatBoost, two powerful tools for learning from tabular data. These frameworks offer a wide range of built-in loss functions, but sometimes you need to optimize for a specific metric or tackle a unique problem that requires a custom loss.</p>
 <p>In this blog post, I’ll walk through the process of creating custom loss functions, using Mean Squared Error (MSE) and Mean Squared Logarithmic Error (MSLE) as practical examples. We’ll start by deriving the gradients and Hessians for these functions, to provide the mathematical foundation for our implementations. Then we’ll move on to the code, showing how to integrate these custom losses into LightGBM and CatBoost. Each of these frameworks has its own API for custom losses, so we’ll cover the specifics for each one separately.</p>
 </section>
 <section id="lightgbm" class="level2" data-number="2">
@@ -371,7 +371,7 @@ window.Quarto = {
 <section id="interface" class="level3" data-number="2.1">
 <h3 data-number="2.1" data-anchor-id="interface"><span class="header-section-number">2.1</span> Interface</h3>
 <p>The loss function and the evaluation metric must have the following structure:</p>
-<div id="cell-10" class="cell" data-execution_count="22">
+<div id="cell-10" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -397,7 +397,7 @@ window.Quarto = {
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">1</span><span class="k">def</span> <span class="nf">lgbm_objective_function</span><span class="p">(</span>
+                <div class="highlight"><pre><span class="linenos">1</span><span class="k">def</span><span class="w"> </span><span class="nf">lgbm_objective_function</span><span class="p">(</span>
 <span class="linenos">2</span>    <span class="n">target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
 <span class="linenos">3</span>    <span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
 <span class="linenos">4</span>    <span class="n">weight</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -429,7 +429,7 @@ window.Quarto = {
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos"> 9</span><span class="k">def</span> <span class="nf">lgbm_evaluation_metric</span><span class="p">(</span>
+                <div class="highlight"><pre><span class="linenos"> 9</span><span class="k">def</span><span class="w"> </span><span class="nf">lgbm_evaluation_metric</span><span class="p">(</span>
 <span class="linenos">10</span>    <span class="n">target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
 <span class="linenos">11</span>    <span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
 <span class="linenos">12</span>    <span class="n">weight</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -456,17 +456,17 @@ window.Quarto = {
 <p>The gradient for sample <span class="math inline">\(i\)</span>, ignoring the constant factor of <span class="math inline">\(\frac{1}{|\mathcal{D}|}\)</span>, is: <span id="eq-mse-gradient"><span class="math display">\[
 \frac{\partial}{\partial p_i} \text{MSE}(y, p) \;=\; \frac{\partial}{\partial p_i} (y_i - p_i)^2 \;=\; -2(y_i - p_i) \;=\; 2 (p_i - y_i) \;\propto\; p_i - y_i
 \tag{2}\]</span></span></p>
-<p>The reason we can ignore the constant factors is that it will not affect the optimum solution, and its effect will be absorbed by the learning rate.</p>
+<p>The reason we can ignore the constant factors is that they will not affect the optimum solution and will be absorbed by the learning rate.</p>
 <p>The hessian for sample <span class="math inline">\(i\)</span> is: <span id="eq-mse-hessian"><span class="math display">\[
 \frac{\partial^2}{\partial p_i^2} \text{MSE}(y, p) \;\propto\; \frac{\partial}{\partial p_i} p_i - y_i \;=\; 1
 \tag{3}\]</span></span></p>
-<div class="callout callout-style-default callout-tip callout-titled" title="Propotionality">
+<div class="callout callout-style-default callout-tip callout-titled" title="Proportionality">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Propotionality
+Proportionality
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -476,7 +476,7 @@ Propotionality
 </div>
 </div>
 </div>
-<div id="cell-13" class="cell" data-execution_count="23">
+<div id="cell-13" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -490,10 +490,10 @@ Propotionality
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">1</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+                <div class="highlight"><pre><span class="linenos">1</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="linenos">2</span>
 <span class="linenos">3</span>
-<span class="linenos">4</span><span class="k">def</span> <span class="nf">lgbm_mse_objective_function</span><span class="p">(</span>
+<span class="linenos">4</span><span class="k">def</span><span class="w"> </span><span class="nf">lgbm_mse_objective_function</span><span class="p">(</span>
 <span class="linenos">5</span>    <span class="n">target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
 <span class="linenos">6</span>    <span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
 <span class="linenos">7</span>    <span class="n">weight</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -546,7 +546,7 @@ Propotionality
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">15</span><span class="k">def</span> <span class="nf">lgbm_mse_metric</span><span class="p">(</span>
+                <div class="highlight"><pre><span class="linenos">15</span><span class="k">def</span><span class="w"> </span><span class="nf">lgbm_mse_metric</span><span class="p">(</span>
 <span class="linenos">16</span>    <span class="n">target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
 <span class="linenos">17</span>    <span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
 <span class="linenos">18</span>    <span class="n">weight</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -579,7 +579,7 @@ Propotionality
 </section>
 <section id="mean-squared-logarithmic-error" class="level3" data-number="2.3">
 <h3 data-number="2.3" data-anchor-id="mean-squared-logarithmic-error"><span class="header-section-number">2.3</span> Mean Squared Logarithmic Error</h3>
-<p><strong>Mean Squared Logarithmic Error (MSLE)</strong> is defined as the average of the squared differences between the logarithm of the predicted and actual values. It’s an scale-invariant metric that is commonly used in regression problems where the target values have a wide range of values. I think it’s a good metric for modeling ratios or percentages.</p>
+<p><strong>Mean Squared Logarithmic Error (MSLE)</strong> is defined as the average of the squared differences between the logarithm of the predicted and actual values. It’s a scale-invariant metric that is commonly used in regression problems where the target values have a wide range of values. It’s a good metric for modeling ratios or percentages.</p>
 <p><span id="eq-msle"><span class="math display">\[
 \text{MSLE}(y, p) \;=\; \frac{1}{|\mathcal{D}|} \sum_{i=1}^{|\mathcal{D}|} (\log_e (1 + y_i) - \log_e (1 + p_i) )^2
 \tag{4}\]</span></span></p>
@@ -618,7 +618,7 @@ Note
 </div>
 </div>
 </div>
-<div id="cell-16" class="cell" data-execution_count="24">
+<div id="cell-16" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -632,10 +632,10 @@ Note
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">1</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+                <div class="highlight"><pre><span class="linenos">1</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="linenos">2</span>
 <span class="linenos">3</span>
-<span class="linenos">4</span><span class="k">def</span> <span class="nf">lgbm_msle_objective</span><span class="p">(</span>
+<span class="linenos">4</span><span class="k">def</span><span class="w"> </span><span class="nf">lgbm_msle_objective</span><span class="p">(</span>
 <span class="linenos">5</span>    <span class="n">target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
 <span class="linenos">6</span>    <span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
 <span class="linenos">7</span>    <span class="n">weight</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -722,7 +722,7 @@ Note
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">21</span><span class="k">def</span> <span class="nf">lgbm_msle_metric</span><span class="p">(</span>
+                <div class="highlight"><pre><span class="linenos">21</span><span class="k">def</span><span class="w"> </span><span class="nf">lgbm_msle_metric</span><span class="p">(</span>
 <span class="linenos">22</span>    <span class="n">target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
 <span class="linenos">23</span>    <span class="n">prediction</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span><span class="p">,</span>
 <span class="linenos">24</span>    <span class="n">weight</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="kp">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -748,16 +748,21 @@ Note
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> lightgbm <span class="im">as</span> lgb</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>regressor <span class="op">=</span> lgb.LGBMRegressor(objective<span class="op">=</span>lgbm_msle_objective)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>regressor.fit(X_train, y_train, eval_set<span class="op">=</span>[(X_val, y_val)], eval_metric<span class="op">=</span>lgbm_msle_metric)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>regressor.fit(</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    X_train,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    y_train,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    eval_set<span class="op">=</span>[(X_val, y_val)],</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    eval_metric<span class="op">=</span>lgbm_msle_metric</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 <section id="catboost" class="level2" data-number="3">
 <h2 data-number="3" data-anchor-id="catboost"><span class="header-section-number">3</span> CatBoost</h2>
 <section id="interface-1" class="level3" data-number="3.1">
 <h3 data-number="3.1" data-anchor-id="interface-1"><span class="header-section-number">3.1</span> Interface</h3>
-<p>The CatBoost interface has a few differences with LightGBM:</p>
+<p>The CatBoost interface has a few differences from LightGBM:</p>
 <ol type="1">
-<li>The objective function and the evaluation metric are implemented as as class rather than a function, and must implement a few specific methods.<br>
+<li>The objective function and the evaluation metric are implemented as class rather than a function, and must implement a few specific methods.<br>
 </li>
 <li>CatBoost expects the negative gradient and hessian to be returned by the loss function.<br>
 </li>
@@ -775,12 +780,12 @@ Caution
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p>CatBoost requires the <em>negative</em> gradient and hessian to be returned by the loss function, so we need to apply a negation at the end of the calculations. Intuitively, this is because to minimize the loss function, we need to move in the opposite direction of the gradient, but I personally would’ve prefrred CatBoost hanlded this internally similar to LightGBM and XGBoost.</p>
+<p>CatBoost requires the <em>negative</em> gradient and hessian to be returned by the loss function, so we need to apply a negation at the end of the calculations. Intuitively, this is because to minimize the loss function, we need to move in the opposite direction of the gradient, but I personally would’ve preferred CatBoost handled this internally similar to LightGBM and XGBoost.</p>
 </div>
 </div>
 </div>
 <p>The overall interface is as follows:</p>
-<div id="cell-21" class="cell" data-execution_count="25">
+<div id="cell-21" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -795,7 +800,7 @@ Caution
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">1</span><span class="k">class</span> <span class="nc">CatBoostObjectiveFunction</span><span class="p">:</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">1</span><span class="k">class</span><span class="w"> </span><span class="nc">CatBoostObjectiveFunction</span><span class="p">:</span></pre></div>
 
             </div>
         </div>
@@ -820,7 +825,7 @@ Caution
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos"> 2</span>    <span class="k">def</span> <span class="nf">calc_ders_range</span><span class="p">(</span>
+                <div class="highlight"><pre><span class="linenos"> 2</span>    <span class="k">def</span><span class="w"> </span><span class="nf">calc_ders_range</span><span class="p">(</span>
 <span class="linenos"> 3</span>        <span class="bp">self</span><span class="p">,</span>
 <span class="linenos"> 4</span>        <span class="n">approxes</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
 <span class="linenos"> 5</span>        <span class="n">targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
@@ -848,7 +853,7 @@ Caution
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">15</span><span class="k">class</span> <span class="nc">CatBoostEvalMetric</span><span class="p">:</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">15</span><span class="k">class</span><span class="w"> </span><span class="nc">CatBoostEvalMetric</span><span class="p">:</span></pre></div>
 
             </div>
         </div>
@@ -874,7 +879,7 @@ Caution
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">16</span>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span>
+                <div class="highlight"><pre><span class="linenos">16</span>    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span>
 <span class="linenos">17</span>        <span class="bp">self</span><span class="p">,</span>
 <span class="linenos">18</span>        <span class="n">approxes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span>
 <span class="linenos">19</span>        <span class="n">target</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
@@ -947,7 +952,7 @@ we'll just have to roll with it</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">37</span>    <span class="k">def</span> <span class="nf">get_final_error</span><span class="p">(</span>
+                <div class="highlight"><pre><span class="linenos">37</span>    <span class="k">def</span><span class="w"> </span><span class="nf">get_final_error</span><span class="p">(</span>
 <span class="linenos">38</span>        <span class="bp">self</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span>
 <span class="linenos">39</span>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span></pre></div>
 
@@ -968,7 +973,7 @@ we'll just have to roll with it</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">40</span>    <span class="k">def</span> <span class="nf">is_max_optimal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">40</span>    <span class="k">def</span><span class="w"> </span><span class="nf">is_max_optimal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span></pre></div>
 
             </div>
         </div>
@@ -977,12 +982,12 @@ we'll just have to roll with it</p>
     
 </div>
 </div>
-<p>If you’re interested in checking out the implementation of CatBoost’s official loss functions, you can find the C++ code <a href="https://github.com/catboost/catboost/blob/a338759f362a66a77599616f793f8d263e5e1ca6/catboost/private/libs/algo_helpers/error_functions.h">here</a>. Took some digging to find! 😄</p>
+<p>If you’re interested in checking out the implementation of CatBoost’s official loss functions, you can find the C++ code <a href="https://github.com/catboost/catboost/blob/a338759f362a66a77599616f793f8d263e5e1ca6/catboost/private/libs/algo_helpers/error_functions.h">here</a>. It took some digging to find! 😄</p>
 </section>
 <section id="mean-squared-error-1" class="level3" data-number="3.2">
 <h3 data-number="3.2" data-anchor-id="mean-squared-error-1"><span class="header-section-number">3.2</span> Mean Squared Error</h3>
 <p>We previously derived the gradient (<a href="#eq-mse-gradient" class="quarto-xref">Equation&nbsp;2</a>) and hessian (<a href="#eq-mse-hessian" class="quarto-xref">Equation&nbsp;3</a>) of the MSE loss function for LightGBM. We can use the same equations for CatBoost, but we need to implement them as a class.</p>
-<div id="cell-25" class="cell" data-execution_count="26">
+<div id="cell-25" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -997,7 +1002,7 @@ we'll just have to roll with it</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">1</span><span class="k">class</span> <span class="nc">MSEObjective</span><span class="p">:</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">1</span><span class="k">class</span><span class="w"> </span><span class="nc">MSEObjective</span><span class="p">:</span></pre></div>
 
             </div>
         </div>
@@ -1011,7 +1016,7 @@ we'll just have to roll with it</p>
                 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos"> 2</span>    <span class="k">def</span> <span class="nf">calc_ders_range</span><span class="p">(</span>
+                <div class="highlight"><pre><span class="linenos"> 2</span>    <span class="k">def</span><span class="w"> </span><span class="nf">calc_ders_range</span><span class="p">(</span>
 <span class="linenos"> 3</span>        <span class="bp">self</span><span class="p">,</span>
 <span class="linenos"> 4</span>        <span class="n">approx</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
 <span class="linenos"> 5</span>        <span class="n">target</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
@@ -1069,7 +1074,7 @@ we'll just have to roll with it</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">18</span><span class="k">class</span> <span class="nc">MSEMetric</span><span class="p">:</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">18</span><span class="k">class</span><span class="w"> </span><span class="nc">MSEMetric</span><span class="p">:</span></pre></div>
 
             </div>
         </div>
@@ -1083,7 +1088,7 @@ we'll just have to roll with it</p>
                 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">19</span>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span>
+                <div class="highlight"><pre><span class="linenos">19</span>    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span>
 <span class="linenos">20</span>        <span class="bp">self</span><span class="p">,</span>
 <span class="linenos">21</span>        <span class="n">approxes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span>
 <span class="linenos">22</span>        <span class="n">target</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
@@ -1119,7 +1124,7 @@ we'll just have to roll with it</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">41</span>    <span class="k">def</span> <span class="nf">get_final_error</span><span class="p">(</span>
+                <div class="highlight"><pre><span class="linenos">41</span>    <span class="k">def</span><span class="w"> </span><span class="nf">get_final_error</span><span class="p">(</span>
 <span class="linenos">42</span>        <span class="bp">self</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span>
 <span class="linenos">43</span>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="linenos">44</span>        <span class="k">return</span> <span class="n">error</span> <span class="o">/</span> <span class="n">weight</span></pre></div>
@@ -1137,7 +1142,7 @@ we'll just have to roll with it</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">45</span>    <span class="k">def</span> <span class="nf">is_max_optimal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+                <div class="highlight"><pre><span class="linenos">45</span>    <span class="k">def</span><span class="w"> </span><span class="nf">is_max_optimal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="linenos">46</span>        <span class="k">return</span> <span class="kc">False</span></pre></div>
 
             </div>
@@ -1151,7 +1156,7 @@ we'll just have to roll with it</p>
 <section id="mean-squared-logarithmic-error-1" class="level3" data-number="3.3">
 <h3 data-number="3.3" data-anchor-id="mean-squared-logarithmic-error-1"><span class="header-section-number">3.3</span> Mean Squared Logarithmic Error</h3>
 <p>Based on the derivations from the LightGBM section (<a href="#eq-msle-gradient" class="quarto-xref">Equation&nbsp;5</a> and <a href="#eq-msle-hessian" class="quarto-xref">Equation&nbsp;6</a>), we can implement the MSLE objective function for CatBoost:</p>
-<div id="cell-28" class="cell" data-execution_count="27">
+<div id="cell-28" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -1166,10 +1171,10 @@ we'll just have to roll with it</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">1</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+                <div class="highlight"><pre><span class="linenos">1</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="linenos">2</span>
 <span class="linenos">3</span>
-<span class="linenos">4</span><span class="k">class</span> <span class="nc">MSLEObjective</span><span class="p">:</span></pre></div>
+<span class="linenos">4</span><span class="k">class</span><span class="w"> </span><span class="nc">MSLEObjective</span><span class="p">:</span></pre></div>
 
             </div>
         </div>
@@ -1183,7 +1188,7 @@ we'll just have to roll with it</p>
                 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos"> 5</span>    <span class="k">def</span> <span class="nf">calc_ders_range</span><span class="p">(</span>
+                <div class="highlight"><pre><span class="linenos"> 5</span>    <span class="k">def</span><span class="w"> </span><span class="nf">calc_ders_range</span><span class="p">(</span>
 <span class="linenos"> 6</span>        <span class="bp">self</span><span class="p">,</span>
 <span class="linenos"> 7</span>        <span class="n">approx</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
 <span class="linenos"> 8</span>        <span class="n">target</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
@@ -1222,7 +1227,7 @@ we'll just have to roll with it</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">29</span><span class="k">class</span> <span class="nc">MSLEMetric</span><span class="p">:</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">29</span><span class="k">class</span><span class="w"> </span><span class="nc">MSLEMetric</span><span class="p">:</span></pre></div>
 
             </div>
         </div>
@@ -1236,7 +1241,7 @@ we'll just have to roll with it</p>
                 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">30</span>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span>
+                <div class="highlight"><pre><span class="linenos">30</span>    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span>
 <span class="linenos">31</span>        <span class="bp">self</span><span class="p">,</span>
 <span class="linenos">32</span>        <span class="n">approxes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span>
 <span class="linenos">33</span>        <span class="n">target</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
@@ -1276,7 +1281,7 @@ we'll just have to roll with it</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">56</span>    <span class="k">def</span> <span class="nf">get_final_error</span><span class="p">(</span>
+                <div class="highlight"><pre><span class="linenos">56</span>    <span class="k">def</span><span class="w"> </span><span class="nf">get_final_error</span><span class="p">(</span>
 <span class="linenos">57</span>        <span class="bp">self</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span>
 <span class="linenos">58</span>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="linenos">59</span>        <span class="k">return</span> <span class="n">error</span> <span class="o">/</span> <span class="n">weight</span></pre></div>
@@ -1294,7 +1299,7 @@ we'll just have to roll with it</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">60</span>    <span class="k">def</span> <span class="nf">is_max_optimal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+                <div class="highlight"><pre><span class="linenos">60</span>    <span class="k">def</span><span class="w"> </span><span class="nf">is_max_optimal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="linenos">61</span>        <span class="k">return</span> <span class="kc">False</span></pre></div>
 
             </div>
@@ -1310,7 +1315,10 @@ we'll just have to roll with it</p>
 <p>To use the custom loss functions in CatBoost, we need to pass it as a parameter during model initialization.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> catboost <span class="im">as</span> cb</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>regressor <span class="op">=</span> cb.CatBoostRegressor(loss_function<span class="op">=</span>MSLEObjective(), eval_metric<span class="op">=</span>MSLEMetric())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>regressor <span class="op">=</span> cb.CatBoostRegressor(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    loss_function<span class="op">=</span>MSLEObjective(),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    eval_metric<span class="op">=</span>MSLEMetric()</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Note that since the functions are implemented as classes, we need to instantiate them before passing them to the model. I fell victim to this mistake a few times, so be careful!</p>
 
 
