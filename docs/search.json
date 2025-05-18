@@ -336,53 +336,46 @@
     "text": "Custodium is a Python package for tracking investment portfolios and calculating adjusted cost basis (ACB) for Canadian capital gain/loss calculations. Primarily designed for educational purposes, so please read the source code and understand the logic before using it for real-world applications and having fun with it!"
   },
   {
-    "objectID": "project/2024-04-12-custodium/index.html#table-of-contents",
-    "href": "project/2024-04-12-custodium/index.html#table-of-contents",
-    "title": "Custodium",
-    "section": "1 Table of Contents",
-    "text": "1 Table of Contents\n\nCustodium\n\nTable of Contents\nKey Features\nInstallation\nUsage\n\nProcessing Transactions\n\nCode Structure\nDisclaimer\nLICENSE"
-  },
-  {
     "objectID": "project/2024-04-12-custodium/index.html#key-features",
     "href": "project/2024-04-12-custodium/index.html#key-features",
     "title": "Custodium",
-    "section": "2 Key Features",
-    "text": "2 Key Features\n\nTrack investment transactions across multiple currencies with automatic exchange rate handling\nCalculate and maintain adjusted cost basis (ACB) over time\nProcess special transaction types (e.g., equity vesting)\nGenerate capital gains reports for tax purposes"
+    "section": "1 Key Features",
+    "text": "1 Key Features\n\nTrack investment transactions across multiple currencies with automatic exchange rate handling\nCalculate and maintain adjusted cost basis (ACB) over time\nProcess special transaction types (e.g., equity vesting)\nGenerate capital gains reports for tax purposes"
   },
   {
     "objectID": "project/2024-04-12-custodium/index.html#installation",
     "href": "project/2024-04-12-custodium/index.html#installation",
     "title": "Custodium",
-    "section": "3 Installation",
-    "text": "3 Installation\npip install custodium"
+    "section": "2 Installation",
+    "text": "2 Installation\npip install custodium"
   },
   {
     "objectID": "project/2024-04-12-custodium/index.html#usage",
     "href": "project/2024-04-12-custodium/index.html#usage",
     "title": "Custodium",
-    "section": "4 Usage",
-    "text": "4 Usage\n\nProcessing Transactions\nCreate a CSV file (e.g. my_transactions.csv) with these columns:\ndate,description,base_currency,quote_currency,quantity,price,fees,note\n2023-01-15,Buy AAPL shares,AAPL,USD,10,150.25,9.95,Initial purchase\n2023-03-10,Buy MSFT shares,MSFT,USD,15,280.45,9.95,Portfolio diversification\n2023-06-30,Sell AAPL shares,AAPL,USD,-5,175.50,9.95,Partial profit taking\n2023-08-15,Convert USD to CAD,CAD,USD,1000,0.73,5.00,Currency repatriation\nThen load and process:\nfrom decimal import Decimal\nfrom custodium.portfolio import Asset, Holdings\nfrom custodium.processing import load_transactions, process_transactions\nfrom custodium.reporting import calculate_yearly_gains, plot_holdings_history\nfrom custodium.utils import displayPandas\n\n# Load transactions from CSV\ntransactions, df_log = load_transactions(\"my_transactions.csv\")\n\n# Create the portfolio\nholdings = Holdings()\nreporting_currency = \"CAD\"\n\n# Create initial holdings with funding\nholdings = Holdings()\nholdings.add(\n    Asset(\n        date=\"2023-01-01\",\n        asset=\"CAD\",\n        quantity=Decimal(\"10000\"),\n        acb=Decimal(\"1\"), # Must be 1 for the reporting currency\n    )\n)\nholdings.add(\n    Asset(\n        date=\"2023-01-01\",\n        asset=\"USD\",\n        quantity=Decimal(\"10000\"),\n        acb=Decimal(\"1.35\"),\n    )\n)\n\n# Process transactions\nholdings, gains = process_transactions(transactions, holdings=holdings, reporting_currency=reporting_currency)\n\n# View current holdings with readable formatting\ndisplayPandas(holdings.current, precision=2)\n\n# Calculate and display the yearly gains/losses\nyearly_gains = calculate_yearly_gains(gains)\ndisplayPandas(yearly_gains, precision=5)\n\n# Plot the history of holdings (Ploty is required)\nfig = plot_holdings_history(holdings)\nfig.show()"
+    "section": "3 Usage",
+    "text": "3 Usage\n\nProcessing Transactions\n\nCreate a CSV file (e.g. my_transactions.csv) with these columns:\n\ndate,description,base_currency,quote_currency,quantity,price,fees,note\n2023-01-15,Buy AAPL shares,AAPL,USD,10,150.25,9.95,Initial purchase\n2023-03-10,Buy MSFT shares,MSFT,USD,15,280.45,9.95,Portfolio diversification\n2023-06-30,Sell AAPL shares,AAPL,USD,-5,175.50,9.95,Partial profit taking\n2023-08-15,Convert USD to CAD,CAD,USD,1000,0.73,5.00,Currency repatriation\n\nThen load and process:\n\nfrom decimal import Decimal\nfrom custodium.portfolio import Asset, Holdings\nfrom custodium.processing import load_transactions, process_transactions\nfrom custodium.reporting import calculate_yearly_gains, plot_holdings_history\nfrom custodium.utils import displayPandas\n\n# Load the transactions from CSV\ntransactions, df_log = load_transactions(\"my_transactions.csv\")\n\n# Create the portfolio\nholdings = Holdings()\nreporting_currency = \"CAD\" # Canadian Dollar\n\n# Create initial holdings\nholdings = Holdings()\nholdings.add(\n    Asset(\n        date=\"2023-01-01\",\n        asset=\"CAD\",\n        quantity=Decimal(\"10000\"),\n        acb=Decimal(\"1\"), # Must be 1 for the reporting currency\n    )\n)\nholdings.add(\n    Asset(\n        date=\"2023-01-01\",\n        asset=\"USD\",\n        quantity=Decimal(\"10000\"),\n        acb=Decimal(\"1.35\"),\n    )\n)\n\n# Process the transactions\nholdings, gains = process_transactions(\n    transactions,\n    holdings=holdings,\n    reporting_currency=reporting_currency,\n)\n\n# View current holdings with readable formatting\ndisplayPandas(holdings.current, precision=2)\n\n# Calculate and display the yearly gains/losses\nyearly_gains = calculate_yearly_gains(gains)\ndisplayPandas(yearly_gains, precision=5)\n\n# Plot the history of holdings (Ploty is required)\nfig = plot_holdings_history(holdings, acb_title=\"ACB $CAD\")\nfig.show()\n\nSample output:"
   },
   {
     "objectID": "project/2024-04-12-custodium/index.html#code-structure",
     "href": "project/2024-04-12-custodium/index.html#code-structure",
     "title": "Custodium",
-    "section": "5 Code Structure",
-    "text": "5 Code Structure\n├── custodium\n│   ├── exchange.py     # Currency exchange rate management\n│   ├── portfolio.py    # Core data structures (Transaction, Asset, Holdings)\n│   ├── processing.py   # Transaction processing logic and CSV loading\n│   ├── reporting.py    # Capital gains reporting and visualization tools\n│   ├── utils.py        # Utility functions\n│   └── __init__.py     # Package version and imports\n├── requirements        # Package dependencies\n├── tests               # Unit tests for package components\n├── .gitignore\n├── .pre-commit-config.yaml  # Pre-commit hooks configuration\n├── LICENSE\n├── Makefile                 # Build and test automation\n├── pyproject.toml           # CI/CD configuration\n├── README.md\n└── setup.py                 # Package installation configuration"
+    "section": "4 Code Structure",
+    "text": "4 Code Structure\n├── custodium\n│   ├── exchange.py     # Currency exchange rate management\n│   ├── portfolio.py    # Core data structures (Transaction, Asset, Holdings)\n│   ├── processing.py   # Transaction processing logic and CSV loading\n│   ├── reporting.py    # Capital gains reporting and visualization tools\n│   ├── utils.py        # Utility functions\n│   └── __init__.py     # Package version and imports\n├── requirements        # Package dependencies\n├── tests               # Unit tests for package components\n├── .gitignore\n├── .pre-commit-config.yaml  # Pre-commit hooks configuration\n├── LICENSE\n├── Makefile                 # Build and test automation\n├── pyproject.toml           # CI/CD configuration\n├── README.md\n└── setup.py                 # Package installation configuration"
   },
   {
     "objectID": "project/2024-04-12-custodium/index.html#disclaimer",
     "href": "project/2024-04-12-custodium/index.html#disclaimer",
     "title": "Custodium",
-    "section": "6 Disclaimer",
-    "text": "6 Disclaimer\nThis package is provided for educational purposes only. Users should not rely on this software for financial advice, tax reporting, or investment decisions without independent verification. The authors accept no responsibility for any financial losses, tax implications, or other issues that may arise from the use of this software."
+    "section": "5 Disclaimer",
+    "text": "5 Disclaimer\nThis package is provided for educational purposes only. Users should not rely on this software for financial advice, tax reporting, or investment decisions without independent verification. The authors accept no responsibility for any financial losses, tax implications, or other issues that may arise from the use of this software."
   },
   {
     "objectID": "project/2024-04-12-custodium/index.html#license",
     "href": "project/2024-04-12-custodium/index.html#license",
     "title": "Custodium",
-    "section": "7 LICENSE",
-    "text": "7 LICENSE\nThis project is licensed under the MIT License. See the LICENSE file for details."
+    "section": "6 LICENSE",
+    "text": "6 LICENSE\nThis project is licensed under the MIT License. See the LICENSE file for details."
   },
   {
     "objectID": "project/index.html",

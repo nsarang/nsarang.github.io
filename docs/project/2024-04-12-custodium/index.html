@@ -269,32 +269,22 @@ main > section:not(:first-of-type) {
 }
 </style>
 <div style="display: flex; justify-content: center;">
-<p><img alt="Custodium" src="https://raw.githubusercontent.com/nsarang/custodium/refs/heads/main/logo.jpg" width="500px" style="max-width: 100%;"></p>
+<p><img alt="Custodium" src="https://raw.githubusercontent.com/nsarang/custodium/refs/heads/main/images/logo.jpg" width="500px" style="max-width: 100%;"></p>
 </div>
 <div style="display: flex; justify-content: center;">
 <p><a href="https://github.com/nsarang/custodium"><img src="https://img.shields.io/badge/nsarang-custodium-red?logo=github&amp;logoSize=auto.png" class="img-fluid" alt="GitHub"></a> <a href="https://pypi.org/project/custodium/"><img src="https://img.shields.io/pypi/v/custodium?logoSize=auto.png" class="img-fluid" alt="PyPI"></a> <a href="https://pypi.org/project/custodium/"><img src="https://img.shields.io/pypi/pyversions/custodium?logo=python&amp;logoSize=auto.png" class="img-fluid" alt="Python Versions"></a> <img src="https://img.shields.io/pypi/l/custodium?logo=auto.png" class="img-fluid" alt="License"></p>
 </div>
 <p><i class="fa-brands fa-github fa-large" aria-label="github"></i> <a href="https://github.com/nsarang/custodium">Custodium</a> is a Python package for tracking investment portfolios and calculating adjusted cost basis (ACB) for Canadian capital gain/loss calculations. Primarily designed for educational purposes, so please read the source code and understand the logic before using it for real-world applications and having fun with it!</p>
-<section id="table-of-contents" class="level2" data-number="1">
-<h2 data-number="1" data-anchor-id="table-of-contents"><span class="header-section-number">1</span> Table of Contents</h2>
 <ul>
-<li><a href="#custodium">Custodium</a>
-<ul>
-<li><a href="#table-of-contents">Table of Contents</a></li>
 <li><a href="#key-features">Key Features</a></li>
 <li><a href="#installation">Installation</a></li>
-<li><a href="#usage">Usage</a>
-<ul>
-<li><a href="#processing-transactions">Processing Transactions</a></li>
-</ul></li>
+<li><a href="#usage">Usage</a></li>
 <li><a href="#code-structure">Code Structure</a></li>
 <li><a href="#disclaimer">Disclaimer</a></li>
 <li><a href="#license">LICENSE</a></li>
-</ul></li>
 </ul>
-</section>
-<section id="key-features" class="level2" data-number="2">
-<h2 data-number="2" data-anchor-id="key-features"><span class="header-section-number">2</span> Key Features</h2>
+<section id="key-features" class="level2" data-number="1">
+<h2 data-number="1" data-anchor-id="key-features"><span class="header-section-number">1</span> Key Features</h2>
 <ul>
 <li>Track investment transactions across multiple currencies with automatic exchange rate handling</li>
 <li>Calculate and maintain adjusted cost basis (ACB) over time</li>
@@ -302,35 +292,39 @@ main > section:not(:first-of-type) {
 <li>Generate capital gains reports for tax purposes</li>
 </ul>
 </section>
-<section id="installation" class="level2" data-number="3">
-<h2 data-number="3" data-anchor-id="installation"><span class="header-section-number">3</span> Installation</h2>
+<section id="installation" class="level2" data-number="2">
+<h2 data-number="2" data-anchor-id="installation"><span class="header-section-number">2</span> Installation</h2>
 <pre><code>pip install custodium</code></pre>
 </section>
-<section id="usage" class="level2" data-number="4">
-<h2 data-number="4" data-anchor-id="usage"><span class="header-section-number">4</span> Usage</h2>
-<section id="processing-transactions" class="level3">
-<h3 data-anchor-id="processing-transactions">Processing Transactions</h3>
-<p>Create a CSV file (e.g.&nbsp;my_transactions.csv) with these columns:</p>
-<pre class="csv"><code>date,description,base_currency,quote_currency,quantity,price,fees,note
-2023-01-15,Buy AAPL shares,AAPL,USD,10,150.25,9.95,Initial purchase
-2023-03-10,Buy MSFT shares,MSFT,USD,15,280.45,9.95,Portfolio diversification
-2023-06-30,Sell AAPL shares,AAPL,USD,-5,175.50,9.95,Partial profit taking
-2023-08-15,Convert USD to CAD,CAD,USD,1000,0.73,5.00,Currency repatriation</code></pre>
-<p>Then load and process:</p>
+<section id="usage" class="level2" data-number="3">
+<h2 data-number="3" data-anchor-id="usage"><span class="header-section-number">3</span> Usage</h2>
+<section id="processing-transactions" class="level4">
+<h4 data-anchor-id="processing-transactions">Processing Transactions</h4>
+<ol type="1">
+<li>Create a CSV file (e.g.&nbsp;my_transactions.csv) with these columns:</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>date<span class="op">,</span>description<span class="op">,</span>base_currency<span class="op">,</span>quote_currency<span class="op">,</span>quantity<span class="op">,</span>price<span class="op">,</span>fees<span class="op">,</span>note</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dv">2023</span><span class="op">-</span><span class="bn">01</span><span class="op">-</span><span class="dv">15</span><span class="op">,</span>Buy AAPL shares<span class="op">,</span>AAPL<span class="op">,</span>USD<span class="op">,</span><span class="dv">10</span><span class="op">,</span><span class="fl">150.25</span><span class="op">,</span><span class="fl">9.95</span><span class="op">,</span>Initial purchase</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dv">2023</span><span class="op">-</span><span class="bn">03</span><span class="op">-</span><span class="dv">10</span><span class="op">,</span>Buy MSFT shares<span class="op">,</span>MSFT<span class="op">,</span>USD<span class="op">,</span><span class="dv">15</span><span class="op">,</span><span class="fl">280.45</span><span class="op">,</span><span class="fl">9.95</span><span class="op">,</span>Portfolio diversification</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dv">2023</span><span class="op">-</span><span class="bn">06</span><span class="op">-</span><span class="dv">30</span><span class="op">,</span>Sell AAPL shares<span class="op">,</span>AAPL<span class="op">,</span>USD<span class="op">,-</span><span class="dv">5</span><span class="op">,</span><span class="fl">175.50</span><span class="op">,</span><span class="fl">9.95</span><span class="op">,</span>Partial profit taking</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dv">2023</span><span class="op">-</span><span class="dv">08</span><span class="op">-</span><span class="dv">15</span><span class="op">,</span>Convert USD to CAD<span class="op">,</span>CAD<span class="op">,</span>USD<span class="op">,</span><span class="dv">1000</span><span class="op">,</span><span class="fl">0.73</span><span class="op">,</span><span class="fl">5.00</span><span class="op">,</span>Currency repatriation</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="2" type="1">
+<li>Then load and process:</li>
+</ol>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> decimal <span class="im">import</span> Decimal</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> custodium.portfolio <span class="im">import</span> Asset, Holdings</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> custodium.processing <span class="im">import</span> load_transactions, process_transactions</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> custodium.reporting <span class="im">import</span> calculate_yearly_gains, plot_holdings_history</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> custodium.utils <span class="im">import</span> displayPandas</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Load transactions from CSV</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the transactions from CSV</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>transactions, df_log <span class="op">=</span> load_transactions(<span class="st">"my_transactions.csv"</span>)</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the portfolio</span></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>holdings <span class="op">=</span> Holdings()</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>reporting_currency <span class="op">=</span> <span class="st">"CAD"</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>reporting_currency <span class="op">=</span> <span class="st">"CAD"</span> <span class="co"># Canadian Dollar</span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Create initial holdings with funding</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Create initial holdings</span></span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>holdings <span class="op">=</span> Holdings()</span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>holdings.add(</span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    Asset(</span>
@@ -349,23 +343,33 @@ main > section:not(:first-of-type) {
 <span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Process transactions</span></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>holdings, gains <span class="op">=</span> process_transactions(transactions, holdings<span class="op">=</span>holdings, reporting_currency<span class="op">=</span>reporting_currency)</span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="co"># View current holdings with readable formatting</span></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>displayPandas(holdings.current, precision<span class="op">=</span><span class="dv">2</span>)</span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate and display the yearly gains/losses</span></span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>yearly_gains <span class="op">=</span> calculate_yearly_gains(gains)</span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>displayPandas(yearly_gains, precision<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Process the transactions</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>holdings, gains <span class="op">=</span> process_transactions(</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    transactions,</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    holdings<span class="op">=</span>holdings,</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    reporting_currency<span class="op">=</span>reporting_currency,</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="co"># View current holdings with readable formatting</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>displayPandas(holdings.current, precision<span class="op">=</span><span class="dv">2</span>)</span>
 <span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the history of holdings (Ploty is required)</span></span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plot_holdings_history(holdings)</span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate and display the yearly gains/losses</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>yearly_gains <span class="op">=</span> calculate_yearly_gains(gains)</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>displayPandas(yearly_gains, precision<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the history of holdings (Ploty is required)</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plot_holdings_history(holdings, acb_title<span class="op">=</span><span class="st">"ACB $CAD"</span>)</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="3" type="1">
+<li>Sample output:</li>
+</ol>
+<div style="display: flex; justify-content: center;">
+<p><img alt="Custodium" src="https://raw.githubusercontent.com/nsarang/custodium/refs/heads/main/images/sample_output.png" width="1000px" style="max-width: 100%;"></p>
+</div>
 </section>
 </section>
-<section id="code-structure" class="level2" data-number="5">
-<h2 data-number="5" data-anchor-id="code-structure"><span class="header-section-number">5</span> Code Structure</h2>
+<section id="code-structure" class="level2" data-number="4">
+<h2 data-number="4" data-anchor-id="code-structure"><span class="header-section-number">4</span> Code Structure</h2>
 <pre><code>├── custodium
 │   ├── exchange.py     # Currency exchange rate management
 │   ├── portfolio.py    # Core data structures (Transaction, Asset, Holdings)
@@ -383,12 +387,12 @@ main > section:not(:first-of-type) {
 ├── README.md
 └── setup.py                 # Package installation configuration</code></pre>
 </section>
-<section id="disclaimer" class="level2" data-number="6">
-<h2 data-number="6" data-anchor-id="disclaimer"><span class="header-section-number">6</span> Disclaimer</h2>
+<section id="disclaimer" class="level2" data-number="5">
+<h2 data-number="5" data-anchor-id="disclaimer"><span class="header-section-number">5</span> Disclaimer</h2>
 <p>This package is provided for educational purposes only. Users should not rely on this software for financial advice, tax reporting, or investment decisions without independent verification. The authors accept no responsibility for any financial losses, tax implications, or other issues that may arise from the use of this software.</p>
 </section>
-<section id="license" class="level2" data-number="7">
-<h2 data-number="7" data-anchor-id="license"><span class="header-section-number">7</span> LICENSE</h2>
+<section id="license" class="level2" data-number="6">
+<h2 data-number="6" data-anchor-id="license"><span class="header-section-number">6</span> LICENSE</h2>
 <p>This project is licensed under the MIT License. See the <a href="LICENSE">LICENSE</a> file for details.</p>
 
 
