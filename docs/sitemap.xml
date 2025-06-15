@@ -1,71 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.nimasarang.com/publication/index.html</loc>
+    <loc>https://www.nimasarang.com/publication/2023-07-01-tractable-reinforcement-learning/index.html</loc>
     <lastmod>2025-05-17T14:06:52.751Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/publication/2018-01-03-protein-design/index.html</loc>
-    <lastmod>2025-05-17T14:06:52.750Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/project/2025-05-16-pymortem/index.html</loc>
-    <lastmod>2025-05-17T14:38:14.647Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/project/2019-06-12-dc-gan/index.html</loc>
-    <lastmod>2025-05-17T14:06:52.749Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/index.html</loc>
-    <lastmod>2025-05-17T14:06:52.745Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/blog/2025-02-28-time-series-forecasting/index.html</loc>
-    <lastmod>2025-05-17T14:06:52.722Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/blog/2024-09-29-llama-in-browser/index.html</loc>
-    <lastmod>2025-05-17T14:06:52.720Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/blog/2024-08-11-gbt-custom-loss/index.html</loc>
-    <lastmod>2025-05-17T14:22:03.430Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/blog/2024-06-15-lstm-from-scratch/index.html</loc>
-    <lastmod>2025-05-17T14:24:30.797Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/about/index.html</loc>
-    <lastmod>2025-05-17T14:06:52.701Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/blog/2024-08-24-information-theory/index.html</loc>
-    <lastmod>2025-05-17T13:59:45.195Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/blog/2025-01-30-post-mortem/index.html</loc>
-    <lastmod>2025-05-17T14:16:44.720Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/blog/index.html</loc>
-    <lastmod>2025-05-17T14:06:52.723Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/project/2017-09-17-d3-force-graph-bio-networks/index.html</loc>
-    <lastmod>2025-05-17T14:06:52.749Z</lastmod>
-  </url>
-  <url>
-    <loc>https://www.nimasarang.com/project/2024-04-12-custodium/index.html</loc>
-    <lastmod>2025-05-18T09:04:29.375Z</lastmod>
   </url>
   <url>
     <loc>https://www.nimasarang.com/project/index.html</loc>
     <lastmod>2025-05-17T14:06:52.750Z</lastmod>
   </url>
   <url>
-    <loc>https://www.nimasarang.com/publication/2023-07-01-tractable-reinforcement-learning/index.html</loc>
+    <loc>https://www.nimasarang.com/project/2024-04-12-custodium/index.html</loc>
+    <lastmod>2025-05-18T09:04:29.375Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/project/2017-09-17-d3-force-graph-bio-networks/index.html</loc>
+    <lastmod>2025-05-17T14:06:52.749Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/blog/index.html</loc>
+    <lastmod>2025-05-17T14:06:52.723Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/blog/2025-01-30-post-mortem/index.html</loc>
+    <lastmod>2025-05-17T14:16:44.720Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/blog/2024-08-24-information-theory/index.html</loc>
+    <lastmod>2025-05-17T13:59:45.195Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/about/index.html</loc>
+    <lastmod>2025-05-17T14:06:52.701Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/blog/2024-06-15-lstm-from-scratch/index.html</loc>
+    <lastmod>2025-05-17T14:24:30.797Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/blog/2024-08-11-gbt-custom-loss/index.html</loc>
+    <lastmod>2025-05-17T14:22:03.430Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/blog/2024-09-29-llama-in-browser/index.html</loc>
+    <lastmod>2025-05-17T14:06:52.720Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/blog/2025-02-28-time-series-forecasting/index.html</loc>
+    <lastmod>2025-05-17T14:06:52.722Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/index.html</loc>
+    <lastmod>2025-05-17T14:06:52.745Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/project/2019-06-12-dc-gan/index.html</loc>
+    <lastmod>2025-05-17T14:06:52.749Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/project/2025-05-16-pymortem/index.html</loc>
+    <lastmod>2025-05-17T14:38:14.647Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/publication/2018-01-03-protein-design/index.html</loc>
+    <lastmod>2025-05-17T14:06:52.750Z</lastmod>
+  </url>
+  <url>
+    <loc>https://www.nimasarang.com/publication/index.html</loc>
     <lastmod>2025-05-17T14:06:52.751Z</lastmod>
   </url>
 </urlset>
