@@ -33,7 +33,7 @@
 
 /* other quarto variables */
 :root {
-  --quarto-font-monospace: "Roboto Mono", "Dank Mono", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --quarto-font-monospace: "JetBrains Mono", "Roboto Mono", "Dank Mono", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 code span.al {
@@ -195,4 +195,4 @@ code span.wa {
   content: "</";
 }
 
-/*# sourceMappingURL=4c46ab053a181c21b125356223436cb7.css.map */
+/*# sourceMappingURL=aaee952b02cb1bf2ef13cfc5fb328302.css.map */
