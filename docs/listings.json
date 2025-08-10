@@ -2,6 +2,7 @@
   {
     "listing": "/project/index.html",
     "items": [
+      "/project/2025-07-19-interactive-pandas/index.html",
       "/project/2025-05-16-pymortem/index.html",
       "/project/2024-04-12-custodium/index.html",
       "/project/2019-06-12-dc-gan/index.html",
@@ -11,6 +12,7 @@
   {
     "listing": "/blog/index.html",
     "items": [
+      "/blog/2025-08-07-github-workflow-tips/index.html",
       "/blog/2025-02-28-time-series-forecasting/index.html",
       "/blog/2025-01-30-post-mortem/index.html",
       "/blog/2024-09-29-llama-in-browser/index.html",
