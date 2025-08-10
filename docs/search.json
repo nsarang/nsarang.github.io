@@ -74,7 +74,7 @@
     "href": "blog/2025-08-07-github-workflow-tips/index.html",
     "title": "Github Workflow Tips and Tricks",
     "section": "",
-    "text": "I have been using Github workflows for a while now, and there are just so many things to learn about. There were a couple of things I learned the hard way, either due to lack of documentation or being unobvious. So I decided to compile a few of them into this post and attempted to present them in a way that is easy to understand. My style of writing is that I defer some of the details to the inline comments within the code, so be sure to go through them as well. You can find the full code examples in the  github_workflows_tip_and_tricks repository."
+    "text": "I have been using Github workflows for a while now, and there are just so many things to learn about. There were a couple of things I learned the hard way, either due to lack of documentation or being unobvious. So I decided to compile a few of them into this post and attempted to present them in a way that is easy to understand. My style of writing is that I defer some of the details to the inline comments within the code, so be sure to go through them as well. You can find the full code examples here ."
   },
   {
     "objectID": "blog/2025-08-07-github-workflow-tips/index.html#workflow-dispatch-with-inputs",
