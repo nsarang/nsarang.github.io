@@ -385,7 +385,10 @@ Run Name Customization
 <div id="callout-1" class="callout-1-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <p>Manual workflow runs all share the same generic title (the workflow name) which can be confusing when multiple users trigger the same workflow but from different branches or with different inputs. You can customize the title using the <code>run-name</code> keyword for better visibility. I think the following line should be added to every workflow by default:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">run-name</span><span class="kw">:</span><span class="at"> </span><span class="st">"${{ github.event_name == 'workflow_dispatch' &amp;&amp; format('{0} from </span><span class="sc">\"</span><span class="st">{1}</span><span class="sc">\"</span><span class="st">', github.workflow, github.ref_name) || '' }}"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">run-name</span><span class="kw">: </span><span class="ch">&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  ${{ github.event_name == 'workflow_dispatch'</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>      &amp;&amp; format('{0} from "{1}"', github.workflow, github.ref_name)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>      || '' }}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This will set the title to include the branch name, but only if the workflow is triggered manually. For any other trigger events (e.g.&nbsp;push), it’ll use Github’s default run name. You can customize the format string to include workflow inputs or other context variables as needed.</p>
 </div>
 </div>
