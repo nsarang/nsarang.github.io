@@ -76,8 +76,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-6a7799821fa2400ad85ae38c4598b577.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-254d953cd40898156eb68ee7ba088901.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-df5ebe0c9f312d766a9da10102d54b50.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-1c815467b185dbef1459a0a4f3369bb1.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-df577a3ddc1a4be3d042116ab6a8de80.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <link href="../../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -286,7 +286,7 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <section id="introduction" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>I bet this experience sounds familiar:</p>
-<p><em>Your code has been running smoothly for a while, and you’re finally breathing easy. Then, an hour into execution an error occurs. The worst part? You have no idea what caused it based on the logs alone, and source is buried 8 calls deep in the stack trace. You’re dreading the thought of validating the data from start to finish to find the root cause, but there’s no other way.</em></p>
+<p><em>Your code has been running smoothly for a while, and you’re finally feeling relaxed. Then an hour into execution an error occurs. The worst part? You have no idea what caused it based on the logs alone, and the source is buried 8 calls deep in the stack trace. You’re dreading the thought of inspecting the code line by line from start to finish to find the root cause, but there’s no other way.</em></p>
 <p>Well, I might’ve found the solution to this. Python’s built-in <code>traceback</code> lets you inspect variables at each step of the stack trace, and even better, save the current context for reuse later! If you’re familiar with the <code>pdb</code> debugger, this article is similar in spirit but with major differences.</p>
 <p>This is the most useful code I’ve written in ages, and it took some mighty effort to get it right due to the lack of proper documentation. If you want the TL;DR, just skip to <a href="#sec-in-action" class="quarto-xref">Section&nbsp;4</a>. Otherwise, let’s dive in.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Update: May 16, 2025">

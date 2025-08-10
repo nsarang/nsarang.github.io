@@ -76,8 +76,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-6a7799821fa2400ad85ae38c4598b577.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-8b1cc51015e3755cb18060f3a40ff3a0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-d44bf51d4b28ac6ab0f5bc5dcff3d4a3.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-5c3d89e383c176d6114051409cd4d933.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-b7936739f96568f08269ad23303a06ee.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <link href="../../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -327,6 +327,22 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
   }
   main .small-li-space ol > li:not(:first-child), main .small-li-space ul > li:not(:first-child) {
     margin-top: 0.5em;
+  }
+  
+  /* Enable scrollbar for code blocks */
+  div.sourceCode {
+    position: relative !important;
+  }
+
+  div.sourceCode pre.sourceCode {
+    position: static !important; /* The copy button needs to use the parent div as the positioning context */
+    overflow-x: auto !important;
+    white-space: pre !important;
+  }
+
+  div.sourceCode pre.sourceCode code {
+    white-space: pre !important;
+    word-wrap: normal !important;
   }
 </style>
 <p>I have been using Github workflows for a while now, and there are just so many things to learn about. There were a couple of things I learned the hard way, either due to lack of documentation or being unobvious. So I decided to compile a few of them into this post and attempted to present them in a way that is easy to understand. My style of writing is that I defer some of the details to the inline comments within the code, so be sure to go through them as well. You can find the full code examples in the <i class="fa-brands fa-github fa-large" aria-label="github"></i> <a href="https://github.com/nsarang/github_workflows_tip_and_tricks">github_workflows_tip_and_tricks</a> repository.</p>
