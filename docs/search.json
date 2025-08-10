@@ -438,7 +438,7 @@
     "href": "project/2025-07-19-interactive-pandas/index.html#features",
     "title": "FrameDisplay: Enhanced DataFrame Display",
     "section": "1 Features",
-    "text": "1 Features\n\nResizable Columns: Drag column dividers to resize them.\nSortable Columns: Click on column headers to sort the data.\nSticky Header & Index: The header and index rows remain visible during vertical and horizontal scrolling.\nColumn Type Icons: Icons in headers indicate data types (numeric, string, etc.).\nNull Value Styling: null values are visually distinct.\nTooltips: Hover over cell content to see the full value.\nNo Size Limit: Display DataFrames of any size (be mindful of browser performance with very large tables).\n\nRoadmap - Virtual scrolling for improved performance with very large DataFrames. - Additional customization options (e.g., theming)."
+    "text": "1 Features\n\nResizable Columns: Drag column dividers to resize them.\nSortable Columns: Click on column headers to sort the data.\nSticky Header & Index: The header and index rows remain visible during vertical and horizontal scrolling.\nColumn Type Icons: Icons in headers indicate data types (numeric, string, etc.).\nNull Value Styling: null values are visually distinct.\nTooltips: Hover over cell content to see the full value.\nNo Size Limit: Display DataFrames of any size (be mindful of browser performance with very large tables).\n\nRoadmap\n\nVirtual scrolling for improved performance with very large DataFrames.\nAdditional customization options (e.g., theming)."
   },
   {
     "objectID": "project/2025-07-19-interactive-pandas/index.html#live-demo",
