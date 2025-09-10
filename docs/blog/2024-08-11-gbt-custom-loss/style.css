@@ -1055,3 +1055,8 @@
 .cell-output:has(.docfuse) {
   border-radius: 0;
 }
+
+.cell:has(.docfuse) {
+  margin-top: 1.5lh;
+  margin-bottom: 3.5lh;
+}

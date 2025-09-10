@@ -76,8 +76,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-aa6766b93b57ee48e38855e0f300849d.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-0cda31e3f4f7166226b354fc84000a1e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-c60cdae389a5a45326ea84e270458925.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-66663b93f90c1ea2d93231846f8aa662.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-708d3faa3aeb82d854165159d4bb2526.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -170,7 +170,7 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="../../_assets/docfuse/main.css">
+<link rel="stylesheet" href="style.css">
 <meta property="og:title" content="Custom Loss Functions for LightGBM and CatBoost">
 <meta property="og:description" content="Guide on how to implement custom loss functions and evaluation metrics for LightGBM and CatBoost">
 <meta property="og:image" content="https://www.nimasarang.com/blog/2024-08-11-gbt-custom-loss/featured.png">
@@ -366,12 +366,6 @@ window.Quarto = {
 <p>% Fourier transform % Fourier transform % Inverse Fourier transform</p>
 <p>% General math % Display style</p>
 </div>
-<style>
-.cell:has(.docfuse) {
-  margin-top: 1.5lh;
-  margin-bottom: 3.5lh;
-}
-</style>
 <section id="introduction" class="level2" data-number="1">
 <h2 data-number="1" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
 <p>As a data scientist, I’ve often found myself pushing the boundaries of popular gradient boosting frameworks. Recently I’ve been exploring the implementation of custom loss functions in LightGBM and CatBoost, two powerful tools for learning from tabular data. These frameworks offer a wide range of built-in loss functions, but sometimes you need to optimize for a specific metric or tackle a unique problem that requires a custom loss.</p>
@@ -382,7 +376,7 @@ window.Quarto = {
 <section id="interface" class="level3" data-number="2.1">
 <h3 data-number="2.1" data-anchor-id="interface"><span class="header-section-number">2.1</span> Interface</h3>
 <p>The loss function and the evaluation metric must have the following structure:</p>
-<div id="cell-10" class="cell" data-execution_count="4">
+<div id="cell-9" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -487,7 +481,7 @@ Proportionality
 </div>
 </div>
 </div>
-<div id="cell-13" class="cell" data-execution_count="5">
+<div id="cell-12" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -629,7 +623,7 @@ Note
 </div>
 </div>
 </div>
-<div id="cell-16" class="cell" data-execution_count="6">
+<div id="cell-15" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -796,7 +790,7 @@ Caution
 </div>
 </div>
 <p>The overall interface is as follows:</p>
-<div id="cell-21" class="cell" data-execution_count="7">
+<div id="cell-20" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -998,7 +992,7 @@ we'll just have to roll with it</p>
 <section id="mean-squared-error-1" class="level3" data-number="3.2">
 <h3 data-number="3.2" data-anchor-id="mean-squared-error-1"><span class="header-section-number">3.2</span> Mean Squared Error</h3>
 <p>We previously derived the gradient (<a href="#eq-mse-gradient" class="quarto-xref">Equation&nbsp;2</a>) and hessian (<a href="#eq-mse-hessian" class="quarto-xref">Equation&nbsp;3</a>) of the MSE loss function for LightGBM. We can use the same equations for CatBoost, but we need to implement them as a class.</p>
-<div id="cell-25" class="cell" data-execution_count="8">
+<div id="cell-24" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
@@ -1167,7 +1161,7 @@ we'll just have to roll with it</p>
 <section id="mean-squared-logarithmic-error-1" class="level3" data-number="3.3">
 <h3 data-number="3.3" data-anchor-id="mean-squared-logarithmic-error-1"><span class="header-section-number">3.3</span> Mean Squared Logarithmic Error</h3>
 <p>Based on the derivations from the LightGBM section (<a href="#eq-msle-gradient" class="quarto-xref">Equation&nbsp;5</a> and <a href="#eq-msle-hessian" class="quarto-xref">Equation&nbsp;6</a>), we can implement the MSLE objective function for CatBoost:</p>
-<div id="cell-28" class="cell" data-execution_count="9">
+<div id="cell-27" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-display">
 
         <div class="docfuse ">
