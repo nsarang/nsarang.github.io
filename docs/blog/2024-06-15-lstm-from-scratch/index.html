@@ -394,12 +394,12 @@ P.S. You can toggle between light and dark mode through the button at the top ri
 f_t &amp;= \sigma(W_{if}x_t + b_{if} \;+\; W_{hf}h_{t-1} + b_{hf}) \\
 i_t &amp;= \sigma(W_{ii}x_t + b_{ii} \;+\; W_{hi}h_{t-1} + b_{hi}) \\
 o_t &amp;= \sigma(W_{io}x_t + b_{io} \;+\; W_{ho}h_{t-1} + b_{ho}) \\
-\tilde{C}_t &amp;= \tanh(W_{ic}x_t + b_{ic} \;+\; W_{hc}h_{t-1} + b_{hc}) \\
-C_t &amp;= f_t \odot C_{t-1} + i_t \odot \tilde{C}_t \\
-h_t &amp;= o_t \odot \tanh(C_t)
+\tilde{c}_t &amp;= \tanh(W_{ic}x_t + b_{ic} \;+\; W_{hc}h_{t-1} + b_{hc}) \\
+c_t &amp;= f_t \odot c_{t-1} + i_t \odot \tilde{c}_t \\
+h_t &amp;= o_t \odot \tanh(c_t)
 \end{aligned}
 \]</span></p>
-<p>where <span class="math inline">\(f_t\)</span>, <span class="math inline">\(i_t\)</span>, and <span class="math inline">\(o_t\)</span> are the forget, input, and output gates, respectively. <span class="math inline">\(\tilde{C}_t\)</span> is the candidate memory state, <span class="math inline">\(C_t\)</span> is the memory state, and <span class="math inline">\(h_t\)</span> is the hidden state at time step <span class="math inline">\(t\)</span>. <span class="math inline">\(x_t\)</span> is the input at time step <span class="math inline">\(t\)</span>, <span class="math inline">\(h_{t-1}\)</span> is the hidden state at time step <span class="math inline">\(t-1\)</span>, and <span class="math inline">\(W\)</span> and <span class="math inline">\(b\)</span> are the weights and biases of each gate.</p>
+<p>where <span class="math inline">\(f_t\)</span>, <span class="math inline">\(i_t\)</span>, and <span class="math inline">\(o_t\)</span> are the forget, input, and output gates, respectively. <span class="math inline">\(\tilde{c}_t\)</span> is the candidate memory state, <span class="math inline">\(c_t\)</span> is the memory state, and <span class="math inline">\(h_t\)</span> is the hidden state at time step <span class="math inline">\(t\)</span>. <span class="math inline">\(x_t\)</span> is the input at time step <span class="math inline">\(t\)</span>, <span class="math inline">\(h_{t-1}\)</span> is the hidden state at time step <span class="math inline">\(t-1\)</span>, and <span class="math inline">\(W\)</span> and <span class="math inline">\(b\)</span> are the weights and biases of each gate.</p>
 <section id="cifg-lstm" class="level4">
 <h4 data-anchor-id="cifg-lstm">CIFG LSTM</h4>
 <p>In this post, we’ll implement a special of type of LSTM called <strong>Coupled Input and Forget Gate (CIFG)</strong> <span class="citation" data-cites="Greff_2017">Greff et al. (<a href="#ref-Greff_2017" role="doc-biblioref">2017</a>)</span>. In CIFG LSTM, the input gate is computed as: <span class="math display">\[i_t = 1 - f_t\]</span> This reduces the number of parameters in the model and has been shown to perform well in practice.</p>
@@ -414,7 +414,7 @@ h_t &amp;= o_t \odot \tanh(C_t)
 </figure>
 </div>
 <p>Now let’s get into the implementation, step by step.</p>
-<div id="cell-6" class="cell no-style-output page-columns page-full" data-execution_count="11">
+<div id="cell-6" class="cell no-style-output page-columns page-full" data-execution_count="25">
 <div class="cell-output cell-output-display column-page">
 <h3 style="margin-top: 0;" data-anchor-id="multi-layers">lstm.py</h3>
         <div class="docfuse ">
@@ -882,7 +882,7 @@ and perform a single linear projection instead of two.</p>
 f_t &amp;= \sigma(W_{if}{input}_t + b_{if} \;+\; W_{hf}h_{t-1} + b_{hf}) \\[1ex]
 i_t &amp;= 1 - f_t \qquad\qquad \text{Coupled forget and input gates} \\[1ex]
 o_t &amp;= \sigma(W_{io}{input}_t + b_{io} \;+\; W_{ho}h_{t-1} + b_{ho}) \\[1ex]
-\tilde{C}_t &amp;= \tanh(W_{ic}{input}_t + b_{ic} \;+\; W_{hc}h_{t-1} + b_{hc}) \\[1ex]
+\tilde{c}_t &amp;= \tanh(W_{ic}{input}_t + b_{ic} \;+\; W_{hc}h_{t-1} + b_{hc}) \\[1ex]
 \end{aligned}
 \)</p>
 
@@ -914,8 +914,8 @@ o_t &amp;= \sigma(W_{io}{input}_t + b_{io} \;+\; W_{ho}h_{t-1} + b_{ho}) \\[1ex]
                 <p>New memory cell and hidden state</p>
 <p>\(
 \begin{aligned}
-C_t &amp;= f_t \odot C_{t-1} + i_t \odot \tilde{C}_t \\[1ex]
-h_t &amp;= o_t \odot \tanh(C_t)
+c_t &amp;= f_t \odot c_{t-1} + i_t \odot \tilde{c}_t \\[1ex]
+h_t &amp;= o_t \odot \tanh(c_t)
 \end{aligned}
 \)</p>
 
@@ -1076,7 +1076,7 @@ The gradients are computed with respect to the input, weights, and biases respec
                 <div class="section-link">
                     <a href="#lstm-35">#</a>
                 </div>
-                <p>Backpropagation through time</p>
+                <p>Backpropagation through time. Let's denote \(t\) as the current timestep</p>
 
             </div>
             <div class="code">
@@ -1096,7 +1096,7 @@ The gradients are computed with respect to the input, weights, and biases respec
             </div>
             <div class="code">
                 <div class="highlight"><pre><span class="linenos">116</span>            <span class="n">dout_t</span> <span class="o">=</span> <span class="n">grad</span><span class="p">[:,</span> <span class="n">timestep</span><span class="p">]</span>
-<span class="linenos">117</span>            <span class="n">h_t</span> <span class="o">=</span> <span class="n">activations</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">timestep</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></pre></div>
+<span class="linenos">117</span>            <span class="n">h</span> <span class="o">=</span> <span class="n">activations</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">timestep</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></pre></div>
 
             </div>
         </div>
@@ -1107,12 +1107,13 @@ The gradients are computed with respect to the input, weights, and biases respec
                 <div class="section-link">
                     <a href="#lstm-37">#</a>
                 </div>
-                <p>\(\text{logits}_t = h_t \mathbf{W}_{\text{head}} + \mathbf{b}_{\text{head}}\)</p>
+                <p>The gradients for the classification head:
+\(\text{logits}_t = h_t \mathbf{W}_{\text{head}} + \mathbf{b}_{\text{head}}\)</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">118</span>            <span class="n">dh_t</span><span class="p">,</span> <span class="n">dW_head</span><span class="p">,</span> <span class="n">db_head</span> <span class="o">=</span> <span class="n">_lin_grad</span><span class="p">(</span>
-<span class="linenos">119</span>                <span class="n">X</span><span class="o">=</span><span class="n">h_t</span><span class="p">,</span> <span class="n">W</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"W_head"</span><span class="p">],</span> <span class="n">dY</span><span class="o">=</span><span class="n">dout_t</span>
+                <div class="highlight"><pre><span class="linenos">118</span>            <span class="n">dh</span><span class="p">,</span> <span class="n">dW_head</span><span class="p">,</span> <span class="n">db_head</span> <span class="o">=</span> <span class="n">_lin_grad</span><span class="p">(</span>
+<span class="linenos">119</span>                <span class="n">X</span><span class="o">=</span><span class="n">h</span><span class="p">,</span> <span class="n">W</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s2">"W_head"</span><span class="p">],</span> <span class="n">dY</span><span class="o">=</span><span class="n">dout_t</span>
 <span class="linenos">120</span>            <span class="p">)</span>
 <span class="linenos">121</span>            <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="sa">f</span><span class="s2">"W_head"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dW_head</span>
 <span class="linenos">122</span>            <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">[</span><span class="sa">f</span><span class="s2">"b_head"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="kp">sum</span><span class="p">(</span><span class="n">db_head</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></pre></div>
@@ -1145,11 +1146,10 @@ The gradients are computed with respect to the input, weights, and biases respec
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">124</span>                <span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">c_bar</span><span class="p">,</span> <span class="n">c_t</span> <span class="o">=</span> <span class="p">(</span>
+                <div class="highlight"><pre><span class="linenos">124</span>                <span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">c_bar</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="p">(</span>
 <span class="linenos">125</span>                    <span class="n">activations</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">timestep</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span>
 <span class="linenos">126</span>                    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"x"</span><span class="p">,</span> <span class="s2">"f"</span><span class="p">,</span> <span class="s2">"o"</span><span class="p">,</span> <span class="s2">"c_bar"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]</span>
-<span class="linenos">127</span>                <span class="p">)</span>
-<span class="linenos">128</span>                <span class="n">c_p</span> <span class="o">=</span> <span class="n">activations</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">timestep</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span></pre></div>
+<span class="linenos">127</span>                <span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -1160,13 +1160,11 @@ The gradients are computed with respect to the input, weights, and biases respec
                 <div class="section-link">
                     <a href="#lstm-40">#</a>
                 </div>
-                <p>Gradients flowing from the next timestep. The gradient of the hidden state \(h_t\) is the sum of
-the gradients from the next cell and the next timestep.</p>
+                <p>Cell state from the previous timestep</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">129</span>                <span class="n">dh_t</span> <span class="o">+=</span> <span class="n">grad_next</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span>
-<span class="linenos">130</span>                <span class="n">dc_t</span> <span class="o">=</span> <span class="n">grad_next</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">128</span>                <span class="n">c_prev</span> <span class="o">=</span> <span class="n">activations</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">timestep</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span></pre></div>
 
             </div>
         </div>
@@ -1177,12 +1175,13 @@ the gradients from the next cell and the next timestep.</p>
                 <div class="section-link">
                     <a href="#lstm-41">#</a>
                 </div>
-                <p>\(h_t = o * tanh(c_t)\)</p>
+                <p>Receive the gradients flowing from the next timestep.
+<br>The gradient of the hidden state \(h_t\) is the sum of the gradients from the next cell and the next timestep.</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">131</span>                <span class="n">do</span> <span class="o">=</span> <span class="n">dh_t</span> <span class="o">*</span> <span class="n">tanh</span><span class="p">(</span><span class="n">c_t</span><span class="p">)</span>
-<span class="linenos">132</span>                <span class="n">dc_t</span> <span class="o">=</span> <span class="n">dh_t</span> <span class="o">*</span> <span class="n">o</span> <span class="o">*</span> <span class="n">tanh</span><span class="p">(</span><span class="n">c_t</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">129</span>                <span class="n">dh</span> <span class="o">+=</span> <span class="n">grad_next</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span>
+<span class="linenos">130</span>                <span class="n">dc</span> <span class="o">=</span> <span class="n">grad_next</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span></pre></div>
 
             </div>
         </div>
@@ -1193,13 +1192,12 @@ the gradients from the next cell and the next timestep.</p>
                 <div class="section-link">
                     <a href="#lstm-42">#</a>
                 </div>
-                <p>\(c_t = f \times c_p + (1 - f) \times c_{\text{bar}}\)</p>
+                <p>\(h_t = o * tanh(c_t)\)</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">133</span>                <span class="n">df</span> <span class="o">=</span> <span class="n">dc_t</span> <span class="o">*</span> <span class="p">(</span><span class="n">c_p</span> <span class="o">-</span> <span class="n">c_bar</span><span class="p">)</span>
-<span class="linenos">134</span>                <span class="n">dc_p</span> <span class="o">=</span> <span class="n">dc_t</span> <span class="o">*</span> <span class="n">f</span>
-<span class="linenos">135</span>                <span class="n">dc_bar</span> <span class="o">=</span> <span class="n">dc_t</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">f</span><span class="p">)</span></pre></div>
+                <div class="highlight"><pre><span class="linenos">131</span>                <span class="n">do</span> <span class="o">=</span> <span class="n">dh</span> <span class="o">*</span> <span class="n">tanh</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="linenos">132</span>                <span class="n">dc</span> <span class="o">+=</span> <span class="n">dh</span> <span class="o">*</span> <span class="n">o</span> <span class="o">*</span> <span class="n">tanh</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></pre></div>
 
             </div>
         </div>
@@ -1209,6 +1207,23 @@ the gradients from the next cell and the next timestep.</p>
             <div class="docs">
                 <div class="section-link">
                     <a href="#lstm-43">#</a>
+                </div>
+                <p>\(c_t = f_t \odot c_{t-1} + (1 - f_t) \odot \tilde{c}_t\)</p>
+
+            </div>
+            <div class="code">
+                <div class="highlight"><pre><span class="linenos">133</span>                <span class="n">df</span> <span class="o">=</span> <span class="n">dc</span> <span class="o">*</span> <span class="p">(</span><span class="n">c_prev</span> <span class="o">-</span> <span class="n">c_bar</span><span class="p">)</span>
+<span class="linenos">134</span>                <span class="n">dc_prev</span> <span class="o">=</span> <span class="n">dc</span> <span class="o">*</span> <span class="n">f</span>
+<span class="linenos">135</span>                <span class="n">dc_bar</span> <span class="o">=</span> <span class="n">dc</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">f</span><span class="p">)</span></pre></div>
+
+            </div>
+        </div>
+    
+
+        <div class="section" id="lstm-44">
+            <div class="docs">
+                <div class="section-link">
+                    <a href="#lstm-44">#</a>
                 </div>
                 <p>Pre-activation gradients</p>
 
@@ -1222,13 +1237,13 @@ the gradients from the next cell and the next timestep.</p>
         </div>
     
 
-        <div class="section" id="lstm-44">
+        <div class="section" id="lstm-45">
             <div class="docs">
                 <div class="section-link">
-                    <a href="#lstm-44">#</a>
+                    <a href="#lstm-45">#</a>
                 </div>
-                <p><code>f</code>, <code>o</code>, <code>c</code> Gates
-Since all the gates are linear operations, the calculation will be similar</p>
+                <p><code>f</code>, <code>o</code>, <code>c</code> gates and the inputs <code>X</code> and \(h_{t-1}\)
+<br>Since all the gates are linear operations, the calculation will be similar</p>
 
             </div>
             <div class="code">
@@ -1248,10 +1263,10 @@ Since all the gates are linear operations, the calculation will be similar</p>
         </div>
     
 
-        <div class="section" id="lstm-45">
+        <div class="section" id="lstm-46">
             <div class="docs">
                 <div class="section-link">
-                    <a href="#lstm-45">#</a>
+                    <a href="#lstm-46">#</a>
                 </div>
                 <p>Accumulate the gradients for the input and the hidden state,
 since they are shared between the gates</p>
@@ -1265,27 +1280,27 @@ since they are shared between the gates</p>
         </div>
     
 
-        <div class="section" id="lstm-46">
+        <div class="section" id="lstm-47">
             <div class="docs">
                 <div class="section-link">
-                    <a href="#lstm-46">#</a>
+                    <a href="#lstm-47">#</a>
                 </div>
-                <p>Update the gradients for the previous timestep</p>
+                <p>Flow the gradients to the previous cell and previous timestep</p>
 
             </div>
             <div class="code">
-                <div class="highlight"><pre><span class="linenos">152</span>                <span class="n">dh_t</span> <span class="o">=</span> <span class="n">dinp</span>
-<span class="linenos">153</span>                <span class="n">grad_next</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">dc_p</span>
+                <div class="highlight"><pre><span class="linenos">152</span>                <span class="n">dh</span> <span class="o">=</span> <span class="n">dinp</span>
+<span class="linenos">153</span>                <span class="n">grad_next</span><span class="p">[</span><span class="s2">"c"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">dc_prev</span>
 <span class="linenos">154</span>                <span class="n">grad_next</span><span class="p">[</span><span class="s2">"h"</span><span class="p">][</span><span class="n">cell_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">dh_prev</span></pre></div>
 
             </div>
         </div>
     
 
-        <div class="section" id="lstm-47">
+        <div class="section" id="lstm-48">
             <div class="docs">
                 <div class="section-link">
-                    <a href="#lstm-47">#</a>
+                    <a href="#lstm-48">#</a>
                 </div>
                 <p>Embedding layer</p>
 
@@ -1298,10 +1313,10 @@ since they are shared between the gates</p>
         </div>
     
 
-        <div class="section" id="lstm-48">
+        <div class="section" id="lstm-49">
             <div class="docs">
                 <div class="section-link">
-                    <a href="#lstm-48">#</a>
+                    <a href="#lstm-49">#</a>
                 </div>
                 <p>Helper method to serialize the model state, similar to PyTorch's <code>state_dict</code>.
 The state dictionary contains the model configuration, weights, and gradients.
@@ -1326,10 +1341,10 @@ It can be used to save and load the model.</p>
         </div>
     
 
-        <div class="section" id="lstm-49">
+        <div class="section" id="lstm-50">
             <div class="docs">
                 <div class="section-link">
-                    <a href="#lstm-49">#</a>
+                    <a href="#lstm-50">#</a>
                 </div>
                 
             </div>
@@ -1365,7 +1380,7 @@ It can be used to save and load the model.</p>
 <li><code>Softmax</code> is used to compute the output probabilities.</li>
 </ul>
 <p>The loss function used is the cross-entropy loss, which is suitable for classification tasks. Next token prediction is indeed a classification task where the model predicts the probability distribution over the vocabulary for the next token in the sequence.</p>
-<div id="cell-8" class="cell no-style-output page-columns page-full" data-execution_count="5">
+<div id="cell-8" class="cell no-style-output page-columns page-full" data-execution_count="26">
 <div class="cell-output cell-output-display column-page">
 <h3 style="margin-top: 0;">op.py</h3>
         <div class="docfuse ">
@@ -1518,7 +1533,7 @@ $$H(y, p) = -\sum_{i} y_i \log(p_i)$$</p>
 <section id="adamw" class="level2 page-columns page-full" data-number="4">
 <h2 data-number="4" data-anchor-id="adamw"><span class="header-section-number">4</span> AdamW</h2>
 <p>AdamW is a variant of the Adam optimizer that decouples weight penalty from the optimization steps, where the weight penalty is applied directly to the gradients. Adam optimizer uses both the first and second moments of the gradients to adapt the learning rate tailored to each parameter. The benefit of Adam/AdamW is that it requires little tuning of hyperparameters compared to RMSprop and SGD. We’ll go over each step of the optimization in the implementation.</p>
-<div id="cell-11" class="cell no-style-output page-columns page-full" data-execution_count="6">
+<div id="cell-11" class="cell no-style-output page-columns page-full" data-execution_count="13">
 <div class="cell-output cell-output-display column-page">
 <h3 style="margin-top: 0;">optim.py</h3>
         <div class="docfuse ">
@@ -1896,7 +1911,7 @@ where \(p_{t-1}\) is the previous parameter value.</p>
 <li>The <code>Dataset</code> class implements the <code>__getitem__</code> method, which returns a single sample from the dataset.</li>
 <li>The <code>DataLoader</code> class will be used to sample mini-batches from the dataset, by calling the <code>__getitem__</code> method of the <code>Dataset</code>.</li>
 </ul>
-<div id="cell-14" class="cell no-style-output page-columns page-full" data-execution_count="7">
+<div id="cell-14" class="cell no-style-output page-columns page-full" data-execution_count="14">
 <div class="cell-output cell-output-display column-page">
 <h3 style="margin-top: 0;">data.py</h3>
         <div class="docfuse ">
@@ -2118,16 +2133,16 @@ used in a <code>for</code> loop to iterate over the dataset. e.g.:</p>
 <p>An important distinction to make between the text generation at training time and inference time is that at training time, we feed the ground truth characters to the model to predict the next character; This is called <strong>teacher forcing</strong>. At inference time, we feed the model’s prediction at time step <span class="math inline">\(t\)</span> as the input at time step <span class="math inline">\(t+1\)</span> to predict the next character.</p>
 <section id="load" class="level3" data-number="6.1">
 <h3 data-number="6.1" data-anchor-id="load"><span class="header-section-number">6.1</span> Load</h3>
-<div id="cell-18" class="cell" data-execution_count="8">
+<div id="cell-18" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pylab <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Download the Shakespeare dataset which is a single text file from the following link: <a href="https://storage.googleapis.com/download.tensorflow.org/data/shakespeare.txt">Shakespeare dataset</a></p>
-<div id="cell-20" class="cell" data-execution_count="9">
+<div id="cell-20" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"shakespeare.txt"</span>) <span class="im">as</span> <span class="bu">file</span>:</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> <span class="bu">file</span>.read()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-21" class="cell styled-output" data-execution_count="10">
+<div id="cell-21" class="cell styled-output" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(data[:<span class="dv">200</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>First Citizen:
@@ -2150,17 +2165,17 @@ First, you</code></pre>
 <section id="preprocess" class="level3" data-number="6.2">
 <h3 data-number="6.2" data-anchor-id="preprocess"><span class="header-section-number">6.2</span> Preprocess</h3>
 <p>We need to convert the text data into numerical data. Using scikit-learn’s <code>LabelEncoder</code> we can map each character to a unique integer. The same encoder will be used to inverse transform the predictions back to characters.</p>
-<div id="cell-23" class="cell" data-execution_count="11">
+<div id="cell-23" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> LabelEncoder</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>char_data <span class="op">=</span> np.array(<span class="bu">list</span>(data))</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>encoder <span class="op">=</span> LabelEncoder()</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>indices_data <span class="op">=</span> encoder.fit_transform(char_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-24" class="cell styled-output" data-execution_count="12">
+<div id="cell-24" class="cell styled-output" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>vocabulary <span class="op">=</span> encoder.classes_</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>vocabulary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="12">
+<div class="cell-output cell-output-display" data-execution_count="19">
 <pre><code>array(['\n', ' ', '!', '$', '&amp;', "'", ',', '-', '.', '3', ':', ';', '?',
        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
        'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
@@ -2170,9 +2185,9 @@ First, you</code></pre>
 </div>
 </div>
 <p>An example of the mapped data:</p>
-<div id="cell-26" class="cell styled-output" data-execution_count="13">
+<div id="cell-26" class="cell styled-output" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>indices_data[:<span class="dv">200</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="13">
+<div class="cell-output cell-output-display" data-execution_count="20">
 <pre><code>array([18, 47, 56, 57, 58,  1, 15, 47, 58, 47, 64, 43, 52, 10,  0, 14, 43,
        44, 53, 56, 43,  1, 61, 43,  1, 54, 56, 53, 41, 43, 43, 42,  1, 39,
        52, 63,  1, 44, 59, 56, 58, 46, 43, 56,  6,  1, 46, 43, 39, 56,  1,
@@ -2191,7 +2206,7 @@ First, you</code></pre>
 <section id="initialize" class="level3" data-number="6.3">
 <h3 data-number="6.3" data-anchor-id="initialize"><span class="header-section-number">6.3</span> Initialize</h3>
 <p>Now let’s define the dataloader, the model and the optimizer. I used the following hyperparameters below, but feel free to experiment with different values.</p>
-<div id="cell-29" class="cell" data-execution_count="14">
+<div id="cell-29" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>SEQUENCE_LENGTH <span class="op">=</span> <span class="dv">128</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>BATCH_SIZE <span class="op">=</span> <span class="dv">32</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>VOCAB_SIZE <span class="op">=</span> <span class="bu">len</span>(vocabulary)</span>
@@ -2205,7 +2220,7 @@ First, you</code></pre>
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>NUM_EPOCHS <span class="op">=</span> <span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Define the train and test data loaders</p>
-<div id="cell-31" class="cell" data-execution_count="15">
+<div id="cell-31" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> data <span class="im">import</span> NextCharDataset, DataLoader</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>trainset_size <span class="op">=</span> <span class="bu">int</span>(<span class="bu">len</span>(indices_data) <span class="op">*</span> TRAIN_SPLIT)</span>
@@ -2219,7 +2234,7 @@ First, you</code></pre>
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>testloader <span class="op">=</span> DataLoader(testset, batch_size<span class="op">=</span>BATCH_SIZE, shuffle<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Define the model and optimizer</p>
-<div id="cell-33" class="cell" data-execution_count="16">
+<div id="cell-33" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lstm <span class="im">import</span> LSTMClassifier</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> optim <span class="im">import</span> AdamW</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2245,7 +2260,7 @@ First, you</code></pre>
 <span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> <span class="fu">compute_loss</span>(predictions<span class="op">,</span> true_labels)</span>
 <span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">record_metrics</span>(loss<span class="op">,</span> accuracy<span class="op">,</span> <span class="op">...</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Most of the implementation such as the forward and backward passes, optimization and data loading is already done. The remaining part is loss computation and gradient of loss w.r.t the predictions. Since next-token prediction is a classification task, we’ll use the cross-entropy loss function.</p>
-<div id="cell-36" class="cell" data-execution_count="17">
+<div id="cell-36" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tqdm.auto <span class="im">import</span> tqdm</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> op <span class="im">import</span> cross_entropy</span>
