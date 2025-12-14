@@ -23,13 +23,14 @@ class GradientBoostedModel:
         min_samples_split: int = 2,
         min_weight_leaf: float = 20,
         min_gain_to_split: float = 0.0,
-        l2_regularization: float = 1.0,
+        objective_weight: list[float] = None,
+        l1_regularization: float = 0.0,
+        l2_regularization: float = 0.0,
         feature_fraction: float = 1.0,
         samples_fraction: float = 1.0,
         goss_top_rate: float = None,
         goss_bottom_rate: float = None,
         goss_rescale_bottom: bool = False,
-        gamma: float = 0.0,
         path_smoothing_strength: float = 0.0,
         max_bins: int = 255,
         max_categories: int = 100,
@@ -38,7 +39,7 @@ class GradientBoostedModel:
         seed: int = None,
         verbose: bool = True,
     ):
-        """
+        r"""
         ### Gradient Boosted Model (GBM)
 
         This is the user-facing class for training and making predictions.
@@ -57,13 +58,18 @@ class GradientBoostedModel:
         - `min_samples_split` : int, default=2
             - The minimum number of samples required to split a node.
         - `min_weight_leaf` : float, default=20
-            - The minimum sum of instance weights required in a leaf node, for a split to be considered.
+            - The minimum sum of instance weights required in a leaf node for a split to be considered.
         - `min_gain_to_split` : float, default=0.0
-            - The minimum gain required to perform a split.
-        - `l2_regularization` : float, default=1.0
+            - The minimum gain required to perform a split. Referred to as $\gamma$ in some literature.
+        - `objective_weight` : List[float], optional
+            - Weights for multi-output objectives. If the distribution is multivariate,
+            this specifies the relative importance of each output dimension.
+        - `l1_regularization` : float, default=0.0
+            - L1 regularization term on leaf values.
+        - `l2_regularization` : float, default=0.0
             - L2 regularization term on leaf values.
         - `feature_fraction` : float, default=1.0
-            - The fraction of features to subsample for each tree. Values between 0 and 1. This helps with regularization.
+            - The fraction of features to subsample for each tree (Values between 0 and 1). This helps with regularization.
         - `samples_fraction` : float, default=1.0
             - The fraction of training samples to subsample for each tree. Values between 0 and 1.
         - `goss_top_rate` : float, optional
@@ -72,8 +78,6 @@ class GradientBoostedModel:
             - If using GOSS, specifies the bottom fraction of samples (by absolute gradient) to keep.
         - `goss_rescale_bottom` : bool, optional
             - Whether to rescale the weights of the bottom samples in GOSS to maintain the overall weight sum.
-        - `gamma` : float, default=0.0
-            - Regularization term for tree complexity (number of leaves).
         - `path_smoothing_strength` : float, default=0.0
             - Strength of path smoothing to apply to leaf values after tree is grown.
         - `max_bins` : int, default=255
@@ -97,13 +101,14 @@ class GradientBoostedModel:
         self.min_samples_split = min_samples_split
         self.min_weight_leaf = min_weight_leaf
         self.min_gain_to_split = min_gain_to_split
+        self.objective_weight = objective_weight
+        self.l1_regularization = l1_regularization
         self.l2_regularization = l2_regularization
         self.feature_fraction = feature_fraction
         self.samples_fraction = samples_fraction
         self.goss_top_rate = goss_top_rate
         self.goss_bottom_rate = goss_bottom_rate
         self.goss_rescale_bottom = goss_rescale_bottom
-        self.gamma = gamma
         self.path_smoothing_strength = path_smoothing_strength
         self.max_bins = max_bins
         self.max_categories = max_categories
@@ -147,7 +152,10 @@ class GradientBoostedModel:
 
         # Initialize tree grower. This handles the logic of growing individual trees.
         grower = TreeGrower(
+            distribution=self.distribution,
             learning_rate=self.learning_rate,
+            objective_weight=self.objective_weight,
+            l1_regularization=self.l1_regularization,
             l2_regularization=self.l2_regularization,
             min_weight_leaf=self.min_weight_leaf,
             max_leaves=self.n_leaves,
@@ -159,8 +167,6 @@ class GradientBoostedModel:
             samples_fraction=self.samples_fraction,
             min_samples_split=self.min_samples_split,
             min_gain_to_split=self.min_gain_to_split,
-            gamma=self.gamma,
-            distribution=self.distribution,
             seed=self.seed,
         )
 
@@ -182,7 +188,7 @@ class GradientBoostedModel:
                 current_predictions=predictions,
             )
             # If no valid tree could be grown, stop early.
-            # Could happen due to lack of enough data or no tangible gain.
+            # Could happen due to insufficient data or no tangible gain.
             if tree is None:
                 break
 

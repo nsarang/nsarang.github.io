@@ -104,13 +104,13 @@ class Gaussian(Distribution):
         grad = np.zeros_like(y_pred)
         hess = np.zeros_like(grad)
 
-        # Derivatives w.r.t $\eta_1$
+        # Derivatives w.r.t. $\eta_1$
         grad[:, 0] = -y_true - eta1 / (2 * eta2)
         hess[:, 0] = -1 / (2 * eta2)
 
         # If learning variance, then $z$ is also a learnable parameter
         if self.learn_variance:
-            # Derivatives w.r.t $\eta_2$
+            # Derivatives w.r.t. $\eta_2$
             grad_eta2 = -(y_true**2) + (eta1**2 / (4 * eta2**2)) - 1 / (2 * eta2)
             hess_eta2 = -(eta1**2) / (2 * eta2**3) + 1 / (2 * eta2**2)
 

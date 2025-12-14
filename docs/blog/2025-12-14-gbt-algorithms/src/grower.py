@@ -5,6 +5,7 @@ from typing import List, Tuple, Union
 import numpy as np
 
 from .data import FeatureInfo
+from .distributions import Distribution
 from .tree import Node, Tree
 from .utils import groupby_sum_2d
 
@@ -66,7 +67,7 @@ class TreeGrower:
     the tree structure is implemented here.
 
     **Parameters**
-    - `distribution` : Objective
+    - `distribution` : Distribution
         - The objective function defining the loss and gradient/hessian computations.
     - `learning_rate` : float
         - The learning rate for boosting.
@@ -88,8 +89,6 @@ class TreeGrower:
         - The fraction of features to consider when looking for the best split.
     - `samples_fraction` : float
         - The fraction of samples to consider when growing the tree.
-    - `gamma` : float
-        - The minimum loss reduction required to make a split.
     - `goss_top_rate` : float
         - The top rate for Gradient-based One-Side Sampling (GOSS).
     - `goss_bottom_rate` : float
@@ -104,7 +103,7 @@ class TreeGrower:
         - Random seed for reproducibility.
     """
 
-    distribution: any
+    distribution: Distribution
     learning_rate: float
     max_leaves: int
     max_depth: int = 100
@@ -115,7 +114,6 @@ class TreeGrower:
     min_weight_leaf: float = float("-inf")
     feature_fraction: float = 1.0
     samples_fraction: float = 1.0
-    gamma: float = 0.0
     goss_top_rate: float = None
     goss_bottom_rate: float = None
     goss_rescale_bottom: bool = False
@@ -125,7 +123,7 @@ class TreeGrower:
 
     def __post_init__(self):
         """Initialize the random state for rng operations"""
-        self.random = np.random.RandomState(self.seed)
+        self.random = np.random.default_rng(self.seed)
 
     def grow(
         self,
@@ -134,7 +132,6 @@ class TreeGrower:
         targets: np.ndarray,
         sample_weight: np.ndarray,
         current_predictions: np.ndarray,
-        **kwargs,
     ) -> Tree:
         """
         Train a decision tree using the provided dataset.
@@ -170,6 +167,9 @@ class TreeGrower:
             current_predictions,
             sample_weight,
         )
+        # NOTE: I don't have a scientific justification for this clipping, but I wanted to avoid
+        # having division by zero errors during gain calculation, and I also saw XGBoost do something
+        # similar. Will have to revisit this later.
         hessian = np.maximum(hessian, 1e-6)
 
         # GOSS Sampling
@@ -188,7 +188,7 @@ class TreeGrower:
             l2_regularization=self.l2_regularization,
             sample_indices=np.arange(len(inputs)),
         )
-        tree = Tree(root=root, **kwargs)
+        tree = Tree(root=root)
 
         # Priority queue to store split candidates. Higher gain splits have higher priority.
         candidates = PriorityQueue()

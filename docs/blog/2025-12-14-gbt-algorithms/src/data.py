@@ -25,8 +25,7 @@ class FeatureInfo:
     - `index` : int
         - The position of the feature in the input array.
     - `type` : str, optional
-        - The type of the feature: `numerical`, `categorical`, or `category_as
-        numeric`.
+        - The type of the feature: `numerical`, `categorical`, or `category_as_numeric`.
     - `bins` : np.ndarray, optional
         - The bin edges for numerical features or categorical features treated as
         numeric.
@@ -175,7 +174,11 @@ class DataPreprocessor:
                 # Transform categorical features to integer codes. The reason we use
                 # integer code rather than keeping original string values is that the transformed
                 # dataset is supposed to be a homogeneous float64 numpy array.
-                array[:, i] = pd.Categorical(X[info.name], categories=info.categories).codes
+                codes = pd.Categorical(X[info.name], categories=info.categories).codes.astype(
+                    "float64"
+                )
+                codes[codes == -1.0] = np.nan
+                array[:, i] = codes
             # CatBoost-style target statistics encoding. Train and test modes differ.
             elif info.type == "category_as_numeric":
                 category_col = pd.Categorical(X[info.name], categories=info.categories)

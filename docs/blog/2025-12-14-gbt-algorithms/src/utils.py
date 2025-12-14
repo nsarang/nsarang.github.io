@@ -13,7 +13,7 @@ def groupby_sum_2d(
     sample_weight: np.ndarray,
 ):
     """
-    Compute grouped sums of gradients and hessians for 2D arrays. Uses Numba for speed up.
+    Compute grouped sums of gradients and hessians for 2D arrays. Uses Numba for speedup.
     Input Shape: `(n_samples, n_outputs)`
     Output Shape: `(n_groups, n_outputs)`
     """
