@@ -1,40 +1,46 @@
 (function () {
     'use strict';
 
-    // Light/Dark theme toggle
     const bodyElement = document.body;
-    const observer = new MutationObserver(mutationsList => {
-        // Check if any class mutations occurred
+    
+    // Function to update theme classes on docfuse elements
+    function updateDocfuseTheme() {
+        const docfuseElements = document.querySelectorAll('.docfuse');
+        const isDarkTheme = bodyElement.classList.contains('quarto-dark');
+
+        docfuseElements.forEach(element => {
+            // If the element has the "fixed-theme" class, skip it
+            if (element.classList.contains('fixed-theme')) {
+                return;
+            }
+
+            if (isDarkTheme) {
+                element.classList.add('dark-theme');
+                element.classList.remove('light-theme');
+            } else { // light theme (default)
+                element.classList.add('light-theme');
+                element.classList.remove('dark-theme');
+            }
+        });
+    }
+
+    // Call immediately on load
+    updateDocfuseTheme();
+
+    // Check if any theme changes occur
+    const observer = new MutationObserver(mutationsList => {    
         const hasClassMutation = mutationsList.some(mutation =>
             mutation.attributeName === 'class'
         );
 
         if (hasClassMutation) {
-            // Get all elements with the "docfuse" class
-            const docfuseElements = document.querySelectorAll('.docfuse');
-            const isDarkTheme = bodyElement.classList.contains('quarto-dark');
-
-            // Iterate through the "docfuse" elements and toggle the classes
-            docfuseElements.forEach(element => {
-                // If the element has the "fixed-theme" class, skip it
-                if (element.classList.contains('fixed-theme')) {
-                    return
-                }
-
-                if (isDarkTheme) {
-                    element.classList.add('dark-theme');
-                    element.classList.remove('light-theme');
-                } else { // light theme (default)
-                    element.classList.add('light-theme');
-                    element.classList.remove('dark-theme');
-                }
-            });
-        } // End if (hasClassMutation)
+            updateDocfuseTheme();
+        }
     });
-
     observer.observe(bodyElement, { attributes: true });
 
-    // Selection Manager
+    // Selection Manager. Ensures selection is limited to one column at a time,
+    // either .docs or .code
     const SelectionManager = {
         selectionStart: null,
         activeColumnType: null,

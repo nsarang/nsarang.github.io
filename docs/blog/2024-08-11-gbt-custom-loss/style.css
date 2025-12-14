@@ -241,6 +241,7 @@
 .docfuse.dark-theme .section .docs {
   background-color: #1d2127;
   color: #ccc;
+  border-top: 1px solid #2f3a49;
 }
 .docfuse.dark-theme .section .docs .section-link a {
   color: #454545;
@@ -254,7 +255,8 @@
 }
 .docfuse.dark-theme .section .code {
   background: #282a36;
-  border-left: 1px solid #293340;
+  border-left: 1px solid #2f3a49;
+  border-top: 1px solid #2f3a49;
 }
 .docfuse.dark-theme .section:first-child .docs {
   border-top: 1px solid #336b90;
@@ -281,7 +283,7 @@
   }
   .docfuse.dark-theme .section .code {
     border-right: 1px solid #336b90;
-    border-left-color: #293340;
+    border-left-color: #2f3a49;
   }
 }
 .docfuse.dark-theme .mjx-chtml {
@@ -662,8 +664,9 @@
   background: #f8fafb;
 }
 .docfuse.light-theme .section .docs {
-  background-color: #ecf0f3;
+  background-color: #f0f4f7;
   color: #555;
+  border-top: 1px solid #dfdfe4;
 }
 .docfuse.light-theme .section .docs .section-link a {
   color: #454545;
@@ -672,12 +675,13 @@
 .docfuse.light-theme .section .docs li code,
 .docfuse.light-theme .section .docs ol code,
 .docfuse.light-theme .section .docs p code {
-  background: #ebedef;
+  background: #e7ebef;
   color: #666;
 }
 .docfuse.light-theme .section .code {
-  background-color: #ebedef;
-  border-left: 1px solid #e2e2eb;
+  background-color: #e7ebef;
+  border-left: 1px solid #dfdfe4;
+  border-top: 1px solid #dfdfe4;
 }
 .docfuse.light-theme .section:first-child .docs {
   border-top: 1px solid #3498db;
@@ -704,7 +708,7 @@
   }
   .docfuse.light-theme .section .code {
     border-right: 1px solid #3498db;
-    border-left-color: #e2e2eb;
+    border-left-color: #dfdfe4;
   }
 }
 .docfuse.light-theme .mjx-chtml {

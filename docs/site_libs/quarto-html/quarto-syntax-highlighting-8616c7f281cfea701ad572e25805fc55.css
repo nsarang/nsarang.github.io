@@ -36,156 +36,186 @@
   --quarto-font-monospace: "JetBrains Mono", "Roboto Mono", "Dank Mono", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
+/* syntax highlight based on Pandoc's rules */
+/* Alert */
 code span.al {
   color: #aa0000;
   font-style: inherit;
 }
 
+/* Annotation */
 code span.an {
   color: #999988;
   font-style: italic;
 }
 
+/* Attribute */
 code span.at {
   color: #008080;
   font-style: inherit;
 }
 
+/* BaseN */
 code span.bn {
   color: #009999;
   font-style: inherit;
 }
 
+/* BuiltIn */
 code span.bu {
   color: #0086B3;
   font-style: inherit;
 }
 
-code span.ch {
-  color: #d14;
-  font-style: inherit;
-}
-
-code span.co {
-  color: #999988;
-  font-style: italic;
-}
-
-code span.cv {
-  color: #999999;
-  font-weight: bold;
-  font-style: italic;
-}
-
-code span.cn {
-  color: #008080;
-  font-style: inherit;
-}
-
+/* ControlFlow */
 code span.cf {
   color: #000000;
   font-weight: bold;
   font-style: inherit;
 }
 
+/* Char */
+code span.ch {
+  color: #d14;
+  font-style: inherit;
+}
+
+/* Constant */
+code span.cn {
+  color: #008080;
+  font-style: inherit;
+}
+
+/* Comment */
+code span.co {
+  color: #999988;
+  font-style: italic;
+}
+
+/* CommentVar */
+code span.cv {
+  color: #999999;
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* Documentation */
+code span.do {
+  color: #999988;
+  font-style: italic;
+}
+
+/* DataType */
 code span.dt {
   color: #445588;
   font-weight: bold;
   font-style: inherit;
 }
 
+/* DecVal */
 code span.dv {
   color: #009999;
   font-style: inherit;
 }
 
-code span.do {
-  color: #999988;
-  font-style: italic;
-}
-
+/* Error */
 code span.er {
   color: #a61717;
   background-color: #e3d2d2;
   font-style: inherit;
 }
 
+/* Extension */
 code span.ex {
   color: #3c5d5d;
   font-weight: bold;
   font-style: inherit;
 }
 
+/* Float */
 code span.fl {
   color: #009999;
   font-style: inherit;
 }
 
+/* Function */
 code span.fu {
   color: #990000;
   font-weight: bold;
   font-style: inherit;
 }
 
+/* Import */
 code span.im {
   color: #000000;
   font-weight: bold;
   font-style: inherit;
 }
 
+/* Information */
 code span.in {
   color: #999999;
   font-style: inherit;
 }
 
+/* Keyword */
 code span.kw {
   color: #000000;
   font-weight: bold;
   font-style: inherit;
 }
 
+/* Operator */
 code span.op {
   color: #000000;
   font-weight: bold;
   font-style: inherit;
 }
 
+/* Other */
 code span.ot {
   color: #000000;
   font-style: inherit;
 }
 
+/* Preprocessor */
 code span.pp {
   color: #999999;
   font-weight: bold;
   font-style: inherit;
 }
 
+/* SpecialChar */
 code span.sc {
   color: #d14;
   font-style: inherit;
 }
 
+/* SpecialString */
 code span.ss {
   color: #009926;
   font-style: inherit;
 }
 
+/* String */
 code span.st {
   color: #d14;
   font-style: inherit;
 }
 
+/* Variable */
 code span.va {
   color: #008080;
   font-style: inherit;
 }
 
+/* VerbatimString */
 code span.vs {
   color: #d14;
   font-style: inherit;
 }
 
+/* Warning */
 code span.wa {
   color: #aa0000;
   font-style: inherit;
@@ -195,4 +225,4 @@ code span.wa {
   content: "</";
 }
 
-/*# sourceMappingURL=aaee952b02cb1bf2ef13cfc5fb328302.css.map */
+/*# sourceMappingURL=b6de71afdc209d0187a6f8fd794b9306.css.map */

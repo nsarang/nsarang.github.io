@@ -14,6 +14,7 @@
   {
     "listing": "/blog/index.html",
     "items": [
+      "/blog/2025-12-14-gbt-algorithms/index.html",
       "/blog/2025-08-07-github-workflow-tips/index.html",
       "/blog/2025-02-28-time-series-forecasting/index.html",
       "/blog/2025-01-30-post-mortem/index.html",
