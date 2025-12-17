@@ -371,6 +371,24 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
   }
 </style>
 <p><br></p>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const img = document.querySelector('.about-image');
+    if (img) {
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'display: flex; flex-direction: column; align-items: center;';
+        
+        img.parentNode.insertBefore(wrapper, img);
+        wrapper.appendChild(img);
+        
+        const caption = document.createElement('div');
+        caption.textContent = 'Generated with StyleGAN2 (2019)';
+        caption.style.cssText = 'text-align: center; margin-top: 0.5em; font-size: 0.9em; font-style: italic;';
+        
+        wrapper.appendChild(caption);
+    }
+});
+</script>
 <!-- style="text-align: justify; text-align-last: right;" -->
 <!-- style="font-family: 'LEMONMILK Pro Light';" -->
 <div class="quarto-about-solana column-page">
