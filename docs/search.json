@@ -585,7 +585,7 @@
     "href": "project/2026-03-06-anime-recommendor/index.html",
     "title": "Anime Recommendor",
     "section": "",
-    "text": "I built a small anime recommender that I’ve been tinkering with for a while. Big thanks to the MAL community for making something like this possible. I’ll write up the source code and how it all works in a separate post."
+    "text": "I built a lightweight anime recommender system based on SVD++ and EASE algorithms, with a little bit of custom flavour. Big thanks to the MAL community for making something like this possible. I’ll write up the source code and how it all works in a separate post."
   },
   {
     "objectID": "publication/2018-01-03-protein-design/index.html#abstract",
