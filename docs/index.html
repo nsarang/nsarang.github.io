@@ -31,6 +31,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./_assets/favicon.svg" rel="icon" type="image/svg+xml">
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -42,9 +44,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-bf6bc7e3992450e9d325e2a4bbb48717.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-27540dd16635a963644f6285e3f576a3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-ee0835820e75629d40d11f5fbf13a14d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-27540dd16635a963644f6285e3f576a3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-3c85cb74aa12c4100b39fbed6a6b141f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-9f8b1130659bfadfc3b6f00d2e24ec66.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-3c85cb74aa12c4100b39fbed6a6b141f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <link href="site_libs/quarto-contrib/academicons-1.9.2/all.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/academicons-1.9.2/size.css" rel="stylesheet">
@@ -74,6 +76,65 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-recent-blog-listing .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-title','listing-image','listing-description','listing-date',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      page: 3,
+    pagination: { item: "<li class='page-item'><a class='page page-link' href='#'></a></li>" },
+      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-recent-blog-listing'] = new List('listing-recent-blog-listing', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-recent-project-listing .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-title','listing-image','listing-description','listing-date',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      page: 3,
+    pagination: { item: "<li class='page-item'><a class='page page-link' href='#'></a></li>" },
+      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-recent-project-listing'] = new List('listing-recent-project-listing', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-HWSGHN8N8N"></script>
 
 <script type="text/javascript">
@@ -108,6 +169,35 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&amp;display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="_assets/hugo/index.css">
 <meta property="og:title" content="Nima Sarang">
@@ -363,14 +453,18 @@ gtag('config', 'G-HWSGHN8N8N', { 'anonymize_ip': true});
 
 
 <style>
-  /* div.quarto-about-solana div.about-entity {
-    align-items: center;
-  } */
   div.quarto-about-solana div.about-entity .about-image {
     margin-top: 1.0em;
   }
+
+  .listing-section {
+  max-width: 80vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0 2rem;
+}
 </style>
-<p><br></p>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const img = document.querySelector('.about-image');
@@ -389,8 +483,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-<!-- style="text-align: justify; text-align-last: right;" -->
-<!-- style="font-family: 'LEMONMILK Pro Light';" -->
+<p><br></p>
 <div class="quarto-about-solana column-page">
   <div class="about-entity">
     <div class="entity-contents">
@@ -439,15 +532,283 @@ I’m always eager to learn new things and connect with people. If you’re up f
   </div>
 </div>
 
-<!-- 
-<div id="my-letter">
-    <svg fill="none", viewBox="0 0 200 300">
-        <text x="50%" y="15%" dy=".35em" text-anchor="middle">
-            n
-        </text>
-    </svg>
+<!-- =====================  LISTINGS  ===================== -->
+<p><br></p>
+<section id="latest-posts" class="level2 listing-section">
+<h2 data-anchor-id="latest-posts">Latest <a href="./blog">Posts</a></h2>
+<div id="listing-recent-blog-listing" class="quarto-listing quarto-listing-container-grid">
+<div class="list grid quarto-listing-cols-3">
+<div class="g-col-1" data-index="0" data-categories="UHl0aG9uJTJDSnVweXRlciUyQ0lQeXRob24lMkNEZWJ1Z2dpbmc=" data-listing-date-sort="1772870400000" data-listing-file-modified-sort="1772952223446" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="527">
+<a href="./blog/2026-03-07-jupyter-memory-leak/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./blog/2026-03-07-jupyter-memory-leak/featured.jpg" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Memory Leak in Jupyter Notebooks and How to Fix It
+</h5>
+<div class="card-text listing-description delink">
+<p>The display hook causing memory leaks? Well that’s a new one.</p>
 </div>
-``` -->
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+Mar 7, 2026
+</div>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="1" data-categories="TUwlMkNBbGdvcml0aG1zJTJDRnJvbSUyMFNjcmF0Y2glMkNHQlQlMkNYR0Jvb3N0JTJDTGlnaHRHQk0lMkNDYXRCb29zdA==" data-listing-date-sort="1765699200000" data-listing-file-modified-sort="1766028948366" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2022">
+<a href="./blog/2025-12-14-gbt-algorithms/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./blog/2025-12-14-gbt-algorithms/featured.jpg" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Implementing Gradient Boosted Trees from Scratch - LightGBM, XGBoost, CatBoost
+</h5>
+<div class="card-text listing-description delink">
+<p>Building a minimal GBT library from scratch to understand what’s actually happening under the hood, and to have the flexibility to experiment with new ideas.</p>
+</div>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+Dec 14, 2025
+</div>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="2" data-categories="R2l0SHViJTJDRGV2T3BzJTJDQ0klMkZDRCUyQ0F1dG9tYXRpb24=" data-listing-date-sort="1754550000000" data-listing-file-modified-sort="1754851998874" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="20" data-listing-word-count-sort="3813">
+<a href="./blog/2025-08-07-github-workflow-tips/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./blog/2025-08-07-github-workflow-tips/featured.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Github Workflow Tips and Tricks
+</h5>
+<div class="card-text listing-description delink">
+<p>A collection of useful tips and tricks for better leveraging Github workflows</p>
+</div>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+Aug 7, 2025
+</div>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="3" data-categories="TUwlMkNUaW1lJTIwU2VyaWVzJTJDRm9yZWNhc3RpbmclMkNMU1RNJTJDTi1CRUFUUyUyQ1RGVCUyQ0RlZXBBUg==" data-listing-date-sort="1740729600000" data-listing-file-modified-sort="1747490812722" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="23" data-listing-word-count-sort="4474">
+<a href="./blog/2025-02-28-time-series-forecasting/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" data-src="./blog/2025-02-28-time-series-forecasting/featured.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+A Review of ML Time Series Forecasting Models
+</h5>
+<div class="card-text listing-description delink">
+<p>A review of some of the well-known machine learning time series forecasting models.</p>
+</div>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+Feb 28, 2025
+</div>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="4" data-categories="UHl0aG9uJTJDRGVidWdnaW5n" data-listing-date-sort="1738224000000" data-listing-file-modified-sort="1754851142071" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1176">
+<a href="./blog/2025-01-30-post-mortem/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" data-src="./blog/2025-01-30-post-mortem/featured.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Saving Time: Post-mortem Debugging in Python
+</h5>
+<div class="card-text listing-description delink">
+<p>A bit of Python black magic that lets you efficiently inspect and manipulate execution contexts after crashes, aka, post-mortem debugging.</p>
+</div>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+Jan 30, 2025
+</div>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="5" data-categories="TkxQJTJDTExNJTJDV2ViTExNJTJDTUxDLUxMTSUyQ1dlYkdQVSUyQ1RWTQ==" data-listing-date-sort="1728198000000" data-listing-file-modified-sort="1747490812720" data-listing-date-modified-sort="1737532800000" data-listing-reading-time-sort="14" data-listing-word-count-sort="2607">
+<a href="./blog/2024-09-29-llama-in-browser/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" data-src="./blog/2024-09-29-llama-in-browser/featured.jpg" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Running Llama 3 in the Browser!
+</h5>
+<div class="card-text listing-description delink">
+<p>Chat with Llama and other LLMs that run locally in your browser using WebLLM.</p>
+</div>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+Oct 6, 2024
+</div>
+</div>
+</div>
+</div></a>
+</div>
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+<nav id="recent-blog-listing-pagination" class="listing-pagination" aria-label="Page Navigation">
+  <ul class="pagination"></ul>
+</nav>
+</div>
+</section>
+<section id="latest-projects" class="level2 listing-section">
+<h2 data-anchor-id="latest-projects">Latest <a href="./project">Projects</a></h2>
+<div id="listing-recent-project-listing" class="quarto-listing quarto-listing-container-grid">
+<div class="list grid quarto-listing-cols-3">
+<div class="g-col-1" data-index="0" data-categories="TUwlMkNSZWNTeXMlMkNXZWJNTCUyQ1dlYkdQVSUyQ0phdmFTY3JpcHQ=" data-listing-date-sort="1772784000000" data-listing-file-modified-sort="1773041721787" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="93">
+<a href="./project/2026-03-06-anime-recommendor/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./project/2026-03-06-anime-recommendor/featured.jpg" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Anime Recommendor
+</h5>
+<div class="card-text listing-description delink">
+<p>A recommender that suggests anime based on your rating history</p>
+</div>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+Mar 6, 2026
+</div>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="1" data-categories="VFRTJTJDVm9pY2UlMjBDbG9uaW5nJTJDTUwlMkNXZWJNTCUyQ1dlYkdQVSUyQ09OTlglMkNKYXZhU2NyaXB0" data-listing-date-sort="1759042800000" data-listing-file-modified-sort="1772954273124" data-listing-date-modified-sort="1763020800000" data-listing-reading-time-sort="1" data-listing-word-count-sort="152">
+<a href="./project/2025-09-28-tts/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./project/2025-09-28-tts/featured.jpg" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Voice Cloning in Browser with F5-TTS
+</h5>
+<div class="card-text listing-description delink">
+<p>Voice cloning using the F5-TTS model in your browser. No servers, no uploads, just pure client-side on-device execution.</p>
+</div>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+Sep 28, 2025
+</div>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="2" data-categories="UHl0aG9uJTJDUGFuZGFzJTJDSnVweXRlciUyQ0RhdGElMjBWaXN1YWxpemF0aW9uJTJDSFRNTCUyQ0phdmFTY3JpcHQ=" data-listing-date-sort="1752908400000" data-listing-file-modified-sort="1759085096166" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="456">
+<a href="./project/2025-07-19-interactive-pandas/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./project/2025-07-19-interactive-pandas/featured.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+FrameDisplay: Enhanced DataFrame Display
+</h5>
+<div class="card-text listing-description delink">
+<p>Interactive DataFrame display in Jupyter with resizable columns, sorting, and sticky headers</p>
+</div>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+Jul 19, 2025
+</div>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="3" data-categories="UHl0aG9uJTJDRGVidWdnaW5n" data-listing-date-sort="1747378800000" data-listing-file-modified-sort="1747492694647" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="662">
+<a href="./project/2025-05-16-pymortem/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" data-src="./project/2025-05-16-pymortem/featured.jpg" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Pymortem
+</h5>
+<div class="card-text listing-description delink">
+<p>A post-mortem debugging tool for inspection and manipulation of execution contexts after exceptions occur.</p>
+</div>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+May 16, 2025
+</div>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="4" data-listing-date-sort="1728975600000" data-listing-file-modified-sort="1755065202713" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="781">
+<a href="./project/2024-10-15-water-supply-forecast-rodeo/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" data-src="./project/2024-10-15-water-supply-forecast-rodeo/featured.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Water Supply Forecast Rodeo
+</h5>
+<div class="card-text listing-description delink">
+<p>A report on my 5th place finish in the Water Supply Forecast Rodeo, an ML competition on predicting seasonal water supply in the western US.</p>
+</div>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+Oct 15, 2024
+</div>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="5" data-categories="UHl0aG9uJTJDRmluYW5jZSUyQ1BvcnRmb2xpbyUyME1hbmFnZW1lbnQlMkNUYXg=" data-listing-date-sort="1712905200000" data-listing-file-modified-sort="1747559069375" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="647">
+<a href="./project/2024-04-12-custodium/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" data-src="./project/2024-04-12-custodium/featured.jpg" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Custodium
+</h5>
+<div class="card-text listing-description delink">
+<p>A Python package for tracking investment portfolios and calculating adjusted cost basis (ACB) for Canadian capital gain/loss calculations.</p>
+</div>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+Apr 12, 2024
+</div>
+</div>
+</div>
+</div></a>
+</div>
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+<nav id="recent-project-listing-pagination" class="listing-pagination" aria-label="Page Navigation">
+  <ul class="pagination"></ul>
+</nav>
+</div>
+</section>
+
 
 
 
